@@ -1,0 +1,90 @@
+@import "./../custom.scss";
+
+.view-header {
+    @include header;
+    padding: 20px;
+    padding-bottom: 10px;
+    // top: 0;
+    // position: sticky;
+
+    .stat-row {
+        justify-content: left;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        .item {
+            width: fit-content;
+            padding-left: 20px;
+        }
+    }
+}
+
+.tableControlBar {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.tableFixHead {
+    max-height: inherit;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tableFixHead thead th {
+    top: 0;
+    position: sticky;
+}
+
+/* Just common table stuff. Really. */
+table {
+    background: $background-1;
+    width: 100vw;
+
+}
+
+th,
+td {
+    color: white;
+    padding: 15px;
+}
+
+.child {
+    background: $background-0;
+}
+
+tbody {
+    width: 100vw;
+    height: 100px;
+    overflow-y: auto;
+
+    tr.process {
+        border-top: 1px solid #444;
+        border-bottom: 1px solid #444;
+    }
+}
+
+.ant-dropdown-trigger:hover {
+    background: $background-2 !important;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+th {
+    background-color: $background-0;
+
+    &.sort {
+        cursor: pointer;
+
+        &.active {
+            color: $blue-1;
+        }
+    }
+
+}
+
+.cut-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: inherit;
+    white-space: nowrap;
+}

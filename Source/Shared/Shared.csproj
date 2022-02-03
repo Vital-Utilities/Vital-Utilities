@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>VitalService.Shared</AssemblyName>
+    <RootNamespace>VitalService</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Dtos\Coms\Settings\**" />
+    <Compile Remove="Dtos\Coms\SignalR\**" />
+    <EmbeddedResource Remove="Dtos\Coms\Settings\**" />
+    <EmbeddedResource Remove="Dtos\Coms\SignalR\**" />
+    <None Remove="Dtos\Coms\Settings\**" />
+    <None Remove="Dtos\Coms\SignalR\**" />
+  </ItemGroup>
+
+</Project>

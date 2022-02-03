@@ -1,0 +1,103 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+    "react",
+    "prettier",
+    "@typescript-eslint",
+    "security",
+    "react-hooks",
+    "unused-imports"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:lodash-template/recommended",
+    "plugin:security/recommended",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+      // React version. "detect" automatically picks the version you have installed.
+      // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
+      // default to latest and warns if missing
+      // It will default to "detect" in the future
+    }
+  },
+  "rules": {
+    "eqeqeq": "error",
+    "prefer-arrow-callback": "error",
+    "indent": "off",
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "no-trailing-spaces": 2,
+    "comma-dangle": 2,
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": 0,
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-empty-interface": [
+      "error",
+      {
+        "allowSingleExtends": false
+      }
+    ],
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/ban-ts-ignore": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-use-before-define": 0,
+    "@typescript-eslint/no-non-null-assertion": 2,
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "react/no-unescaped-entities": 0,
+    "prefer-const": 2,
+    "no-debugger": 1,
+    "arrow-parens": 0,
+    "no-tabs": "off",
+    "react/prop-types": 0,
+    "react/display-name": 0,
+    "react-hooks/exhaustive-deps": 0,
+    "security/detect-object-injection": 0,
+    "prettier/prettier": [
+      "warn",
+      {
+        "arrowParens": "avoid",
+        "bracketSpacing": true,
+        "trailingComma": "none",
+        "endOfLine": "auto",
+        "printWidth": 400,
+        "singleQuote": false,
+        "useTabs": false,
+        "semi": true,
+        "indent": 4,
+        "tabWidth": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+/Publish
+/Source/Affinity/logs
+app.db
+*.db-shm
+*.db-wal
+*.db

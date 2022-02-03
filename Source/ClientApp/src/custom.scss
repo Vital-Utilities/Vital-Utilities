@@ -1,0 +1,399 @@
+@import "./variables.scss";
+
+
+#root {
+    height: 100vh;
+}
+
+body {
+    height: 100%;
+    background: $background-0;
+    overflow: hidden;
+
+}
+
+h1,
+h2,
+h3,
+h4 {
+    margin: 0;
+}
+
+.ant-message-notice-content,
+.ant-popover-inner,
+.ant-notification-notice {
+    background: #40455f;
+}
+
+.ant-dropdown-menu {
+    background: $background-1;
+    border: 1px solid $background-2;
+
+    .ant-dropdown-menu-item-group-title {
+        color: $primary;
+    }
+
+    .ant-dropdown-menu-item,
+    .ant-dropdown-menu-submenu-title {
+        color: $primary;
+
+
+        &:hover {
+            background: $background-2;
+            color: $primary;
+        }
+    }
+}
+
+
+.ant-notification-notice-message {
+    color: white;
+}
+
+.ant-progress .ant-progress-inner {
+    background: $background-2 !important;
+}
+
+.ant-progress-text {
+    color: white !important;
+}
+
+.ant-menu {
+    background: transparent;
+
+    .ant-menu-title-content {
+        color: $primary;
+    }
+}
+
+.anticon {
+    color: white;
+    margin: 0 !important;
+}
+
+.ant-radio-button-wrapper {
+    background-color: $background-1 !important;
+    color: white;
+}
+
+
+.ant-menu-item .ant-menu-item-icon+span,
+.ant-menu-submenu-title .ant-menu-item-icon+span,
+.ant-menu-item .anticon+span,
+.ant-menu-submenu-title .anticon+span {
+    margin: 0;
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item:hover,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu:hover,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item-active,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu-active,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item-open,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu-open,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item-selected,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu-selected .ant-menu-item {
+    color: #1890ff;
+    border-bottom: 5px solid $border-blue;
+}
+
+.ant-menu-horizontal,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item:hover::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu:hover::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item-active::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu-active::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item-open::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu-open::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item-selected::after,
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-submenu-selected::after {
+    border: none;
+}
+
+.ant-menu-item-selected {
+    .anticon {
+        color: $primary;
+    }
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark)>.ant-menu-item {
+    padding-right: 20px;
+    padding-left: 20px;
+    margin: 0px 0px 0px 10px;
+}
+
+.ant-empty-description {
+    color: white;
+}
+
+a {
+    color: $blue-1;
+}
+
+h1,
+h2,
+h3,
+h4,
+div {
+    color: white;
+}
+
+code {
+    color: #e01a76;
+}
+
+.ant-breadcrumb a,
+.ant-breadcrumb-separator {
+    color: $secondary;
+}
+
+.ant-breadcrumb>span:last-child {
+    color: $primary;
+}
+
+.ant-checkbox-wrapper,
+.ant-form-item-label>label {
+    color: white;
+}
+
+.ant-btn {
+    background-color: $btn;
+    color: white;
+
+    &:hover {
+        background: lighten($btn, 10%);
+        color: white;
+    }
+
+    &:active,
+    &:focus {
+        color: inherit;
+        border-color: inherit;
+        background: inherit;
+    }
+}
+
+.ant-btn-primary {
+    color: #fff;
+    background: $btn-primary;
+    border-color: #1861ac;
+
+    &:hover {
+        color: #fff;
+        background: lighten($btn-primary, 10%);
+    }
+}
+
+.ant-progress-text {
+    color: white;
+}
+
+.ant-progress {
+    .ant-progress-inner {
+        background-color: #555;
+    }
+}
+
+.ant-btn-dangerous {
+    &:hover {
+        background: lighten($btn, 10%);
+    }
+
+    &:focus {
+        background: rgb(75, 0, 0);
+    }
+}
+
+.ant-layout {
+    background: $background-1;
+}
+
+.ant-select {
+    color: White;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.ant-select-dropdown,
+.ant-select-item-option {
+    background: $background-1;
+    color: white;
+}
+
+.ant-select-dropdown {
+    border: 1px solid $blue-1;
+}
+
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background: $background-2;
+}
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background: $background-0;
+    color: $blue-1;
+}
+
+.ant-input {
+    background: $background-1;
+    color: white;
+}
+
+.ant-checkbox-inner,
+.ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed,
+.ant-table-row-expand-icon.ant-table-row-expand-icon-expanded {
+    background: $background-1;
+}
+
+.ant-form-item,
+.ant-radio-wrapper {
+    color: white;
+}
+
+.ant-table-tbody>tr>td,
+.ant-table-tbody>tr>td,
+.ant-table-tbody>tr.ant-table-row:hover>td,
+.ant-table-tbody>tr.ant-table-placeholder:hover>td,
+.ant-table-expanded-row>td,
+tr.ant-table-expanded-row:hover>td {
+    background: $background-1;
+    color: white;
+}
+
+.ant-table-thead>tr>th {
+    @include header;
+}
+
+.ant-table-thead th.ant-table-column-sort,
+.ant-table-thead th.ant-table-column-has-sorters:hover {
+    @include header-hover;
+}
+
+.ant-table-body {
+    overflow-y: auto !important;
+}
+
+.ant-modal-content {
+    background-color: $background-1;
+
+    .ant-modal-header,
+    .ant-modal-title {
+        @include header;
+    }
+
+    .ant-modal-body {
+        .header {
+            @include content-header;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.ant-menu-horizontal>.ant-menu-item::after,
+.ant-menu-horizontal>.ant-menu-submenu::after {
+    transition: none !important;
+}
+
+
+.button-row>button {
+    margin: 5px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.overlayFilter {
+    transition: 0.2s ease;
+}
+
+.overlay-container {
+    position: relative;
+}
+
+.center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: fit-content;
+}
+
+.recharts-default-tooltip {
+    background-color: #333 !important;
+}
+
+text.recharts-text.recharts-cartesian-axis-tick-value {
+    fill: white !important;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: $background-0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: $background-2;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: $scroll-hover-color-1;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:active {
+    background: $blue-1;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.hide-legend {
+    .recharts-legend-wrapper {
+        display: none;
+    }
+}
+
+.interactable {
+    color: $interactableStaticColor;
+
+    .anticon {
+        color: $interactableStaticColor;
+    }
+
+    &:hover .anticon,
+    &:hover {
+        color: $interactableHoverColor;
+        cursor: pointer;
+    }
+}

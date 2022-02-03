@@ -1,0 +1,127 @@
+Copyright © 2022 Snazzie, Aaron Cooper. All rights reserved.
+
+Vital License v1.0
+
+1. Definitions
+--------------
+
+1.1 "Contributor"
+    means each individual or legal entity that creates, contributes to
+    the creation of, or owns Covered Software.
+    
+1.2 "Contributor Version"
+    means the combination of the Contributions of others (if any) used
+    by a Contributor and that particular Contributor's Contribution.
+    
+1.3 "Contribution"
+    means Modifications to Covered Software of a particular Contributor.
+    
+1.4 "Official Repository"
+    means the origin of where the Covered Software's source materials resides in.
+    
+1.5 "Compiled binary"
+    means any form of the work other than Source Code Form.
+    
+1.6 "Covered Software"
+    means Source Code Form to which the initial Contributor has attached
+    the notice in Exhibit A, the Executable Form of such Source Code
+    Form, and Modifications of such Source Code Form, in each case
+    including portions thereof.
+    
+1.7 "License"
+    means this document.
+
+1.8 "Modifications"
+    means any of the following:
+
+    (a) any file in Source Code Form that results from an addition to,
+        deletion from, or modification of the contents of Covered
+        Software; or
+
+    (b) any new file in Source Code Form that contains any Covered
+        Software.
+
+1.9 "You" (or "Your")
+    means an individual or a legal entity exercising rights under this
+    License. For legal entities, "You" includes any entity that
+    controls, is controlled by, or is under common control with You. For
+    purposes of this definition, "control" means (a) the power, direct
+    or indirect, to cause the direction or management of such entity,
+    whether by contract or otherwise, or (b) ownership of more than
+    fifty percent (50%) of the outstanding shares or beneficial
+    ownership of such entity.
+
+
+2 Terms and Conditions
+------------------------
+
+2.1 Copyright Holder
+    The Copyright Holder Aaron Cooper holds all rights to all contributions 
+    made to the Covered Software.
+    
+2.2 Grants and Conditions
+    1. Permission to use the Official Compiled Binary of the Covered Software
+       for private and non commercial use is granted to all.
+
+    2. Permission to modify and compile source code of the Covered Software is 
+       granted to You only if You intend to submit your Modifications as a 
+       form of Contribution to the Official Repository.
+       
+    3. Permissions in Section 2.2.2 is only granted to You if You agree to automatically
+       forfeit all Your rights to Your Contributions to the Copyright Holder of the
+       Covered Software when the Contribution is added into the Covered Software Source.
+       
+2.3 Representation
+    Each Contributor represents that the Contributor believes its
+    Contributions are its original creation(s) or it has sufficient rights
+    to grant the rights to its Contributions conveyed by this License.
+
+2.4 Effective Date
+    The License becomes effective immediately when You possess any materials 
+    covered by the License.
+
+3 Termination
+-----------------
+
+3.1 The permissions granted under this License will terminate automatically
+    if You fail to comply with any of its Terms and Conditions. However, if You become
+    compliant, then the permissions granted under this License are reinstated.
+     
+3.2 If you were notified that your permissions are revoked, the permissions granted
+    by this license can only be reinstated to you manually by the copyright holder.
+     
+3.3 If you were banned from the repository, it means that permissions granted to You by 
+    this License are terminated and cannot be reinstated until the ban is lifted.
+
+3.4 If you dont have the permissions granted under Section 2.2.2, you must remove 
+    any material covered by this License from your posession. This includes 
+    but not limited to forks, code, local checkouts and Compiled Binaries.
+     
+4 Publish and Distribution    
+-------------------------------
+
+  PUBLISHING AND DISTRIBUTING MODIFIED AND UNMODIFIED COPYRIGHTED MATERIALS 
+  WITHOUT EXPLICIT PERMISSION FROM THE COPYRIGHT HOLDER IS PROHIBITED. 
+
+5 Disclaimer of Warranty
+------------------------------
+
+  THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. 
+  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES 
+  PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, 
+  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+  FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE 
+  PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL 
+  NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+6 Limitation of Liability
+-----------------------------------
+
+  IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL 
+  ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE 
+  PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY 
+  GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE 
+  USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF 
+  DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES 
+  OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH 
+  HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
