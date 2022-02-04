@@ -56,6 +56,7 @@ Report a bug >> [Issues](https://github.com/Snazzie/Vital-Utilities/issues)
 - Bugs exists. UI and features are missing and are subject to change throughout its development.
 
 ## Looking for help
+Please get in contact with Snazzie if you're interested in helping with anything below.
 
 - Looking for someone who has experience with Wix toolkit to complete the installer
 - Looking for someone who has experience with AMD and NVIDIA SDK to grab cpu and gpu data
