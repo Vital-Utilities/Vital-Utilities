@@ -20,6 +20,6 @@ jobs:
         cache-dependency-path: '**/package-lock.json'
     - run: npm i -g ts-node
     - run: npm i -g @types/node
-    - run: npm i
+    - run: npm ci
     - run: npm test
     - run: npm run build --if-present
