@@ -3,7 +3,6 @@
 </p>
 <p align="center">
 
-<img src="https://github.com/Snazzie/Vital/workflows/.NET%20Core/badge.svg"/>
 <img src="https://img.shields.io/github/v/release/snazzie/Vital-Utilities?include_prereleases"/>
 <a href="https://discord.gg/ghQ8nQK2ma"><img src="https://img.shields.io/discord/753338394481787070?label=Discord"/></a>
  <br/>
@@ -57,6 +56,7 @@ Report a bug >> [Issues](https://github.com/Snazzie/Vital-Utilities/issues)
 - Bugs exists. UI and features are missing and are subject to change throughout its development.
 
 ## Looking for help
+Please get in contact with Snazzie if you're interested in helping with anything below.
 
 - Looking for someone who has experience with Wix toolkit to complete the installer
 - Looking for someone who has experience with AMD and NVIDIA SDK to grab cpu and gpu data

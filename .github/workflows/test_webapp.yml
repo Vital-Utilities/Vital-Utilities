@@ -1,0 +1,25 @@
+name: Test Web App
+
+on:
+  workflow_dispatch:
+  push:
+    paths: 'Source/ClientApp/**'
+defaults:
+  run:
+    working-directory: ./Source/ClientApp
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    - run: npm i -g ts-node
+    - run: npm i -g @types/node
+    - run: npm i
+    - run: npm test
+    - run: npm run build --if-present
