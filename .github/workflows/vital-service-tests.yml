@@ -1,4 +1,4 @@
-name: Test Vital Service
+name: Vital Service Tests
 
 on:
   workflow_dispatch:
