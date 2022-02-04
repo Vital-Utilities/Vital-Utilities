@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="MySetup" Language="1033" Version="!(bind.fileVersion.VitalService)" Manufacturer="MyCompany" UpgradeCode="$guid3$">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate />
+
+        <Feature Id="ProductFeature" Title="MySetup" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder">
+                <Directory Id="INSTALLFOLDER" Name="VitalApp" />
+            </Directory>
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+             <File Id="VitalService" Name="VitalService.exe" Source="VitalService.exe" />
+        </ComponentGroup>
+    </Fragment>
+
+    <ServiceInstall Account="NT AUTHORITY\LocalService"
+                    Id="d2f40bab-8ff9-4cce-8cda-eaeb001f0492"
+                    Start="auto"
+                    Interactive="yes"
+                    DisplayName="VitalService"
+                    Name="VitalService"
+                    Type="ownProcess"
+                    Vital="yes" >
+      <util:ServiceConfig FirstFailureActionType="restart"
+                          SecondFailureActionType="restart"
+                          ThirdFailureActionType="restart"/>
+
+      
+    </ServiceInstall>
+</Wix>

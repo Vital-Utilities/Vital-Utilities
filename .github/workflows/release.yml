@@ -1,0 +1,81 @@
+# This is a basic workflow that is manually triggered
+
+name: Release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'version'
+        required: true
+        default: ""
+env:
+  CARGO_TERM_COLOR: always
+  SENTRYIO_BACKEND_DSN: ${{ secrets.SENTRYIO_BACKEND_DSN }}
+  SENTRYIO_REACT_DSN: ${{ secrets.SENTRYIO_REACT_DSN }}
+  SENTRYIO_RUST_DSN: ${{ secrets.SENTRYIO_RUST_DSN }}
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  vital-service-tests:
+     uses: ./.github/workflows/vital-service-tests.yml
+  webapp-tests:
+     uses: ./.github/workflows/test_webapp.yml
+  build-deploy:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    needs: [vital-service-tests, webapp-tests]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        include-prerelease: false
+    - name: install Rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Cache Rust
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/cache
+          !~/cache/exclude
+        key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
+    - name: modify version
+      run: |
+        cd "./Source"
+        echo ${{ github.event.inputs.version }} > Version.txt
+        
+    - name: version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./Source/Version.txt
+        git commit -m "Update Version" -a
+    - uses: actions/setup-node@v2
+      with:
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+    - name: install ts-node
+      run: |
+        cd "./Source/ClientApp"
+        npm i -g ts-node
+        npm i -D @types/node
+    - name: Build release
+      run: |
+        cd "./Source/ClientApp"
+        npm run build:release
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with: 
+        draft: true
+        generate_release_notes: true
+        fail_on_unmatched_files: true
+        tag_name: ${{ github.event.inputs.version }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files:
+          './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi'
