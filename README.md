@@ -4,6 +4,7 @@
 <p align="center">
 
 <img src="https://img.shields.io/github/v/release/snazzie/Vital-Utilities?include_prereleases"/>
+<img src="https://github.com/Snazzie/Vital-Utilities/actions/workflows/test_webapp.yml/badge.svg?branch=master"/>
 <a href="https://discord.gg/ghQ8nQK2ma"><img src="https://img.shields.io/discord/753338394481787070?label=Discord"/></a>
  <br/>
 🌟🌠✨⭐Show your support by hitting that Star, share and talk about this app ⭐✨🌠🌟
