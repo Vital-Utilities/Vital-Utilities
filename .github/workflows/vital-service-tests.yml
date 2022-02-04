@@ -3,7 +3,7 @@ name: Test Vital Service
 on:
   workflow_dispatch:
   push:
-    paths: 'Source/Backend**'
+    paths: 'Source/Backend/**'
 jobs:
   build:
     runs-on: windows-latest
