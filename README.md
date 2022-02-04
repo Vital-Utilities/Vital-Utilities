@@ -3,7 +3,6 @@
 </p>
 <p align="center">
 
-<img src="https://github.com/Snazzie/Vital/workflows/.NET%20Core/badge.svg"/>
 <img src="https://img.shields.io/github/v/release/snazzie/Vital-Utilities?include_prereleases"/>
 <a href="https://discord.gg/ghQ8nQK2ma"><img src="https://img.shields.io/discord/753338394481787070?label=Discord"/></a>
  <br/>
