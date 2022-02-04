@@ -3,8 +3,7 @@ name: Test Web App
 on:
   workflow_dispatch:
   push:
-    paths: "Source/ClientApp/
-
+    paths: "Source/ClientApp/**"
 jobs:
   build:
     runs-on: ubuntu-latest
