@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     paths: 'Source/ClientApp/**'
+defaults:
+  run:
+    working-directory: ./Source/ClientApp
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +20,6 @@ jobs:
         cache-dependency-path: '**/package-lock.json'
     - run: npm i -g ts-node
     - run: npm i -g @types/node
-    - run: cd "./Source/ClientApp"
     - run: npm i
     - run: npm run build --if-present
     - run: npm test
