@@ -3,7 +3,7 @@ name: Test Web App
 on:
   workflow_dispatch:
   push:
-    path: "Source/ClientApp/
+    paths: "Source/ClientApp/
 
 jobs:
   build:
