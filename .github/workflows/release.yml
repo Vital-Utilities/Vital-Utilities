@@ -29,6 +29,15 @@ jobs:
     needs: [vital-service-tests, webapp-tests]
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
+    - name: Install dependencies
+      run: dotnet add package Newtonsoft.Json --version 12.0.1
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
