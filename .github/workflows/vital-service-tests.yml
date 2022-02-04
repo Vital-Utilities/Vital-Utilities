@@ -7,7 +7,7 @@ on:
     paths: 'Source/Backend/**'
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env: 
        source: ./Source
     steps:

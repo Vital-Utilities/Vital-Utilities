@@ -3,11 +3,11 @@
 </p>
 <p align="center">
 
-<img src="https://img.shields.io/github/v/release/snazzie/Vital-Utilities?include_prereleases"/>
+<img src="https://img.shields.io/github/v/release/Vital-Utilities/Vital-Utilities?include_prereleases"/>
 <a href="https://discord.gg/ghQ8nQK2ma"><img src="https://img.shields.io/discord/753338394481787070?label=Discord"/></a>
 <br/>
-<img src="https://github.com/Snazzie/Vital-Utilities/actions/workflows/vital-service-tests.yml/badge.svg?branch=master"/>
-<img src="https://github.com/Snazzie/Vital-Utilities/actions/workflows/test_webapp.yml/badge.svg?branch=master"/>
+<img src="https://github.com/Vital-Utilities/Vital-Utilities/actions/workflows/vital-service-tests.yml/badge.svg?branch=master"/>
+<img src="https://github.com/Vital-Utilities/Vital-Utilities/actions/workflows/test_webapp.yml/badge.svg?branch=master"/>
 <br/>
 🌟🌠✨⭐Show your support by hitting that Star, share and talk about this app ⭐✨🌠🌟
 
@@ -33,9 +33,9 @@
 
 ## Links
 
-Feature requests and questions >> [Discussion](https://github.com/Snazzie/Vital-Utilities/discussions)
+Feature requests and questions >> [Discussion](https://github.com/Vital-Utilities/Vital-Utilities/discussions)
 
-Report a bug >> [Issues](https://github.com/Snazzie/Vital-Utilities/issues)
+Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issues)
 
 [Discord Server](https://discord.gg/ghQ8nQK2ma)
 
@@ -53,7 +53,7 @@ Report a bug >> [Issues](https://github.com/Snazzie/Vital-Utilities/issues)
 
 ## Notice
 
-- Always download installers from [The Official Download Location](https://github.com/Snazzie/Vital-Utilities/releases) to avoid tampered code from malicious people.
+- Always download installers from [The Official Download Location](https://github.com/Vital-Utilities/Vital-Utilities/releases) to avoid tampered code from malicious people.
 - If for whatever reason you decided to not take the above advice, at least make sure the file is signed by this repository.
 - The state of this project is very much in alpha stage.
 - Bugs exists. UI and features are missing and are subject to change throughout its development.
