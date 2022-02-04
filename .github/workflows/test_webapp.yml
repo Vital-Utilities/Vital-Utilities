@@ -15,9 +15,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
-    - run: cd ./Source/ClientApp
     - run: npm i -g ts-node
     - run: npm i -g @types/node
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+    - run: |
+        cd ./Source/ClientApp
+        npm ci
+        npm run build --if-present
+        npm test
