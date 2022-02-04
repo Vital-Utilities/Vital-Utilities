@@ -1,4 +1,4 @@
-name: Vital Service Tests
+name: Test Vital Service
 
 on:
   push:
