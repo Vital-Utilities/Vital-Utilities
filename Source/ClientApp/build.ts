@@ -51,7 +51,7 @@ function buildSoftware() {
 
     execute(`dotnet build ../Backend/VitalService.csproj -c release -o ./bin/Backend/ -p:Version=${version}`);
     //execute(`dotnet publish ../Backend/VitalService.csproj -c release -o ./bin/Backend/ -p:Version=${version} -p:PublishProfile=FolderProfile`);
-    execute("npm install");
+    execute("npm ci");
     execute("npm run generateRustTypings");
     execute("npm run build");
 }
