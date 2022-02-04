@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Release
+name: Do Release With Tests
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -23,12 +23,19 @@ jobs:
      uses: ./.github/workflows/vital-service-tests.yml
   webapp-tests:
      uses: ./.github/workflows/test_webapp.yml
-  build-deploy:
+  build-release:
     # The type of runner that the job will run on
     runs-on: windows-latest
     needs: [vital-service-tests, webapp-tests]
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: ~/.nuget/packages
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -58,6 +65,7 @@ jobs:
         git commit -m "Update Version" -a
     - uses: actions/setup-node@v2
       with:
+        node-version: '17.4.0'
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
     - name: install ts-node
