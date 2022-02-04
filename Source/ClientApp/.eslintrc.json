@@ -6,7 +6,6 @@
     "jest": true
   },
   "plugins": [
-    "react",
     "prettier",
     "@typescript-eslint",
     "security",
@@ -19,7 +18,6 @@
     "plugin:lodash-template/recommended",
     "plugin:security/recommended",
     "eslint:recommended",
-    "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "prettier"
   ],

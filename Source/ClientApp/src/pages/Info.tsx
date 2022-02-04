@@ -1,14 +1,14 @@
 import React from "react";
-import { version, name, copyright } from "../../package.json";
+import packageInfo from "../../package.json";
 import { BsDiscord, BsGithub } from "react-icons/bs";
 import { openUrl } from "../Utilities/TauriCommands";
 export const InfoPage: React.FunctionComponent = () => {
     return (
         <div style={{ alignItems: "center", display: "grid", justifyContent: "center", height: "100%", width: "100%" }}>
             <div>
-                <h1>{name}</h1>
-                <p>v{version}</p>
-                <div style={{ fontWeight: "bold" }}>{copyright}</div>
+                <h1>{packageInfo.name}</h1>
+                <p>v{packageInfo.version}</p>
+                <div style={{ fontWeight: "bold" }}>{packageInfo.copyright}</div>
                 <br />
                 <div style={{ display: "flex", flexDirection: "column", gap: 5, fontSize: 16 }}>
                     <a onClick={() => openUrl("https://discord.gg/ghQ8nQK2ma")}>
