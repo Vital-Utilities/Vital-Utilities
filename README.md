@@ -3,7 +3,7 @@
 </p>
 <p align="center">
 
-<img src="https://img.shields.io/github/v/release/Vital-Utilities/Vital-Utilities?include_prereleases"/>
+<img src="https://img.shields.io/github/v/release/Vital-Utilities/Vital-Utilities?style=flat-square"/>
 <a href="https://discord.gg/ghQ8nQK2ma"><img src="https://img.shields.io/discord/753338394481787070?label=Discord"/></a>
 <br/>
 <img src="https://github.com/Vital-Utilities/Vital-Utilities/actions/workflows/vital-service-tests.yml/badge.svg?branch=master"/>
