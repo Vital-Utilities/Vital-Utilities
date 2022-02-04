@@ -16,7 +16,7 @@ jobs:
         cache-dependency-path: '**/package-lock.json'
     - name: Test
     - run: cd "./Source/ClientApp"
-      run: |
+    - run: |
         npm i -g ts-node
         npm i -D @types/node
     - run: npm ci
