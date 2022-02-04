@@ -21,5 +21,5 @@ jobs:
     - run: npm i -g ts-node
     - run: npm i -g @types/node
     - run: npm i
-    - run: npm run build --if-present
     - run: npm test
+    - run: npm run build --if-present
