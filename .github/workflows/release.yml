@@ -19,15 +19,14 @@ env:
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  vital_service_tests:
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: ./.github/workflow/vital-service-tests.yml
+  vital-service-tests:
+     uses: /.github/workflows/vital-service-tests.yml@${GITHUB_REF}
+  webapp-tests:
+     uses: /.github/workflows/test_webapp.yml@${GITHUB_REF}
   build-deploy:
     # The type of runner that the job will run on
     runs-on: windows-latest
-    needs: vital_service_tests
+    needs: [vital-service-tests, webapp-tests]
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
