@@ -1,6 +1,7 @@
 name: Web App Tests
 
 on:
+  workflow_call:
   workflow_dispatch:
   push:
     paths: 'Source/ClientApp/**'
