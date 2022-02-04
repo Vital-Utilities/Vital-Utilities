@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Release
+name: Do Release With Tests
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -23,7 +23,7 @@ jobs:
      uses: ./.github/workflows/vital-service-tests.yml
   webapp-tests:
      uses: ./.github/workflows/test_webapp.yml
-  build-deploy:
+  build-release:
     # The type of runner that the job will run on
     runs-on: windows-latest
     needs: [vital-service-tests, webapp-tests]
