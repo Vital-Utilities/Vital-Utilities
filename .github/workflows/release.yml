@@ -67,6 +67,7 @@ jobs:
         git commit -m "Update Version" -a
     - uses: actions/setup-node@v2
       with:
+        node-version: '17.4.0'
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
     - name: install ts-node
