@@ -1,6 +1,7 @@
 name: Test Vital Service
 
 on:
+  workflow_dispatch:
   push:
     paths: 'Source/Backend**'
 jobs:
