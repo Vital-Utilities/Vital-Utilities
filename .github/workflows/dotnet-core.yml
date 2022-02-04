@@ -1,9 +1,8 @@
-name: .NET Core
+name: Vital Service Tests
 
 on:
   push:
-    branches: [ master ]
-    
+    paths: 'Source/Backend**'
 jobs:
   build:
     runs-on: windows-latest
