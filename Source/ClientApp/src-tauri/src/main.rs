@@ -83,7 +83,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
 
     if cfg!(feature = "release") && !is_vital_service_running() {
-        let _ = start_backend();
+        let _ = start_vital_service();
     }
 
     tauri::Builder::default()
@@ -145,32 +145,39 @@ fn set_always_on_top(app: &AppHandle, value: bool) {
     }
 }
 
-fn end_process(pid: u32) {
+fn end_process(pid: u32) -> Result<(), String> {
     if !cfg!(feature = "release") {
         info!("Debug mode: not killing process with pid: {}", pid);
-    } else {
-        info!("Killing process with pid: {}", pid);
-        let s = System::new_all();
-        let process = s.process(pid.try_into().unwrap());
-        match process {
-            Some(process) => {
-                let result = process.kill();
-                if result == false {
-                    error!("failed to terminate process. {:?}", pid);
-                }
+        return Err("Debug mode: not killing process".to_string());
+    }
+
+    info!("Killing process with pid: {}", pid);
+    let s = System::new_all();
+    let process = s.process(pid.try_into().unwrap());
+    match process {
+        Some(process) => {
+            let result = process.kill();
+            if result == false {
+                error!("failed to terminate process. {:?}", pid);
+                return Err("failed to terminate process".to_string());
             }
-            None => info!("process not found. {:?}", pid),
+            return Ok(());
+        }
+        None => {
+            info!("process not found. {:?}", pid);
+            return Err("process not found".to_string());
         }
     }
 }
 
 // function uses winapi to get process of given pid and kills it.
 
-fn start_backend() -> Result<String, String> {
+fn start_vital_service() -> Result<String, String> {
     if !cfg!(feature = "release") {
         info!("Debug mode: backend will not be started");
         return Ok("Debug mode: backend will not be started".to_string());
     } else {
+        info!("Starting Vital Service");
         const CREATE_NO_WINDOW: u32 = 0x08000000;
         let result = Command::new("cmd")
             .args(&["/C", "start", "./bin/Backend/VitalService.exe"])
@@ -179,12 +186,12 @@ fn start_backend() -> Result<String, String> {
 
         match result {
             Ok(_) => {
-                info!("Backend started");
-                return Ok("Backend started".to_string());
+                info!("Vital Service started");
+                return Ok("Vital Service started".to_string());
             }
             Err(err) => {
-                error!("Failed to start backend: {:?}", err);
-                return Err(format!("Failed to start backend: {:?}", err));
+                error!("Failed to start Vital Service: {:?}", err);
+                return Err(format!("Failed to start Vital Service: {:?}", err));
             }
         }
     }
@@ -198,7 +205,7 @@ fn is_vital_service_running() -> bool {
     return false;
 }
 
-fn get_vital_service_pid() -> Option<usize> {
+fn get_running_vital_service_pid() -> Option<usize> {
     let s = System::new_all();
     for _process in s.process_by_name("VitalService") {
         return Some(_process.pid());
@@ -212,20 +219,21 @@ fn restart_vital_service() -> Result<String, String> {
         let msg = "Debug mode: backend will not be restarted".to_string();
         info!("{}", msg);
         return Err(msg);
-    } else {
-        match get_vital_service_pid() {
-            some => match some {
-                Some(pid) => {
-                    end_process(pid as u32);
-                    let _ = start_backend();
-                    return Ok("Attempted to restart backend".to_string());
-                }
-                None => {
-                    let msg = "failed to get vital service pid".to_string();
-                    error!("{}", msg);
-                    return Err(msg);
-                }
-            },
+    }
+
+    match get_running_vital_service_pid() {
+        Some(pid) => {
+            info!("Found an existing Vital Service instance running, killing it");
+            let end_process_result = end_process(pid as u32);
+
+            if end_process_result.is_err() {
+                return Err(end_process_result.unwrap_err());
+            }
+
+            return start_vital_service();
+        }
+        None => {
+            return start_vital_service();
         }
     }
 }
@@ -329,6 +337,7 @@ fn update_vital_service_port(port_number: f64) -> Result<String, String> {
         }
     }
 }
+
 #[tauri::command]
 fn open_url(url: &str) -> Result<(), String> {
     let result = webbrowser::open(url);
