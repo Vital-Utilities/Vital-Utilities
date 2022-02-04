@@ -96,7 +96,7 @@ namespace VitalService
 #endif
                  //webBuilder.UseElectron(args);
                  webBuilder.UseStartup<Startup>();
-             }).UseWindowsService(e => { e.ServiceName = AppDomain.CurrentDomain.FriendlyName; });
+             });
 
             return builder;
         }
