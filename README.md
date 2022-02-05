@@ -55,6 +55,7 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 - Always download installers from [The Official Download Location](https://github.com/Vital-Utilities/Vital-Utilities/releases) to avoid tampered code from malicious people.
 - The state of this project is very much in alpha stage.
 - Bugs exists. UI and features are missing and are subject to change throughout its development.
+- There is no built in update checker. So join the discord server to get notified.
 
 ## Tech Stack
 
