@@ -24,7 +24,7 @@ body:
       options:
         - Windows 10
         - Windows 11
-        required: true
+      required: true
   - type: textarea
     id: logs
     attributes:
