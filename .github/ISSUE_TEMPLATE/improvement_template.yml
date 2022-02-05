@@ -9,6 +9,6 @@ body:
       label: "What improvement would you like to see?"
       description: "What is the issue you're having with the current feature"
       placeholder: "It would be awesome if...."
-      value: ""
+      value: "It would be awesome if"
     validations:
       required: true
