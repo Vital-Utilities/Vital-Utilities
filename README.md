@@ -124,7 +124,7 @@ VitalService.exe is the back bone of the application, without it the app will no
 Not giving VitalService.exe admin priviledges will lead to the following results:
 
 - Some machine stats will not be collected due to LibreHardware requiring it to collect them.
-- Process Manager will not be able to modify the affinity of some processes. ('audiodg' as an example)
+- Process Affinity profile will not be able to modify the affinity of some processes. ('audiodg' as an example)
 
 ## Auto start Vital Service on log in
 
