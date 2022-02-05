@@ -11,6 +11,10 @@ export enum ProcessPriorityEnum {
 	High = "High",
 	RealTime = "RealTime"
 }
+export interface ClientSettings
+{
+	alwaysOnTop: boolean;
+}
 export interface AddProccessRequest
 {
 	processName: string;
