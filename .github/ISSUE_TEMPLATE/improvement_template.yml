@@ -6,9 +6,9 @@ body:
   - type: textarea
     id: improvement
     attributes:
-      label: What improvement would you like to see?
-      description: What is the issue you're having with the current feature
-      placeholder: It would be awesome if....
+      label: "What improvement would you like to see?"
+      description: "What is the issue you're having with the current feature"
+      placeholder: "It would be awesome if...."
       value: ""
     validations:
       required: true
