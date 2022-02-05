@@ -14,7 +14,7 @@ export const InfoPage: React.FunctionComponent = () => {
                     <a onClick={() => openUrl("https://discord.gg/ghQ8nQK2ma")}>
                         <BsDiscord /> Discord Hangout
                     </a>
-                    <a onClick={() => openUrl("https://github.com/Vital-Utilities/Vital-Utilities/issues/new")}>
+                    <a onClick={() => openUrl("https://github.com/Vital-Utilities/Vital-Utilities/issues/new?assignees=&labels=Bug&template=bug_report.yaml&title=Bug")}>
                         <BsGithub /> Submit a bug
                     </a>
                     <a onClick={() => openUrl("https://github.com/Vital-Utilities/Vital-Utilities/discussions/categories/feature-requests-suggestions")}>
