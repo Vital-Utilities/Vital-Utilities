@@ -91,6 +91,7 @@ Vital is a modern alternative to Windows Task Manager. It aims to provide a fami
 ## Why use Vital?
 
 - Find the process to kill faster with search 🗡️ (search by pid, name, title)
+- Always On Top ensures Vital Utilities app is always above other apps when it matters the most. Unlike scaredy Task Manager 👻
 - Dark theme so your retina is safe. 🐼
 - Beautiful Graphs 📈📊
 - Plentiful information 👓
