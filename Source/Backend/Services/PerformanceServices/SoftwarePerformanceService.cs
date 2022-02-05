@@ -11,7 +11,6 @@ using System.Management.Automation;
 using System.Threading;
 using System.Threading.Tasks;
 using VitalService.Stores;
-
 namespace VitalService.Services.PerformanceServices
 {
     public class SoftwarePerformanceService : IHostedService
@@ -158,8 +157,9 @@ namespace VitalService.Services.PerformanceServices
                 var unrespondingProcesses = new HashSet<int>();
                 Utilities.Debug.LogExecutionTime("Get Processes with main title", () =>
                 {
-                    var ps = PowerShell.Create().AddScript("Get-Process | Where-Object { $_.MainWindowTitle }").Invoke();
-                    foreach (var collection in ps)
+                    var ps = PowerShell.Create();
+                    ps.AddScript("Get-Process | Where-Object { $_.MainWindowTitle }");
+                    foreach (var collection in ps.Invoke())
                     {
                         var baseobj = collection.BaseObject;
                         var type = baseobj.GetType();
