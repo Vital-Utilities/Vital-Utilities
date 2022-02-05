@@ -1,38 +1,42 @@
 name: Bug Report
 description: File a bug report
-title: "[Bug]:"
-labels: ["Bug"]
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - octocat
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
   - type: textarea
+    id: what-happened
     attributes:
       label: What happened?
       description: Also tell us, what did you expect to happen?
       placeholder: Tell us what you see!
+      value: "A bug happened!"
     validations:
       required: true
   - type: dropdown
+    id: what-os
     attributes:
-      label: Version
-      description: What version of the software are you running?
-    value: "eg. 1.0.0"
-    validations:
-      required: true
-  - type: dropdown
-    attributes:
-      label: What operating systen are you running?
+      label: What operating system are you seeing the problem on?
       multiple: true
       options:
         - Windows 10
         - Windows 11
   - type: textarea
+    id: logs
     attributes:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
       render: shell
   - type: checkboxes
+    id: terms
     attributes:
-      label: Bug exists on latest version
-      description: Please verify this bug exists on the latest version of the software.
+      label: This bug exists on the latest released version of the software
+      description: Please verify that this bug exists on the latest version of the software
       options:
-        - label: This bug exists on the latest version of the software available right now.
+        - label: I confirm this bug exists on the latest version of the software
           required: true
