@@ -53,7 +53,6 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 ## Notice
 
 - Always download installers from [The Official Download Location](https://github.com/Vital-Utilities/Vital-Utilities/releases) to avoid tampered code from malicious people.
-- If for whatever reason you decided to not take the above advice, at least make sure the file is signed by this repository.
 - The state of this project is very much in alpha stage.
 - Bugs exists. UI and features are missing and are subject to change throughout its development.
 
