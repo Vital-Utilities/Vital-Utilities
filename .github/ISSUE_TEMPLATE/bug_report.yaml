@@ -21,10 +21,10 @@ body:
     attributes:
       label: What operating system are you seeing the problem on?
       multiple: true
+      required: true
       options:
         - Windows 10
         - Windows 11
-      required: true
   - type: textarea
     id: logs
     attributes:
