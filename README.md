@@ -154,7 +154,7 @@ If you want your profiles applied and metrics collected when you log in. You can
 - Alerts / Notifications
 - Plugins API (Allow third parties to make plugins for Vital)
 - Drop .netcore and go complete Rust? 🤔
-- Option to use PostgresDb or InfluxDb2 as timeseries db.
+- Option to use PostgresDb or InfluxDb2 as timeseries db instead of SQLlite.
 - InfluxDb2 integration. (currently not all metrics are being pushed)
 - Affinity Whitelists. (only these processes can run on this thread)
 - Auto updater.
