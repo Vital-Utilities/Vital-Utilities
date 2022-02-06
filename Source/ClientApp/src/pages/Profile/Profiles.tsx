@@ -63,9 +63,10 @@ export const Profiles: React.FunctionComponent = () => {
     }
     function renderRow(e: ProfileDto) {
         return (
-            <tr>
+            <tr key={e.id}>
                 <td>{e.name}</td>
                 <td style={{ textAlign: "center" }}>{e.enabled ? "Enabled" : "Disabled"}</td>
+                <td></td>
                 <td style={{ display: "flex", gap: 10, justifyContent: "center" }}>
                     <Button>
                         <Link to={`profiles/${e.id}`}>Edit</Link>
@@ -86,7 +87,6 @@ export const Profiles: React.FunctionComponent = () => {
                         <Button danger>Delete</Button>
                     </Popconfirm>
                 </td>
-                <td></td>
                 <td></td>
             </tr>
         );
@@ -112,8 +112,8 @@ export const Profiles: React.FunctionComponent = () => {
                             Name {sortBy.sortBy === SortByEnum.Name && sortDirectionRender()}
                         </th>
                         <th style={{ width: 100 }}>Status</th>
-                        <th style={{ width: 200 }}>Actions</th>
                         <th style={{ width: 400 }}>Summary</th>
+                        <th style={{ width: 200 }}>Actions</th>
                         <th></th>
                     </tr>
                 </thead>
