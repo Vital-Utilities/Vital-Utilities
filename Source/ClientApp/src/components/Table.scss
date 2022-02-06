@@ -1,0 +1,61 @@
+@import "../variables.scss";
+
+.custom-table {
+    max-height: inherit;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    table {
+        background: $background-1;
+        width: 100vw;
+
+        thead th {
+            top: 0;
+            position: sticky;
+        }
+
+        th,
+        td {
+            color: white;
+            padding: 15px;
+            @include no-select;
+        }
+
+        th {
+            background-color: $background-0;
+
+            &.sort {
+                cursor: pointer;
+
+                &.active {
+                    color: $blue-1;
+                }
+            }
+
+        }
+
+        tbody {
+            width: 100vw;
+            height: 100px;
+            overflow-y: auto;
+
+            tr.process {
+                border-top: 1px solid #444;
+                border-bottom: 1px solid #444;
+            }
+        }
+
+        .child {
+            background: $background-0;
+        }
+
+        .cut-text {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            width: inherit;
+            white-space: nowrap;
+        }
+    }
+
+
+}

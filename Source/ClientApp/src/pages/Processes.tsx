@@ -14,6 +14,7 @@ import { GetMachineDynamicDataResponse, ParentChildModelDto, ProcessViewDto } fr
 import { getProcessCPUPercentColor } from "../components/PerfBadge";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../components/FormatUtils";
 import { openUrl } from "../Utilities/TauriCommands";
+import { Table } from "../components/Table";
 
 enum SortByEnum {
     "Description" = "Description",
@@ -332,44 +333,34 @@ export const Processes: React.FunctionComponent = () => {
                     Show all Processes
                 </Checkbox>
             </div>
-            <div className="tableFixHead">
-                <table id="table">
-                    <thead>
-                        <tr>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Description && "active"}`} style={{ minWidth: 100 }} onClick={() => setSort(SortByEnum.Description)}>
-                                Name {sortBy.sortBy === SortByEnum.Description && sortDirectionRender()}
-                            </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Title && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.Title)}>
-                                Window Title {sortBy.sortBy === SortByEnum.Title && sortDirectionRender()}
-                            </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.ProcessName && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.ProcessName)}>
-                                Process {sortBy.sortBy === SortByEnum.ProcessName && sortDirectionRender()}
-                            </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Pid && "active"}`} style={{ width: 80 }} onClick={() => setSort(SortByEnum.Pid)}>
-                                Pid {sortBy.sortBy === SortByEnum.Pid && sortDirectionRender()}
-                            </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Cpu && "active"}`} style={{ width: 80 }} onClick={() => setSort(SortByEnum.Cpu)}>
-                                CPU {sortBy.sortBy === SortByEnum.Cpu && sortDirectionRender()}
-                            </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Ram && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.Ram)}>
-                                Ram {sortBy.sortBy === SortByEnum.Ram && sortDirectionRender()}
-                            </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.DiskIO && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.DiskIO)}>
-                                Disk {sortBy.sortBy === SortByEnum.DiskIO && sortDirectionRender()}
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {/*  <tr>
-                            <td style={{ border: "none !important" }}>
-                                <h2 style={{ marginLeft: 15 }}>Apps</h2>
-                            </td>
-                        </tr> */}
-                        {view.map(e => renderProcess(e))}
-                    </tbody>
-                </table>
-            </div>
+            <Table>
+                <thead>
+                    <tr>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Description && "active"}`} style={{ minWidth: 100 }} onClick={() => setSort(SortByEnum.Description)}>
+                            Name {sortBy.sortBy === SortByEnum.Description && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Title && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.Title)}>
+                            Window Title {sortBy.sortBy === SortByEnum.Title && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.ProcessName && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.ProcessName)}>
+                            Process {sortBy.sortBy === SortByEnum.ProcessName && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Pid && "active"}`} style={{ width: 80 }} onClick={() => setSort(SortByEnum.Pid)}>
+                            Pid {sortBy.sortBy === SortByEnum.Pid && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Cpu && "active"}`} style={{ width: 80 }} onClick={() => setSort(SortByEnum.Cpu)}>
+                            CPU {sortBy.sortBy === SortByEnum.Cpu && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Ram && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.Ram)}>
+                            Ram {sortBy.sortBy === SortByEnum.Ram && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.DiskIO && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.DiskIO)}>
+                            Disk {sortBy.sortBy === SortByEnum.DiskIO && sortDirectionRender()}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>{view.map(e => renderProcess(e))}</tbody>
+            </Table>
         </>
     );
 };
