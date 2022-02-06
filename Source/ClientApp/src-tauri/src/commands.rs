@@ -6,7 +6,7 @@ use crate::{
 };
 use log::{debug, error, info};
 use sysinfo::{ProcessExt, System, SystemExt};
-use tauri::{api::path::document_dir, Manager};
+use tauri::{api::path::document_dir, AppHandle, Manager};
 
 #[tauri::command]
 pub fn get_client_settings() -> Result<ClientSettings, String> {
@@ -76,24 +76,8 @@ pub fn update_client_settings(client_settings: ClientSettings) -> Result<String,
                     }
 
                     let guard = handle.unwrap().lock().unwrap();
-                    let window = guard.get_window("main");
-
+                    let _ = set_always_on_top(&guard, client_settings.always_on_top);
                     std::mem::drop(guard);
-                    if window.is_none() {
-                        error!("Failed to get window");
-                        panic!("Failed to get window");
-                    }
-                    match window
-                        .unwrap()
-                        .set_always_on_top(client_settings.always_on_top)
-                    {
-                        Ok(_) => {
-                            debug!("Set always on top to: {}", client_settings.always_on_top);
-                        }
-                        Err(e) => {
-                            error!("Failed to set always on top: {}", e);
-                        }
-                    }
                     return Ok(msg.to_string());
                 }
                 Err(e) => {
@@ -235,6 +219,20 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
             let msg = "failed to get document directory".to_string();
             error!("{}", msg);
             return Err(msg);
+        }
+    }
+}
+
+pub fn set_always_on_top(app: &AppHandle, value: bool) -> Result<(), String> {
+    let window = app.get_window("main").unwrap();
+    match window.set_always_on_top(value) {
+        Ok(_) => {
+            debug!("Set always on top to: {}", value);
+            return Ok(());
+        }
+        Err(e) => {
+            error!("Failed to set always on top: {}", e);
+            return Err(format!("{}", e));
         }
     }
 }

@@ -5,7 +5,7 @@
 mod backend_types;
 mod commands;
 
-use commands::get_client_settings;
+use commands::{get_client_settings, set_always_on_top};
 use log::{debug, error, info, trace, warn};
 use once_cell::sync::OnceCell;
 use sentry::IntoDsn;
@@ -137,12 +137,26 @@ fn main() {
                 "restartBackend" => {
                     let _ = restart_vital_service();
                 }
-                "alwaysOnTop_enable" => {
-                    set_always_on_top(app, true);
-                }
-                "alwaysOnTop_disable" => {
-                    set_always_on_top(app, false);
-                }
+                "alwaysOnTop_enable" => match get_client_settings() {
+                    Ok(settings) => {
+                        let mut settings = settings;
+                        settings.always_on_top = true;
+                        let _ = update_client_settings(settings);
+                    }
+                    Err(e) => {
+                        error!("Failed to get client settings: {}", e);
+                    }
+                },
+                "alwaysOnTop_disable" => match get_client_settings() {
+                    Ok(settings) => {
+                        let mut settings = settings;
+                        settings.always_on_top = false;
+                        let _ = update_client_settings(settings);
+                    }
+                    Err(e) => {
+                        error!("Failed to get client settings: {}", e);
+                    }
+                },
                 _ => {}
             },
             _ => {}
@@ -172,14 +186,6 @@ fn system_tray_setup() -> SystemTray {
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(quit);
     return SystemTray::new().with_menu(tray_menu);
-}
-
-fn set_always_on_top(app: &AppHandle, value: bool) {
-    let window = app.get_window("main").unwrap();
-    let result = window.set_always_on_top(value);
-    if result.is_err() {
-        error!("failed to set always on top. {:?}", result.unwrap_err());
-    }
 }
 
 fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
