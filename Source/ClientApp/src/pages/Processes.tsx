@@ -339,7 +339,7 @@ export const Processes: React.FunctionComponent = () => {
                             <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Description && "active"}`} style={{ minWidth: 100 }} onClick={() => setSort(SortByEnum.Description)}>
                                 Name {sortBy.sortBy === SortByEnum.Description && sortDirectionRender()}
                             </th>
-                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.ProcessName && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.Title)}>
+                            <th className={`no-select sort ${sortBy.sortBy === SortByEnum.Title && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.Title)}>
                                 Window Title {sortBy.sortBy === SortByEnum.Title && sortDirectionRender()}
                             </th>
                             <th className={`no-select sort ${sortBy.sortBy === SortByEnum.ProcessName && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.ProcessName)}>
