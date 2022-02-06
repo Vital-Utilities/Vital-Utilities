@@ -4,14 +4,15 @@
 )]
 mod backend_types;
 mod commands;
-mod settings;
 
+use commands::get_client_settings;
 use log::{debug, error, info, trace, warn};
+use once_cell::sync::OnceCell;
 use sentry::IntoDsn;
-use settings::get_client_settings;
 use std::io;
+use std::sync::Mutex;
 
-use tauri::{AppHandle, Manager, Window};
+use tauri::{App, AppHandle, Manager, Window};
 use tauri::{
     CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
     SystemTraySubmenu,
@@ -19,8 +20,11 @@ use tauri::{
 
 use crate::commands::{
     get_vital_service_ports, is_vital_service_running, open_url, restart_vital_service,
-    start_vital_service, update_vital_service_port,
+    start_vital_service, update_client_settings, update_vital_service_port,
 };
+
+static APP_HANDLE: OnceCell<Mutex<AppHandle>> = OnceCell::new();
+
 fn main() {
     if cfg!(feature = "release") {
         log::set_max_level(log::LevelFilter::Error);
@@ -67,13 +71,16 @@ fn main() {
     }
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![
-            get_vital_service_ports,
-            restart_vital_service,
-            update_vital_service_port,
-            open_url
-        ])
-        .on_page_load(|window, _payload| {
+        .setup(|app| {
+            let set_handle = APP_HANDLE.set(Mutex::new(app.handle()));
+            if set_handle.is_err() {
+                error!("Failed to set app handle in once cell");
+            }
+            let window = app.get_window("main");
+            if window.is_none() {
+                error!("Failed to get window");
+                panic!("Failed to get window");
+            }
             let always_on_top = match get_client_settings() {
                 Ok(settings) => settings.always_on_top,
                 Err(e) => {
@@ -81,7 +88,7 @@ fn main() {
                     true
                 }
             };
-            let result = window.set_always_on_top(always_on_top);
+            let result = window.unwrap().set_always_on_top(always_on_top);
             match result {
                 Ok(_) => {
                     debug!("Set always on top to: {}", always_on_top);
@@ -90,7 +97,16 @@ fn main() {
                     error!("Failed to set always on top: {}", e);
                 }
             }
+            Ok(())
         })
+        .invoke_handler(tauri::generate_handler![
+            get_client_settings,
+            update_client_settings,
+            get_vital_service_ports,
+            restart_vital_service,
+            update_vital_service_port,
+            open_url
+        ])
         .system_tray(system_tray_setup())
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {

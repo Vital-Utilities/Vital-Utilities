@@ -1,30 +1,33 @@
 import React, { useEffect } from "react";
-import { Layout, Form, Radio, Button } from "antd";
+import { Layout, Form, Radio, Button, Input } from "antd";
 import { SettingsDto } from "../Dtos/Dto";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { State } from "../Redux/States";
 import { fetchSettingsAction } from "../Redux/actions/settingsAction";
+import { useRustClientSettings } from "../Utilities/TauriCommands";
 
 const { Content } = Layout;
 
 enum viewOptions {
-    //"Client" = "Client",
+    "Client" = "Client",
     "Service" = "Vital Service"
 }
 
 export const Settings: React.FunctionComponent = () => {
-    const settings = useSelector<State, SettingsDto | undefined>(state => state.settingsState.settings);
-    const [view, setView] = React.useState<viewOptions>(viewOptions.Service);
+    const backendSettings = useSelector<State, SettingsDto | undefined>(state => state.settingsState.settings);
+    const [view, setView] = React.useState<viewOptions>(viewOptions.Client);
+
+    const { clientSettings, updateClientSettings } = useRustClientSettings();
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchSettingsAction());
     }, []);
 
-    if (!settings) return <>settings is undefined</>;
+    if (!backendSettings) return <>settings is undefined</>;
     function SetRunAtStartup(runAtStartup: boolean) {
-        if (!settings) return;
+        if (!backendSettings) return;
         axios
             .put(`api/settings/SetRunAtStartup?runAtStartup=${runAtStartup ? true : false}`, {})
             .then(() => {
@@ -35,25 +38,25 @@ export const Settings: React.FunctionComponent = () => {
 
     function getPage() {
         switch (view) {
-            /*             case "Client":
+            case "Client":
                 return (
                     <div>
-                        <h2>UI</h2>
-                        {settings?.ui?.networkUtilizationFormat && (
+                        <h2>App Settings</h2>
+                        {clientSettings && (
                             <>
-                                <Form.Item label="Network Activity Format">
-                                    <Radio.Group options={Object.keys(NetworkActivityFormat)} onChange={() => null} value={NetworkActivityFormat[settings.ui.networkUtilizationFormat]} optionType="button" />
+                                <Form.Item label="Window is always on top">
+                                    <Input type={"checkbox"} checked={clientSettings.alwaysOnTop} onChange={e => updateClientSettings({ ...clientSettings, alwaysOnTop: !clientSettings.alwaysOnTop })} />
                                 </Form.Item>
                             </>
                         )}
                     </div>
-                ); */
+                );
             case viewOptions.Service:
                 return (
                     <div>
-                        {settings && (
+                        {backendSettings && (
                             <Form.Item label="Run on windows log in">
-                                <Button onClick={() => SetRunAtStartup(!settings.runAtStarup)}>{settings.runAtStarup ? "Stop Vital Service from running on log in" : "Run Vital Service on log in"}</Button> (Requires Admin Rights)
+                                <Button onClick={() => SetRunAtStartup(!backendSettings.runAtStarup)}>{backendSettings.runAtStarup ? "Stop Vital Service from running on log in" : "Run Vital Service on log in"}</Button> (Requires Admin Rights)
                             </Form.Item>
                         )}
                     </div>

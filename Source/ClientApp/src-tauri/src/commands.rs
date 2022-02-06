@@ -1,13 +1,145 @@
-use std::{convert::TryInto, os::windows::process::CommandExt, process::Command};
-
-use log::{error, info};
-use sysinfo::{ProcessExt, System, SystemExt};
-use tauri::api::path::document_dir;
+use std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex};
 
 use crate::{
-    backend_types::{LaunchSettings, SettingsDto},
-    settings::get_backend_settings,
+    backend_types::{self, ClientSettings, LaunchSettings, SettingsDto},
+    APP_HANDLE,
 };
+use log::{debug, error, info};
+use sysinfo::{ProcessExt, System, SystemExt};
+use tauri::{api::path::document_dir, Manager};
+
+#[tauri::command]
+pub fn get_client_settings() -> Result<ClientSettings, String> {
+    let document_dir = document_dir();
+    if document_dir.is_none() {
+        let msg = "failed to get document dir".to_string();
+        error!("{}", msg);
+        return Err(msg);
+    }
+    let file_path = &document_dir
+        .unwrap()
+        .join(r#"Vital Utilities\ClientSettings.json"#);
+
+    let settings_file = std::fs::read_to_string(file_path);
+    if settings_file.is_err() {
+        error!("Failed to read ClientSettings file, Creating new ClientSettings File");
+        let settings = backend_types::ClientSettings {
+            always_on_top: true,
+        };
+        let content = serde_json::to_string(&settings);
+        if content.is_err() {
+            error!("failed to serialize new ClientSettings");
+            return Err("failed to serialize new ClientSettings".to_string());
+        }
+        match std::fs::write(file_path, content.unwrap()) {
+            Ok(_) => {
+                info!("Created new ClientSettings file");
+                return Ok(settings);
+            }
+            Err(e) => {
+                error!("Failed to write client settings: {}", e);
+                return Err(format!("{}", e));
+            }
+        }
+    }
+
+    let settings = serde_json::from_str::<backend_types::ClientSettings>(&settings_file.unwrap());
+    match settings {
+        Ok(settings) => {
+            debug!("Successfully read client settings");
+            return Ok(settings);
+        }
+        Err(e) => {
+            error!("{}", e);
+            return Err(format!("{}", e));
+        }
+    }
+}
+
+#[tauri::command]
+pub fn update_client_settings(client_settings: ClientSettings) -> Result<String, String> {
+    match document_dir() {
+        Some(dir) => {
+            let file_path = dir.join(r#"Vital Utilities\ClientSettings.json"#);
+
+            let result =
+                std::fs::write(&file_path, serde_json::to_string(&client_settings).unwrap());
+            match result {
+                Ok(_) => {
+                    let msg = "Successfully updated client settings file";
+
+                    info!("{}", msg);
+                    let handle = APP_HANDLE.get();
+                    if handle.is_none() {
+                        error!("Failed to get app handle, app must restart to apply new settings");
+                        return Err(msg.to_string());
+                    }
+
+                    let guard = handle.unwrap().lock().unwrap();
+                    let window = guard.get_window("main");
+
+                    std::mem::drop(guard);
+                    if window.is_none() {
+                        error!("Failed to get window");
+                        panic!("Failed to get window");
+                    }
+                    match window
+                        .unwrap()
+                        .set_always_on_top(client_settings.always_on_top)
+                    {
+                        Ok(_) => {
+                            debug!("Set always on top to: {}", client_settings.always_on_top);
+                        }
+                        Err(e) => {
+                            error!("Failed to set always on top: {}", e);
+                        }
+                    }
+                    return Ok(msg.to_string());
+                }
+                Err(e) => {
+                    let msg = format!("Failed to update client settings file. {}", e);
+                    error!("{}", msg);
+                    return Err(msg);
+                }
+            }
+        }
+        None => {
+            let msg = "failed to get document directory".to_string();
+            error!("{}", msg);
+            return Err(msg);
+        }
+    }
+}
+
+pub fn get_backend_settings() -> Result<backend_types::SettingsDto, String> {
+    let document_dir = document_dir();
+    if document_dir.is_none() {
+        let msg = "failed to get document dir".to_string();
+        error!("{}", msg);
+        return Err(msg);
+    }
+    let file_path = document_dir
+        .unwrap()
+        .join(r#"Vital Utilities\Settings.json"#);
+
+    let settings_file = std::fs::read_to_string(file_path);
+    if settings_file.is_err() {
+        let msg = "failed to read settings file".to_string();
+        error!("{}", msg);
+        return Err(msg);
+    }
+
+    let settings = serde_json::from_str::<backend_types::SettingsDto>(&settings_file.unwrap());
+    match settings {
+        Ok(settings) => {
+            return Ok(settings);
+        }
+        Err(e) => {
+            error!("{}", e);
+            return Err(format!("{}", e));
+        }
+    }
+}
 
 #[tauri::command]
 pub fn restart_vital_service() -> Result<String, String> {
