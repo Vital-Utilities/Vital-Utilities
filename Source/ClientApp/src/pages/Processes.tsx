@@ -321,7 +321,7 @@ export const Processes: React.FunctionComponent = () => {
 
     function setSort(e: SortByEnum) {
         if (e === sortBy.sortBy) setSortBy({ ...sortBy, descending: !sortBy.descending });
-        else if (e === SortByEnum.Cpu || e === SortByEnum.Ram) setSortBy({ sortBy: e, descending: true });
+        else if (e === SortByEnum.Cpu || e === SortByEnum.Ram || e === SortByEnum.DiskIO) setSortBy({ sortBy: e, descending: true });
         else setSortBy({ sortBy: e, descending: false });
     }
     return (
