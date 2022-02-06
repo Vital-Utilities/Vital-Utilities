@@ -18,6 +18,12 @@ use std::collections::HashMap;
 pub type SettingsClasses = HashMap<String, Option<serde_json::Value>>;
 
 #[derive(Serialize, Deserialize)]
+pub struct ClientSettings {
+    #[serde(rename = "alwaysOnTop")]
+    pub always_on_top: bool,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct AddProccessRequest {
     #[serde(rename = "affinity")]
     pub affinity: Vec<f64>,

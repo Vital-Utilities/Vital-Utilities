@@ -3,21 +3,27 @@
     windows_subsystem = "windows"
 )]
 mod backend_types;
+mod commands;
 
+use commands::{get_client_settings, set_always_on_top};
 use log::{debug, error, info, trace, warn};
+use once_cell::sync::OnceCell;
 use sentry::IntoDsn;
-use std::convert::TryInto;
 use std::io;
-use std::os::windows::process::CommandExt;
-use sysinfo::{ProcessExt, System, SystemExt};
-use tauri::api::path::document_dir;
+use std::sync::Mutex;
 
-use std::process::Command;
-use tauri::{AppHandle, Manager};
+use tauri::{App, AppHandle, Manager, Window};
 use tauri::{
     CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
     SystemTraySubmenu,
 };
+
+use crate::commands::{
+    get_vital_service_ports, is_vital_service_running, open_url, restart_vital_service,
+    start_vital_service, update_client_settings, update_vital_service_port,
+};
+
+static APP_HANDLE: OnceCell<Mutex<AppHandle>> = OnceCell::new();
 
 fn main() {
     if cfg!(feature = "release") {
@@ -60,40 +66,48 @@ fn main() {
         }
     }
 
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let always_on_top_menu = SystemTrayMenu::new()
-        .add_item(CustomMenuItem::new(
-            "alwaysOnTop_enable".to_string(),
-            "enable",
-        ))
-        .add_item(CustomMenuItem::new(
-            "alwaysOnTop_disable".to_string(),
-            "disable",
-        ));
-    let always_on_top = SystemTraySubmenu::new("alwaysOnTop".to_string(), always_on_top_menu);
-
-    let mut _restart_backend = CustomMenuItem::new("restartBackend".to_string(), "Restart Backend");
-    _restart_backend.enabled = cfg!(feature = "release");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(_restart_backend)
-        .add_submenu(always_on_top)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(quit);
-
-    let tray = SystemTray::new().with_menu(tray_menu);
-
     if cfg!(feature = "release") && !is_vital_service_running() {
         let _ = start_vital_service();
     }
 
     tauri::Builder::default()
+        .setup(|app| {
+            let set_handle = APP_HANDLE.set(Mutex::new(app.handle()));
+            if set_handle.is_err() {
+                error!("Failed to set app handle in once cell");
+            }
+            let window = app.get_window("main");
+            if window.is_none() {
+                error!("Failed to get window");
+                panic!("Failed to get window");
+            }
+            let always_on_top = match get_client_settings() {
+                Ok(settings) => settings.always_on_top,
+                Err(e) => {
+                    error!("Failed to get client settings: {}", e);
+                    true
+                }
+            };
+            let result = window.unwrap().set_always_on_top(always_on_top);
+            match result {
+                Ok(_) => {
+                    debug!("Set always on top to: {}", always_on_top);
+                }
+                Err(e) => {
+                    error!("Failed to set always on top: {}", e);
+                }
+            }
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
+            get_client_settings,
+            update_client_settings,
             get_vital_service_ports,
             restart_vital_service,
             update_vital_service_port,
             open_url
         ])
-        .system_tray(tray)
+        .system_tray(system_tray_setup())
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
                 position: _,
@@ -123,12 +137,26 @@ fn main() {
                 "restartBackend" => {
                     let _ = restart_vital_service();
                 }
-                "alwaysOnTop_enable" => {
-                    set_always_on_top(app, true);
-                }
-                "alwaysOnTop_disable" => {
-                    set_always_on_top(app, false);
-                }
+                "alwaysOnTop_enable" => match get_client_settings() {
+                    Ok(settings) => {
+                        let mut settings = settings;
+                        settings.always_on_top = true;
+                        let _ = update_client_settings(settings);
+                    }
+                    Err(e) => {
+                        error!("Failed to get client settings: {}", e);
+                    }
+                },
+                "alwaysOnTop_disable" => match get_client_settings() {
+                    Ok(settings) => {
+                        let mut settings = settings;
+                        settings.always_on_top = false;
+                        let _ = update_client_settings(settings);
+                    }
+                    Err(e) => {
+                        error!("Failed to get client settings: {}", e);
+                    }
+                },
                 _ => {}
             },
             _ => {}
@@ -137,220 +165,27 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-fn set_always_on_top(app: &AppHandle, value: bool) {
-    let window = app.get_window("main").unwrap();
-    let result = window.set_always_on_top(value);
-    if result.is_err() {
-        error!("failed to set always on top. {:?}", result.unwrap_err());
-    }
-}
+fn system_tray_setup() -> SystemTray {
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    let always_on_top_menu = SystemTrayMenu::new()
+        .add_item(CustomMenuItem::new(
+            "alwaysOnTop_enable".to_string(),
+            "enable",
+        ))
+        .add_item(CustomMenuItem::new(
+            "alwaysOnTop_disable".to_string(),
+            "disable",
+        ));
+    let always_on_top = SystemTraySubmenu::new("alwaysOnTop".to_string(), always_on_top_menu);
 
-fn end_process(pid: u32) -> Result<(), String> {
-    if !cfg!(feature = "release") {
-        info!("Debug mode: not killing process with pid: {}", pid);
-        return Err("Debug mode: not killing process".to_string());
-    }
-
-    info!("Killing process with pid: {}", pid);
-    let s = System::new_all();
-    let process = s.process(pid.try_into().unwrap());
-    match process {
-        Some(process) => {
-            let result = process.kill();
-            if result == false {
-                error!("failed to terminate process. {:?}", pid);
-                return Err("failed to terminate process".to_string());
-            }
-            return Ok(());
-        }
-        None => {
-            info!("process not found. {:?}", pid);
-            return Err("process not found".to_string());
-        }
-    }
-}
-
-// function uses winapi to get process of given pid and kills it.
-
-fn start_vital_service() -> Result<String, String> {
-    if !cfg!(feature = "release") {
-        info!("Debug mode: backend will not be started");
-        return Ok("Debug mode: backend will not be started".to_string());
-    }
-
-    info!("Starting Vital Service");
-    const CREATE_NO_WINDOW: u32 = 0x08000000;
-    let result = Command::new("cmd")
-        .args(&["/C", "start", "./bin/Backend/VitalService.exe"])
-        .creation_flags(CREATE_NO_WINDOW)
-        .spawn();
-
-    match result {
-        Ok(_) => {
-            info!("Vital Service started");
-            return Ok("Vital Service started".to_string());
-        }
-        Err(err) => {
-            error!("Failed to start Vital Service: {:?}", err);
-            return Err(format!("Failed to start Vital Service: {:?}", err));
-        }
-    }
-}
-
-fn is_vital_service_running() -> bool {
-    let s = System::new_all();
-    for _process in s.process_by_name("VitalService") {
-        return true;
-    }
-    return false;
-}
-
-fn get_running_vital_service_pid() -> Option<usize> {
-    let s = System::new_all();
-    for _process in s.process_by_name("VitalService") {
-        return Some(_process.pid());
-    }
-    return None;
-}
-
-#[tauri::command]
-fn restart_vital_service() -> Result<String, String> {
-    if !cfg!(feature = "release") {
-        let msg = "Debug mode: backend will not be restarted".to_string();
-        info!("{}", msg);
-        return Err(msg);
-    }
-
-    match get_running_vital_service_pid() {
-        Some(pid) => {
-            info!("Found an existing Vital Service instance running, killing it");
-            let end_process_result = end_process(pid as u32);
-
-            if end_process_result.is_err() {
-                return Err(end_process_result.unwrap_err());
-            }
-
-            return start_vital_service();
-        }
-        None => {
-            return start_vital_service();
-        }
-    }
-}
-
-#[tauri::command]
-fn get_vital_service_ports() -> Result<backend_types::LaunchSettings, String> {
-    let document_dir = document_dir();
-    match document_dir {
-        Some(dir) => {
-            let file_path = dir.join(r#"Vital Utilities\Settings.json"#);
-
-            let settings_file = std::fs::read_to_string(file_path);
-            match settings_file {
-                Ok(settings_str) => {
-                    let settings =
-                        serde_json::from_str::<backend_types::SettingsDto>(&settings_str);
-                    match settings {
-                        Ok(settings) => {
-                            return Ok(settings.launch);
-                        }
-                        Err(e) => {
-                            error!("{}", e);
-                            return Err(format!("{}", e));
-                        }
-                    }
-                }
-                Err(e) => {
-                    error!("{}", e);
-                    return Err(format!("{}", e));
-                }
-            }
-        }
-        None => {
-            let msg = "failed to get document dir".to_string();
-            error!("{}", msg);
-            return Err(msg);
-        }
-    }
-}
-
-#[tauri::command]
-fn update_vital_service_port(port_number: f64) -> Result<String, String> {
-    if !cfg!(feature = "release") {
-        let msg = "Debug mode: vital service port will not be updated".to_string();
-        info!("{}", msg);
-        return Err(msg);
-    }
-
-    let document_dir = document_dir();
-    match document_dir {
-        Some(dir) => {
-            let file_path = dir.join(r#"Vital Utilities\Settings.json"#);
-
-            let settings_file = std::fs::read_to_string(&file_path);
-            match settings_file {
-                Ok(settings_str) => {
-                    let settings =
-                        serde_json::from_str::<backend_types::SettingsDto>(&settings_str);
-                    match settings {
-                        Ok(mut settings) => {
-                            settings.launch.vital_service_https_port = port_number;
-
-                            let result = std::fs::write(
-                                &file_path,
-                                serde_json::to_string(&settings).unwrap(),
-                            );
-                            match result {
-                                Ok(_) => {
-                                    let msg = format!(
-                                        "Successfully updated vital service port to {}",
-                                        port_number
-                                    );
-
-                                    info!("{}", msg);
-                                    return Ok(msg);
-                                }
-                                Err(e) => {
-                                    let msg = format!("Failed to update vital service port. {}", e);
-                                    error!("{}", msg);
-                                    return Err(msg);
-                                }
-                            }
-                        }
-                        Err(e) => {
-                            error!("{}", e);
-                            return Err(format!("{}", e));
-                        }
-                    }
-                }
-                Err(e) => {
-                    error!("{}", e);
-                    return Err(format!("{}", e));
-                }
-            }
-        }
-        None => {
-            let msg = "failed to get document directory".to_string();
-            error!("{}", msg);
-            return Err(msg);
-        }
-    }
-}
-
-#[tauri::command]
-fn open_url(url: &str) -> Result<(), String> {
-    let result = webbrowser::open(url);
-
-    match result {
-        Ok(_) => {
-            info!("Opened url: {}", url);
-            return Ok(());
-        }
-        Err(e) => {
-            error!("Failed to open url: {}", e);
-            return Err(format!("Failed to open url: {}", e));
-        }
-    }
+    let mut _restart_backend = CustomMenuItem::new("restartBackend".to_string(), "Restart Backend");
+    _restart_backend.enabled = cfg!(feature = "release");
+    let tray_menu = SystemTrayMenu::new()
+        .add_item(_restart_backend)
+        .add_submenu(always_on_top)
+        .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(quit);
+    return SystemTray::new().with_menu(tray_menu);
 }
 
 fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
