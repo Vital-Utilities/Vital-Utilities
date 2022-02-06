@@ -1,73 +1,99 @@
-import { Button, Input, Popconfirm, Table } from "antd";
+import { Button, Input, Popconfirm } from "antd";
 import Modal from "antd/lib/modal/Modal";
-import { ColumnsType } from "antd/lib/table";
-import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { CreateProfile } from "./AddProfile";
 import { fetchProfilesAction, recieveDeleteProfileAction } from "../../Redux/actions/profileActions";
 import { State, ProfileState } from "../../Redux/States";
+import { Table } from "../../components/Table";
+import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import { ProfileDto } from "../../Dtos/Dto";
+import { Link } from "react-router-dom";
+import axios from "axios";
+
+enum SortByEnum {
+    Name = "Name"
+}
 
 export const Profiles: React.FunctionComponent = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [data, setData] = React.useState<any>();
+    const [view, setView] = React.useState<ProfileDto[]>([]);
     const [filter_LowerCased, setFilter_LowerCased] = React.useState<string>("");
     const [showAddModal, setShowAddModal] = React.useState<boolean>(false);
     const profileState = useSelector<State, ProfileState>(state => state.profileState);
+    const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Name, descending: false });
+
     const dispatch = useDispatch();
 
     useEffect(() => {
         render();
-    }, [profileState, filter_LowerCased]);
+    }, [profileState, filter_LowerCased, sortBy]);
 
     useEffect(() => {
         dispatch(fetchProfilesAction());
     }, []);
 
     function render() {
-        let list = profileState.profiles;
-        if (filter_LowerCased.length > 0) list = list.filter(e => e.name.toLowerCase().includes(filter_LowerCased));
+        let returnList = profileState.profiles;
+        if (filter_LowerCased.length > 0) returnList = returnList.filter(e => e.name.toLowerCase().includes(filter_LowerCased));
 
-        const returnList = list.map(e => {
-            return {
-                key: e.id,
-                name: e.name,
-                actions: (
-                    <div>
-                        <div className="button-row center">
-                            <Button>
-                                <Link to={`profiles/${e.id}`}>Edit</Link>
-                            </Button>
-                            <Popconfirm
-                                title="Are you sure you want to delete this profile?"
-                                onConfirm={() => {
-                                    axios
-                                        .delete(`api/profile/${e.id}`)
-                                        .then(response => {
-                                            if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
-                                        })
-                                        .catch(result => console.error(result));
-                                }}
-                                okText="Yes"
-                                cancelText="No"
-                            >
-                                <Button danger>Delete</Button>
-                            </Popconfirm>
-                        </div>
-                    </div>
-                )
-            };
-        });
-        setData(returnList);
+        switch (sortBy.sortBy) {
+            case SortByEnum.Name: {
+                const toReturn = returnList.sort((a, b) => a.name.localeCompare(b.name));
+                returnList = sortBy.descending ? toReturn.reverse() : toReturn;
+                break;
+            }
+            default:
+                break;
+        }
+        setView(returnList);
     }
 
     function onModalSubmit() {
         setShowAddModal(false);
     }
 
+    function sortDirectionRender() {
+        return sortBy.descending ? <CaretDownOutlined /> : <CaretUpOutlined />;
+    }
+
+    function setSort(e: SortByEnum) {
+        if (e === sortBy.sortBy) setSortBy({ ...sortBy, descending: !sortBy.descending });
+        else setSortBy({ sortBy: e, descending: false });
+    }
+    function renderRow(e: ProfileDto) {
+        return (
+            <tr>
+                <td>{e.name}</td>
+                <td style={{ textAlign: "center" }}>{e.enabled ? "Enabled" : "Disabled"}</td>
+                <td style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+                    <Button>
+                        <Link to={`profiles/${e.id}`}>Edit</Link>
+                    </Button>
+                    <Popconfirm
+                        title="Are you sure you want to delete this profile?"
+                        onConfirm={() => {
+                            axios
+                                .delete(`api/profile/${e.id}`)
+                                .then(response => {
+                                    if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
+                                })
+                                .catch(result => console.error(result));
+                        }}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button danger>Delete</Button>
+                    </Popconfirm>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        );
+    }
+
     return (
-        <div style={{ height: "100%", width: "100vw" }}>
+        <>
             {showAddModal && (
                 <Modal width={600} visible={true} title="Add New Process" closable onCancel={() => setShowAddModal(false)} maskClosable={false} afterClose={onModalSubmit} footer={null}>
                     <CreateProfile onCancel={() => setShowAddModal(false)} onSubmit={onModalSubmit} />
@@ -79,27 +105,20 @@ export const Profiles: React.FunctionComponent = () => {
                     New Profile
                 </Button>
             </div>
-            <div className="table-container">
-                <Table columns={columns} showHeader dataSource={data} scroll={{ y: "calc(100vh - 200px)" }} sticky pagination={false} bordered />
-            </div>
-        </div>
+            <Table>
+                <thead>
+                    <tr>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Name && "active"}`} style={{ minWidth: 100, width: 500 }} onClick={() => setSort(SortByEnum.Name)}>
+                            Name {sortBy.sortBy === SortByEnum.Name && sortDirectionRender()}
+                        </th>
+                        <th style={{ width: 100 }}>Status</th>
+                        <th style={{ width: 200 }}>Actions</th>
+                        <th style={{ width: 400 }}>Summary</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>{view.map(e => renderRow(e))}</tbody>
+            </Table>
+        </>
     );
 };
-
-const columns: ColumnsType<never> = [
-    {
-        title: "Name",
-        dataIndex: "name",
-        width: 250
-    },
-    {
-        title: "Summary",
-        dataIndex: "summary",
-        width: 250
-    },
-    {
-        title: "Actions",
-        dataIndex: "actions",
-        width: 200
-    }
-];

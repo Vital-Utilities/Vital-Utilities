@@ -6,7 +6,7 @@ import "./home.scss";
 import axios from "axios";
 import _ from "lodash";
 import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { ManagedState, ProcessViewState, ProfileState, State } from "../Redux/States";
+import { ProcessViewState, ProfileState, State } from "../Redux/States";
 import { fetchMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { fetchRunningProcessesAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
@@ -30,8 +30,6 @@ enum SortByEnum {
 
 export const Processes: React.FunctionComponent = () => {
     const [view, setView] = React.useState<ParentChildModelDto[]>([]);
-    const managedState = useSelector<State, ManagedState>(state => state.managedState);
-
     const processViewState = useSelector<State, ProcessViewState>(state => state.processViewState);
 
     const profileState = useSelector<State, ProfileState>(state => state.profileState);
@@ -113,7 +111,7 @@ export const Processes: React.FunctionComponent = () => {
             }
             setView(returnList);
         }
-    }, [managedState, profileState, showAllProcess, processViewState, filter_LowerCased, processCpuThreadPercentage, processCpuPercentage, processRamGb, sortBy]);
+    }, [profileState, showAllProcess, processViewState, filter_LowerCased, processCpuThreadPercentage, processCpuPercentage, processRamGb, sortBy]);
 
     const dispatch = useDispatch();
 

@@ -14,6 +14,11 @@
             position: sticky;
         }
 
+        thead tr {
+            background: $background-0;
+            color: white;
+        }
+
         th,
         td {
             color: white;
@@ -34,14 +39,20 @@
 
         }
 
+
         tbody {
             width: 100vw;
             height: 100px;
             overflow-y: auto;
 
-            tr.process {
+            tr {
                 border-top: 1px solid #444;
                 border-bottom: 1px solid #444;
+
+                &:hover {
+                    background: $background-2 !important;
+                    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                }
             }
         }
 
@@ -56,6 +67,4 @@
             white-space: nowrap;
         }
     }
-
-
 }
