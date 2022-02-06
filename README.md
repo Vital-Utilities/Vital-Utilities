@@ -9,7 +9,7 @@
 <img src="https://github.com/Vital-Utilities/Vital-Utilities/actions/workflows/vital-service-tests.yml/badge.svg?branch=master"/>
 <img src="https://github.com/Vital-Utilities/Vital-Utilities/actions/workflows/test_webapp.yml/badge.svg?branch=master"/>
 <br/>
-🌟🌠✨⭐Show your support by hitting that Star, sharing and talk about Vital Utilities ⭐✨🌠🌟
+🌟🌠✨⭐Show your support by hitting that Star and yap your neighbours ears of about it ⭐✨🌠🌟
 
 </p>
 
