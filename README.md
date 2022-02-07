@@ -99,7 +99,7 @@ Vital is a modern alternative to Windows Task Manager. It aims to provide a fami
 - More responsive than task manager 🏎️
 - Process affinity/priority profiles 📷
   - Simply set and forget.
-  - No more repetitive editing process affinities. We all know how bloody annoying it is that discord refuse to fix their compatibility issue with Voicemeeter. Simply set discord to one core and all your misery is gone!
+  - No more repetitive editing process affinities. We all know how bloody annoying it is that discord refuse to fix their compatibility issue with Voicemeeter. Simply set audiodb to one core and all your miseries are gone!
   - Stop streaming applications like OBS from affecting your game's frame rates by pinning them to different cpu cores.
   - Maintain a useable machine while running cpu intensive workloads in the background. (i.e 3D rendering, video rendering, machine learning).
   - Prioritize performance critial applications over others.
