@@ -50,6 +50,9 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 |                 | ❌Distribution   |
 |                 | ❌Patent use     |
 
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FVital-Utilities%2FVital-Utilities.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FVital-Utilities%2FVital-Utilities?ref=badge_large)
+
 ## Notice
 
 - Always download installers from [The Official Download Location](https://github.com/Vital-Utilities/Vital-Utilities/releases) to avoid tampered code from malicious people.
@@ -177,3 +180,4 @@ If you want your profiles applied and metrics collected when you log in. You can
 ![vital_utilities_0f28NydPeT](https://user-images.githubusercontent.com/19627023/150866174-3a918715-e606-4e30-8b56-8c8cacc5f9b2.gif)
 ![vital_utilities_zyB21Liz2u](https://user-images.githubusercontent.com/19627023/150884846-4d960bb8-feef-4564-8c7e-1a69f3c87704.gif)
 ![vital_utilities_Nt35LUPfzy](https://user-images.githubusercontent.com/19627023/150865860-d2739c78-f269-4498-b1b6-1813fe7319ec.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FVital-Utilities%2FVital-Utilities.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FVital-Utilities%2FVital-Utilities?ref=badge_shield)
