@@ -44,11 +44,13 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 
 | Permissions     | Limitations      |
 | --------------- | ---------------- |
-| ✅ Private use  | ❌Commercial use |
-| ✅ Modification | ❌Liability      |
-|                 | ❌Warranty       |
-|                 | ❌Distribution   |
-|                 | ❌Patent use     |
+| ✅ Private use  | ❌ Commercial use |
+| ✅ Modification | ❌ Trademark use  |
+|                 | ❌ Patent use     |
+|                 | ❌ Warranty       |
+|                 | ❌ Liability      |
+|                 | ❌ Distribution   |
+
 
 ## Notice
 
