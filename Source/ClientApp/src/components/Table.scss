@@ -5,10 +5,11 @@
     overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
+    width: 100%;
 
     table {
         background: $background-1;
-        width: 100vw;
+        width: inherit;
 
         thead th {
             top: 0;
@@ -25,6 +26,7 @@
             color: white;
             padding: 15px;
             @include no-select;
+            z-index: 10;
         }
 
         th {

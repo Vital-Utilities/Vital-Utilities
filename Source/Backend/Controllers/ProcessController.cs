@@ -93,7 +93,7 @@ namespace VitalService.Controllers
 
                     TryGetFileName(process, out var fileName);
                     p.ExecutionPath = fileName;
-
+                    p.MainWindowTitle = process.MainWindowTitle;
                     p.Pid = process.Id;
                     p.CanModify = true;
 
@@ -109,6 +109,7 @@ namespace VitalService.Controllers
                         processToReturn.Add(new ProcessToAddDto
                         {
                             ProcessName = process.ProcessName,
+                            MainWindowTitle = process.MainWindowTitle,
                             ExecutionPath = fileName,
                             Pid = process.Id,
                             CanModify = false

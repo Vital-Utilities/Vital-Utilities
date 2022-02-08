@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, ReactNode } from "react";
+import { useEffect } from "react";
 import React from "react";
 import { Button, Input, Modal } from "antd";
-import Table, { ColumnsType } from "antd/lib/table";
 import _ from "lodash";
 import { AddProcessView } from "./AddProcessView";
 import { useSelector } from "react-redux";
 import { State, MachineState } from "../../Redux/States";
 import axios from "axios";
 import { GetProcessesToAddResponse, ManagedModelDto, ProcessToAddDto, ProfileDto } from "../../Dtos/Dto";
+import { Table } from "../../components/Table";
 
 enum Pages {
     Select,
@@ -21,7 +21,12 @@ interface AddProcessProps {
     onSubmit: () => void;
 }
 export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
-    const [data, setData] = React.useState<ReactNode[]>([]);
+    const [data, setData] = React.useState<
+        {
+            key: string;
+            values: [ProcessToAddDto, ...ProcessToAddDto[]];
+        }[]
+    >([]);
     const [unManagedProcesses, setUnManagedProcesses] = React.useState<ProcessToAddDto[]>();
     const [filter_LowerCased, setFilter_LowerCased] = React.useState<string>("");
     const [isFetching, setIsFetching] = React.useState<boolean>(false);
@@ -63,7 +68,7 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
 
     function render() {
         let filteredUnManaged = unManagedProcesses;
-        if (filter_LowerCased.length > 0) filteredUnManaged = filteredUnManaged?.filter(e => e.processName.toLowerCase().includes(filter_LowerCased) || e.pid.toString().includes(filter_LowerCased));
+        if (filter_LowerCased.length > 0) filteredUnManaged = filteredUnManaged?.filter(e => e.processName.toLowerCase().includes(filter_LowerCased) || e.mainWindowTitle.toLowerCase().includes(filter_LowerCased) || e.pid.toString().includes(filter_LowerCased) || e.pid.toString().includes(filter_LowerCased));
 
         const grouped = _.groupBy(filteredUnManaged, e => e.processName);
         const groupedArray = _.toArray(
@@ -71,48 +76,51 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
                 return { key: key, values: values };
             })
         );
-        const list = groupedArray.map(e => {
-            let action: any;
 
-            if (e.values.some(f => props.managedModels.some(g => f.processName === g.processName))) {
-                action = <div>This process is already being handled in this profile</div>;
-            } else if (e.values.some(x => x.canModify)) {
-                action = <Button onClick={() => OnAddProcessClick(e.key, machineState.static?.cpu.threadCount ?? 0)}>Add Process</Button>;
-            } else {
-                action = <div>This process cannot be managed. This may be due to Vital Service not having Administrator Privileges or it is just not possible.</div>;
-            }
-            return {
-                key: e.key,
-                name: e.key,
-                description: `Active pid(s) with this process name: ${e.values.map(f => f.pid)}`,
-                action: action
-            };
-        });
-        setData(list);
+        setData(groupedArray);
     }
     function selectView() {
         return (
-            <div style={{ height: "100%" }}>
+            <div style={{ height: "100%", width: "100%" }}>
                 <div className="header" style={{ gap: 10 }}>
-                    <Input placeholder="Filter name or PID" style={{ width: 200, float: "right" }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
+                    <Input placeholder="Search" style={{ width: 200 }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
                     <Button onClick={() => getUnmanagedProcesses()}>Refresh</Button>
                 </div>
-
-                <Table<any>
-                    expandable={{
-                        expandedRowRender: record => <p style={{ margin: 0 }}>{record.description}</p>,
-                        rowExpandable: record => record.name !== "Not Expandable"
-                    }}
-                    sticky
-                    size={"middle"}
-                    scroll={{ y: "300px" }}
-                    columns={columns}
-                    dataSource={isFetching ? [] : data}
-                    pagination={false}
-                    bordered
-                    loading={isFetching}
-                />
-
+                <div style={{ height: 400 }}>
+                    <Table>
+                        <thead>
+                            <th style={{ width: 70 }}>Process Name</th>
+                            <th style={{ width: 120 }}>Title</th>
+                            <th style={{ width: 400 }}>Pids</th>
+                            <th style={{ width: 120 }}>Action</th>
+                        </thead>
+                        <tbody>
+                            {data.map(e => {
+                                return (
+                                    <tr>
+                                        <td>{e.values[0].processName}</td>
+                                        <td>{e.values[0].mainWindowTitle}</td>
+                                        <td style={{ width: 100 }}>
+                                            {e.values
+                                                .map(f => f.pid)
+                                                .toString()
+                                                .replace(/,/g, ", ")}
+                                        </td>
+                                        <td>
+                                            {e.values.some(f => props.managedModels.some(g => f.processName === g.processName)) ? (
+                                                <div>This process is already being handled in this profile</div>
+                                            ) : e.values.some(x => x.canModify) ? (
+                                                <Button onClick={() => OnAddProcessClick(e.key, machineState.static?.cpu.threadCount ?? 0)}>Add Process</Button>
+                                            ) : (
+                                                <div>This process cannot be managed. This may be due to Vital Service not having Administrator Privileges or it is just not possible.</div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                </div>
                 <div className="ant-modal-footer">{currentPage === Pages.Select && <Button onClick={props.onClose}>Cancel</Button>}</div>
             </div>
         );
@@ -126,24 +134,12 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
     }
 
     return (
-        <Modal width={1000} visible={true} title="Add New Process" closable onCancel={props.onClose} maskClosable={false} afterClose={props.onClose} footer={null}>
+        <Modal width={"80%"} visible={true} title="Add New Process" closable onCancel={props.onClose} maskClosable={false} afterClose={props.onClose} footer={null}>
             {currentPage === Pages.Select && selectView()}
             {currentPage === Pages.Add && addView()}
         </Modal>
     );
 };
-
-const columns: ColumnsType<ProcessToAddDto> = [
-    {
-        title: "Process name",
-        dataIndex: "name"
-    },
-    {
-        title: "Action",
-        dataIndex: "action",
-        width: 200
-    }
-];
 
 function canModifySorter(a: boolean, b: boolean) {
     return Number(a) - Number(b);
