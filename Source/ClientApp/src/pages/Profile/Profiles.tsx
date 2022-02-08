@@ -8,7 +8,6 @@ import { State, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { ProfileDto } from "../../Dtos/Dto";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 
@@ -23,7 +22,6 @@ export const Profiles: React.FunctionComponent = () => {
     const [showAddModal, setShowAddModal] = React.useState<boolean>(false);
     const profileState = useSelector<State, ProfileState>(state => state.profileState);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Name, descending: false });
-    const location = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
