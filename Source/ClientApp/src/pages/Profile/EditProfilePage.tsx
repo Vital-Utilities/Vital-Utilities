@@ -74,42 +74,44 @@ export const EditProfilePage: React.FunctionComponent = () => {
                     )}
                 </td>
                 <td>
-                    <div
-                        style={{
-                            width: "auto",
-                            display: "flex",
-                            flexWrap: "wrap",
-                            pointerEvents: "none"
-                        }}
+                    <OverlayContent
+                        content={
+                            <div className="button-row center">
+                                <Button onClick={() => updateProcessModel(e)}>Edit Affinity</Button>
+                                <Popconfirm
+                                    title="Are you sure you want to delete this configuration?"
+                                    onConfirm={() => {
+                                        axios
+                                            .delete(`api/profile/process/${e.id}`)
+                                            .then(result => {
+                                                if (result.status === 200) {
+                                                    dispatch(recieveDeleteManagedProcessAction(e.id));
+                                                }
+                                            })
+                                            .catch(result => {
+                                                notification.error({ duration: null, message: result });
+                                                console.error(result);
+                                            });
+                                    }}
+                                    okText="Yes"
+                                    cancelText="No"
+                                >
+                                    <Button danger>Delete</Button>
+                                </Popconfirm>
+                            </div>
+                        }
                     >
-                        <AffinityRenderer affinity={e.affinity} />
-                    </div>
-
-                    <ShowOnHover>
-                        <div className="button-row center">
-                            <Button onClick={() => updateProcessModel(e)}>Edit Affinity</Button>
-                            <Popconfirm
-                                title="Are you sure you want to delete this configuration?"
-                                onConfirm={() => {
-                                    axios
-                                        .delete(`api/profile/process/${e.id}`)
-                                        .then(result => {
-                                            if (result.status === 200) {
-                                                dispatch(recieveDeleteManagedProcessAction(e.id));
-                                            }
-                                        })
-                                        .catch(result => {
-                                            notification.error({ duration: null, message: result });
-                                            console.error(result);
-                                        });
-                                }}
-                                okText="Yes"
-                                cancelText="No"
-                            >
-                                <Button danger>Delete</Button>
-                            </Popconfirm>
+                        <div
+                            style={{
+                                width: "auto",
+                                display: "flex",
+                                flexWrap: "wrap",
+                                pointerEvents: "none"
+                            }}
+                        >
+                            <AffinityRenderer affinity={e.affinity} />
                         </div>
-                    </ShowOnHover>
+                    </OverlayContent>
                 </td>
                 <td />
             </tr>
@@ -218,8 +220,8 @@ export const EditProfilePage: React.FunctionComponent = () => {
         );
 };
 
-const ShowOnHover: React.FunctionComponent = props => {
-    const [show, setShow] = React.useState<boolean>();
+const OverlayContent: React.FunctionComponent<{ show?: boolean; content: React.ReactNode }> = props => {
+    const [show, setShow] = React.useState<boolean>(props.show ?? false);
 
     function OverlayBehaviour(): React.CSSProperties | undefined {
         if (show) return { opacity: "1" };
@@ -227,8 +229,18 @@ const ShowOnHover: React.FunctionComponent = props => {
     }
 
     return (
-        <div className="overlayFilter overlay" style={OverlayBehaviour()} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+        <div className="overlay-container">
             {props.children}
+
+            {props.show === undefined ? (
+                <div className="overlayFilter overlay" style={OverlayBehaviour()} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
+                    {props.content}
+                </div>
+            ) : (
+                <div className="overlayFilter overlay" style={OverlayBehaviour()}>
+                    {props.content}
+                </div>
+            )}
         </div>
     );
 };
