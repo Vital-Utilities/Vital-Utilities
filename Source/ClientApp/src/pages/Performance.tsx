@@ -65,7 +65,7 @@ export const PerformancePage: React.FunctionComponent = props => {
 
     if (hideVirtualAdapters && networkAdapters) {
         Object.entries(networkAdapters).forEach(([adapterName, adapter]) => {
-            if (adapter.properties.name.includes("Virtual") || adapter.properties.name?.startsWith("v")) {
+            if (adapter.properties.name.toLowerCase().includes("virtual") || adapter.properties.name?.startsWith("v") || adapter.properties.description?.toLowerCase().includes("virtual")) {
                 delete networkAdapters?.[adapterName];
             }
         });
