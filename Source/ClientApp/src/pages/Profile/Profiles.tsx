@@ -8,8 +8,9 @@ import { State, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { ProfileDto } from "../../Dtos/Dto";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 
 enum SortByEnum {
     Name = "Name"
@@ -22,7 +23,7 @@ export const Profiles: React.FunctionComponent = () => {
     const [showAddModal, setShowAddModal] = React.useState<boolean>(false);
     const profileState = useSelector<State, ProfileState>(state => state.profileState);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Name, descending: false });
-
+    const location = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -64,29 +65,29 @@ export const Profiles: React.FunctionComponent = () => {
     function renderRow(e: ProfileDto) {
         return (
             <tr key={e.id}>
-                <td>{e.name}</td>
+                <td>
+                    <span style={{ paddingRight: 20 }}>{e.name}</span>
+                    <div className="actions">
+                        <BsPencilFill style={{ cursor: "pointer" }} onClick={() => (location.pathname = `profiles/${e.id}`)} />
+                        <Popconfirm
+                            title="Are you sure you want to delete this profile?"
+                            onConfirm={() => {
+                                axios
+                                    .delete(`api/profile/${e.id}`)
+                                    .then(response => {
+                                        if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
+                                    })
+                                    .catch(result => console.error(result));
+                            }}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <BsTrashFill className="danger" style={{ cursor: "pointer" }} />
+                        </Popconfirm>
+                    </div>
+                </td>
                 <td style={{ textAlign: "center" }}>{e.enabled ? "Enabled" : "Disabled"}</td>
                 <td></td>
-                <td style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-                    <Button>
-                        <Link to={`profiles/${e.id}`}>Edit</Link>
-                    </Button>
-                    <Popconfirm
-                        title="Are you sure you want to delete this profile?"
-                        onConfirm={() => {
-                            axios
-                                .delete(`api/profile/${e.id}`)
-                                .then(response => {
-                                    if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
-                                })
-                                .catch(result => console.error(result));
-                        }}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button danger>Delete</Button>
-                    </Popconfirm>
-                </td>
                 <td></td>
             </tr>
         );
@@ -108,12 +109,11 @@ export const Profiles: React.FunctionComponent = () => {
             <Table>
                 <thead>
                     <tr>
-                        <th className={`sort ${sortBy.sortBy === SortByEnum.Name && "active"}`} style={{ minWidth: 100, width: 500 }} onClick={() => setSort(SortByEnum.Name)}>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Name && "active"}`} style={{ minWidth: 100, width: 400 }} onClick={() => setSort(SortByEnum.Name)}>
                             Name {sortBy.sortBy === SortByEnum.Name && sortDirectionRender()}
                         </th>
                         <th style={{ width: 100 }}>Status</th>
                         <th style={{ width: 400 }}>Summary</th>
-                        <th style={{ width: 200 }}>Actions</th>
                         <th></th>
                     </tr>
                 </thead>

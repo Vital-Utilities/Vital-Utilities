@@ -49,9 +49,26 @@
                 border-top: 1px solid #444;
                 border-bottom: 1px solid #444;
 
+                td {
+                    .actions {
+                        display: inline-flex;
+                        opacity: 0;
+                        gap: 10px;
+                    }
+                }
+
                 &:hover {
                     background: $background-2 !important;
                     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+                    td {
+                        .actions {
+                            transition: all 0.5s ease;
+                            opacity: 1;
+                            display: inline-flex;
+                            gap: 10px;
+                        }
+                    }
                 }
             }
         }
