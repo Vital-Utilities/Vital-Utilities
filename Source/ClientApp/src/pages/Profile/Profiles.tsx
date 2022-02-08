@@ -10,6 +10,7 @@ import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { ProfileDto } from "../../Dtos/Dto";
 import axios from "axios";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
+import { Link, useLocation } from "react-router-dom";
 
 enum SortByEnum {
     Name = "Name"
@@ -23,7 +24,7 @@ export const Profiles: React.FunctionComponent = () => {
     const profileState = useSelector<State, ProfileState>(state => state.profileState);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Name, descending: false });
     const dispatch = useDispatch();
-
+    const location = useLocation();
     useEffect(() => {
         render();
     }, [profileState, filter_LowerCased, sortBy]);
@@ -66,7 +67,9 @@ export const Profiles: React.FunctionComponent = () => {
                 <td>
                     <span style={{ paddingRight: 20 }}>{e.name}</span>
                     <div className="actions">
-                        <BsPencilFill style={{ cursor: "pointer" }} onClick={() => (location.pathname = `profiles/${e.id}`)} />
+                        <Link to={`profiles/${e.id}`}>
+                            <BsPencilFill style={{ cursor: "pointer" }}></BsPencilFill>
+                        </Link>
                         <Popconfirm
                             title="Are you sure you want to delete this profile?"
                             onConfirm={() => {
