@@ -67,6 +67,7 @@ export interface ProcessToAddDto
 {
 	pid: number;
 	processName: string;
+	mainWindowTitle: string;
 	executionPath?: string;
 	canModify: boolean;
 	affinity: number[];

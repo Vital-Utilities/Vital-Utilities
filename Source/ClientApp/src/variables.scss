@@ -11,7 +11,7 @@ $border-blue: $blue-0;
 $btn: #333;
 $btn-selected: $blue-1;
 $btn-primary: #1b6ec2;
-$btn-danger: rgb(88, 0, 0);
+$btn-danger: rgb(247, 66, 66);
 $primary: white;
 $secondary: rgb(168, 168, 168);
 $interactableStaticColor: rgb(221, 221, 221);
@@ -34,4 +34,20 @@ $interactableHoverColor: rgb(255, 255, 255);
 
 @mixin box-shadow {
     box-shadow: 0 0 20px $background-2;
+}
+
+@mixin no-select {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                        supported by Chrome, Edge, Opera and Firefox */
 }
