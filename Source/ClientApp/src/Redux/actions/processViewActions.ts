@@ -27,7 +27,7 @@ interface UpdateProcessViewAction {
 }
 interface DeleteProcessViewAction {
     type: typeof DELETE_PROCESSVIEW;
-    message: string;
+    id: number;
 }
 
 function recieveAllProcessView(message: GetRunningProcessesResponse) {
@@ -42,8 +42,8 @@ function recieveUpdateProcessView(message: ProcessViewDto) {
     return { type: UPDATE_PROCESSVIEW, message: message };
 }
 
-function recieveDeleteProcessView(message: string) {
-    return { type: DELETE_PROCESSVIEW, message: message };
+function recieveDeleteProcessView(id: number) {
+    return { type: DELETE_PROCESSVIEW, id: id };
 }
 
 function fetchProcessView() {
@@ -53,10 +53,10 @@ function fetchProcessView() {
         .catch(e => Promise.reject(e));
 }
 
-export function recieveDeleteProcessViewAction(entityIds: string) {
+export function recieveDeleteProcessViewAction(entityId: number) {
     //@ts-ignore
     return function (dispatch) {
-        dispatch(recieveDeleteProcessView(entityIds));
+        dispatch(recieveDeleteProcessView(entityId));
     };
 }
 

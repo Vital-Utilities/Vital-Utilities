@@ -8,6 +8,11 @@ export function ProcessViewReducer(state = InitialState.processViewState, action
             newState.processView = action.message.processView;
             return newState;
         }
+        case "DELETE_PROCESSVIEW": {
+            const newState = { ...state };
+            delete newState.processView[action.id];
+            return newState;
+        }
         default:
             return state;
     }

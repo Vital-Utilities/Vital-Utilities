@@ -8,7 +8,7 @@ import _ from "lodash";
 import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { ProcessViewState, ProfileState, State } from "../Redux/States";
 import { fetchMachineDynamicDataAction } from "../Redux/actions/machineActions";
-import { fetchRunningProcessesAction } from "../Redux/actions/processViewActions";
+import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
 import { GetMachineDynamicDataResponse, ParentChildModelDto, ProcessViewDto } from "../Dtos/Dto";
 import { getProcessCPUPercentColor } from "../components/PerfBadge";
@@ -42,6 +42,8 @@ export const Processes: React.FunctionComponent = () => {
     const processBytesPerSecActivity = dynamicData?.processDiskBytesPerSecActivity;
     const [expandedIds, setExpandedIds] = React.useState<number[]>([]);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Description, descending: false });
+    const dispatch = useDispatch();
+
     useEffect(() => {
         render();
         function render() {
@@ -113,8 +115,6 @@ export const Processes: React.FunctionComponent = () => {
         }
     }, [profileState, showAllProcess, processViewState, filter_LowerCased, processCpuThreadPercentage, processCpuPercentage, processRamGb, sortBy]);
 
-    const dispatch = useDispatch();
-
     const totalRam = (dto: ParentChildModelDto) => valueOrZero(processRamGb?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 1);
     const totalCpu = (dto: ParentChildModelDto) => valueOrZero(processCpuPercentage?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 1);
     const totalDiskActivity = (dto: ParentChildModelDto) => valueOrZero(processBytesPerSecActivity?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 1);
@@ -128,6 +128,15 @@ export const Processes: React.FunctionComponent = () => {
         { immediate: true }
     );
 
+    function killProcess(id: number) {
+        axios
+            .post(`api/process/kill/${id}`)
+            .then(() => dispatch(recieveDeleteProcessViewAction(id)))
+            .catch(result => {
+                console.error(result);
+                notification.error({ message: result, duration: 2000 });
+            });
+    }
     function valueOrZero(value: undefined | never | number): number {
         return value || 0;
     }
@@ -362,13 +371,6 @@ export const Processes: React.FunctionComponent = () => {
         </>
     );
 };
-
-function killProcess(id: number) {
-    axios.post(`api/process/kill/${id}`).catch(result => {
-        console.error(result);
-        notification.error({ message: result, duration: 2000 });
-    });
-}
 
 function openProcessPath(id: number) {
     axios.post(`api/process/openpath/${id}`).catch(result => {
