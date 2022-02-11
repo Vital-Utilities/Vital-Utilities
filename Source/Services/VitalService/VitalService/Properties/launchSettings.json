@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "CliOnly": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "hotReloadEnabled": false,
+      "applicationUrl": ""
+    }
+  }
+}

@@ -4,11 +4,11 @@
 
 //@ts-ignore
 const fs = require("fs");
-
 const version = fs
     .readFileSync("../../Source/Version.txt", "utf-8")
     .trim()
     .replace(/\r?\n|\r/g, "");
+const vitalServiceDir = "../Services/VitalService/VitalService";
 const buildTempDir = "./buildtemp";
 const bin = "./bin";
 const binBackend = "./bin/Backend/";
@@ -49,7 +49,7 @@ function buildSoftware() {
     setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
-    execute(`dotnet build ../Backend/VitalService.csproj -c release -o ./bin/Backend/ -p:Version=${version}`);
+    execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ./bin/Backend/ -p:Version=${version}`);
     //execute(`dotnet publish ../Backend/VitalService.csproj -c release -o ./bin/Backend/ -p:Version=${version} -p:PublishProfile=FolderProfile`);
     execute("npm ci");
     execute("npm run generateRustTypings");
@@ -69,9 +69,9 @@ function getSecretsFromEnviornment() {
 function replaceInCodeSecretPlaceholders() {
     const secret = getSecretsFromEnviornment();
     if (secret.sentryBackend) {
-        const file = fs.readFileSync("../Backend/program.cs", "utf-8") as string;
+        const file = fs.readFileSync(`${vitalServiceDir}/program.cs`, "utf-8") as string;
         const replaced = file.replace(/REPLACE_WITH_SENTRYIO_BACKEND_DSN/g, secret.sentryBackend);
-        fs.writeFileSync("../Backend/program.cs", replaced);
+        fs.writeFileSync(`${vitalServiceDir}/program.cs`, replaced);
     }
 
     if (secret.sentryReact) {
@@ -88,9 +88,9 @@ function replaceInCodeSecretPlaceholders() {
 }
 
 function setCsprojOutputType(str: string) {
-    let csproj = fs.readFileSync("../Backend/VitalService.csproj", "utf-8") as string;
+    let csproj = fs.readFileSync(`${vitalServiceDir}/VitalService.csproj`, "utf-8") as string;
     csproj = csproj.replace(/<OutputType>.*<\/OutputType>/g, `<OutputType>${str}</OutputType>`);
-    fs.writeFileSync("../Backend/VitalService.csproj", csproj);
+    fs.writeFileSync(`${vitalServiceDir}/VitalService.csproj`, csproj);
 }
 
 function setPackageJsonVersion() {
