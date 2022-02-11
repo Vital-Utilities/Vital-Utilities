@@ -1,27 +1,25 @@
-import { useInterval, useLocalStorageState } from "ahooks";
+import { PlayCircleOutlined, PauseOutlined, CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { useLocalStorageState, useInterval } from "ahooks";
+import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
+import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { DiskMetricHealthChart } from "../components/Charts/DiskMetricHealthChart";
-import { DiskMetricPercentageChart } from "../components/Charts/DiskMetricPercentageChart";
-import { ClassicDiskMetricView, DiskMetricChart, diskMetricsModel } from "../components/Charts/DiskMetricChart";
-import { ClassicNetworkAdapterMetricView, NetworkAdapterMetricChart, networkMetricsModel } from "../components/Charts/NetworkAdapterMetricChart";
-import { ClassicRamMetricView, RamMetricChart, ramMetricsModel } from "../components/Charts/RamMetricChart";
-import { ClassicGpuMetricView, GpuMetricChart, gpuMetricsModel } from "../components/Charts/GpuMetricChart";
-import { CpuThreadsChartTimeSeries } from "../components/Charts/CpuThreadsChartTimeSeries";
-import { CpuChartTimeSeries, ClassicCpuChartView, CpuMetricsModel } from "../components/Charts/CpuChartTimeSeries";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, To, TimeSeriesMachineMetricsModel, TimeSeriesMachineMetricsResponse } from "../Dtos/Dto";
-import { fetchMachineTimeSeriesDataAction } from "../Redux/actions/machineActions";
-import { State } from "../Redux/States";
-import "./performance.scss";
-import { Dropdown, Form, Menu, Radio } from "antd";
-import { CaretDownOutlined, CaretRightOutlined, CaretUpOutlined, PauseOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { CpuMetricsModel, CpuChartTimeSeries } from "../../components/Charts/CpuChartTimeSeries";
+import { CpuThreadsChartTimeSeries } from "../../components/Charts/CpuThreadsChartTimeSeries";
+import { diskMetricsModel, ClassicDiskMetricView, DiskMetricChart } from "../../components/Charts/DiskMetricChart";
+import { DiskMetricHealthChart } from "../../components/Charts/DiskMetricHealthChart";
+import { DiskMetricPercentageChart } from "../../components/Charts/DiskMetricPercentageChart";
+import { gpuMetricsModel, ClassicGpuMetricView, GpuMetricChart } from "../../components/Charts/GpuMetricChart";
+import { networkMetricsModel, ClassicNetworkAdapterMetricView, NetworkAdapterMetricChart } from "../../components/Charts/NetworkAdapterMetricChart";
+import { ramMetricsModel, ClassicRamMetricView, RamMetricChart } from "../../components/Charts/RamMetricChart";
+import { ChartData } from "../../components/Charts/Shared";
+import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
+import { To, GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/Dto";
+import { NetworkActivityFormat } from "../../Dtos/UiModel";
+import { fetchMachineTimeSeriesDataAction } from "../../Redux/actions/machineActions";
+import { VitalState } from "../../Redux/States";
+import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
 const { Option } = Select;
-import moment from "moment";
-import { Select } from "antd";
-import { getReadableBytesPerSecondString, getReadableBytesString, getReadableBitsPerSecondString, MBpsToMbps } from "../components/FormatUtils";
-import { ChartData } from "../components/Charts/Shared";
-import Checkbox from "antd/lib/checkbox/Checkbox";
-import { NetworkActivityFormat } from "../Dtos/UiModel";
 
 enum viewOptions {
     "Classic" = "Classic",
@@ -53,9 +51,9 @@ export const PerformancePage: React.FunctionComponent = props => {
     const [cpuMetricView, setCpuMetricView] = React.useState<cpuMetricViewOptions>(cpuMetricViewOptions.General);
     const [relativeTimeOption, setRelativeTimeOption] = React.useState<relativeTypeStringOptions>("Last 1 minute");
     const [view, setView] = React.useState<viewOptions>(viewOptions.Classic);
-    const staticState = useSelector<State, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
-    const dynamicState = useSelector<State, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
-    const timeSeriesMetrics = useSelector<State, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
+    const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
+    const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
+    const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
     const CurrentMetricState = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1];
 
     const [hideVirtualAdapters, setHideVirtualAdapters] = useLocalStorageState("hideVirtualAdapters", { defaultValue: false });

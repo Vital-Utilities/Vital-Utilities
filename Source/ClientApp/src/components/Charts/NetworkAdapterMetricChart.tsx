@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { ComposedChart, ReferenceLine, Bar, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, AreaChart, Area } from "recharts";
 import { GetMachineDynamicDataResponse } from "../../Dtos/Dto";
 import { NetworkActivityFormat } from "../../Dtos/UiModel";
-import { State } from "../../Redux/States";
+import { VitalState } from "../../Redux/States";
 import { getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../FormatUtils";
 import { ChartData, ClassicLayout, CustomTooltip, customUnitFlags, formatXAxis, ItemOne, ItemTwo } from "./Shared";
 export type networkMetricsModel = {
@@ -50,7 +50,7 @@ export const NetworkAdapterMetricChart: React.FunctionComponent<{ macAddress: st
 
 export const ClassicNetworkAdapterMetricView: React.FunctionComponent<{ macAddress: string; networkActivityFormat: NetworkActivityFormat } & ChartData> = props => {
     const [ordered, setOrdered] = React.useState<networkMetricsModel[]>([]);
-    const dynamicState = useSelector<State, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
+    const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const thisAdapter = Object.values(dynamicState?.networkUsageData?.adapters ?? {}).find(e => e.properties.macAddress === props.macAddress);
 
     React.useEffect(() => {

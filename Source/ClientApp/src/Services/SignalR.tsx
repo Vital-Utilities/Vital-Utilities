@@ -7,13 +7,13 @@ import { GetMachineDynamicDataResponse, ManagedModelDto } from "../Dtos/Dto";
 import { updateSignalRConnectedAction } from "../Redux/actions/appActions";
 import { recieveMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { recieveDeleteManagedProcessAction, recieveManagedProcessAddedAction, recieveManagedProcessUpdatedAction } from "../Redux/actions/managedModelActions";
-import { State, AppState } from "../Redux/States";
+import { VitalState, AppState } from "../Redux/States";
 
 const ManagedHubSignalR: React.FunctionComponent = () => {
     // eslint-disable-next-line no-unused-vars
     const [signalRConnection, setConnection] = React.useState<HubConnection>();
     const dispatch = useDispatch();
-    const appState = useSelector<State, AppState>(state => state.appState);
+    const appState = useSelector<VitalState, AppState>(state => state.appState);
     // register signalR after the user logged in
     setInterval(() => {
         if (signalRConnection?.state === HubConnectionState.Disconnected)

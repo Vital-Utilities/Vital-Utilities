@@ -3,7 +3,7 @@ import axios from "axios";
 import React from "react";
 import { useSelector } from "react-redux";
 import { AddProccessRequest, ProcessPriorityEnum } from "../../Dtos/Dto";
-import { State } from "../../Redux/States";
+import { VitalState } from "../../Redux/States";
 import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
 import { ProcessPriority } from "./ProcessPriority";
 
@@ -17,7 +17,7 @@ interface AddProcessViewProps {
 }
 
 export const AddProcessView: React.FunctionComponent<AddProcessViewProps> = props => {
-    const totalThreads = useSelector<State, number | undefined>(state => state.machineState.static?.cpu.threadCount);
+    const totalThreads = useSelector<VitalState, number | undefined>(state => state.machineState.static?.cpu.threadCount);
     const [addProcessRequest, setAddProcessRequest] = React.useState<AddProccessRequest>({ processName: props.name, executionPath: props.executionPath, alias: "", processPriority: ProcessPriorityEnum.DontOverride, affinity: generateDefaultAffinity(), profileId: props.profileId });
 
     function generateDefaultAffinity() {

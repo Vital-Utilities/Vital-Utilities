@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateProfile } from "./AddProfile";
 import { fetchProfilesAction, recieveDeleteProfileAction } from "../../Redux/actions/profileActions";
-import { State, ProfileState } from "../../Redux/States";
+import { VitalState, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { ProfileDto } from "../../Dtos/Dto";
@@ -21,7 +21,7 @@ export const Profiles: React.FunctionComponent = () => {
     const [view, setView] = React.useState<ProfileDto[]>([]);
     const [filter_LowerCased, setFilter_LowerCased] = React.useState<string>("");
     const [showAddModal, setShowAddModal] = React.useState<boolean>(false);
-    const profileState = useSelector<State, ProfileState>(state => state.profileState);
+    const profileState = useSelector<VitalState, ProfileState>(state => state.profileState);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Name, descending: false });
     const dispatch = useDispatch();
     const location = useLocation();

@@ -12,7 +12,7 @@ export type ProcessViewState = GetRunningProcessesResponse;
 export interface ProfileState {
     profiles: ProfileDto[];
 }
-export interface State {
+export interface VitalState {
     managedState: ManagedState;
     processViewState: ProcessViewState;
     profileState: ProfileState;
@@ -30,7 +30,7 @@ export interface AppState {
     vitalServicePort: number | undefined;
 }
 
-export const InitialState: State = {
+export const InitialState: VitalState = {
     machineState: {
         static: undefined,
         dynamic: undefined

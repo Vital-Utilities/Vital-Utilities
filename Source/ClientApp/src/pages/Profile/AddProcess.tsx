@@ -5,7 +5,7 @@ import { Button, Input, Modal } from "antd";
 import _ from "lodash";
 import { AddProcessView } from "./AddProcessView";
 import { useSelector } from "react-redux";
-import { State, MachineState } from "../../Redux/States";
+import { VitalState, MachineState } from "../../Redux/States";
 import axios from "axios";
 import { GetProcessesToAddResponse, ManagedModelDto, ProcessToAddDto, ProfileDto } from "../../Dtos/Dto";
 import { Table } from "../../components/Table";
@@ -32,7 +32,7 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
     const [isFetching, setIsFetching] = React.useState<boolean>(false);
     const [currentPage, setCurrentPage] = React.useState<Pages>(Pages.Select);
 
-    const machineState = useSelector<State, MachineState>(state => state.machineState);
+    const machineState = useSelector<VitalState, MachineState>(state => state.machineState);
 
     const [selectedProcess, setSelectedProcess] = React.useState<{
         processName: string;

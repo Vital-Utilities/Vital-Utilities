@@ -1,7 +1,7 @@
 import { Checkbox } from "antd";
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
-import { State, MachineState } from "../../Redux/States";
+import { VitalState, MachineState } from "../../Redux/States";
 import "./affinity.scss";
 interface props {
     affinity: number[];
@@ -9,7 +9,7 @@ interface props {
 }
 
 export const AffinityRenderer: React.FunctionComponent<props> = ({ affinity, onChange }) => {
-    const machineState = useSelector<State, MachineState>(e => e.machineState);
+    const machineState = useSelector<VitalState, MachineState>(e => e.machineState);
     function updateAffinity(value: number, add: boolean) {
         let newAffinity = Array.from(affinity);
         if (add) {
@@ -42,7 +42,7 @@ export const AffinityRenderer: React.FunctionComponent<props> = ({ affinity, onC
 };
 
 export const MiniAffinityRenderer: React.FunctionComponent<{ affinity: number[] }> = ({ affinity }) => {
-    const machineState = useSelector<State, MachineState>(e => e.machineState);
+    const machineState = useSelector<VitalState, MachineState>(e => e.machineState);
     const renderedAffinity = renderAffinity(affinity);
     function renderAffinity(affinity: number[]): ReactNode {
         const returnElements: ReactNode[] = [];

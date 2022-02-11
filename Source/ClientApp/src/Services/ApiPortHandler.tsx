@@ -3,11 +3,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LaunchSettings } from "../Dtos/Dto";
 import { updateApiPortAction } from "../Redux/actions/appActions";
-import { State } from "../Redux/States";
+import { VitalState } from "../Redux/States";
 
 export const ApiPortHandler: React.FunctionComponent = () => {
     const dispatch = useDispatch();
-    const appPort = useSelector<State, number | undefined>(state => state.appState.vitalServicePort);
+    const appPort = useSelector<VitalState, number | undefined>(state => state.appState.vitalServicePort);
     useEffect(() => {
         invoke<LaunchSettings>("get_vital_service_ports")
             .then(response => {

@@ -3,7 +3,7 @@ import { Layout, Form, Radio, Button, Input } from "antd";
 import { SettingsDto } from "../Dtos/Dto";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { State } from "../Redux/States";
+import { VitalState } from "../Redux/States";
 import { fetchSettingsAction } from "../Redux/actions/settingsAction";
 import { useRustClientSettings } from "../Utilities/TauriCommands";
 
@@ -15,7 +15,7 @@ enum viewOptions {
 }
 
 export const Settings: React.FunctionComponent = () => {
-    const backendSettings = useSelector<State, SettingsDto | undefined>(state => state.settingsState.settings);
+    const backendSettings = useSelector<VitalState, SettingsDto | undefined>(state => state.settingsState.settings);
     const [view, setView] = React.useState<viewOptions>(viewOptions.Client);
 
     const { clientSettings, updateClientSettings } = useRustClientSettings();

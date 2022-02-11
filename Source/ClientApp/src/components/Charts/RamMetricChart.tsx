@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { GetMachineDynamicDataResponse, GetMachineStaticDataResponse } from "../../Dtos/Dto";
-import { State } from "../../Redux/States";
+import { VitalState } from "../../Redux/States";
 import { getReadableBytesString } from "../FormatUtils";
 import { ChartData, ClassicLayout, CustomTooltip, customUnitFlags, formatXAxis, ItemOne, ItemTwo } from "./Shared";
 export type ramMetricsModel = {
@@ -47,9 +47,9 @@ export const RamMetricChart: React.FunctionComponent<ChartData> = props => {
 };
 export const ClassicRamMetricView: React.FunctionComponent<ChartData> = props => {
     const [ordered, setOrdered] = React.useState<ramMetricsModel[]>();
-    const staticState = useSelector<State, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
+    const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
 
-    const dynamicState = useSelector<State, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
+    const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const thisRamStatic = staticState?.ram;
     React.useEffect(() => {
         if (!props.metrics) return;

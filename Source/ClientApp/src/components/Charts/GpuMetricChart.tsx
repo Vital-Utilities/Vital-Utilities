@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { GetMachineDynamicDataResponse, GetMachineStaticDataResponse } from "../../Dtos/Dto";
-import { State } from "../../Redux/States";
+import { VitalState } from "../../Redux/States";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../FormatUtils";
 import { ChartData, ClassicLayout, CustomTooltip, formatXAxis, ItemOne, ItemTwo } from "./Shared";
 export type gpuMetricsModel = {
@@ -64,9 +64,9 @@ export const GpuMetricChart: React.FunctionComponent<{ gpuNumber: string } & Cha
 
 export const ClassicGpuMetricView: React.FunctionComponent<{ gpuNumber: number } & ChartData> = props => {
     const [ordered, setOrdered] = React.useState<gpuMetricsModel[]>([]);
-    const staticState = useSelector<State, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
+    const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
 
-    const dynamicState = useSelector<State, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
+    const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const thisGpuStatic = staticState?.gpu?.[props.gpuNumber];
     const thisGpuDynamic = dynamicState?.gpuUsageData?.[props.gpuNumber];
     React.useEffect(() => {

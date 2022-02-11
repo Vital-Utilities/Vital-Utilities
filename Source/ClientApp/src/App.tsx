@@ -8,7 +8,7 @@ import { SettingFilled, QuestionCircleFilled, ProfileFilled, DashboardOutlined, 
 import { Profiles } from "./pages/Profile/Profiles";
 import { EditProfilePage } from "./pages/Profile/EditProfilePage";
 import { useDispatch, useSelector } from "react-redux";
-import { AppState, State } from "./Redux/States";
+import { AppState, VitalState } from "./Redux/States";
 import { CpuPerfBadge, GpuPerfBadge, RamUsageBadge } from "./components/PerfBadge";
 import { PerformancePage } from "./pages/Performance";
 import { Settings } from "./pages/Settings";
@@ -24,7 +24,7 @@ import { updateAppReadyAction } from "./Redux/actions/appActions";
 const App: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const appState = useSelector<State, AppState>(state => state.appState);
+    const appState = useSelector<VitalState, AppState>(state => state.appState);
     const [noConnectionModalVisible, setNoConnectionModalVisible] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
 
