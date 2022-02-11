@@ -1,6 +1,6 @@
 {
     "name": "Vital Utilities",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "private": true,
     "copyright": "Copyright © 2022 Snazzie, Aaron Cooper. All rights reserved.",
     "engines": {
@@ -10,7 +10,7 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "cross-env CI=false react-scripts build",
-        "build:backend": "rimraf ./bin/Backend && dotnet build ../Backend/VitalService.csproj -c release -o ./bin/Backend/ -v detailed -p:Version=0.0.1",
+        "build:backend": "rimraf ./bin/Backend && dotnet build ../Services/VitalService/VitalService/VitalService.csproj -c release -o ./bin/Backend/ -v detailed -p:Version=0.0.1",
         "build:release": "npx ts-node build.ts",
         "test": "react-scripts test",
         "eject": "react-scripts eject",

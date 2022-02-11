@@ -6,7 +6,7 @@
 		<SignAssembly>False</SignAssembly>
 		<Nullable>enable</Nullable>
 		<UserSecretsId>4f340cb3-d382-4643-b0c4-12888907bb06</UserSecretsId>
-		<ApplicationIcon>..\Assets\Vital-large.ico</ApplicationIcon>
+		<ApplicationIcon>..\..\..\Assets\Vital-large.ico</ApplicationIcon>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<Platforms>AnyCPU;x64</Platforms>
 		<Company></Company>
@@ -62,20 +62,10 @@
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Remove="Services\Toast\**" />
-		<Content Remove="Services\Toast\**" />
-		<EmbeddedResource Remove="Services\Toast\**" />
-		<None Remove="Services\Toast\**" />
-	</ItemGroup>
-	<ItemGroup>
 		<Content Include="Reinforced.Typings.settings.xml" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
-		<Content Include="AddVitalServiceAsAService.ps1">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		</Content>
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj" />
