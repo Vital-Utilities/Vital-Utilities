@@ -1,0 +1,1264 @@
+2021-08-20 05:02:19.013 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:19.426 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:21.084 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:21.084 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:22.968 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:22.968 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:25.045 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:25.046 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:26.998 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:26.999 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:29.044 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:29.045 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:30.966 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:30.967 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:32.981 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:32.982 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:34.980 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:34.982 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:36.964 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:36.965 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:39.150 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:39.151 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:40.994 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:40.995 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:42.994 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:42.994 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:45.040 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:45.040 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:47.504 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:47.505 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:49.876 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:49.877 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:50.992 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:50.993 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:52.976 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:52.977 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:55.037 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:55.038 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:57.021 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:57.022 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:02:58.990 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:02:58.991 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:00.958 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:00.959 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:03.011 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:03.018 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:05.081 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:05.082 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:07.003 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:07.004 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:08.964 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:08.965 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:10.991 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:10.992 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:13.141 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:13.143 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:15.203 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:15.203 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:17.621 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:17.623 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:19.031 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:19.033 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:20.984 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:20.986 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:23.294 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:23.295 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:25.014 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:25.016 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:27.014 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:27.016 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:28.998 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:28.999 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:30.982 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:30.983 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:33.017 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:33.018 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:34.981 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:34.983 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:36.965 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:36.966 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:38.995 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:38.996 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:41.785 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:41.786 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:43.428 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:43.429 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:44.994 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:44.995 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:46.962 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:46.963 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:49.024 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:49.025 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:51.039 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:51.039 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:54.650 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:54.652 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:54.960 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:54.961 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:56.960 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:56.960 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:03:58.975 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:03:58.976 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:01.014 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:01.018 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:03.500 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:03.517 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:04.958 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:04.959 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:06.973 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:06.974 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:09.877 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:09.878 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:10.987 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:10.988 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:13.235 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:13.236 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:14.986 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:14.987 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:16.970 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:16.971 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:19.605 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:19.607 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:21.109 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:21.111 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:22.970 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:22.971 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:25.015 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:25.016 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:26.968 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:26.969 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:04:29.510 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:04:29.511 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:19:53.338 +01:00 [INF] Loading Metric Database into memory.
+2021-08-20 05:19:56.105 +01:00 [DBG] [ 2680ms] MetricsStorageService..ctor => .Load metrics Db into cache
+2021-08-20 05:19:56.107 +01:00 [INF] Finished loading Metric Database into memory.
+2021-08-20 05:19:56.146 +01:00 [INF] SoftwarePerformanceService started
+2021-08-20 05:19:56.151 +01:00 [INF] HardwarePerformanceService started
+2021-08-20 05:19:56.151 +01:00 [INF] MetricsStorageService started
+2021-08-20 05:19:56.152 +01:00 [INF] AffinityApplyer Service started
+2021-08-20 05:19:56.290 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:19:56.329 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:19:56.332 +01:00 [DBG] [   51ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 05:19:56.334 +01:00 [DBG] [   55ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 05:19:56.434 +01:00 [DBG] [  152ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 05:19:56.549 +01:00 [DBG] [  220ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 05:19:58.029 +01:00 [DBG] [    7ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 05:19:58.033 +01:00 [DBG] [   11ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 05:19:58.033 +01:00 [DBG] [   11ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 05:19:58.033 +01:00 [DBG] [   11ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 05:19:58.305 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 05:19:58.305 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 05:19:58.313 +01:00 [DBG] [    7ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 05:19:58.313 +01:00 [DBG] [    7ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 05:19:58.328 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 05:19:58.563 +01:00 [DBG] [  258ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 05:19:59.651 +01:00 [DBG] [    7ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 05:19:59.654 +01:00 [DBG] [    9ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 05:20:00.257 +01:00 [DBG] [ 4077ms] SoftwarePerformanceService.<GetProcesses>b__58_0 => .Get Processes with main title
+2021-08-20 12:23:45.553 +01:00 [INF] Loading Metric Database into memory.
+2021-08-20 12:23:48.350 +01:00 [DBG] [ 2731ms] MetricsStorageService..ctor => .Load metrics Db into cache
+2021-08-20 12:23:48.351 +01:00 [INF] Finished loading Metric Database into memory.
+2021-08-20 12:23:48.398 +01:00 [INF] SoftwarePerformanceService started
+2021-08-20 12:23:48.406 +01:00 [INF] HardwarePerformanceService started
+2021-08-20 12:23:48.407 +01:00 [INF] MetricsStorageService started
+2021-08-20 12:23:48.408 +01:00 [INF] AffinityApplyer Service started
+2021-08-20 12:23:48.589 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:23:48.624 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:23:48.631 +01:00 [DBG] [   57ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:23:48.640 +01:00 [DBG] [   55ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:23:48.783 +01:00 [DBG] [  164ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:23:49.226 +01:00 [DBG] [  668ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:23:50.539 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:23:50.539 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:23:50.541 +01:00 [DBG] [    2ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:23:50.542 +01:00 [DBG] [    2ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:23:50.560 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:23:50.797 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:50.811 +01:00 [DBG] [   28ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:50.812 +01:00 [DBG] [   29ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:50.812 +01:00 [DBG] [   28ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:50.897 +01:00 [DBG] [  358ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:23:51.920 +01:00 [DBG] [   10ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:52.552 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:23:52.553 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:23:52.553 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:23:52.557 +01:00 [DBG] [    4ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:23:52.575 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:23:52.657 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:52.810 +01:00 [DBG] [  257ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:23:53.688 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:54.536 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:23:54.537 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:23:54.538 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:23:54.555 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:23:54.568 +01:00 [DBG] [   31ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:23:54.775 +01:00 [DBG] [  238ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:23:54.894 +01:00 [DBG] [    9ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:55.758 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:56.582 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:23:56.582 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:23:56.584 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:23:56.600 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:23:56.603 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:23:56.655 +01:00 [DBG] [ 8097ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:23:56.818 +01:00 [DBG] [  236ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:23:56.880 +01:00 [DBG] [ 5459ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:23:57.388 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:57.746 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:57.906 +01:00 [DBG] [  488ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:23:58.566 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:23:58.566 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:23:58.570 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:23:58.585 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:23:58.586 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:23:58.791 +01:00 [DBG] [  225ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:23:58.834 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:23:59.178 +01:00 [DBG] [    7ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:59.602 +01:00 [DBG] [    7ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:23:59.900 +01:00 [DBG] [  482ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:00.519 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:00.519 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:00.520 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:00.525 +01:00 [DBG] [    6ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:00.537 +01:00 [DBG] [   17ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:00.714 +01:00 [DBG] [  195ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:00.787 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:01.506 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:01.827 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:01.914 +01:00 [DBG] [  496ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:02.534 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:02.534 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:02.536 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:02.552 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:02.555 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:02.762 +01:00 [DBG] [  227ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:02.818 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:03.686 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:03.889 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:03.902 +01:00 [DBG] [  486ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:04.518 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:04.518 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:04.520 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:04.530 +01:00 [DBG] [   12ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:04.537 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:04.705 +01:00 [DBG] [  186ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:04.786 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:05.622 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:05.884 +01:00 [DBG] [  468ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:06.107 +01:00 [DBG] [    7ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:06.517 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:06.518 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:06.521 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:06.531 +01:00 [DBG] [   13ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:06.536 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:06.725 +01:00 [DBG] [  207ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:06.785 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:07.649 +01:00 [DBG] [    7ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:07.887 +01:00 [DBG] [  471ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:08.230 +01:00 [DBG] [19753ms] SoftwarePerformanceService.<GetProcesses>b__58_0 => .Get Processes with main title
+2021-08-20 12:24:08.250 +01:00 [DBG] [    8ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:08.532 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:08.533 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:08.534 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:08.544 +01:00 [DBG] [   11ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:08.552 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:08.751 +01:00 [DBG] [  218ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:08.800 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:08.801 +01:00 [DBG] [20393ms] SoftwarePerformanceService.GetProcesses
+2021-08-20 12:24:09.661 +01:00 [DBG] [   22ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:09.886 +01:00 [DBG] [  470ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:10.341 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:10.532 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:10.533 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:10.534 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:10.538 +01:00 [DBG] [    6ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:10.552 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:10.737 +01:00 [DBG] [  204ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:10.800 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:11.910 +01:00 [DBG] [  495ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:12.547 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:12.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:12.552 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:12.566 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:12.569 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:12.757 +01:00 [DBG] [  209ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:12.815 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:13.038 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:13.905 +01:00 [DBG] [  491ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:14.068 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:14.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:14.547 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:14.549 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:14.567 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:14.587 +01:00 [DBG] [   40ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:14.758 +01:00 [DBG] [  211ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:14.817 +01:00 [DBG] [  270ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:15.984 +01:00 [DBG] [  570ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:16.562 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:16.562 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:16.563 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:16.585 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:16.587 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:16.842 +01:00 [DBG] [  280ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:16.845 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:17.305 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:17.316 +01:00 [DBG] [   20ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:17.934 +01:00 [DBG] [  521ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:18.562 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:18.562 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:18.568 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:18.587 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:18.590 +01:00 [DBG] [   28ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:18.846 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:18.847 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:19.936 +01:00 [DBG] [  523ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:20.078 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:20.087 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:20.529 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:20.530 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:20.535 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:20.550 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:20.562 +01:00 [DBG] [   32ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:20.736 +01:00 [DBG] [  207ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:20.798 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:21.919 +01:00 [DBG] [  507ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:22.560 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:22.560 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:22.562 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:22.590 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:22.591 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:22.815 +01:00 [DBG] [  255ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:22.846 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:23.932 +01:00 [DBG] [  520ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:24.127 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:24.529 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:24.529 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:24.531 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:24.551 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:24.563 +01:00 [DBG] [   34ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:24.756 +01:00 [DBG] [  226ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:24.814 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:25.208 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:25.973 +01:00 [DBG] [  559ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:26.577 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:26.577 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:26.585 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:26.598 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:26.620 +01:00 [DBG] [   43ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:26.641 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:26.861 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:27.111 +01:00 [DBG] [  534ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:27.959 +01:00 [DBG] [  546ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:28.592 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:28.592 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:28.594 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:28.615 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:28.626 +01:00 [DBG] [   34ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:28.877 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:28.881 +01:00 [DBG] [  288ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:29.862 +01:00 [DBG] [   21ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:29.876 +01:00 [DBG] [   22ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:29.939 +01:00 [DBG] [  526ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:30.546 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:30.547 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:30.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:30.570 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:30.571 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:30.831 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:30.859 +01:00 [DBG] [  312ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:31.934 +01:00 [DBG] [  520ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:32.550 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:32.562 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:32.562 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:32.585 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:32.599 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:32.651 +01:00 [DBG] [   89ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:32.800 +01:00 [DBG] [  238ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:32.845 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:33.698 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:33.922 +01:00 [DBG] [  509ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:34.545 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:34.545 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:34.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:34.568 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:34.569 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:34.773 +01:00 [DBG] [  227ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:34.829 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:35.891 +01:00 [DBG] [  479ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:36.187 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:36.191 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:36.560 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:36.561 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:36.562 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:36.592 +01:00 [DBG] [   32ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:36.593 +01:00 [DBG] [   32ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:36.781 +01:00 [DBG] [  221ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:36.844 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:37.908 +01:00 [DBG] [  496ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:38.575 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:38.575 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:38.580 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:38.594 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:38.596 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:38.784 +01:00 [DBG] [  209ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:38.843 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:39.036 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:39.047 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:39.910 +01:00 [DBG] [  498ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:40.683 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:40.699 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:40.713 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:40.742 +01:00 [DBG] [   43ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:40.744 +01:00 [DBG] [   45ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:40.953 +01:00 [DBG] [  254ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:40.983 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:42.221 +01:00 [DBG] [  810ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:42.270 +01:00 [DBG] [   16ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:42.518 +01:00 [DBG] [   19ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:42.543 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:42.544 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:42.545 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:42.560 +01:00 [DBG] [   16ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:42.568 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:42.829 +01:00 [DBG] [  286ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:42.831 +01:00 [DBG] [  286ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:43.946 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:43.953 +01:00 [DBG] [  527ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:44.558 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:44.559 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:44.560 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:44.579 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:44.583 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:44.786 +01:00 [DBG] [  228ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:44.842 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:45.294 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:45.508 +01:00 [DBG] [35100ms] SoftwarePerformanceService.<GetProcesses>b__58_0 => .Get Processes with main title
+2021-08-20 12:24:45.896 +01:00 [DBG] [  486ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:45.901 +01:00 [DBG] [35494ms] SoftwarePerformanceService.GetProcesses
+2021-08-20 12:24:46.224 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:46.930 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:46.930 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:46.934 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:46.951 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:46.955 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:47.161 +01:00 [DBG] [  231ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:47.213 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:47.913 +01:00 [DBG] [  503ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:48.147 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:48.558 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:48.559 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:48.561 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:48.588 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:48.590 +01:00 [DBG] [   32ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:48.842 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:49.153 +01:00 [DBG] [  595ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:49.913 +01:00 [DBG] [  504ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:50.541 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:50.542 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:50.548 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:50.563 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:50.574 +01:00 [DBG] [   32ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:50.680 +01:00 [DBG] [   16ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:50.713 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:50.752 +01:00 [DBG] [  210ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:50.824 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:51.900 +01:00 [DBG] [  492ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:52.573 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:52.573 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:52.575 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:52.599 +01:00 [DBG] [   26ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:52.608 +01:00 [DBG] [   35ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:52.745 +01:00 [DBG] [  172ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:52.855 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:53.673 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:53.942 +01:00 [DBG] [  516ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:54.556 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:54.556 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:54.560 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:54.586 +01:00 [DBG] [   29ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:54.586 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:54.633 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:54.776 +01:00 [DBG] [  219ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:54.840 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:55.878 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:55.928 +01:00 [DBG] [  521ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:56.540 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:56.540 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:56.541 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:56.558 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:56.563 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:56.805 +01:00 [DBG] [  264ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:56.823 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:57.990 +01:00 [DBG] [  583ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:24:57.997 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:58.002 +01:00 [DBG] [   23ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:24:58.554 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:24:58.555 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:24:58.556 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:24:58.576 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:24:58.576 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:24:58.755 +01:00 [DBG] [  200ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:24:58.839 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:24:59.940 +01:00 [DBG] [  534ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:00.554 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:00.554 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:00.558 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:00.574 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:00.578 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:00.764 +01:00 [DBG] [  209ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:00.839 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:01.048 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:01.059 +01:00 [DBG] [   27ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:01.913 +01:00 [DBG] [  507ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:02.538 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:02.538 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:02.539 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:02.564 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:02.564 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:02.735 +01:00 [DBG] [  196ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:02.823 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:03.579 +01:00 [DBG] [   16ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:03.586 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:03.884 +01:00 [DBG] [  479ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:04.538 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:04.538 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:04.543 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:04.544 +01:00 [DBG] [    6ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:04.557 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:04.742 +01:00 [DBG] [  203ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:04.805 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:05.886 +01:00 [DBG] [  482ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:06.212 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:06.215 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:06.553 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:06.553 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:06.554 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:06.576 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:06.584 +01:00 [DBG] [   31ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:06.747 +01:00 [DBG] [  194ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:06.836 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:07.906 +01:00 [DBG] [  486ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:08.405 +01:00 [DBG] [21987ms] SoftwarePerformanceService.<GetProcesses>b__58_0 => .Get Processes with main title
+2021-08-20 12:25:08.537 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:08.537 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:08.540 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:08.556 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:08.562 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:08.735 +01:00 [DBG] [  198ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:08.819 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:08.829 +01:00 [DBG] [22411ms] SoftwarePerformanceService.GetProcesses
+2021-08-20 12:25:08.900 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:08.959 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:09.920 +01:00 [DBG] [  501ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:10.520 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:10.520 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:10.522 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:10.524 +01:00 [DBG] [    3ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:10.539 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:10.712 +01:00 [DBG] [  192ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:10.791 +01:00 [DBG] [  270ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:10.967 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:11.911 +01:00 [DBG] [  508ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:12.230 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:12.550 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:12.551 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:12.556 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:12.569 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:12.572 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:12.770 +01:00 [DBG] [  219ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:12.834 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:13.361 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:13.901 +01:00 [DBG] [  484ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:14.368 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:14.519 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:14.519 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:14.520 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:14.526 +01:00 [DBG] [    6ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:14.539 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:14.725 +01:00 [DBG] [  205ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:14.788 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:15.576 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:15.918 +01:00 [DBG] [  500ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:16.534 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:16.534 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:16.536 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:16.546 +01:00 [DBG] [   11ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:16.555 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:16.747 +01:00 [DBG] [  212ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:16.817 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:17.891 +01:00 [DBG] [  474ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:18.120 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:18.125 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:18.549 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:18.549 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:18.550 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:18.561 +01:00 [DBG] [   11ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:18.570 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:18.742 +01:00 [DBG] [  193ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:18.832 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:19.912 +01:00 [DBG] [  496ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:20.548 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:20.549 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:20.554 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:20.567 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:20.573 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:20.733 +01:00 [DBG] [  184ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:20.817 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:20.911 +01:00 [DBG] [   16ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:20.917 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:21.920 +01:00 [DBG] [  504ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:22.517 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:22.517 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:22.521 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:22.532 +01:00 [DBG] [   14ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:22.537 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:22.770 +01:00 [DBG] [  252ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:22.803 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:22.963 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:23.917 +01:00 [DBG] [  502ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:24.193 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:24.547 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:24.548 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:24.551 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:24.561 +01:00 [DBG] [   13ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:24.568 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:24.779 +01:00 [DBG] [  230ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:24.831 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:25.287 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:25.937 +01:00 [DBG] [  522ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:26.488 +01:00 [DBG] [   37ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:26.547 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:26.548 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:26.551 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:26.555 +01:00 [DBG] [    7ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:26.568 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:26.831 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:26.916 +01:00 [DBG] [  368ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:27.538 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:27.905 +01:00 [DBG] [  494ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:28.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:28.547 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:28.548 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:28.567 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:28.572 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:28.772 +01:00 [DBG] [  225ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:28.832 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:29.358 +01:00 [DBG] [18947ms] SoftwarePerformanceService.<GetProcesses>b__58_0 => .Get Processes with main title
+2021-08-20 12:25:29.655 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:29.659 +01:00 [DBG] [   20ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:29.784 +01:00 [DBG] [19374ms] SoftwarePerformanceService.GetProcesses
+2021-08-20 12:25:29.949 +01:00 [DBG] [  536ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:30.531 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:30.531 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:30.532 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:30.539 +01:00 [DBG] [    8ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:30.556 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:30.763 +01:00 [DBG] [  231ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:30.815 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:32.058 +01:00 [DBG] [  645ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:32.349 +01:00 [DBG] [   77ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:32.546 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:32.546 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:32.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:32.566 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:32.567 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:32.810 +01:00 [DBG] [  264ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:32.830 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:33.841 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:33.913 +01:00 [DBG] [  501ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:34.561 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:34.561 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:34.564 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:34.588 +01:00 [DBG] [   27ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:34.594 +01:00 [DBG] [   33ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:34.779 +01:00 [DBG] [  219ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:34.844 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:35.906 +01:00 [DBG] [  493ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:35.982 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:36.545 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:36.545 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:36.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:36.564 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:36.570 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:36.741 +01:00 [DBG] [  196ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:36.828 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:37.205 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:37.902 +01:00 [DBG] [  490ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:38.264 +01:00 [DBG] [   13ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:38.575 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:38.576 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:38.577 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:38.594 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:38.597 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:38.821 +01:00 [DBG] [  244ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:38.859 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:39.339 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:39.900 +01:00 [DBG] [  473ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:40.432 +01:00 [DBG] [   13ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:40.544 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:40.544 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:40.547 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:40.552 +01:00 [DBG] [    8ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:40.563 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:40.766 +01:00 [DBG] [  222ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:40.813 +01:00 [DBG] [  269ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:41.923 +01:00 [DBG] [  496ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:42.544 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:42.544 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:42.550 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:42.567 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:42.583 +01:00 [DBG] [   39ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:42.776 +01:00 [DBG] [  232ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:42.827 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:43.256 +01:00 [DBG] [   19ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:43.267 +01:00 [DBG] [   19ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:43.899 +01:00 [DBG] [  473ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:44.543 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:44.543 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:44.548 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:44.563 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:44.566 +01:00 [DBG] [   23ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:44.744 +01:00 [DBG] [  201ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:44.827 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:45.680 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:45.686 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:45.883 +01:00 [DBG] [  473ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:46.526 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:46.526 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:46.532 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:46.547 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:46.557 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:46.717 +01:00 [DBG] [  191ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:46.795 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:47.898 +01:00 [DBG] [  488ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:48.226 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:48.230 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:48.557 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:48.558 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:48.565 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:48.579 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:48.599 +01:00 [DBG] [   41ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:48.841 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:49.138 +01:00 [DBG] [  580ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:49.897 +01:00 [DBG] [  488ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:50.526 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:50.526 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:50.528 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:50.544 +01:00 [DBG] [   17ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:50.545 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:50.710 +01:00 [DBG] [  184ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:50.809 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:51.501 +01:00 [DBG] [   20ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:51.501 +01:00 [DBG] [   20ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:51.905 +01:00 [DBG] [  496ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:52.526 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:52.526 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:52.532 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:52.532 +01:00 [DBG] [    6ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:52.549 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:52.739 +01:00 [DBG] [  213ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:52.808 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:53.905 +01:00 [DBG] [  492ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:54.169 +01:00 [DBG] [   13ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:54.172 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:54.525 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:54.525 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:54.528 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:54.539 +01:00 [DBG] [   14ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:54.545 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:54.757 +01:00 [DBG] [  232ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:54.808 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:55.883 +01:00 [DBG] [  476ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:56.153 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:56.540 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:56.540 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:56.543 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:56.557 +01:00 [DBG] [   16ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:56.561 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:56.755 +01:00 [DBG] [  215ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:56.808 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:57.811 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:25:57.898 +01:00 [DBG] [  491ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:25:58.539 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:25:58.539 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:25:58.541 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:25:58.571 +01:00 [DBG] [   31ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:25:58.576 +01:00 [DBG] [   37ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:25:58.756 +01:00 [DBG] [  217ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:25:58.822 +01:00 [DBG] [  282ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:25:59.885 +01:00 [DBG] [  479ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:00.072 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:00.080 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:00.523 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:00.523 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:00.526 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:00.539 +01:00 [DBG] [   15ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:00.545 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:00.724 +01:00 [DBG] [  201ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:00.807 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:01.902 +01:00 [DBG] [  497ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:02.356 +01:00 [DBG] [31934ms] SoftwarePerformanceService.<GetProcesses>b__58_0 => .Get Processes with main title
+2021-08-20 12:26:02.702 +01:00 [DBG] [   44ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:02.703 +01:00 [DBG] [   44ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:02.770 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:02.771 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:02.773 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:02.780 +01:00 [DBG] [    9ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:02.791 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:02.953 +01:00 [DBG] [32531ms] SoftwarePerformanceService.GetProcesses
+2021-08-20 12:26:03.021 +01:00 [DBG] [  250ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:03.055 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:03.897 +01:00 [DBG] [  492ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:04.553 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:04.553 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:04.555 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:04.575 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:04.578 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:04.802 +01:00 [DBG] [  248ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:04.836 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:05.782 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:05.788 +01:00 [DBG] [   17ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:05.873 +01:00 [DBG] [  469ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:06.521 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:06.522 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:06.525 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:06.541 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:06.541 +01:00 [DBG] [   19ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:06.739 +01:00 [DBG] [  218ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:06.789 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:07.898 +01:00 [DBG] [  494ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:08.217 +01:00 [DBG] [   13ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:08.361 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:08.552 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:08.552 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:08.556 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:08.572 +01:00 [DBG] [   20ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:08.582 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:08.804 +01:00 [DBG] [  252ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:08.835 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:09.903 +01:00 [DBG] [  499ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:10.520 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:10.520 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:10.521 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:10.526 +01:00 [DBG] [    5ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:10.539 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:10.696 +01:00 [DBG] [  176ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:10.788 +01:00 [DBG] [  268ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:11.880 +01:00 [DBG] [  477ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:11.993 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:12.561 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:12.562 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:12.566 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:12.581 +01:00 [DBG] [   19ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:12.586 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:12.590 +01:00 [DBG] [   28ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:12.767 +01:00 [DBG] [  206ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:12.835 +01:00 [DBG] [  273ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:13.926 +01:00 [DBG] [  508ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:14.550 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:14.550 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:14.552 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:14.581 +01:00 [DBG] [   30ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:14.582 +01:00 [DBG] [   31ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:14.763 +01:00 [DBG] [  212ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:14.776 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:14.834 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:15.909 +01:00 [DBG] [  492ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:15.933 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:16.565 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:16.566 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:16.567 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:16.590 +01:00 [DBG] [   24ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:16.590 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:16.749 +01:00 [DBG] [  183ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:16.833 +01:00 [DBG] [  267ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:17.293 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:17.914 +01:00 [DBG] [  497ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:18.400 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:18.550 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:18.550 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:18.554 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:18.565 +01:00 [DBG] [   15ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:18.572 +01:00 [DBG] [   22ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:18.800 +01:00 [DBG] [  250ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:18.833 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:19.899 +01:00 [DBG] [  483ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:20.500 +01:00 [DBG] [   34ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:20.564 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:20.564 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:20.568 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:20.590 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:20.598 +01:00 [DBG] [   33ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:20.802 +01:00 [DBG] [  238ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:20.848 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:21.536 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:21.910 +01:00 [DBG] [  494ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:26:22.532 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:26:22.533 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:26:22.537 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:26:22.547 +01:00 [DBG] [   13ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:26:22.551 +01:00 [DBG] [   18ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:26:22.743 +01:00 [DBG] [  210ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:26:22.802 +01:00 [DBG] [  269ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:26:23.618 +01:00 [DBG] [   15ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:26:24.051 +01:00 [DBG] [  635ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:32:14.518 +01:00 [INF] Loading Metric Database into memory.
+2021-08-20 12:32:17.574 +01:00 [DBG] [ 2987ms] MetricsStorageService..ctor => .Load metrics Db into cache
+2021-08-20 12:32:17.575 +01:00 [INF] Finished loading Metric Database into memory.
+2021-08-20 12:32:17.612 +01:00 [INF] SoftwarePerformanceService started
+2021-08-20 12:32:17.618 +01:00 [INF] HardwarePerformanceService started
+2021-08-20 12:32:17.618 +01:00 [INF] MetricsStorageService started
+2021-08-20 12:32:17.619 +01:00 [INF] AffinityApplyer Service started
+2021-08-20 12:32:17.802 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:32:17.816 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:32:17.816 +01:00 [DBG] [   39ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:32:17.818 +01:00 [DBG] [   40ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:32:18.018 +01:00 [DBG] [  210ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:32:18.082 +01:00 [DBG] [  304ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:32:18.101 +01:00 [DBG] [  305ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:32:19.853 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:32:19.853 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:32:19.854 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:32:19.858 +01:00 [DBG] [    4ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:32:19.880 +01:00 [DBG] [   26ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:32:20.144 +01:00 [DBG] [  290ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:32:20.230 +01:00 [DBG] [  377ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:32:20.780 +01:00 [DBG] [   14ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:20.785 +01:00 [DBG] [   18ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:20.785 +01:00 [DBG] [   19ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:20.785 +01:00 [DBG] [   19ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:21.269 +01:00 [DBG] [  641ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:32:21.760 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:32:21.760 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:32:21.764 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:32:21.776 +01:00 [DBG] [   15ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:32:21.785 +01:00 [DBG] [   25ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:32:22.043 +01:00 [DBG] [  283ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:32:22.046 +01:00 [DBG] [  285ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:32:23.133 +01:00 [DBG] [   11ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:23.134 +01:00 [DBG] [   13ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:23.149 +01:00 [DBG] [  522ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:32:23.775 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:32:23.775 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:32:23.781 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:32:23.795 +01:00 [DBG] [   21ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:32:23.811 +01:00 [DBG] [   35ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:32:23.999 +01:00 [DBG] [  224ms] HardwarePerformanceService.UpdateNetworkUsage
+2021-08-20 12:32:24.058 +01:00 [DBG] [  284ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:32:25.154 +01:00 [DBG] [  528ms] SoftwarePerformanceService.InvokeProcessesPerformanceQuery
+2021-08-20 12:32:25.626 +01:00 [DBG] [   20ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:25.660 +01:00 [DBG] [   34ms] MachineDataStore.GetRunningProcesses => .map children to parent
+2021-08-20 12:32:25.948 +01:00 [DBG] [    0ms] HardwarePerformanceService.UpdateDiskUsage
+2021-08-20 12:32:25.949 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Dedicated Memory Used is not handled
+2021-08-20 12:32:26.009 +01:00 [ERR] Unhandled GPU Small Data
+System.NotImplementedException: D3D Shared Memory Used is not handled
+2021-08-20 12:32:26.011 +01:00 [DBG] [   61ms] HardwarePerformanceService.UpdateGpuUsage
+2021-08-20 12:32:26.046 +01:00 [DBG] [   96ms] HardwarePerformanceService.UpdateRamUsage
+2021-08-20 12:32:26.310 +01:00 [DBG] [  361ms] HardwarePerformanceService.UpdateCpuUsage
+2021-08-20 12:32:26.312 +01:00 [INF] AffinityApplyer Service is stopping.
+2021-08-20 12:32:26.315 +01:00 [INF] AffinityApplyer Service is stopped.
+2021-08-20 12:32:26.316 +01:00 [INF] MetricsStorageService is stopped.
+2021-08-20 12:32:26.394 +01:00 [INF] HardwarePerformanceService is stopped.
+2021-08-20 12:32:26.396 +01:00 [INF] SoftwarePerformanceService is stopped.
