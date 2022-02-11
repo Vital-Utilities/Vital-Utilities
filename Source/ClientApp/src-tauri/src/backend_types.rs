@@ -88,6 +88,9 @@ pub struct ProcessToAddDto {
     #[serde(rename = "executionPath")]
     pub execution_path: Option<String>,
 
+    #[serde(rename = "mainWindowTitle")]
+    pub main_window_title: String,
+
     #[serde(rename = "pid")]
     pub pid: f64,
 

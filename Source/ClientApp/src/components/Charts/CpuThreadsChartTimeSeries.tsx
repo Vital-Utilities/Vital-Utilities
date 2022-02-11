@@ -3,7 +3,7 @@ import { useInView } from "react-intersection-observer";
 import { useSelector } from "react-redux";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CpuUsageMetricModel, TimeSeriesMachineMetricsResponse } from "../../Dtos/Dto";
-import { State } from "../../Redux/States";
+import { VitalState } from "../../Redux/States";
 import { CustomTooltip, formatXAxis } from "./Shared";
 
 // array of colors
@@ -12,7 +12,7 @@ const COLORS = ["#0088FE", "#FF8234", "#00C49F", "#FFBB28", "#ffffff", "#FF3956"
 export const CpuThreadsChartTimeSeries: React.FunctionComponent = () => {
     const { ref, inView } = useInView();
     const [ordered, setOrdered] = React.useState<CpuUsageMetricModel[]>([]);
-    const metrics = useSelector<State, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
+    const metrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
 
     React.useEffect(() => {
         if (!metrics || !inView) return;

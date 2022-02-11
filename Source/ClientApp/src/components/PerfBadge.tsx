@@ -3,18 +3,18 @@ import { Progress, Badge } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RamUsages } from "../Dtos/Dto";
-import { State } from "../Redux/States";
+import { VitalState } from "../Redux/States";
 
 interface props {
     processName: string;
 }
 export const ProcessorThreadPerfBadge: React.FunctionComponent<props> = ({ processName }) => {
     const [name] = React.useState(processName);
-    const processCpuThreadPercentage = useSelector<State, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuThreadsUsage);
-    const processCpuPercentage = useSelector<State, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuUsage);
+    const processCpuThreadPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuThreadsUsage);
+    const processCpuPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuUsage);
 
-    const processRamPercentage = useSelector<State, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processRamUsageGb);
-    const totalRamBytes = useSelector<State, number | undefined>(state => state.machineState.dynamic?.ramUsagesData?.totalVisibleMemoryBytes);
+    const processRamPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processRamUsageGb);
+    const totalRamBytes = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.ramUsagesData?.totalVisibleMemoryBytes);
     function getStroke(value: number) {
         if (value > 90) {
             return "red";
@@ -52,7 +52,7 @@ export function getProcessCPUPercentColor(percent: number) {
 }
 
 export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
-    const coresPercentage = useSelector<State, number[] | undefined>(state => state.machineState.dynamic?.cpuUsageData?.cores);
+    const coresPercentage = useSelector<VitalState, number[] | undefined>(state => state.machineState.dynamic?.cpuUsageData?.cores);
 
     const Square: React.FunctionComponent<{ value: number }> = ({ value }) => {
         return <div style={{ height: 8, width: 8, backgroundColor: getPercentColor(value) }} />;
@@ -72,7 +72,7 @@ export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
 };
 
 export const CpuPerfBadge: React.FunctionComponent = () => {
-    const cpuUsagePercentage = useSelector<State, number | undefined>(state => state.machineState.dynamic?.cpuUsageData?.total);
+    const cpuUsagePercentage = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.cpuUsageData?.total);
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
@@ -91,7 +91,7 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
     );
 };
 export const GpuPerfBadge: React.FunctionComponent = () => {
-    const data = useSelector<State, number | undefined>(state => state.machineState.dynamic?.gpuUsageData?.[0]?.load?.core);
+    const data = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.gpuUsageData?.[0]?.load?.core);
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
@@ -110,7 +110,7 @@ export const GpuPerfBadge: React.FunctionComponent = () => {
     );
 };
 export const RamUsageBadge: React.FunctionComponent = () => {
-    const usages = useSelector<State, RamUsages | undefined>(state => state.machineState.dynamic?.ramUsagesData);
+    const usages = useSelector<VitalState, RamUsages | undefined>(state => state.machineState.dynamic?.ramUsagesData);
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
@@ -131,7 +131,7 @@ export const RamUsageBadge: React.FunctionComponent = () => {
 
 export const ThreadCountBadge: React.FunctionComponent<props> = ({ processName }) => {
     const [name] = React.useState(processName);
-    const processThreadCount = useSelector<State, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processThreadCount);
+    const processThreadCount = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processThreadCount);
 
     return <Badge style={{ backgroundColor: "gray", pointerEvents: "none" }} count={`Threads in use: ${processThreadCount && processThreadCount[name]}`} />;
 };

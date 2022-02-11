@@ -3,10 +3,10 @@ import { invoke } from "@tauri-apps/api";
 import { Button, Input, message } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import { AppState, State } from "../Redux/States";
+import { AppState, VitalState } from "../Redux/States";
 
 export const ConnnectionIssuePage: React.FunctionComponent = () => {
-    const appState = useSelector<State, AppState>(state => state.appState);
+    const appState = useSelector<VitalState, AppState>(state => state.appState);
     const [portInput, setPortInput] = React.useState(appState.vitalServicePort);
     return (
         <div style={{ alignItems: "center", display: "grid", justifyContent: "center", height: "100%", width: "100%" }}>

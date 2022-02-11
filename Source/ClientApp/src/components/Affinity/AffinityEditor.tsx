@@ -1,7 +1,7 @@
 import { Button } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import { State } from "../../Redux/States";
+import { VitalState } from "../../Redux/States";
 import "./affinity.scss";
 import { AffinityRenderer } from "./AffinityRenderer";
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const AffinityEditor: React.FunctionComponent<Props> = ({ affinity, onChange }) => {
-    const totalThreads = useSelector<State, number>(state => state.machineState.static?.cpu.threadCount ?? 0);
+    const totalThreads = useSelector<VitalState, number>(state => state.machineState.static?.cpu.threadCount ?? 0);
 
     function toggleAll() {
         const newAffinity = Array.from(affinity);

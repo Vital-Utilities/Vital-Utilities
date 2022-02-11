@@ -4,10 +4,10 @@ import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateHttpConnectedAction } from "../Redux/actions/appActions";
-import { AppState, State } from "../Redux/States";
+import { AppState, VitalState } from "../Redux/States";
 
 export const ServiceLiveMonitor: React.FunctionComponent = () => {
-    const appState = useSelector<State, AppState>(state => state.appState);
+    const appState = useSelector<VitalState, AppState>(state => state.appState);
     const dispatcher = useDispatch();
     const [responseHistory, setResponseHistory] = React.useState<{ date: Date; success: boolean }[]>([]);
     useRequest(sendHello, { pollingInterval: 1000 });

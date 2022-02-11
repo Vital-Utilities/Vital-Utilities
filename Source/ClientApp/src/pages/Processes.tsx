@@ -6,7 +6,7 @@ import "./home.scss";
 import axios from "axios";
 import _ from "lodash";
 import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
-import { ProcessViewState, ProfileState, State } from "../Redux/States";
+import { ProcessViewState, ProfileState, VitalState } from "../Redux/States";
 import { fetchMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
@@ -30,12 +30,12 @@ enum SortByEnum {
 
 export const Processes: React.FunctionComponent = () => {
     const [view, setView] = React.useState<ParentChildModelDto[]>([]);
-    const processViewState = useSelector<State, ProcessViewState>(state => state.processViewState);
+    const processViewState = useSelector<VitalState, ProcessViewState>(state => state.processViewState);
 
-    const profileState = useSelector<State, ProfileState>(state => state.profileState);
+    const profileState = useSelector<VitalState, ProfileState>(state => state.profileState);
     const [showAllProcess, setShowAllProcess] = React.useState<boolean>(false);
     const [filter_LowerCased, setFilter_LowerCased] = React.useState<string>("");
-    const dynamicData = useSelector<State, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
+    const dynamicData = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const processCpuThreadPercentage = dynamicData?.processCpuThreadsUsage;
     const processCpuPercentage = dynamicData?.processCpuUsage;
     const processRamGb = dynamicData?.processRamUsageGb;
