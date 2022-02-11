@@ -4,7 +4,7 @@ on:
   workflow_call:
   workflow_dispatch:
   push:
-    paths: 'Source/Backend/**'
+    paths: 'Source/Services/VitalService/**'
 jobs:
   build:
     runs-on: windows-latest
