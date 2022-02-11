@@ -10,7 +10,6 @@ import { EditProfilePage } from "./pages/Profile/EditProfilePage";
 import { useDispatch, useSelector } from "react-redux";
 import { AppState, VitalState } from "./Redux/States";
 import { CpuPerfBadge, GpuPerfBadge, RamUsageBadge } from "./components/PerfBadge";
-import { PerformancePage } from "./pages/Performance";
 import { Settings } from "./pages/Settings";
 import { ConnnectionIssuePage } from "./pages/ConnectionIssue";
 import { useInterval } from "ahooks";
@@ -20,6 +19,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { fetchManagedProcessesAction } from "./Redux/actions/managedModelActions";
 import { updateAppReadyAction } from "./Redux/actions/appActions";
+import { PerformancePage } from "./pages/Performance/Performance";
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App: React.FunctionComponent = () => {
     const dispatch = useDispatch();

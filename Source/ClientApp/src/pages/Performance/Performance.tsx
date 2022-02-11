@@ -6,12 +6,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CpuMetricsModel, CpuChartTimeSeries } from "../../components/Charts/CpuChartTimeSeries";
 import { CpuThreadsChartTimeSeries } from "../../components/Charts/CpuThreadsChartTimeSeries";
-import { diskMetricsModel, ClassicDiskMetricView, DiskMetricChart } from "../../components/Charts/DiskMetricChart";
+import { diskMetricsModel, DiskMetricChart } from "../../components/Charts/DiskMetricChart";
 import { DiskMetricHealthChart } from "../../components/Charts/DiskMetricHealthChart";
 import { DiskMetricPercentageChart } from "../../components/Charts/DiskMetricPercentageChart";
-import { gpuMetricsModel, ClassicGpuMetricView, GpuMetricChart } from "../../components/Charts/GpuMetricChart";
-import { networkMetricsModel, ClassicNetworkAdapterMetricView, NetworkAdapterMetricChart } from "../../components/Charts/NetworkAdapterMetricChart";
-import { ramMetricsModel, ClassicRamMetricView, RamMetricChart } from "../../components/Charts/RamMetricChart";
+import { gpuMetricsModel, GpuMetricChart } from "../../components/Charts/GpuMetricChart";
+import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components/Charts/NetworkAdapterMetricChart";
+import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
 import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
 import { To, GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/Dto";
@@ -19,6 +19,11 @@ import { NetworkActivityFormat } from "../../Dtos/UiModel";
 import { fetchMachineTimeSeriesDataAction } from "../../Redux/actions/machineActions";
 import { VitalState } from "../../Redux/States";
 import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
+import { ClassicDiskView } from "./Classic/ClassicDiskView";
+import { ClassicGpuView } from "./Classic/ClassicGpuView";
+import { ClassicNetworkAdapterView } from "./Classic/ClassicNetworkAdapterView";
+import { ClassicRamView } from "./Classic/ClassicRamView";
+import "./performance.scss";
 const { Option } = Select;
 
 enum viewOptions {
@@ -343,14 +348,14 @@ export const PerformancePage: React.FunctionComponent = props => {
                         <ClassicCpuChartView {...chartable} graphView={classicCpuGraphView} />
                     ) : classicViewProps.selectedKey.includes("GPU") ? (
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        <ClassicGpuMetricView {...chartable} gpuNumber={classicViewProps.gpuNumber!} />
+                        <ClassicGpuView {...chartable} gpuNumber={classicViewProps.gpuNumber!} />
                     ) : classicViewProps.selectedKey.includes("Memory") ? (
-                        <ClassicRamMetricView {...chartable} />
+                        <ClassicRamView {...chartable} />
                     ) : classicViewProps.selectedKey.includes("Disk") ? (
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        <ClassicDiskMetricView {...chartable} driveLetter={classicViewProps.driveLetter!} />
+                        <ClassicDiskView {...chartable} driveLetter={classicViewProps.driveLetter!} />
                     ) : classicViewProps.selectedKey.includes("NetAdapter") && classicViewProps.macAddress ? (
-                        <ClassicNetworkAdapterMetricView {...chartable} macAddress={classicViewProps.macAddress} networkActivityFormat={networkActivityFormat} />
+                        <ClassicNetworkAdapterView {...chartable} macAddress={classicViewProps.macAddress} networkActivityFormat={networkActivityFormat} />
                     ) : (
                         <></>
                     )}
