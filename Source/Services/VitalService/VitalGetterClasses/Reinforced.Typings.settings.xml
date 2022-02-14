@@ -16,7 +16,7 @@
 			It is not used if RtDivideTypesAmongFiles='true' specified.
 			Important! Do not forget to include generated file to solution.
 		-->
-		<RtTargetFile>..\..\..\ClientApp\src\Dtos\Dto.ts</RtTargetFile>
+		<RtTargetFile>$(ProjectDir)\CodeGenerated\VitalRustServiceClasses.ts</RtTargetFile>
 
 		<!--
 			This property sets RT configuration method for fluent configuration.

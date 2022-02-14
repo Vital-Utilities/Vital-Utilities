@@ -24,8 +24,9 @@ namespace VitalService.Services.PerformanceServices
         public ConcurrentDictionary<int, PerfObj.Raw> ProcessPerformanceData { get { LastServiceAccess = DateTime.Now; return processPerformanceData; } }
 
         public ConcurrentDictionary<int, string> IdName { get { LastServiceAccess = DateTime.Now; return idName; } }
-        public ConcurrentDictionary<string, int> NameId { get { LastServiceAccess = DateTime.Now; return nameId; } }
-        private bool IsUpdatingTrackedProcesses { get; set; }
+
+        ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> ProcessGpu { get; set; }
+
         private bool IsUpdatingRunningProcesses { get; set; }
         private bool IsParentChildMapping { get; set; }
 
@@ -75,6 +76,17 @@ namespace VitalService.Services.PerformanceServices
             f.ObjectReady += ProcessPerfWmiQueryer_ObjectReady;
             ProcessPerfWmiQueryer = f;
         }
+
+        public void RecieveProcessGpuData(IEnumerable<VitalRustServiceClasses.ProcessData> data)
+        {
+            var concurrent = new ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData>();
+            foreach (var process in data)
+            {
+                concurrent.TryAdd(process.Pid, process);
+            }
+            ProcessGpu = concurrent;
+        }
+
         public Dictionary<int, PerfObj> GetProcessMetrics()
         {
             return ProcessPerformanceData.ToDictionary(k => k.Key, v =>

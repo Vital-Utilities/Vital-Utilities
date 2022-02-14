@@ -55,20 +55,17 @@
 		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.1" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
 		<PackageReference Include="Octokit" Version="0.50.0" />
-		<PackageReference Include="Reinforced.Typings" Version="1.6.1" />
 		<PackageReference Include="Sentry.AspNetCore" Version="3.12.3" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include="Reinforced.Typings.settings.xml" />
-	</ItemGroup>
-	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\Shared.csproj" />
+		<ProjectReference Include="..\VitalGetterClasses\VitalRustServiceClasses.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Resource Include="Assets\project.png">

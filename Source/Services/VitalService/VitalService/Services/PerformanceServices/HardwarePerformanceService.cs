@@ -70,6 +70,7 @@ namespace VitalService.Services.PerformanceServices
             }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+
         private void SetStaticData()
         {
             computer.Accept(new UpdateVisitor());

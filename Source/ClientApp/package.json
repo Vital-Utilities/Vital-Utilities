@@ -18,7 +18,8 @@
         "tauri:dev": "npm run generateRustTypings && set RUST_DEBUG=1 && tauri dev",
         "generateRustTypings": "npx ts-node generateRustTypings.ts",
         "redux-devtools": "redux-devtools --hostname=localhost --port=9000",
-        "fix-lint": "eslint --fix --ext .ts,.tsx src"
+        "fix-lint": "eslint --fix --ext .ts,.tsx src",
+        "watch": "copy-and-watch --watch src/**/*.{html,json} src/**/{fonts,images}/* dist/"
     },
     "dependencies": {
         "@ant-design/icons": "^4.7.0",

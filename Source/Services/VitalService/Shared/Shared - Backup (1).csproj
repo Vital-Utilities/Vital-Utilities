@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)CodeGenerated/ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\..\GeneratedCodeArtifact\&quot; /F /R /Y /I&#xD;&#xA;xcopy &quot;$(ProjectDir)CodeGenerated/ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\..\ClientApp\src\Dtos\&quot; /F /R /Y /I&#xD;&#xA;" />
+    <Exec Command="xcopy &quot;$(ProjectDir)CodeGenerated/ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\..\GeneratedCodeArtifact&quot;;&#xD;&#xA;&#xD;&#xA;xcopy &quot;$(ProjectDir)CodeGenerated/ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\..\ClientApp\src\Dtos&quot;;&#xD;&#xA;" />
   </Target>
 
 </Project>
