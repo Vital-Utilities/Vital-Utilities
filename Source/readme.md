@@ -34,7 +34,7 @@ If you have the production vital service already installed and running on your m
 
 Admin rights are not required, but some functionalities in vital will be unavailable, see the main readme for more details.
 
-To disable the admin rights requirement prompt, comment out the following in [./Backend/app.manifest](./Backend/app.manifest)
+To disable the admin rights requirement prompt, comment out the following in [./Services/VitalService/VitalService/app.manifest](./Services/VitalService/VitalService/app.manifest)
 
 ```xml
 <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
