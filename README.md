@@ -129,7 +129,7 @@ Not giving VitalService.exe admin priviledges will lead to the following results
 
 ## Auto start Vital Service on log in
 
-If you want your profiles applied and metrics collected when you log in. You can go into settings on the UI and add enable run on log in.
+If you want your profiles applied and metrics collected when you log in. You can go into settings on the UI and enable run on log in.
 
 ## Things being worked on
 
