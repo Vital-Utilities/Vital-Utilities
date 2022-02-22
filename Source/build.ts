@@ -48,7 +48,7 @@ function buildSoftware() {
     replaceInCodeSecretPlaceholders();
 
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
-    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release --target-dir ../../Build/RustService`);
+    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release --target-dir ../../Build/VitalRustService`);
     execute(`cd ${vitalClientDir} && npm ci && npm run generateRustTypings && npm run build`);
 }
 
