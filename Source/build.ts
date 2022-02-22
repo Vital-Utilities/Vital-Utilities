@@ -2,6 +2,7 @@
 /* eslint-disable security/detect-child-process */
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+
 //@ts-ignore
 const fs = require("fs");
 const version = fs
@@ -47,7 +48,7 @@ function buildSoftware() {
     replaceInCodeSecretPlaceholders();
 
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
-    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release --target-dir ${vitalRustServiceBin}`);
+    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release --target-dir ../../Build/RustService`);
     execute(`cd ${vitalClientDir} && npm ci && npm run generateRustTypings && npm run build`);
 }
 
