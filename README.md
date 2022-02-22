@@ -146,11 +146,11 @@ If you want your profiles applied and metrics collected when you log in. You can
 - Lightweight alt+f4 like shortcut for easily killing deadlocked apps that just wont die.
 - Export Import Profiles
 - Alerts
+- Support Linux
 
 ### Distant Future Goals
 
 - Correlate process utilization with machine utilization
-- Support Linux
 - Support Mac Os (Wont be actively worked on by me, someone will have to take ownership of that code)
 - Alerts / Notifications
 - Plugins API (Allow third parties to make plugins for Vital)
