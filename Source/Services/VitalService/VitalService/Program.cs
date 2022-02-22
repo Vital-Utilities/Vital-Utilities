@@ -18,8 +18,14 @@ namespace VitalService
         public static readonly string appAliasWithoutSpace = "VitalUtilities";
         public static readonly string appAliasWithSpace = "Vital Utilities";
         public static readonly string appDocumentsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), appAliasWithSpace);
-        public static readonly string rustServiceExe = Path.Combine(appDir, "");
+#if DEBUG == false
+        public static readonly string rustServiceExe = Path.Combine(appDir, "../VitalRustService/VitalRustService.exe");
+
+#endif
+
         static readonly IConfigurationRoot appSettings = new ConfigurationBuilder().SetBasePath(appDir)
+
+
 #if DEBUG == false
                 .AddJsonFile(Path.Combine(appDir, "appsettings.json"), false, true)
 #else
@@ -52,11 +58,24 @@ namespace VitalService
                 return;
             }
 
-            //SentrySdk.CaptureMessage("Hello Sentry");
 
-            // sensure rust service is running
+#if DEBUG == false
+            // ensure rust service is running
 
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = "powershell.exe",
+                Arguments = $"{rustServiceExe}",
+                UseShellExecute = true,
+                CreateNoWindow = false
+            };
+            var process = new Process
+            {
+                StartInfo = startInfo
+            };
+            process.Start();
 
+#endif
 
             CreateHostBuilder(args).Build().Run();
         }
