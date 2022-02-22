@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { GetMachineDynamicDataResponse, GetMachineRelativeTimeSeriesRequest, GetMachineStaticDataResponse, TimeSeriesMachineMetricsResponse } from "../../Dtos/Dto";
+import { GetMachineDynamicDataResponse, GetMachineRelativeTimeSeriesRequest, GetMachineStaticDataResponse, TimeSeriesMachineMetricsResponse } from "../../Dtos/ClientApiDto";
 
 export type MachineActionTypes = UpdateMachineDynamicDataAction | UpdateMachineStaticDataAction | UpdateMachineTimeSeriesDataAction;
 

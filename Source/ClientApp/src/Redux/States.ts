@@ -1,4 +1,4 @@
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, ManagedModelDto, GetRunningProcessesResponse, ProfileDto, SettingsDto, TimeSeriesMachineMetricsResponse } from "../Dtos/Dto";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, ManagedModelDto, GetRunningProcessesResponse, ProfileDto, SettingsDto, TimeSeriesMachineMetricsResponse } from "../Dtos/ClientApiDto";
 
 export interface MachineState {
     static?: GetMachineStaticDataResponse;

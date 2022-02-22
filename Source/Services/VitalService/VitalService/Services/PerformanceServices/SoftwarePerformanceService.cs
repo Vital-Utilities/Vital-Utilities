@@ -10,6 +10,7 @@ using System.Management;
 using System.Management.Automation;
 using System.Threading;
 using System.Threading.Tasks;
+using VitalRustServiceClasses;
 using VitalService.Stores;
 namespace VitalService.Services.PerformanceServices
 {
@@ -21,17 +22,13 @@ namespace VitalService.Services.PerformanceServices
         /// pid, obj
         /// </summary>
         public ConcurrentDictionary<int, ProcessData> RunningProcesses { get { LastServiceAccess = DateTime.Now; return runningProcesses; } }
-        public ConcurrentDictionary<int, PerfObj.Raw> ProcessPerformanceData { get { LastServiceAccess = DateTime.Now; return processPerformanceData; } }
+        public ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> ProcessPerformanceData { get { LastServiceAccess = DateTime.Now; return processPerformanceData; } }
 
         public ConcurrentDictionary<int, string> IdName { get { LastServiceAccess = DateTime.Now; return idName; } }
 
-        ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> ProcessGpu { get; set; }
-
         private bool IsUpdatingRunningProcesses { get; set; }
-        private bool IsParentChildMapping { get; set; }
 
-        private ConcurrentDictionary<int, PerfObj.Raw> processPerformanceData = new();
-        private ConcurrentDictionary<int, HashSet<int>> parentChildProcessMapping = new();
+        private ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> processPerformanceData = new();
         private ConcurrentDictionary<int, ProcessData> runningProcesses = new();
         private ConcurrentDictionary<int, string> idName = new();
         private ConcurrentDictionary<string, int> nameId = new();
@@ -42,18 +39,17 @@ namespace VitalService.Services.PerformanceServices
         private Timer? UpdateRunningProcessesTimer { get; set; } = null;
         private Timer? AutoThrottlerTimer { get; set; } = null;
         private DateTime LastServiceAccess;
+        private ConcurrentDictionary<int, string> pidProcessTitleMapping = new();
 
         public bool ThrottleActive { get; private set; }
         readonly TimeSpan throttleAfter = TimeSpan.FromSeconds(10);
 
 
-        private ProcessPerfWmiQueryer ProcessPerfWmiQueryer { get; }
 
         public SoftwarePerformanceService(ManagedProcessStore affinityStore)
         {
             AffinityStore = affinityStore;
             AutoThrottlerTimer = new Timer((_) => AutoThrottle(), null, Timeout.Infinite, Timeout.Infinite);
-            UpdateProcessesUsageTimer = new Timer((_) => InvokeProcessesPerformanceQuery(), null, Timeout.Infinite, Timeout.Infinite);
             UpdateRunningProcessesTimer = new Timer((_) =>
             {
                 if (!IsUpdatingRunningProcesses)
@@ -69,22 +65,16 @@ namespace VitalService.Services.PerformanceServices
                     }
                 }
             }, null, Timeout.Infinite, Timeout.Infinite);
-
-            //UpdateParentChildMapperTimer = new Timer(MapParentChildren, null, Timeout.Infinite, Timeout.Infinite);
-
-            var f = new ProcessPerfWmiQueryer();
-            f.ObjectReady += ProcessPerfWmiQueryer_ObjectReady;
-            ProcessPerfWmiQueryer = f;
         }
 
-        public void RecieveProcessGpuData(IEnumerable<VitalRustServiceClasses.ProcessData> data)
+        public void RecieveProcessData(IEnumerable<VitalRustServiceClasses.ProcessData> data)
         {
             var concurrent = new ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData>();
             foreach (var process in data)
             {
-                concurrent.TryAdd(process.Pid, process);
+                concurrent.TryAdd((int)process.Pid, process);
             }
-            ProcessGpu = concurrent;
+            processPerformanceData = concurrent;
         }
 
         public Dictionary<int, PerfObj> GetProcessMetrics()
@@ -93,44 +83,26 @@ namespace VitalService.Services.PerformanceServices
             {
                 return new PerfObj
                 {
-                    InstanceName = v.Value.InstanceName,
-                    IDProcess = v.Value.IDProcess,
-                    PercentProcessorTime = (float)Math.Round(v.Value.PercentProcessorTime, 2),
-                    WorkingSetGB = (float)Math.Round(v.Value.WorkingSetPrivate / 1024 / 1024 / 1024, 3),
-                    WriteBytesPerSec = v.Value.WriteBytesPerSec,
-                    ReadBytesPerSec = v.Value.ReadBytesPerSec,
+                    InstanceName = v.Value.Name,
+                    IDProcess = (int)v.Value.Pid,
+                    PercentProcessorTime = (float)Math.Round(v.Value.CpuPercentage, 2),
+                    WorkingSetGB = (float)Math.Round(v.Value.MemoryKb / 1024 / 1024, 3),
+                    WriteBytesPerSec = v.Value.DiskUsage.WriteBytesPerSecond,
+                    ReadBytesPerSec = v.Value.DiskUsage.ReadBytesPerSecond,
+                    GpuPercentage = v.Value.GpuCorePercentage ?? 0
                 };
             });
         }
-        private void ProcessPerfWmiQueryer_ObjectReady(object sender, ObjectReadyEventArgs e)
+
+        public void RecieveIdProcessTitleMappings(List<PidProcessTitleMapping> mappings)
         {
-
-            try
+            var dictionary = new ConcurrentDictionary<int, string>();
+            foreach (var mapping in mappings)
             {
-                var instanceName = e.NewObject["Name"].ToString();
-                if (instanceName is not null or "_Total")
-                {
-                    var value = new PerfObj.Raw
-                    {
-#pragma warning disable CS8604 // Possible null reference argument.
-                        InstanceName = instanceName,
-                        PercentProcessorTime = double.Parse(e.NewObject["PercentProcessorTime"].ToString()) / 10,
-                        WorkingSetPrivate = double.Parse(e.NewObject["WorkingSetPrivate"].ToString()),
-                        WriteBytesPerSec = double.Parse(e.NewObject["IOWriteBytesPersec"].ToString()),
-                        ReadBytesPerSec = double.Parse(e.NewObject["IOReadBytesPersec"].ToString()),
-                        IDProcess = int.Parse(e.NewObject["IDProcess"].ToString())
-#pragma warning restore CS8604 // Possible null reference argument.
-                    };
-                    processPerformanceData.AddOrUpdate(value.IDProcess, value, (index, oldVal) => oldVal = value);
-                }
+                dictionary.TryAdd((int)mapping.Id, mapping.Title);
             }
-            catch (Exception ex)
-            {
-                Log.Logger.Error(ex, "Something went wrong");
-            }
+            pidProcessTitleMapping = dictionary;
         }
-
-
         public class PerfObj
         {
             public string? InstanceName { get; set; }
@@ -145,45 +117,15 @@ namespace VitalService.Services.PerformanceServices
             public float WorkingSetGB { get; set; }
             public double WriteBytesPerSec { get; set; }
             public double ReadBytesPerSec { get; set; }
-
-            public class Raw
-            {
-                public string? InstanceName { get; set; }
-                public int IDProcess { get; set; }
-
-                public double PercentProcessorTime { get; set; }
-
-                public double WorkingSetPrivate { get; set; }
-                public double WriteBytesPerSec { get; internal set; }
-                public double ReadBytesPerSec { get; internal set; }
-            }
+            public float GpuPercentage { get; internal set; }
         }
-
         private void GetProcesses()
         {
             Utilities.Debug.LogExecutionTime(null, () =>
             {
                 var returnValue = new ConcurrentDictionary<int, ProcessData>();
                 var properties = typeof(ProcessData).GetProperties();
-                var processesWithMainTitle = new Dictionary<int, string>();
-                var unrespondingProcesses = new HashSet<int>();
-                Utilities.Debug.LogExecutionTime("Get Processes with main title", () =>
-                {
-                    var ps = PowerShell.Create();
-                    ps.AddScript("Get-Process | Where-Object { $_.MainWindowTitle }");
-                    foreach (var collection in ps.Invoke())
-                    {
-                        var baseobj = collection.BaseObject;
-                        var type = baseobj.GetType();
-                        if (baseobj != null)
-                        {
-                            var id = int.Parse(type.GetProperty("Id")?.GetValue(baseobj, null).ToString());
-                            processesWithMainTitle.Add(id, type.GetProperty("MainWindowTitle")?.GetValue(baseobj, null)?.ToString());
-                            if (baseobj.GetType().GetProperty("Responding")?.GetValue(baseobj, null)?.ToString() == "False")
-                                unrespondingProcesses.Add(id);
-                        }
-                    }
-                });
+
                 var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Process");
                 var toReturnIdName = new ConcurrentDictionary<int, string>();
                 var toReturnNameId = new ConcurrentDictionary<string, int>();
@@ -197,7 +139,7 @@ namespace VitalService.Services.PerformanceServices
                             if (propertyInfo.Name == "MainWindowTitle")
                             {
                                 var val = int.Parse(queryObj["ProcessId"].ToString());
-                                if (processesWithMainTitle.TryGetValue(val, out var value))
+                                if (pidProcessTitleMapping.TryGetValue(val, out var value))
                                     propertyInfo.SetValue(data, Convert.ChangeType(value, propertyInfo.PropertyType), null);
                                 continue;
                             }
@@ -239,20 +181,6 @@ namespace VitalService.Services.PerformanceServices
             public string? MainWindowTitle { get; set; }
         }
 
-        private void InvokeProcessesPerformanceQuery()
-        {
-            if (!ProcessPerfWmiQueryer.ReadyToInvoke)
-                return;
-            Utilities.Debug.LogExecutionTime(null, () =>
-            {
-                ProcessPerfWmiQueryer.InvokeGet();
-                while (!ProcessPerfWmiQueryer.ReadyToInvoke)
-                {
-                    // do nothing;
-                }
-            });
-        }
-
         private void AutoThrottle()
         {
             if (!ThrottleActive && DateTime.Now - LastServiceAccess > throttleAfter)
@@ -274,52 +202,18 @@ namespace VitalService.Services.PerformanceServices
             }
         }
 
-        private void MapParentChildren()
-        {
-            if (IsParentChildMapping)
-            {
-                return;
-            }
-            IsParentChildMapping = true;
-            Utilities.Debug.LogExecutionTime(null, () =>
-            {
-                var dictionary = new ConcurrentDictionary<int, HashSet<int>>();
-
-
-                foreach (var (key, value) in runningProcesses)
-                {
-                    try
-                    {
-                        if (!dictionary.ContainsKey(value.ParentProcessId))
-                            dictionary.TryAdd(value.ParentProcessId, new HashSet<int>());
-                        dictionary[value.ParentProcessId].Add(key);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Logger.Error(e, "Something went wrong");
-                    }
-                };
-
-                parentChildProcessMapping = dictionary;
-            });
-            IsParentChildMapping = false;
-        }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             Log.Logger.Information($"{nameof(SoftwarePerformanceService)} started");
             LastServiceAccess = DateTime.Now;
-            UpdateProcessesUsageTimer.Change(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(2));
             AutoThrottlerTimer?.Change(TimeSpan.FromSeconds(6), TimeSpan.FromSeconds(2));
-            UpdateParentChildMapperTimer?.Change(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
             UpdateRunningProcessesTimer?.Change(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(2));
             return Task.CompletedTask;
         }
         public Task StopAsync(CancellationToken cancellationToken)
         {
             AutoThrottlerTimer?.Change(Timeout.Infinite, 0);
-            UpdateProcessesUsageTimer?.Change(Timeout.Infinite, 0);
-            UpdateParentChildMapperTimer?.Change(Timeout.Infinite, 0);
             UpdateRunningProcessesTimer?.Change(Timeout.Infinite, 0);
 
             Log.Logger.Information($"{nameof(SoftwarePerformanceService)} is stopped.");

@@ -46,6 +46,7 @@ namespace VitalService.Controllers
                 ProcessCpuUsage = processCpuUsage,
                 ProcessRamUsageGb = MachineDataStore.GetProcessRamUsagesInGb(),
                 ProcessDiskBytesPerSecActivity = MachineDataStore.GetProcessDiskBytesPerSecActivity(),
+                ProcessGpuUsage = MachineDataStore.GetProcessGpuUsage(),
                 //ProcessThreadCount = MachineDataStore.GetProcessMetrics(MachineDataStore.MetricType.ThreadCount)
             };
             return Task.FromResult(toReturn);

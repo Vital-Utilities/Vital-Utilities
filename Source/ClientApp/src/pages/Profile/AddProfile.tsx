@@ -2,7 +2,7 @@ import { Input, Button, Form, notification } from "antd";
 import axios from "axios";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { CreateProfileRequest, ProfileDto } from "../../Dtos/Dto";
+import { CreateProfileRequest, ProfileDto } from "../../Dtos/ClientApiDto";
 import { recieveProfileAddedAction } from "../../Redux/actions/profileActions";
 
 interface CreateProfileInterface {

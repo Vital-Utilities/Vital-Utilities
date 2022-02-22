@@ -17,6 +17,7 @@ namespace VitalService.Dtos.Coms
         public IDictionary<int, float>? ProcessRamUsageGb { get; set; }
         public IDictionary<int, double>? ProcessDiskBytesPerSecActivity { get; set; }
         public IDictionary<string, float>? CpuTemperature { get; set; }
+        public IDictionary<int, float>? ProcessGpuUsage { get; set; }
     }
 
     public class GetMachineTimeSeriesRequest

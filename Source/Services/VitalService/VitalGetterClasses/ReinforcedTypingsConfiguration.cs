@@ -16,7 +16,7 @@ namespace ReinforcedTypings
             // fluent configuration goes here
             var webDtos = Assembly.GetAssembly(typeof(ReinforcedTypingsConfiguration))
                 .GetTypes()
-                .Where(x => x.Namespace?.StartsWith("VitalGetterClasses") == true)
+                .Where(x => x.Namespace?.StartsWith("VitalRustServiceClasses") == true)
                 .ToArray();
             builder.Substitute(typeof(Guid), new RtSimpleTypeName("string"))
                 .Substitute(typeof(DateTime), new RtSimpleTypeName("Date"))

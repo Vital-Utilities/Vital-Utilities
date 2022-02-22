@@ -2,7 +2,7 @@ import React from "react";
 import { useInView } from "react-intersection-observer";
 import { useSelector } from "react-redux";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { CpuUsageMetricModel, TimeSeriesMachineMetricsResponse } from "../../Dtos/Dto";
+import { CpuUsageMetricModel, TimeSeriesMachineMetricsResponse } from "../../Dtos/ClientApiDto";
 import { VitalState } from "../../Redux/States";
 import { CustomTooltip, formatXAxis } from "./Shared";
 

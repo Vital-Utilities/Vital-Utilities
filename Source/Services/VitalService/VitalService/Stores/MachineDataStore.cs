@@ -9,7 +9,6 @@ using VitalService.Dtos.Data.Metrics;
 using VitalService.Services;
 using VitalService.Services.PerformanceServices;
 using static VitalService.Dtos.GetRunningProcessesResponse;
-using static VitalService.Services.PerformanceServices.SoftwarePerformanceService;
 
 namespace VitalService.Stores
 {
@@ -47,6 +46,13 @@ namespace VitalService.Stores
         public NetworkAdapters GetNetworkUsage()
         {
             return HardwarePerformanceService.CurrentNetworkUsage;
+        }
+
+        internal IDictionary<int, float> GetProcessGpuUsage()
+        {
+            var metrics = SoftwarePerformanceService.GetProcessMetrics();
+
+            return metrics.ToDictionary(k => k.Value.IDProcess, v => v.Value.GpuPercentage);
         }
 
         //public async Task<Dictionary<int, float>> GetProcessTotalCpuThreadsUsagesAsync()
@@ -111,7 +117,7 @@ namespace VitalService.Stores
             return (requestDateRange, model);
         }
 
-       
+
         public record MetricsModel(IEnumerable<TimeSeriesMachineMetricsModel>? Model);
 
         public Dictionary<int, float> GetProcessTotalCpuUsages()
@@ -125,19 +131,7 @@ namespace VitalService.Stores
             }
             return returnValue;
         }
-        private Dictionary<int, PerfObj> GetProcessMetrics()
-        {
-            return SoftwarePerformanceService.ProcessPerformanceData.ToDictionary(k => k.Key, v =>
-            {
-                return new PerfObj
-                {
-                    InstanceName = v.Value.InstanceName,
-                    IDProcess = v.Value.IDProcess,
-                    PercentProcessorTime = (float)Math.Round(v.Value.PercentProcessorTime, 2),
-                    WorkingSetGB = (float)Math.Round(v.Value.WorkingSetPrivate / 1024 / 1024 / 1024, 3)
-                };
-            });
-        }
+
         public float GetCpuUsagePercentage()
         {
             return (float)Math.Round(HardwarePerformanceService.CurrentCpuUsage.Total, 1);

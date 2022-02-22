@@ -14,7 +14,7 @@ import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components
 import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
 import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
-import { To, GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/Dto";
+import { To, GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../Dtos/UiModel";
 import { fetchMachineTimeSeriesDataAction } from "../../Redux/actions/machineActions";
 import { VitalState } from "../../Redux/States";

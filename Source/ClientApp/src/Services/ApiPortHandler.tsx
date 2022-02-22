@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LaunchSettings } from "../Dtos/Dto";
+import { LaunchSettings } from "../Dtos/ClientApiDto";
 import { updateApiPortAction } from "../Redux/actions/appActions";
 import { VitalState } from "../Redux/States";
 

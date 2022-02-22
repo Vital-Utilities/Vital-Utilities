@@ -4,4 +4,4 @@ dist
 webpack/*.js
 .webpack
 out
-src/Dtos/Dto.ts
+src/Dtos/**

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb, Button, Input, notification, Popconfirm } from "antd";
 import { useEffect } from "react";
-import { ManagedModelDto, ProcessPriorityEnum, ProfileDto, UpdateProfileRequest } from "../../Dtos/Dto";
+import { ManagedModelDto, ProcessPriorityEnum, ProfileDto, UpdateProfileRequest } from "../../Dtos/ClientApiDto";
 import { EditProcess } from "./EditProcess";
 import "../home.scss";
 import { AffinityRenderer } from "../../components/Affinity/AffinityRenderer";

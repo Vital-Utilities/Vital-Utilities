@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "build:backend": "rimraf ./Build/VitalService && dotnet build ./Services/VitalService/VitalService/VitalService.csproj -c release -o ./Build/VitalService -v detailed -p:Version=0.0.1",
+    "build:release": "npx ts-node build.ts",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.0.0-rc.5",
+    "@types/node": "^17.0.14",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.4.0"
+  }
+}

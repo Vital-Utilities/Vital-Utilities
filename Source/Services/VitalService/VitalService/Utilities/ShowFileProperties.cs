@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace VitalService.Utilities
 {
-    public class FileProperties
+    public static class FileProperties
     {
         [DllImport("shell32.dll", CharSet = CharSet.Auto)]
         static extern bool ShellExecuteEx(ref SHELLEXECUTEINFO lpExecInfo);
@@ -37,7 +37,7 @@ namespace VitalService.Utilities
         private const uint SEE_MASK_INVOKEIDLIST = 12;
         public static bool Open(string Filename)
         {
-            SHELLEXECUTEINFO info = new SHELLEXECUTEINFO();
+            var info = new SHELLEXECUTEINFO();
             info.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(info);
             info.lpVerb = "properties";
             info.lpFile = Filename;

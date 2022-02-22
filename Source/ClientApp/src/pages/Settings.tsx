@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Layout, Form, Radio, Button, Input } from "antd";
-import { SettingsDto } from "../Dtos/Dto";
+import { SettingsDto } from "../Dtos/ClientApiDto";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { VitalState } from "../Redux/States";

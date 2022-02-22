@@ -3,7 +3,7 @@ import { HubConnectionBuilder, HubConnectionState, HubConnection } from "@micros
 import { message, notification } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetMachineDynamicDataResponse, ManagedModelDto } from "../Dtos/Dto";
+import { GetMachineDynamicDataResponse, ManagedModelDto } from "../Dtos/ClientApiDto";
 import { updateSignalRConnectedAction } from "../Redux/actions/appActions";
 import { recieveMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { recieveDeleteManagedProcessAction, recieveManagedProcessAddedAction, recieveManagedProcessUpdatedAction } from "../Redux/actions/managedModelActions";

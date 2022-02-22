@@ -4,7 +4,7 @@ import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "rec
 import { gpuMetricsModel } from "../../../components/Charts/GpuMetricChart";
 import { ChartData, formatXAxis, CustomTooltip, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../../../components/FormatUtils";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/Dto";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & ChartData> = props => {

@@ -2,3 +2,81 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
+export interface ProcessData
+{
+	pid: number;
+	parentPid?: number;
+	name: string;
+	timeStamp: Date;
+	cpuPercentage: number;
+	memoryKb: number;
+	diskUsage: DiskUsage;
+	status: string;
+	gpuCorePercentage?: number;
+	gpuMemPercentage?: number;
+	gpuEncodingPercentage?: number;
+	gpuDecodingPercentage?: number;
+}
+export interface SendUtilizationRequest
+{
+	processData: ProcessData[];
+	systemUsage: SystemUsage;
+}
+export interface DiskUsage
+{
+	readBytesPerSecond: number;
+	writeBytesPerSecond: number;
+}
+export interface SystemUsage
+{
+	cpuUsage: CpuUsage;
+	memUsage: MemUsage;
+}
+export interface NetworkUsage
+{
+	name: string;
+	description?: string;
+	macAddress: string;
+	uploadSpeedBps: number;
+	downloadSpeedBps: number;
+	uploadedBps: number;
+	downloadedBps: number;
+	usagePercentage: number;
+}
+export interface CpuUsage
+{
+	cpuPercentage: number;
+	cpuTemp: number;
+	coreFrequencies: number[];
+	corePercentages: number[];
+}
+export interface GpuUsage
+{
+	name: string;
+	corePercentage: number;
+	corePowerWatt: number;
+	coreClockMhz: number;
+	memPercentage: number;
+	memTotalKB: number;
+	memClockMhz: number;
+	pciThroughputSendKBs: number;
+	pciThroughputRecieveKBs: number;
+}
+export interface MemUsage
+{
+	memPercentage: number;
+	memUsedKB: number;
+	memTotalKB: number;
+	swapPercentage: number;
+	swapUsedKB: number;
+	swapTotalKB: number;
+}
+export interface SendProcessMainWindowTitleMappingRequest
+{
+	mappings: PidProcessTitleMapping[];
+}
+export interface PidProcessTitleMapping
+{
+	id: number;
+	title: string;
+}

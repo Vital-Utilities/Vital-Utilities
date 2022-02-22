@@ -4,7 +4,7 @@ import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "rec
 import { ramMetricsModel } from "../../../components/Charts/RamMetricChart";
 import { ChartData, formatXAxis, CustomTooltip, customUnitFlags, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
 import { getReadableBytesString } from "../../../components/FormatUtils";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/Dto";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicRamView: React.FunctionComponent<ChartData> = props => {

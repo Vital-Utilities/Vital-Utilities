@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { ProfileDto } from "../../Dtos/Dto";
+import { ProfileDto } from "../../Dtos/ClientApiDto";
 
 export type ProfileActionTypes = FetchAllProfilesAction | AddProfileAction | UpdateProfileAction | DeleteProfileAction;
 // Profile

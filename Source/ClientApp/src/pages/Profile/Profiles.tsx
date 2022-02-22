@@ -7,7 +7,7 @@ import { fetchProfilesAction, recieveDeleteProfileAction } from "../../Redux/act
 import { VitalState, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
-import { ProfileDto } from "../../Dtos/Dto";
+import { ProfileDto } from "../../Dtos/ClientApiDto";
 import axios from "axios";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";

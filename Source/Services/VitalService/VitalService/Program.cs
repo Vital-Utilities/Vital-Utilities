@@ -18,6 +18,7 @@ namespace VitalService
         public static readonly string appAliasWithoutSpace = "VitalUtilities";
         public static readonly string appAliasWithSpace = "Vital Utilities";
         public static readonly string appDocumentsDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), appAliasWithSpace);
+        public static readonly string rustServiceExe = Path.Combine(appDir, rustServiceExe);
         static readonly IConfigurationRoot appSettings = new ConfigurationBuilder().SetBasePath(appDir)
 #if DEBUG == false
                 .AddJsonFile(Path.Combine(appDir, "appsettings.json"), false, true)
@@ -52,6 +53,8 @@ namespace VitalService
             }
 
             //SentrySdk.CaptureMessage("Hello Sentry");
+
+            // sensure rust service is running
 
 
 
@@ -94,7 +97,6 @@ namespace VitalService
                  }
                  catch (Exception e) { Log.Logger.Error("", e); }
 #endif
-                 //webBuilder.UseElectron(args);
                  webBuilder.UseStartup<Startup>();
              });
 

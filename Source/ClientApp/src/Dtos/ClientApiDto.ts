@@ -244,6 +244,7 @@ export interface GetMachineDynamicDataResponse
 	processRamUsageGb?: { [key:number]: number };
 	processDiskBytesPerSecActivity?: { [key:number]: number };
 	cpuTemperature?: { [key:string]: number };
+	processGpuUsage?: { [key:number]: number };
 }
 export interface GetMachineTimeSeriesRequest
 {

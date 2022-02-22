@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "ClientApp"
+    },
+    {
+      "path": "Services\\VitalRustService"
+    },
+    {
+      "path": "."
+    }
+  ],
+  "settings": {}
+}
