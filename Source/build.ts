@@ -9,17 +9,18 @@ const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()
     .replace(/\r?\n|\r/g, "");
-const vitalServiceDir = "./Services/VitalService/VitalService";
-const vitalRustServiceDir = "./Services/VitalRustService";
-const vitalTauriDir = "./ClientApp/src-tauri";
-const vitalClientDir = "./ClientApp";
+const vitalServiceDir = "Services/VitalService/VitalService";
+const vitalRustServiceDir = "Services/VitalRustService";
+const vitalTauriDir = "ClientApp/src-tauri";
+const vitalClientDir = "ClientApp";
 
-const buildFolder = "./Build";
-const vitalServiceBin = buildFolder + "/VitalService";
-const vitalRustServiceBin = buildFolder + "/VitalRustService";
+const buildFolder = "Build";
+const vitalServiceBin = `${buildFolder}/VitalService`;
+const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
 setupBuildDir();
 setWebPackageJsonVersion();
+//setVitalRustServiceVersions();
 
 buildSoftware();
 beforePackage();
@@ -31,6 +32,9 @@ function setupBuildDir() {
 
     if (!fs.existsSync(buildFolder)) {
         fs.mkdirSync(buildFolder);
+    }
+    if (!fs.existsSync(vitalRustServiceBin)) {
+        fs.mkdirSync(vitalRustServiceBin);
     }
 }
 
@@ -48,7 +52,11 @@ function buildSoftware() {
     replaceInCodeSecretPlaceholders();
 
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
-    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release --target-dir ../../Build/VitalRustService`);
+    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release`);
+
+    //@ts-ignore
+    fs.copyFileSync(`${vitalRustServiceDir}/target/release/VitalRustService.exe`, `${vitalRustServiceBin}/VitalRustService.exe`);
+
     execute(`cd ${vitalClientDir} && npm ci && npm run generateRustTypings && npm run build`);
 }
 
@@ -105,11 +113,17 @@ function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     tauriConf.package.version = version;
-
     // eslint-disable-next-line security/detect-non-literal-fs-filename
 
     execute(`cd ${vitalTauriDir} && tauri build --features "release" --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
 }
+
+function setVitalRustServiceVersions(){
+    const vitalrustserviceConf = fs.readFileSync(`${vitalRustServiceDir}/cargo.toml`, "utf-8");
+    const replaced = vitalrustserviceConf.replace(/\[package\]\n(version = ".*")/g, `\[package\]\n(version = "21312")`);
+    fs.writeFileSync(`${vitalRustServiceDir}/Cargo.toml`, replaced);
+}
+
 // function that takes a command and executes it synchronously
 function execute(command: string) {
     console.log(`Executing: ${command}`);
