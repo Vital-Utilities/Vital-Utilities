@@ -16,7 +16,7 @@
   - `\Source\ClientApp\src\Dtos\Dto.ts` is generated on Vital Service Build Success
   - `Source\ClientApp\src-tauri\src\backend_types.rs` is generated when you run `npm run tauri:dev` and `npm run generateRustTypings` in `\Source\ClientApp`
 
-## For Backend
+## For Vital Service
 
 ### You will need
 
@@ -43,6 +43,10 @@ To disable the admin rights requirement prompt, comment out the following in [./
 ```
 
 ## For Vital Rust Service
+
+Vital Rust Service gets additional utilization data from the system. All C# code in VitalService will be migrated into here.
+
+### You will need
 
 - [install Rust lang](https://www.rust-lang.org/tools/install)
 
