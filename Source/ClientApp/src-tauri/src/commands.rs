@@ -287,7 +287,7 @@ pub fn start_vital_service() -> Result<String, String> {
     info!("Starting Vital Service");
     const CREATE_NO_WINDOW: u32 = 0x08000000;
     let result = Command::new("cmd")
-        .args(&["/C", "start", "./bin/Backend/VitalService.exe"])
+        .args(&["/C", "start", "./Build/VitalService/VitalService.exe"])
         .creation_flags(CREATE_NO_WINDOW)
         .spawn();
 
