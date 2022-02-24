@@ -14,6 +14,7 @@ namespace VitalService
 {
     public class Program
     {
+        public static string ExePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory + $"{AppDomain.CurrentDomain.FriendlyName}.exe");
         public static readonly string appDir = AppDomain.CurrentDomain.BaseDirectory;
         public static readonly string appAliasWithoutSpace = "VitalUtilities";
         public static readonly string appAliasWithSpace = "Vital Utilities";
