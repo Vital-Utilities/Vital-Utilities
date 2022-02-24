@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
