@@ -62,20 +62,7 @@ namespace VitalService
 
 #if DEBUG == false
             // ensure rust service is running
-
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = "powershell.exe",
-                Arguments = $"{rustServiceExe}",
-                UseShellExecute = true,
-                CreateNoWindow = false
-            };
-            var process = new Process
-            {
-                StartInfo = startInfo
-            };
-            process.Start();
-
+            Process.Start(rustServiceExe);
 #endif
 
             CreateHostBuilder(args).Build().Run();
