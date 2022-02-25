@@ -43,7 +43,10 @@ async fn main() {
     let nvml_result = NVML::init();
     let nvml = match nvml_result {
         Ok(nvml) => Some(nvml),
-        Err(e) => None,
+        Err(e) => {
+            error!("{}", e);
+            None
+        }
     };
 
     let sys_stat = systemstat::System::new();
