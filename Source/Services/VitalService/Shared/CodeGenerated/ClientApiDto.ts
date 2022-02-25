@@ -59,7 +59,6 @@ export interface ManagedModelDto
 	processName: string;
 	alias: string;
 	processPriority: ProcessPriorityEnum;
-	executablePath: string;
 	affinity: number[];
 	parentProfileId: number;
 }

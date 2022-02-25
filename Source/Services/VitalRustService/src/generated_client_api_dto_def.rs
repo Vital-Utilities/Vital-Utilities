@@ -61,9 +61,6 @@ pub struct ManagedModelDto {
     #[serde(rename = "alias")]
     pub alias: String,
 
-    #[serde(rename = "executablePath")]
-    pub executable_path: String,
-
     #[serde(rename = "id")]
     pub id: f64,
 
