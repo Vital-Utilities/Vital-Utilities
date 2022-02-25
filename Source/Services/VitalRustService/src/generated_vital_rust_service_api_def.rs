@@ -15,6 +15,78 @@ use serde::{Deserialize, Serialize};
 extern crate serde_derive;
 
 #[derive(Serialize, Deserialize)]
+pub struct GpuUsage {
+    #[serde(rename = "coreClockMhz")]
+    pub core_clock_mhz: f64,
+
+    #[serde(rename = "corePercentage")]
+    pub core_percentage: f64,
+
+    #[serde(rename = "corePowerWatt")]
+    pub core_power_watt: f64,
+
+    #[serde(rename = "memClockMhz")]
+    pub mem_clock_mhz: f64,
+
+    #[serde(rename = "memPercentage")]
+    pub mem_percentage: f64,
+
+    #[serde(rename = "memTotalKB")]
+    pub mem_total_kb: f64,
+
+    #[serde(rename = "name")]
+    pub name: String,
+
+    #[serde(rename = "pciThroughputRecieveKBs")]
+    pub pci_throughput_recieve_k_bs: f64,
+
+    #[serde(rename = "pciThroughputSendKBs")]
+    pub pci_throughput_send_k_bs: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct NetworkUsage {
+    #[serde(rename = "description")]
+    pub description: Option<String>,
+
+    #[serde(rename = "downloadedBps")]
+    pub downloaded_bps: f64,
+
+    #[serde(rename = "downloadSpeedBps")]
+    pub download_speed_bps: f64,
+
+    #[serde(rename = "macAddress")]
+    pub mac_address: String,
+
+    #[serde(rename = "name")]
+    pub name: String,
+
+    #[serde(rename = "uploadedBps")]
+    pub uploaded_bps: f64,
+
+    #[serde(rename = "uploadSpeedBps")]
+    pub upload_speed_bps: f64,
+
+    #[serde(rename = "usagePercentage")]
+    pub usage_percentage: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SendProcessMainWindowTitleMappingRequest {
+    #[serde(rename = "mappings")]
+    pub mappings: Vec<PidProcessTitleMapping>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct PidProcessTitleMapping {
+    #[serde(rename = "id")]
+    pub id: f64,
+
+    #[serde(rename = "title")]
+    pub title: String,
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct SendUtilizationRequest {
     #[serde(rename = "processData")]
     pub process_data: Vec<ProcessData>,
@@ -120,76 +192,4 @@ pub struct MemUsage {
 
     #[serde(rename = "swapUsedKB")]
     pub swap_used_kb: f64,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct NetworkUsage {
-    #[serde(rename = "description")]
-    pub description: Option<String>,
-
-    #[serde(rename = "downloadedBps")]
-    pub downloaded_bps: f64,
-
-    #[serde(rename = "downloadSpeedBps")]
-    pub download_speed_bps: f64,
-
-    #[serde(rename = "macAddress")]
-    pub mac_address: String,
-
-    #[serde(rename = "name")]
-    pub name: String,
-
-    #[serde(rename = "uploadedBps")]
-    pub uploaded_bps: f64,
-
-    #[serde(rename = "uploadSpeedBps")]
-    pub upload_speed_bps: f64,
-
-    #[serde(rename = "usagePercentage")]
-    pub usage_percentage: f64,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct GpuUsage {
-    #[serde(rename = "coreClockMhz")]
-    pub core_clock_mhz: f64,
-
-    #[serde(rename = "corePercentage")]
-    pub core_percentage: f64,
-
-    #[serde(rename = "corePowerWatt")]
-    pub core_power_watt: f64,
-
-    #[serde(rename = "memClockMhz")]
-    pub mem_clock_mhz: f64,
-
-    #[serde(rename = "memPercentage")]
-    pub mem_percentage: f64,
-
-    #[serde(rename = "memTotalKB")]
-    pub mem_total_kb: f64,
-
-    #[serde(rename = "name")]
-    pub name: String,
-
-    #[serde(rename = "pciThroughputRecieveKBs")]
-    pub pci_throughput_recieve_k_bs: f64,
-
-    #[serde(rename = "pciThroughputSendKBs")]
-    pub pci_throughput_send_k_bs: f64,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct SendProcessMainWindowTitleMappingRequest {
-    #[serde(rename = "mappings")]
-    pub mappings: Vec<PidProcessTitleMapping>,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct PidProcessTitleMapping {
-    #[serde(rename = "id")]
-    pub id: f64,
-
-    #[serde(rename = "title")]
-    pub title: String,
 }
