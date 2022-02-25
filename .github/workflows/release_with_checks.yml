@@ -74,12 +74,12 @@ jobs:
         cache-dependency-path: '**/package-lock.json'
     - name: install ts-node
       run: |
-        cd "./Source/ClientApp"
+        cd "./Source"
         npm i -g ts-node
         npm i -D @types/node
     - name: Build release
       run: |
-        cd "./Source/ClientApp"
+        cd "./Source"
         npm run build:release
     - name: Release
       uses: softprops/action-gh-release@v1
