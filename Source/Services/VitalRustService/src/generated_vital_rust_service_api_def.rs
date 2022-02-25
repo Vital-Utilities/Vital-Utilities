@@ -31,17 +31,8 @@ pub struct ProcessData {
     #[serde(rename = "diskUsage")]
     pub disk_usage: DiskUsage,
 
-    #[serde(rename = "gpuCorePercentage")]
-    pub gpu_core_percentage: Option<f64>,
-
-    #[serde(rename = "gpuDecodingPercentage")]
-    pub gpu_decoding_percentage: Option<f64>,
-
-    #[serde(rename = "gpuEncodingPercentage")]
-    pub gpu_encoding_percentage: Option<f64>,
-
-    #[serde(rename = "gpuMemPercentage")]
-    pub gpu_mem_percentage: Option<f64>,
+    #[serde(rename = "gpuUtil")]
+    pub gpu_util: Option<ProcessGpuUtil>,
 
     #[serde(rename = "memoryKb")]
     pub memory_kb: f64,
@@ -69,6 +60,21 @@ pub struct DiskUsage {
 
     #[serde(rename = "writeBytesPerSecond")]
     pub write_bytes_per_second: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ProcessGpuUtil {
+    #[serde(rename = "gpuCorePercentage")]
+    pub gpu_core_percentage: Option<f64>,
+
+    #[serde(rename = "gpuDecodingPercentage")]
+    pub gpu_decoding_percentage: Option<f64>,
+
+    #[serde(rename = "gpuEncodingPercentage")]
+    pub gpu_encoding_percentage: Option<f64>,
+
+    #[serde(rename = "gpuMemPercentage")]
+    pub gpu_mem_percentage: Option<f64>,
 }
 
 #[derive(Serialize, Deserialize)]

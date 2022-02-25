@@ -12,6 +12,10 @@ export interface ProcessData
 	memoryKb: number;
 	diskUsage: DiskUsage;
 	status: string;
+	gpuUtil?: ProcessGpuUtil;
+}
+export interface ProcessGpuUtil
+{
 	gpuCorePercentage?: number;
 	gpuMemPercentage?: number;
 	gpuEncodingPercentage?: number;

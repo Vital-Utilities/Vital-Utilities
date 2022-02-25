@@ -16,11 +16,17 @@ namespace VitalRustServiceClasses
         public float MemoryKb { get; set; }
         public DiskUsage DiskUsage { get; set; }
         public string Status { get; set; }
+        public ProcessGpuUtil? GpuUtil { get; set; }
+    }
+
+    public class ProcessGpuUtil
+    {
         public float? GpuCorePercentage { get; set; }
         public float? GpuMemPercentage { get; set; }
         public float? GpuEncodingPercentage { get; set; }
         public float? GpuDecodingPercentage { get; set; }
     }
+
     public class SendUtilizationRequest
     {
         public ProcessData[] ProcessData { get; set; }

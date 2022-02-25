@@ -89,7 +89,7 @@ namespace VitalService.Services.PerformanceServices
                     WorkingSetGB = (float)Math.Round(v.Value.MemoryKb / 1024 / 1024, 3),
                     WriteBytesPerSec = v.Value.DiskUsage.WriteBytesPerSecond,
                     ReadBytesPerSec = v.Value.DiskUsage.ReadBytesPerSecond,
-                    GpuPercentage = v.Value.GpuCorePercentage ?? 0
+                    GpuPercentage = v.Value.GpuUtil?.GpuCorePercentage ?? 0
                 };
             });
         }

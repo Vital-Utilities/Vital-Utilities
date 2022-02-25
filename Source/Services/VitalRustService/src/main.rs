@@ -4,10 +4,13 @@ use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
 use chrono::{DateTime, Utc};
-use generated_vital_rust_service_api_def::SendProcessMainWindowTitleMappingRequest;
+use generated_vital_rust_service_api_def::{
+    ProcessGpuUtil, SendProcessMainWindowTitleMappingRequest,
+};
 use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
 
+use nvml::struct_wrappers::device::ProcessUtilizationSample;
 use nvml::{Device, NVML};
 use sysinfo::{PidExt, ProcessorExt, SystemExt};
 use systemstat::Platform;
@@ -37,15 +40,16 @@ async fn main() {
         error!("{}", "failed to get vital service port");
         panic!("{}", "failed to get vital service port");
     }
-    let nvml = NVML::init().unwrap();
-    let mut sys_info = sysinfo::System::new_all();
-
-    sys_info.refresh_all(); // required to get the correct usage as data relies on previous sample
-    thread::sleep(WAIT_TIME);
+    let nvml_result = NVML::init();
+    let nvml = match nvml_result {
+        Ok(nvml) => Some(nvml),
+        Err(e) => None,
+    };
 
     let sys_stat = systemstat::System::new();
-    let device = nvml.device_by_index(0).unwrap();
 
+    let mut sys_info = sysinfo::System::new_all();
+    sys_info.refresh_all(); // required to get the correct usage as data relies on previous sample
     loop {
         thread::sleep(WAIT_TIME);
         let now = Instant::now();
@@ -60,7 +64,8 @@ async fn main() {
                 title: title,
             });
         }
-        let process_data = get_process_util(&sys_info, &device, time).unwrap();
+
+        let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
         let (cpu_util, mem_util) =
             join!(get_cpu_util(&sys_info, &sys_stat), get_mem_util(&sys_info));
@@ -108,14 +113,41 @@ async fn main() {
     }
 }
 
+fn get_process_gpu_util(nvml: &Option<NVML>) -> Option<Vec<ProcessUtilizationSample>> {
+    if nvml.is_none() {
+        return None;
+    }
+    let mut process_data = Vec::new();
+    if let Some(nvml) = nvml {
+        let count = nvml.device_count();
+        if count.is_err() {
+            error!("{}", "failed to get device count");
+            return None;
+        }
+
+        for i in 0..count.unwrap() {
+            let device = nvml.device_by_index(i);
+            if let Ok(device) = device {
+                let util = device.process_utilization_stats(None);
+                if util.is_ok() {
+                    process_data.push(util.unwrap());
+                }
+            }
+        }
+    }
+
+    // flat map the vector of vectors
+    return Some(process_data.into_iter().flatten().collect());
+}
 fn get_process_util(
     sysinfo: &sysinfo::System,
-    gpu_device: &Device,
+    nvml: &Option<NVML>,
     time_stamp: DateTime<Utc>,
 ) -> Option<Vec<generated_vital_rust_service_api_def::ProcessData>> {
     let mut list = Vec::new();
     let processes = sysinfo.processes();
-    let gpu_usages = gpu_device.process_utilization_stats(None).unwrap();
+
+    let gpu_usages = get_process_gpu_util(&nvml).unwrap();
     /*
     let using_compute = gpu_device.running_compute_processes().unwrap();
     let using_graphics = gpu_device.running_graphics_processes().unwrap();
@@ -127,7 +159,9 @@ fn get_process_util(
     let cores = sysinfo.physical_core_count();
     for (pid, process) in processes {
         let disk_bytes = process.disk_usage();
-        let gpudata = &gpu_usages.iter().find(|x| x.pid == pid.as_u32());
+        // get first gpu usage that has this pid
+        let process_gpu_util = gpu_usages.iter().find(|sample| sample.pid == pid.as_u32());
+
         list.push(generated_vital_rust_service_api_def::ProcessData {
             name: process.name().to_string(),
             pid: pid.as_u32() as f64,
@@ -143,26 +177,17 @@ fn get_process_util(
                 write_bytes_per_second: disk_bytes.written_bytes as f64,
             },
             status: process.status().to_string(),
-            gpu_core_percentage: if gpudata.is_some() {
-                Some(gpudata.unwrap().sm_util as f64)
+            gpu_util: if process_gpu_util.is_some() {
+                Some(ProcessGpuUtil {
+                    gpu_core_percentage: Some(process_gpu_util.unwrap().sm_util as f64),
+                    gpu_decoding_percentage: Some(process_gpu_util.unwrap().dec_util as f64),
+                    gpu_encoding_percentage: Some(process_gpu_util.unwrap().enc_util as f64),
+                    gpu_mem_percentage: Some(process_gpu_util.unwrap().mem_util as f64),
+                })
             } else {
                 None
             },
-            gpu_decoding_percentage: if gpudata.is_some() {
-                Some(gpudata.unwrap().dec_util as f64)
-            } else {
-                None
-            },
-            gpu_encoding_percentage: if gpudata.is_some() {
-                Some(gpudata.unwrap().enc_util as f64)
-            } else {
-                None
-            },
-            gpu_mem_percentage: if gpudata.is_some() {
-                Some(gpudata.unwrap().mem_util as f64)
-            } else {
-                None
-            },
+
             time_stamp: time_stamp.to_rfc3339(),
         });
     }
