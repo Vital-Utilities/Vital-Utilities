@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "ClientApp"
+    },
+    {
+      "path": "Services\\VitalRustService"
+    },
+    {
+      "path": "."
+    },
+    {
+      "path": "ClientApp\\src-tauri"
+    }
+  ],
+  "settings": {}
+}

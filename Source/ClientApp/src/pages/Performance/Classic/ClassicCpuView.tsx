@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CpuMetricsModel } from "../../../components/Charts/CpuChartTimeSeries";
 import { ChartData, ClassicLayout, CustomTooltip, formatXAxis, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/Dto";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {

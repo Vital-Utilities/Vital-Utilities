@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { ReactNode } from "react";
 import { TooltipProps } from "recharts";
-import { DateRange } from "../../Dtos/Dto";
+import { DateRange } from "../../Dtos/ClientApiDto";
 import { getReadableBitsPerSecondString, getReadableBytesPerSecondString, getReadableBytesString } from "../FormatUtils";
 import { CpuMetricsModel } from "./CpuChartTimeSeries";
 import { diskMetricsModel } from "./DiskMetricChart";

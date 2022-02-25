@@ -7,7 +7,7 @@ import { AddProcessView } from "./AddProcessView";
 import { useSelector } from "react-redux";
 import { VitalState, MachineState } from "../../Redux/States";
 import axios from "axios";
-import { GetProcessesToAddResponse, ManagedModelDto, ProcessToAddDto, ProfileDto } from "../../Dtos/Dto";
+import { GetProcessesToAddResponse, ManagedModelDto, ProcessToAddDto, ProfileDto } from "../../Dtos/ClientApiDto";
 import { Table } from "../../components/Table";
 
 enum Pages {

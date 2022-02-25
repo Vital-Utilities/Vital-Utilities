@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using VitalService.Data;
 using VitalService.Dtos;
 using VitalService.Stores;
+using VitalService.Utilities;
 
 namespace VitalService.Controllers
 {
@@ -85,17 +86,18 @@ namespace VitalService.Controllers
             {
                 try
                 {
-                    _ = process.ProcessorAffinity; // used to check if we can modify Affinity. if we cant an exception will be thrown.
+                    var affinity = process.ProcessorAffinity; // also used to check if we can access/modify Affinity. if we cant an exception will be thrown.
+                    TryGetFileName(process, out var fileName);
                     var p = new ProcessToAddDto
                     {
-                        ProcessName = process.ProcessName
+                        ProcessName = process.ProcessName,
+                        ExecutionPath = fileName,
+                        MainWindowTitle = process.MainWindowTitle,
+                        Pid = process.Id,
+                        CanModify = true,
+                        ProcessPriority = process.PriorityClass.ToDomainObject(),
+                        Affinity = Affinity.IntPtrToBinary(affinity)
                     };
-
-                    TryGetFileName(process, out var fileName);
-                    p.ExecutionPath = fileName;
-                    p.MainWindowTitle = process.MainWindowTitle;
-                    p.Pid = process.Id;
-                    p.CanModify = true;
 
                     processToReturn.Add(p);
 

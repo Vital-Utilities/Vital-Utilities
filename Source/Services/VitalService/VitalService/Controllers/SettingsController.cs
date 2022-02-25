@@ -14,7 +14,6 @@ namespace VitalService.Controllers
     {
         public SettingsStore SettingsStore { get; }
 
-        private string ExePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory + $"{AppDomain.CurrentDomain.FriendlyName}.exe");
         public SettingsController(SettingsStore settingsStore)
         {
             SettingsStore = settingsStore;
@@ -44,7 +43,7 @@ namespace VitalService.Controllers
 
             var taskFolderName = Program.appAliasWithSpace;
             string argument = runAtStartup
-                ? $"Register-ScheduledTask VitalService '{taskFolderName}' -Action (New-ScheduledTaskAction -Execute '{ExePath}') -Principal (New-ScheduledTaskPrincipal -UserId (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName) -RunLevel Highest) -Trigger (New-ScheduledTaskTrigger -AtLogon -User (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)) -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries)"
+                ? $"Register-ScheduledTask VitalService '{taskFolderName}' -Action (New-ScheduledTaskAction -Execute '{Program.ExePath}') -Principal (New-ScheduledTaskPrincipal -UserId (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName) -RunLevel Highest) -Trigger (New-ScheduledTaskTrigger -AtLogon -User (Get-CimInstance –ClassName Win32_ComputerSystem | Select-Object -expand UserName)) -Settings (New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries)"
                 : $@"
 Unregister-ScheduledTask -TaskPath '\{taskFolderName}\' -TaskName VitalService -Confirm:$false;
 $scheduleObject = New-Object -ComObject Schedule.Service;

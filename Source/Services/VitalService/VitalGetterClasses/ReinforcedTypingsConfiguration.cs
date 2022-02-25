@@ -1,12 +1,10 @@
 ﻿using Reinforced.Typings.Ast.TypeNames;
 using Reinforced.Typings.Fluent;
-using ReinforcedTypings.Dummy;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using VitalService.Dtos;
 using ConfigurationBuilder = Reinforced.Typings.Fluent.ConfigurationBuilder;
 
 namespace ReinforcedTypings
@@ -16,9 +14,9 @@ namespace ReinforcedTypings
         public static void Configure(ConfigurationBuilder builder)
         {
             // fluent configuration goes here
-            var webDtos = Assembly.GetAssembly(typeof(ReinforcedTypingsDummy))
+            var webDtos = Assembly.GetAssembly(typeof(ReinforcedTypingsConfiguration))
                 .GetTypes()
-                .Where(x => x.Namespace?.StartsWith("VitalService.Dtos") == true)
+                .Where(x => x.Namespace?.StartsWith("VitalRustServiceClasses") == true)
                 .ToArray();
             builder.Substitute(typeof(Guid), new RtSimpleTypeName("string"))
                 .Substitute(typeof(DateTime), new RtSimpleTypeName("Date"))
@@ -37,7 +35,6 @@ namespace ReinforcedTypings
                 conf.FlattenHierarchy().UseString(true);
             });
 
-            builder.ExportAsEnum<DriveType>().UseString();
             //builder.ExportAsEnum<ProcessPriorityEnum>().WithCodeGenerator<AdditionalEnumGenerator>();
             foreach (var type in webDtos.Where(e => !e.IsEnum && !e.IsInterface))
             {

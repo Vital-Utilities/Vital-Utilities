@@ -1,4 +1,4 @@
-import { ProcessToAddDto } from "./Dto";
+import { ProcessToAddDto } from "./ClientApiDto";
 
 export interface UiProcessToAdd extends ProcessToAddDto {
     id: string;

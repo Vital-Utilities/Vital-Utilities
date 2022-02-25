@@ -2,7 +2,7 @@
 import { Progress, Badge } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import { RamUsages } from "../Dtos/Dto";
+import { RamUsages } from "../Dtos/ClientApiDto";
 import { VitalState } from "../Redux/States";
 
 interface props {

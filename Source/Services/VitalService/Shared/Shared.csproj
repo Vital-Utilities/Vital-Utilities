@@ -18,4 +18,20 @@
     <None Remove="Dtos\Coms\SignalR\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Reinforced.Typings.settings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Reinforced.Typings.settings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Reinforced.Typings" Version="1.6.1" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)CodeGenerated/ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\..\GeneratedCodeArtifact\&quot; /F /R /Y /I&#xD;&#xA;&#xD;&#xA;xcopy &quot;$(ProjectDir)CodeGenerated/ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\..\ClientApp\src\Dtos\&quot; /F /R /Y /I" />
+  </Target>
+
 </Project>

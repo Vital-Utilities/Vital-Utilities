@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AnyAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { GetRunningProcessesResponse, ProcessViewDto } from "../../Dtos/Dto";
+import { GetRunningProcessesResponse, ProcessViewDto } from "../../Dtos/ClientApiDto";
 
 export type ProcessViewActionTypes = FetchAllProcessViewAction | AddProcessViewAction | UpdateProcessViewAction | DeleteProcessViewAction;
 

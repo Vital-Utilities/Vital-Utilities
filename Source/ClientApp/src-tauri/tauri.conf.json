@@ -23,7 +23,7 @@
                 "icons/icon.ico"
             ],
             "resources": [
-                "../bin/Backend"
+                "../../bin"
             ],
             "externalBin": [],
             "copyright": "Copyright © 2022 Snazzie, Aaron Cooper. All rights reserved.",

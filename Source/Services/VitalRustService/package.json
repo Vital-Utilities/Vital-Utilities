@@ -1,0 +1,13 @@
+{
+  "name": "vitalrustservice",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "generateRustTypings": "npx ts-node generateRustTypings ../../GeneratedCodeArtifact/VitalRustServiceClasses.ts ./src/generated_vital_rust_service_api_def.rs | npx ts-node generateRustTypings ../../GeneratedCodeArtifact/ClientApiDto.ts ./src/generated_client_api_dto_def.rs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "quicktype": "^15.0.260",
+    "ts-node": "^10.5.0"
+  }
+}

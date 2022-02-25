@@ -10,7 +10,7 @@ import { ProcessViewState, ProfileState, VitalState } from "../Redux/States";
 import { fetchMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
-import { GetMachineDynamicDataResponse, ParentChildModelDto, ProcessViewDto } from "../Dtos/Dto";
+import { GetMachineDynamicDataResponse, ParentChildModelDto, ProcessViewDto } from "../Dtos/ClientApiDto";
 import { getProcessCPUPercentColor } from "../components/PerfBadge";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../components/FormatUtils";
 import { openUrl } from "../Utilities/TauriCommands";
@@ -40,10 +40,15 @@ export const Processes: React.FunctionComponent = () => {
     const processCpuPercentage = dynamicData?.processCpuUsage;
     const processRamGb = dynamicData?.processRamUsageGb;
     const processBytesPerSecActivity = dynamicData?.processDiskBytesPerSecActivity;
+    const processGpuPercentage = dynamicData?.processGpuUsage;
     const [expandedIds, setExpandedIds] = React.useState<number[]>([]);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Description, descending: false });
     const dispatch = useDispatch();
 
+    const totalRam = (dto: ParentChildModelDto) => valueOrZero(processRamGb?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 1);
+    const totalCpu = (dto: ParentChildModelDto) => valueOrZero(processCpuPercentage?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 1);
+    const totalDiskActivity = (dto: ParentChildModelDto) => valueOrZero(processBytesPerSecActivity?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 1);
+    const totalGpuActivity = (dto: ParentChildModelDto) => valueOrZero(processGpuPercentage?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 1);
     useEffect(() => {
         render();
         function render() {
@@ -108,16 +113,17 @@ export const Processes: React.FunctionComponent = () => {
                     returnList = sortBy.descending ? toReturn.reverse() : toReturn;
                     break;
                 }
+                case SortByEnum.Gpu: {
+                    const toReturn = returnList.sort((a, b) => totalGpuActivity(a) - totalGpuActivity(b));
+                    returnList = sortBy.descending ? toReturn.reverse() : toReturn;
+                    break;
+                }
                 default:
                     break;
             }
             setView(returnList);
         }
     }, [profileState, showAllProcess, processViewState, filter_LowerCased, processCpuThreadPercentage, processCpuPercentage, processRamGb, sortBy]);
-
-    const totalRam = (dto: ParentChildModelDto) => valueOrZero(processRamGb?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 1);
-    const totalCpu = (dto: ParentChildModelDto) => valueOrZero(processCpuPercentage?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 1);
-    const totalDiskActivity = (dto: ParentChildModelDto) => valueOrZero(processBytesPerSecActivity?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 1);
 
     useInterval(
         () => {
@@ -140,12 +146,6 @@ export const Processes: React.FunctionComponent = () => {
     function valueOrZero(value: undefined | never | number): number {
         return value || 0;
     }
-
-    // parse string to number
-    const parseNumber = (value: string | undefined): number => {
-        const parsedValue = parseFloat(value ?? "");
-        return isNaN(parsedValue) ? 0 : parsedValue;
-    };
 
     // function converts gb to bytes and returns the value in bytes
     const convertGbToBytes = (value: number | undefined): number => {
@@ -216,7 +216,8 @@ export const Processes: React.FunctionComponent = () => {
                         <td>{e.parent.id}</td>
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(valueOrZero(processCpuPercentage?.[e.parent.id]) ?? 0) }}>{valueOrZero(processCpuPercentage?.[e.parent.id]).toFixed(1)}%</td>
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processRamGb && getReadableBytesString(convertGbToBytes(valueOrZero(processRamGb[e.parent.id])), 1)}</td>
-                        <td style={{ textAlign: "right", minWidth: 80 }}>{processRamGb && getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
+                        <td style={{ textAlign: "right", minWidth: 80 }}>{processBytesPerSecActivity && getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
+                        <td style={{ textAlign: "right", minWidth: 80 }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
                     </tr>
                 </Dropdown>
             );
@@ -226,6 +227,8 @@ export const Processes: React.FunctionComponent = () => {
             const totalCpu = valueOrZero(processCpuPercentage?.[e.parent.id]) + e.children.map(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
             const totalRam = valueOrZero(processRamGb?.[e.parent.id]) + e.children.map(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 0);
             const diskBytesPerSecActivity = valueOrZero(processBytesPerSecActivity?.[e.parent.id]) + e.children.map(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 0);
+            const gpuActivity = valueOrZero(processGpuPercentage?.[e.parent.id]) + e.children.map(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
+
             returnValue.push(
                 <Dropdown key={`dropdown - ${e.parent.id}`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
                     <tr className="process">
@@ -258,6 +261,7 @@ export const Processes: React.FunctionComponent = () => {
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(totalCpu ?? 0) }}>{totalCpu?.toFixed(1)}%</td>
                         <td style={{ textAlign: "right" }}>{getReadableBytesString(convertGbToBytes(totalRam), 1)}</td>
                         <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(diskBytesPerSecActivity, 1)}</td>
+                        <td style={{ textAlign: "right" }}>{gpuActivity && gpuActivity}%</td>
                     </tr>
                 </Dropdown>
             );
@@ -294,6 +298,7 @@ export const Processes: React.FunctionComponent = () => {
                             <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
                             <td style={{ textAlign: "right" }}>{getReadableBytesString(convertGbToBytes(valueOrZero(processRamGb?.[e.parent.id])), 1)}</td>
                             <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
+                            <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
                         </tr>
                     </Dropdown>
                 );
@@ -314,6 +319,7 @@ export const Processes: React.FunctionComponent = () => {
                                     <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
                                     <td style={{ textAlign: "right" }}>{getReadableBytesString(convertGbToBytes(processRamGb?.[c.id]), 1)}</td>
                                     <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[c.id], 1)}</td>
+                                    <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[c.id]}%</td>
                                 </tr>
                             </Dropdown>
                         );
@@ -329,7 +335,7 @@ export const Processes: React.FunctionComponent = () => {
 
     function setSort(e: SortByEnum) {
         if (e === sortBy.sortBy) setSortBy({ ...sortBy, descending: !sortBy.descending });
-        else if (e === SortByEnum.Cpu || e === SortByEnum.Ram || e === SortByEnum.DiskIO) setSortBy({ sortBy: e, descending: true });
+        else if (e === SortByEnum.Cpu || e === SortByEnum.Ram || e === SortByEnum.DiskIO || e === SortByEnum.Gpu) setSortBy({ sortBy: e, descending: true });
         else setSortBy({ sortBy: e, descending: false });
     }
     return (
@@ -356,13 +362,16 @@ export const Processes: React.FunctionComponent = () => {
                             Pid {sortBy.sortBy === SortByEnum.Pid && sortDirectionRender()}
                         </th>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.Cpu && "active"}`} style={{ width: 80 }} onClick={() => setSort(SortByEnum.Cpu)}>
-                            CPU {sortBy.sortBy === SortByEnum.Cpu && sortDirectionRender()}
+                            Cpu {sortBy.sortBy === SortByEnum.Cpu && sortDirectionRender()}
                         </th>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.Ram && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.Ram)}>
                             Ram {sortBy.sortBy === SortByEnum.Ram && sortDirectionRender()}
                         </th>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.DiskIO && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.DiskIO)}>
                             Disk {sortBy.sortBy === SortByEnum.DiskIO && sortDirectionRender()}
+                        </th>
+                        <th className={`sort ${sortBy.sortBy === SortByEnum.Gpu && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.Gpu)}>
+                            Gpu {sortBy.sortBy === SortByEnum.Gpu && sortDirectionRender()}
                         </th>
                     </tr>
                 </thead>

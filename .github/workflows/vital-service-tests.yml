@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: windows-latest
     env: 
-       source: ./Source
+       source: ./Source/Services/VitalService
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2

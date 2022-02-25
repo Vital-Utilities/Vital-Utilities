@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using VitalRustServiceClasses;
 using VitalService.Dtos.Coms;
 using VitalService.Dtos.Data;
 
@@ -25,6 +26,8 @@ namespace VitalService.Services.PerformanceServices
         public List<GpuUsages> CurrentGpuUsage { get { lastServiceAccess = DateTime.Now; return gpuUsageData; } }
         public CpuUsages CurrentCpuUsage { get { lastServiceAccess = DateTime.Now; return cpuUsageData; } }
         public DiskUsages CurrentDiskUsages { get { lastServiceAccess = DateTime.Now; return diskUsagesData; } }
+
+
         public NetworkAdapters CurrentNetworkUsage { get { lastServiceAccess = DateTime.Now; return networkUsageData; } }
 
         private List<GpuUsages> gpuUsageData = new();
@@ -38,6 +41,9 @@ namespace VitalService.Services.PerformanceServices
         private Timer AutoThrottlerTimer { get; set; }
         private DateTime lastServiceAccess;
         private DiskUsages diskUsagesData = new();
+        private VitalRustServiceClasses.CpuUsage cpuDataFromRust;
+        private VitalRustServiceClasses.MemUsage memDataFromRust;
+        //private VitalRustServiceClasses.GpuUsage[] gpuDataFromRust;
 
         public bool ThrottleActive { get; private set; }
         private TimeSpan throttleAfter = TimeSpan.FromSeconds(10);
@@ -51,8 +57,9 @@ namespace VitalService.Services.PerformanceServices
             IsControllerEnabled = false,
             IsNetworkEnabled = true,
             IsStorageEnabled = true,
-
         };
+
+
         public HardwarePerformanceService()
         {
             computer.Open();
@@ -68,6 +75,13 @@ namespace VitalService.Services.PerformanceServices
                 Task.Run(() => UpdateNetworkUsage());
                 Task.Run(() => UpdateDiskUsage());
             }, null, Timeout.Infinite, Timeout.Infinite);
+        }
+
+        public void RecieveHardwareData(SystemUsage hardwareUsage)
+        {
+            cpuDataFromRust = hardwareUsage.CpuUsage;
+            memDataFromRust = hardwareUsage.MemUsage;
+            //gpuDataFromRust = hardwareUsage.GpuUsage;
         }
 
         private void SetStaticData()
@@ -140,8 +154,8 @@ namespace VitalService.Services.PerformanceServices
                     ConfiguredClockSpeedMhz = (uint)Convert.ChangeType(queryObj.CimInstanceProperties["ConfiguredClockSpeed"].Value, typeof(uint)),
                     Capacity = (double)Convert.ChangeType(queryObj.CimInstanceProperties["Capacity"].Value, typeof(double))
                 };
-                var slotName = queryObj.CimInstanceProperties["DeviceLocator"].Value as string;
-                if (slotName != null)
+
+                if (queryObj.CimInstanceProperties["DeviceLocator"].Value is string slotName)
                 {
                     var rgx = new Regex(@"/\d +$/");
                     var split = rgx.Match(slotName);
@@ -165,13 +179,15 @@ namespace VitalService.Services.PerformanceServices
             {
                 Utilities.Debug.LogExecutionTime(null, () =>
                 {
-                    var adapters = NetworkInterface.GetAllNetworkInterfaces().ToDictionary(k => k.Name, v => v);
+                    Dictionary<string, NetworkInterface>? adapters = null;
+
+                    Utilities.Debug.LogExecutionTime("GetAllNetworkInterfaces", () => adapters = NetworkInterface.GetAllNetworkInterfaces().ToDictionary(k => k.Name, v => v));
+
 
                     var toReturn = new NetworkAdapters();
-                    foreach (var hardwareItem in computer.Hardware)
+                    foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Network))
                     {
-                        if (hardwareItem.HardwareType == HardwareType.Network
-                        && adapters.TryGetValue(hardwareItem.Name, out var adapter)
+                        if (adapters!.TryGetValue(hardwareItem.Name, out var adapter)
                         && adapter.OperationalStatus is not OperationalStatus.Down or OperationalStatus.Unknown or OperationalStatus.NotPresent)
                         {
                             var ipProperties = adapter.GetIPProperties();
@@ -387,30 +403,7 @@ namespace VitalService.Services.PerformanceServices
             {
                 Utilities.Debug.LogExecutionTime(null, () =>
                 {
-                    var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT Name, PercentProcessorTime FROM Win32_PerfFormattedData_PerfOS_Processor");
                     var toReturn = new CpuUsages();
-                    var coresBeforeSort = new SortedDictionary<int, float>();
-
-                    try
-                    {
-                        foreach (ManagementObject queryObj in searcher.Get())
-                        {
-                            if (queryObj["Name"].ToString() == "_Total")
-#pragma warning disable CS8604 // Possible null reference argument.
-
-                                toReturn.Total = (float)Math.Round(double.Parse(queryObj["PercentProcessorTime"].ToString()), 2);
-
-                            else
-                                coresBeforeSort.Add(int.Parse(queryObj["Name"].ToString()), float.Parse(queryObj["PercentProcessorTime"].ToString()));
-#pragma warning restore CS8604 // Possible null reference argument.
-                        }
-
-                        toReturn.Cores = coresBeforeSort.Values.ToList();
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Logger.Error(e.Message, e);
-                    }
 
                     foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Cpu))
                     {
@@ -427,11 +420,6 @@ namespace VitalService.Services.PerformanceServices
                                         else
                                             toReturn.TemperatureReadings.TryAdd(sensor.Name, (float)Math.Round((float)sensor.Value, 2));
                                     break;
-                                case SensorType.Clock:
-                                    if (sensor.Value == null || !sensor.Name.Contains("Core"))
-                                        continue;
-                                    toReturn.CoreClocksMhz.Add((int)sensor.Value);
-                                    break;
                                 case SensorType.Power:
                                     if (sensor.Value != null && sensor.Name == "Package" && sensor.Value != null)
                                         toReturn.PowerDrawWattage = (float)Math.Round((float)sensor.Value, 2);
@@ -439,7 +427,12 @@ namespace VitalService.Services.PerformanceServices
                             }
                         }
                     }
-
+                    if (cpuDataFromRust is not null)
+                    {
+                        toReturn.CoreClocksMhz = cpuDataFromRust.CoreFrequencies;
+                        toReturn.Total = (float)Math.Round(cpuDataFromRust.CpuPercentage);
+                        toReturn.Cores = cpuDataFromRust.CorePercentages;
+                    }
                     cpuUsageData = toReturn;
                 });
             }
@@ -581,30 +574,13 @@ namespace VitalService.Services.PerformanceServices
 
             Utilities.Debug.LogExecutionTime(null, () =>
             {
-                var searcher = new ManagementObjectSearcher("root\\CIMV2",
-                   "SELECT FreePhysicalMemory, TotalVisibleMemorySize FROM Win32_OperatingSystem");
-
-                var data = new RamUsageRaw();
-
-                try
-                {
-                    foreach (ManagementObject queryObj in searcher.Get())
-                    {
-                        foreach (var propertyInfo in typeof(RamUsageRaw).GetProperties())
-                        {
-                            propertyInfo.SetValue(data, Convert.ChangeType(queryObj[propertyInfo.Name]?.ToString() ?? null, propertyInfo.PropertyType), null);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Log.Logger.Error(e.Message, e);
-                }
+                if (memDataFromRust is null)
+                    return;
 
                 ramUsageData = new RamUsages
                 {
-                    UsedMemoryBytes = (data.TotalVisibleMemorySize - data.FreePhysicalMemory) * 1024,
-                    TotalVisibleMemoryBytes = data.TotalVisibleMemorySize * 1024
+                    UsedMemoryBytes = memDataFromRust.MemUsedKB * 1000,
+                    TotalVisibleMemoryBytes = memDataFromRust.MemTotalKB * 1000
                 };
             });
         }

@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import React from "react";
-import { ManagedModelDto } from "../../Dtos/Dto";
+import { ManagedModelDto } from "../../Dtos/ClientApiDto";
 import { UpdateProcessView } from "./UpdateProcessView";
 
 interface EditProcessModelProps {

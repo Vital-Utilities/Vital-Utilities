@@ -16,7 +16,7 @@
   - `\Source\ClientApp\src\Dtos\Dto.ts` is generated on Vital Service Build Success
   - `Source\ClientApp\src-tauri\src\backend_types.rs` is generated when you run `npm run tauri:dev` and `npm run generateRustTypings` in `\Source\ClientApp`
 
-## For Backend
+## For Vital Service
 
 ### You will need
 
@@ -42,6 +42,17 @@ To disable the admin rights requirement prompt, comment out the following in [./
 </requestedPrivileges>
 ```
 
+## For Vital Rust Service
+
+Vital Rust Service gets additional utilization data from the system. All C# code in VitalService will be migrated into here.
+
+### You will need
+
+- [install Rust lang](https://www.rust-lang.org/tools/install)
+
+5. open [./Services/VitalRustService](./Services/VitalRustService)
+6. run `cargo run`
+
 ## For Web App
 
 ### You will need
@@ -49,10 +60,10 @@ To disable the admin rights requirement prompt, comment out the following in [./
 - [Visual Studio Code](https://code.visualstudio.com)
 - [NPM and Node](https://nodejs.org/en/) (currently using 17.4.0)
 
-5. Open [ClientApp](./ClientApp) as work directory in vscode
-6. Install app recommended vscode extensions
-7. npm ci
-8. npm start (if you want to use the browser only to access the UI, port is :3000)
+7. Open [ClientApp](./ClientApp) as work directory in vscode
+8. Install app recommended vscode extensions
+9. `npm ci`
+10. `npm start` (if you want to use the browser only to access the UI, port is :3000)
 
 ## For Web App in Desktop Client
 
@@ -60,4 +71,4 @@ To disable the admin rights requirement prompt, comment out the following in [./
 
 - [install Rust lang](https://www.rust-lang.org/tools/install)
 
-8. npm run tauri:dev (if you want to develop with the web app inside the desktop client)
+11. npm run tauri:dev (if you want to develop with the web app inside the desktop client)

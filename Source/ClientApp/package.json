@@ -10,15 +10,15 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "cross-env CI=false react-scripts build",
-        "build:backend": "rimraf ./bin/Backend && dotnet build ../Services/VitalService/VitalService/VitalService.csproj -c release -o ./bin/Backend/ -v detailed -p:Version=0.0.1",
-        "build:release": "npx ts-node build.ts",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "clean": "rimraf node_modules/",
         "tauri:dev": "npm run generateRustTypings && set RUST_DEBUG=1 && tauri dev",
+        "tauri": "tauri",
         "generateRustTypings": "npx ts-node generateRustTypings.ts",
         "redux-devtools": "redux-devtools --hostname=localhost --port=9000",
-        "fix-lint": "eslint --fix --ext .ts,.tsx src"
+        "fix-lint": "eslint --fix --ext .ts,.tsx src",
+        "watch": "copy-and-watch --watch src/**/*.{html,json} src/**/{fonts,images}/* dist/"
     },
     "dependencies": {
         "@ant-design/icons": "^4.7.0",
@@ -26,7 +26,7 @@
         "@sentry/browser": "^6.17.4",
         "@sentry/react": "^6.17.4",
         "@sentry/tracing": "^6.17.4",
-        "@tauri-apps/api": "1.0.0-beta.8",
+        "@tauri-apps/api": "1.0.0-rc.1",
         "ahooks": "^3.1.5",
         "antd": "^4.18.5",
         "axios": "^0.21.4",
@@ -48,7 +48,7 @@
     "devDependencies": {
         "@babel/core": "7.17.0",
         "@reduxjs/toolkit": "^1.7.2",
-        "@tauri-apps/cli": "1.0.0-beta.10",
+        "@tauri-apps/cli": "1.0.0-rc.5",
         "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^12.1.2",
         "@testing-library/user-event": "^13.5.0",
@@ -61,6 +61,7 @@
         "@types/recharts": "^1.8.23",
         "@typescript-eslint/eslint-plugin": "^5.10.2",
         "@typescript-eslint/parser": "^5.10.2",
+        "cross-env": "^7.0.3",
         "eslint": "^8.0.0",
         "eslint-config-prettier": "8.3.0",
         "eslint-config-react-app": "^7.0.0",

@@ -4,7 +4,7 @@ import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "rec
 import { networkMetricsModel } from "../../../components/Charts/NetworkAdapterMetricChart";
 import { ChartData, customUnitFlags, formatXAxis, CustomTooltip, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
 import { getReadableBitsPerSecondString, getReadableBytesPerSecondString, getReadableBytesString } from "../../../components/FormatUtils";
-import { GetMachineDynamicDataResponse } from "../../../Dtos/Dto";
+import { GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../../Dtos/UiModel";
 import { VitalState } from "../../../Redux/States";
 

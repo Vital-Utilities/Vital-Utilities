@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { SettingsDto } from "../../Dtos/Dto";
+import { SettingsDto } from "../../Dtos/ClientApiDto";
 
 export type SettingsActionTypes = GetSettingsAction;
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AnyAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { ManagedModelDto, GetManagedResponse } from "../../Dtos/Dto";
+import { ManagedModelDto, GetManagedResponse } from "../../Dtos/ClientApiDto";
 
 export type ManagedActionTypes = FetchAllManagedAction | AddManagedAction | UpdateManagedAction | DeleteManagedAction;
 

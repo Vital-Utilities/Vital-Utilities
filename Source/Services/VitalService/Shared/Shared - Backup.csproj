@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>VitalService.Shared</AssemblyName>
+    <RootNamespace>VitalService</RootNamespace>
+    <Platforms>AnyCPU;x64</Platforms>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Dtos\Coms\Settings\**" />
+    <Compile Remove="Dtos\Coms\SignalR\**" />
+    <EmbeddedResource Remove="Dtos\Coms\Settings\**" />
+    <EmbeddedResource Remove="Dtos\Coms\SignalR\**" />
+    <None Remove="Dtos\Coms\Settings\**" />
+    <None Remove="Dtos\Coms\SignalR\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Reinforced.Typings.settings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Reinforced.Typings.settings.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Reinforced.Typings" Version="1.6.1" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)CodeGenerated\ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\GeneratedCodeArtifact&quot;&#xD;&#xA;xcopy &quot;$(ProjectDir)CodeGenerated\ClientApiDto.ts&quot; &quot;$(ProjectDir)..\..\ClientApp\src\Dtos&quot;&#xD;&#xA;" />
+  </Target>
+
+</Project>
