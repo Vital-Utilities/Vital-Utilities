@@ -44,7 +44,8 @@ To disable the admin rights requirement prompt, comment out the following in [./
 
 ## For Vital Rust Service
 
-Vital Rust Service gets additional utilization data from the system. All C# code in VitalService will be migrated into here.
+Vital Rust Service gets additional utilization data from the system. All C# code in VitalService will be migrated into here eventually.
+This needs to be running for UI to display all data.
 
 ### You will need
 
