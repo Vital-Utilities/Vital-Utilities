@@ -1,18 +1,23 @@
-#![windows_subsystem = "windows"]
+#![cfg_attr(
+    all(not(debug_assertions), target_os = "windows"),
+    windows_subsystem = "windows"
+)]
 
+use std::string;
 use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
 use chrono::{DateTime, Utc};
 use generated_vital_rust_service_api_def::{
-    ProcessGpuUtil, SendProcessMainWindowTitleMappingRequest,
+    NetworkAdapterProperties, NetworkAdapterUsage, NetworkAdapterUtil, ProcessGpuUtil,
+    SendProcessMainWindowTitleMappingRequest,
 };
 use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
 
 use nvml::struct_wrappers::device::ProcessUtilizationSample;
 use nvml::{Device, NVML};
-use sysinfo::{PidExt, ProcessorExt, SystemExt};
+use sysinfo::{NetworkExt, PidExt, ProcessorExt, SystemExt};
 use systemstat::Platform;
 use tokio::{join, try_join};
 
@@ -23,12 +28,13 @@ mod api;
 mod commands;
 mod generated_client_api_dto_def;
 mod generated_vital_rust_service_api_def;
+mod network_adapter;
 mod nvidia;
 mod windows;
-use sysinfo::ProcessExt;
-static LOGGER: SimpleLogger = SimpleLogger;
 use api::post_request;
+use sysinfo::ProcessExt;
 
+static LOGGER: SimpleLogger = SimpleLogger;
 static WAIT_TIME: core::time::Duration = Duration::from_millis(1000);
 
 #[tokio::main]
@@ -70,8 +76,11 @@ async fn main() {
 
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
-        let (cpu_util, mem_util) =
-            join!(get_cpu_util(&sys_info, &sys_stat), get_mem_util(&sys_info));
+        let (cpu_util, mem_util, adapter_util) = join!(
+            get_cpu_util(&sys_info, &sys_stat),
+            get_mem_util(&sys_info),
+            get_net_adapters(&sys_info)
+        );
 
         //let mut gpu_usage = Vec::new();
         //#gpu_usage.push(nvidia::get_gpu_util(&device));
@@ -83,6 +92,7 @@ async fn main() {
                     system_usage: generated_vital_rust_service_api_def::SystemUsage {
                         cpu_usage: cpu_util,
                         mem_usage: mem_util,
+                        network_adapter_usage: adapter_util,
                         //gpu_usage: gpu_usage,
                     },
                 },
@@ -208,23 +218,6 @@ async fn get_mem_util(sysinfo: &sysinfo::System) -> generated_vital_rust_service
     };
 }
 
-/* fn get_net_adapters(
-    sysinfo: &sysinfo::System,
-    sys_stat: &systemstat::System,
-) -> Vec<generated_vital_rust_service_api_def::NetworkUsage> {
-    let mut list = Vec::new();
-
-    let nets = sys_stat.networks().unwrap();
-    for (name, adapter) in nets {
-        list.push(generated_vital_rust_service_api_def::NetworkUsage {
-            name: adapter.name,
-            ip_address: adapter.addrs[0].addr().,
-            mac_address: adapter.mac_addr().to_string(),
-        });
-    }
-    return list;
-} */
-
 async fn get_cpu_util(
     sysinfo: &sysinfo::System,
     sysstat: &systemstat::System,
@@ -241,6 +234,42 @@ async fn get_cpu_util(
         core_frequencies,
         cpu_temp: sysstat.cpu_temp().unwrap_or(0.0) as f64,
     };
+}
+async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUsage> {
+    let mut list = Vec::new();
+    let mut utils = Vec::new();
+
+    let networks = sysinfo.networks();
+
+    for data in networks {
+        utils.push(data);
+    }
+
+    for (_, int) in default_net::get_interfaces().into_iter().enumerate() {
+        let stats = utils.get(int.index as usize);
+
+        list.push(NetworkAdapterUsage {
+            properties: NetworkAdapterProperties {
+                name: int.name,
+                description: int.description,
+                mac_address: int.mac_addr.unwrap().address(),
+                i_pv4_address: Some(int.ipv4.into_iter().map(|x| x.addr.to_string()).collect()),
+                i_pv6_address: Some(int.ipv6.into_iter().map(|x| x.addr.to_string()).collect()),
+                dns_suffix: None,
+                speed_bps: None,
+                connection_type: None,
+            },
+            utilisation: match stats {
+                Some(stats) => Some(NetworkAdapterUtil {
+                    send_bps: stats.1.transmitted() as f64,
+                    recieve_bps: stats.1.received() as f64,
+                }),
+                None => None,
+            },
+        });
+    }
+
+    return list;
 }
 
 struct SimpleLogger;

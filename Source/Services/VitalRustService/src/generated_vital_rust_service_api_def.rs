@@ -45,33 +45,6 @@ pub struct GpuUsage {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct NetworkUsage {
-    #[serde(rename = "description")]
-    pub description: Option<String>,
-
-    #[serde(rename = "downloadedBps")]
-    pub downloaded_bps: f64,
-
-    #[serde(rename = "downloadSpeedBps")]
-    pub download_speed_bps: f64,
-
-    #[serde(rename = "macAddress")]
-    pub mac_address: String,
-
-    #[serde(rename = "name")]
-    pub name: String,
-
-    #[serde(rename = "uploadedBps")]
-    pub uploaded_bps: f64,
-
-    #[serde(rename = "uploadSpeedBps")]
-    pub upload_speed_bps: f64,
-
-    #[serde(rename = "usagePercentage")]
-    pub usage_percentage: f64,
-}
-
-#[derive(Serialize, Deserialize)]
 pub struct SendProcessMainWindowTitleMappingRequest {
     #[serde(rename = "mappings")]
     pub mappings: Vec<PidProcessTitleMapping>,
@@ -156,6 +129,9 @@ pub struct SystemUsage {
 
     #[serde(rename = "memUsage")]
     pub mem_usage: MemUsage,
+
+    #[serde(rename = "networkAdapterUsage")]
+    pub network_adapter_usage: Vec<NetworkAdapterUsage>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -192,4 +168,49 @@ pub struct MemUsage {
 
     #[serde(rename = "swapUsedKB")]
     pub swap_used_kb: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct NetworkAdapterUsage {
+    #[serde(rename = "properties")]
+    pub properties: NetworkAdapterProperties,
+
+    #[serde(rename = "utilisation")]
+    pub utilisation: Option<NetworkAdapterUtil>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct NetworkAdapterProperties {
+    #[serde(rename = "connectionType")]
+    pub connection_type: Option<String>,
+
+    #[serde(rename = "description")]
+    pub description: Option<String>,
+
+    #[serde(rename = "dnsSuffix")]
+    pub dns_suffix: Option<String>,
+
+    #[serde(rename = "iPv4Address")]
+    pub i_pv4_address: Option<Vec<String>>,
+
+    #[serde(rename = "iPv6Address")]
+    pub i_pv6_address: Option<Vec<String>>,
+
+    #[serde(rename = "macAddress")]
+    pub mac_address: String,
+
+    #[serde(rename = "name")]
+    pub name: String,
+
+    #[serde(rename = "speedBps")]
+    pub speed_bps: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct NetworkAdapterUtil {
+    #[serde(rename = "recieveBps")]
+    pub recieve_bps: f64,
+
+    #[serde(rename = "sendBps")]
+    pub send_bps: f64,
 }

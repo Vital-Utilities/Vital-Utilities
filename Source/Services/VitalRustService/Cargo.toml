@@ -7,7 +7,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sysinfo = "0.23.2"
+sysinfo = "0.23.4"
 systemstat = "0.1.10"
 nvml-wrapper = "0.7.0"
 chrono = "0.4.19"
@@ -19,6 +19,7 @@ log = {version = "0.4", features = ["max_level_debug", "release_max_level_warn"]
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.16.1", features = ["full"] }
 once_cell = "1.9.0"
+default-net = "0.8.1"
 # rocket = {version = "0.5.0-rc.1", features = ["json"] }
 
 [dependencies.windows]
@@ -34,3 +35,5 @@ features = [
     "Win32_System_StationsAndDesktops",
     "Win32_Foundation"
 ]
+#[target.'cfg(windows)'.dependencies]
+# nvapi = "0.1.3"

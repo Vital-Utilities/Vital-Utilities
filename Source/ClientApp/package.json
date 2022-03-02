@@ -77,7 +77,6 @@
         "eslint-plugin-security": "1.4.0",
         "eslint-plugin-testing-library": "^5.0.5",
         "eslint-plugin-unused-imports": "^2.0.0",
-        "file-loader": "6.1.1",
         "jest": "27.4.7",
         "jest-circus": "27.4.6",
         "jest-resolve": "27.4.6",

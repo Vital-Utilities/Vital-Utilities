@@ -35,16 +35,26 @@ export interface MemUsage
 	swapUsedKB: number;
 	swapTotalKB: number;
 }
-export interface NetworkUsage
+export interface NetworkAdapterUsage
+{
+	properties: NetworkAdapterProperties;
+	utilisation?: NetworkAdapterUtil;
+}
+export interface NetworkAdapterProperties
 {
 	name: string;
 	description?: string;
 	macAddress: string;
-	uploadSpeedBps: number;
-	downloadSpeedBps: number;
-	uploadedBps: number;
-	downloadedBps: number;
-	usagePercentage: number;
+	speedBps?: number;
+	connectionType?: string;
+	iPv4Address?: string[];
+	iPv6Address?: string[];
+	dnsSuffix?: string;
+}
+export interface NetworkAdapterUtil
+{
+	sendBps: number;
+	recieveBps: number;
 }
 export interface PidProcessTitleMapping
 {
@@ -83,4 +93,5 @@ export interface SystemUsage
 {
 	cpuUsage: CpuUsage;
 	memUsage: MemUsage;
+	networkAdapterUsage: NetworkAdapterUsage[];
 }
