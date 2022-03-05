@@ -31,7 +31,6 @@ namespace VitalService.Services.PerformanceServices
         private ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> processPerformanceData = new();
         private ConcurrentDictionary<int, ProcessData> runningProcesses = new();
         private ConcurrentDictionary<int, string> idName = new();
-        private ConcurrentDictionary<string, int> nameId = new();
 
         private Timer? UpdateParentChildMapperTimer { get; set; } = null;
 
@@ -39,11 +38,9 @@ namespace VitalService.Services.PerformanceServices
         private Timer? UpdateRunningProcessesTimer { get; set; } = null;
         private Timer? AutoThrottlerTimer { get; set; } = null;
         private DateTime LastServiceAccess;
-        private ConcurrentDictionary<int, string> pidProcessTitleMapping = new();
 
         public bool ThrottleActive { get; private set; }
         readonly TimeSpan throttleAfter = TimeSpan.FromSeconds(10);
-
 
 
         public SoftwarePerformanceService(ManagedProcessStore affinityStore)
@@ -94,14 +91,38 @@ namespace VitalService.Services.PerformanceServices
             });
         }
 
-        public void RecieveIdProcessTitleMappings(List<PidProcessTitleMapping> mappings)
+        private void GetProcesses()
         {
-            var dictionary = new ConcurrentDictionary<int, string>();
-            foreach (var mapping in mappings)
+            Utilities.Debug.LogExecutionTime(null, () =>
             {
-                dictionary.TryAdd((int)mapping.Id, mapping.Title);
-            }
-            pidProcessTitleMapping = dictionary;
+                var returnValue = new ConcurrentDictionary<int, ProcessData>();
+
+                foreach (var (pid, data) in processPerformanceData)
+                {
+                    var processData = new ProcessData
+                    {
+                        ProcessId = (int)data.Pid,
+                        MainWindowTitle = data.MainWindowTitle,
+                        Description = data.Description,
+                        Name = data.Name,
+                        ExecutablePath = data.ExecutablePath,
+                        ParentProcessId = (int?)data.ParentPid,
+                    };
+                    returnValue.TryAdd(pid, processData);
+                }
+                runningProcesses = returnValue;
+            });
+
+        }
+
+        public class ProcessData
+        {
+            public int ProcessId { get; set; }
+            public int? ParentProcessId { get; set; }
+            public string? ExecutablePath { get; set; }
+            public string Name { get; set; } = "";
+            public string? Description { get; set; } // must come after ExecutablePath
+            public string? MainWindowTitle { get; set; }
         }
         public class PerfObj
         {
@@ -119,68 +140,6 @@ namespace VitalService.Services.PerformanceServices
             public double ReadBytesPerSec { get; set; }
             public float GpuPercentage { get; internal set; }
         }
-        private void GetProcesses()
-        {
-            Utilities.Debug.LogExecutionTime(null, () =>
-            {
-                var returnValue = new ConcurrentDictionary<int, ProcessData>();
-                var properties = typeof(ProcessData).GetProperties();
-
-                var searcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Process");
-                var toReturnIdName = new ConcurrentDictionary<int, string>();
-                var toReturnNameId = new ConcurrentDictionary<string, int>();
-                try
-                {
-                    foreach (var queryObj in searcher.Get())
-                    {
-                        var data = new ProcessData();
-                        foreach (var propertyInfo in properties)
-                        {
-                            if (propertyInfo.Name == "MainWindowTitle")
-                            {
-                                var val = int.Parse(queryObj["ProcessId"].ToString());
-                                if (pidProcessTitleMapping.TryGetValue(val, out var value))
-                                    propertyInfo.SetValue(data, Convert.ChangeType(value, propertyInfo.PropertyType), null);
-                                continue;
-                            }
-                            else if (propertyInfo.Name == "Description" && !string.IsNullOrEmpty(data.ExecutablePath))
-                            {
-                                var description = FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription;
-                                if (string.IsNullOrWhiteSpace(description))
-                                    description = null;
-                                propertyInfo.SetValue(data, Convert.ChangeType(description, propertyInfo.PropertyType), null);
-
-                                continue;
-                            }
-                            propertyInfo.SetValue(data, Convert.ChangeType(queryObj[propertyInfo.Name]?.ToString() ?? "", propertyInfo.PropertyType), null);
-                        }
-                        returnValue.TryAdd(data.ProcessId, data);
-                        toReturnIdName.TryAdd(data.ParentProcessId, data.Name);
-                        toReturnNameId.TryAdd(data.Name, data.ProcessId);
-                    }
-                    runningProcesses = returnValue;
-                    idName = toReturnIdName;
-                    nameId = toReturnNameId;
-                }
-                catch (Exception e)
-                {
-                    Log.Logger.Error(e.Message, e);
-                }
-            });
-
-        }
-
-        public class ProcessData
-        {
-            public int ProcessId { get; set; }
-            public int ParentProcessId { get; set; }
-            public string? ExecutablePath { get; set; }
-            public string CommandLine { get; set; } = "";
-            public string Name { get; set; } = "";
-            public string? Description { get; set; } // must come after ExecutablePath
-            public string? MainWindowTitle { get; set; }
-        }
-
         private void AutoThrottle()
         {
             if (!ThrottleActive && DateTime.Now - LastServiceAccess > throttleAfter)

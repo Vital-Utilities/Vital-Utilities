@@ -29,12 +29,5 @@ namespace VitalService.Controllers
             return Ok();
         }
 
-        [Route("ProcessMainWindowTitleMapping")]
-        [HttpPost]
-        public IActionResult ProcessMainWindowTitleMapping([FromBody] SendProcessMainWindowTitleMappingRequest data)
-        {
-            SoftwarePerformanceService.RecieveIdProcessTitleMappings(data.Mappings);
-            return Ok();
-        }
     }
 }

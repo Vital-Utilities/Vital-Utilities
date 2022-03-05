@@ -64,15 +64,6 @@ async fn main() {
         sys_info.refresh_all();
         let time = chrono::Utc::now();
 
-        let mut id_process_tittle_mapping_vector = Vec::new();
-
-        for (id, title) in get_mainwindowtitles() {
-            id_process_tittle_mapping_vector.push(PidProcessTitleMapping {
-                id: id as f64,
-                title: title,
-            });
-        }
-
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
         let (cpu_util, mem_util, adapter_util, disk) = join!(
@@ -105,20 +96,7 @@ async fn main() {
                 ),
             );
 
-            let send_map = post_request(
-                SendProcessMainWindowTitleMappingRequest {
-                    mappings: id_process_tittle_mapping_vector,
-                },
-                format!(
-                    "https://localhost:{}/api/ingest/ProcessMainWindowTitleMapping",
-                    vital_service_port
-                        .as_ref()
-                        .unwrap()
-                        .vital_service_https_port
-                ),
-            );
-
-            join!(send_util, send_map);
+            join!(send_util);
         } else {
             error!("no process data found");
         }
@@ -169,15 +147,23 @@ fn get_process_util(
         p.used_gpu_memory();
     } */
 
+    let id_process_tittle_mapping_vector = get_mainwindowtitles();
+
     let cores = sysinfo.physical_core_count();
     for (pid, process) in processes {
         let disk_bytes = process.disk_usage();
         // get first gpu usage that has this pid
         let process_gpu_util = gpu_usages.iter().find(|sample| sample.pid == pid.as_u32());
-
+        let pid = pid.as_u32();
         list.push(generated_vital_rust_service_api_def::ProcessData {
             name: process.name().to_string(),
-            pid: pid.as_u32() as f64,
+            pid: pid as f64,
+            main_window_title: match id_process_tittle_mapping_vector.get(&pid) {
+                Some(title) => Some(title.to_string()),
+                None => None,
+            },
+            description: None,
+            executable_path: None,
             parent_pid: if process.parent().is_some() {
                 Some(process.parent().unwrap().as_u32() as f64)
             } else {
@@ -189,7 +175,7 @@ fn get_process_util(
                 read_bytes_per_second: disk_bytes.read_bytes as f64,
                 write_bytes_per_second: disk_bytes.written_bytes as f64,
             },
-            status: process.status().to_string(),
+            status: Some(process.status().to_string()),
             gpu_util: if process_gpu_util.is_some() {
                 Some(ProcessGpuUtil {
                     gpu_core_percentage: Some(process_gpu_util.unwrap().sm_util as f64),

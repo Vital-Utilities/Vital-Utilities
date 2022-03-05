@@ -15,6 +15,8 @@ use serde::{Deserialize, Serialize};
 extern crate serde_derive;
 use std::collections::HashMap;
 
+pub type SendProcessMainWindowTitleMappingRequest = HashMap<String, Option<serde_json::Value>>;
+
 #[derive(Serialize, Deserialize)]
 pub struct GpuUsage {
     #[serde(rename = "coreClockMhz")]
@@ -46,12 +48,6 @@ pub struct GpuUsage {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct SendProcessMainWindowTitleMappingRequest {
-    #[serde(rename = "mappings")]
-    pub mappings: Vec<PidProcessTitleMapping>,
-}
-
-#[derive(Serialize, Deserialize)]
 pub struct PidProcessTitleMapping {
     #[serde(rename = "id")]
     pub id: f64,
@@ -74,11 +70,20 @@ pub struct ProcessData {
     #[serde(rename = "cpuPercentage")]
     pub cpu_percentage: f64,
 
+    #[serde(rename = "description")]
+    pub description: Option<String>,
+
     #[serde(rename = "diskUsage")]
     pub disk_usage: ProcessDiskUsage,
 
+    #[serde(rename = "executablePath")]
+    pub executable_path: Option<String>,
+
     #[serde(rename = "gpuUtil")]
     pub gpu_util: Option<ProcessGpuUtil>,
+
+    #[serde(rename = "mainWindowTitle")]
+    pub main_window_title: Option<String>,
 
     #[serde(rename = "memoryKb")]
     pub memory_kb: f64,
@@ -93,7 +98,7 @@ pub struct ProcessData {
     pub pid: f64,
 
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: Option<String>,
 
     #[serde(rename = "timeStamp")]
     pub time_stamp: String,

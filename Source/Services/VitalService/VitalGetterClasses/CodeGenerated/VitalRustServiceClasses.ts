@@ -89,12 +89,15 @@ export interface ProcessData
 {
 	pid: number;
 	parentPid?: number;
+	executablePath?: string;
+	description?: string;
+	mainWindowTitle?: string;
 	name: string;
 	timeStamp: Date;
 	cpuPercentage: number;
 	memoryKb: number;
 	diskUsage: ProcessDiskUsage;
-	status: string;
+	status?: string;
 	gpuUtil?: ProcessGpuUtil;
 }
 export interface ProcessDiskUsage
@@ -111,7 +114,6 @@ export interface ProcessGpuUtil
 }
 export interface SendProcessMainWindowTitleMappingRequest
 {
-	mappings: PidProcessTitleMapping[];
 }
 export interface SendUtilizationRequest
 {
