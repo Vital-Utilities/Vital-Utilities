@@ -93,26 +93,22 @@ namespace VitalService.Services.PerformanceServices
 
         private void GetProcesses()
         {
-            Utilities.Debug.LogExecutionTime(null, () =>
+            var returnValue = new ConcurrentDictionary<int, ProcessData>();
+
+            foreach (var (pid, data) in processPerformanceData)
             {
-                var returnValue = new ConcurrentDictionary<int, ProcessData>();
-
-                foreach (var (pid, data) in processPerformanceData)
+                var processData = new ProcessData
                 {
-                    var processData = new ProcessData
-                    {
-                        ProcessId = (int)data.Pid,
-                        MainWindowTitle = data.MainWindowTitle,
-                        Description = data.Description,
-                        Name = data.Name,
-                        ExecutablePath = data.ExecutablePath,
-                        ParentProcessId = (int?)data.ParentPid,
-                    };
-                    returnValue.TryAdd(pid, processData);
-                }
-                runningProcesses = returnValue;
-            });
-
+                    ProcessId = (int)data.Pid,
+                    MainWindowTitle = data.MainWindowTitle,
+                    Description = data.Description,
+                    Name = data.Name,
+                    ExecutablePath = data.ExecutablePath,
+                    ParentProcessId = (int?)data.ParentPid,
+                };
+                returnValue.TryAdd(pid, processData);
+            }
+            runningProcesses = returnValue;
         }
 
         public class ProcessData
