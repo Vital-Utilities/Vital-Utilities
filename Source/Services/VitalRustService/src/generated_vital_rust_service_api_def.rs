@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 // }
 
 extern crate serde_derive;
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct GpuUsage {
@@ -74,7 +75,7 @@ pub struct ProcessData {
     pub cpu_percentage: f64,
 
     #[serde(rename = "diskUsage")]
-    pub disk_usage: DiskUsage,
+    pub disk_usage: ProcessDiskUsage,
 
     #[serde(rename = "gpuUtil")]
     pub gpu_util: Option<ProcessGpuUtil>,
@@ -99,7 +100,7 @@ pub struct ProcessData {
 }
 
 #[derive(Serialize, Deserialize)]
-pub struct DiskUsage {
+pub struct ProcessDiskUsage {
     #[serde(rename = "readBytesPerSecond")]
     pub read_bytes_per_second: f64,
 
@@ -127,6 +128,9 @@ pub struct SystemUsage {
     #[serde(rename = "cpuUsage")]
     pub cpu_usage: CpuUsage,
 
+    #[serde(rename = "disk")]
+    pub disk: HashMap<String, Disk>,
+
     #[serde(rename = "memUsage")]
     pub mem_usage: MemUsage,
 
@@ -147,6 +151,69 @@ pub struct CpuUsage {
 
     #[serde(rename = "cpuTemp")]
     pub cpu_temp: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Disk {
+    #[serde(rename = "driveType")]
+    pub drive_type: Option<String>,
+
+    #[serde(rename = "health")]
+    pub health: Option<DiskHealth>,
+
+    #[serde(rename = "letter")]
+    pub letter: Option<String>,
+
+    #[serde(rename = "load")]
+    pub load: Option<DiskLoad>,
+
+    #[serde(rename = "name")]
+    pub name: String,
+
+    #[serde(rename = "serial")]
+    pub serial: Option<String>,
+
+    #[serde(rename = "temperatures")]
+    pub temperatures: Option<HashMap<String, f64>>,
+
+    #[serde(rename = "throughput")]
+    pub throughput: Option<DiskThroughput>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct DiskHealth {
+    #[serde(rename = "totalBytesRead")]
+    pub total_bytes_read: Option<f64>,
+
+    #[serde(rename = "totalBytesWritten")]
+    pub total_bytes_written: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct DiskLoad {
+    #[serde(rename = "totalActivityPercentage")]
+    pub total_activity_percentage: Option<f64>,
+
+    #[serde(rename = "totalFreeSpaceBytes")]
+    pub total_free_space_bytes: Option<f64>,
+
+    #[serde(rename = "usedSpaceBytes")]
+    pub used_space_bytes: Option<f64>,
+
+    #[serde(rename = "usedSpacePercentage")]
+    pub used_space_percentage: Option<f64>,
+
+    #[serde(rename = "writeActivityPercentage")]
+    pub write_activity_percentage: Option<f64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct DiskThroughput {
+    #[serde(rename = "readRateBytesPerSecond")]
+    pub read_rate_bytes_per_second: Option<f64>,
+
+    #[serde(rename = "writeRateBytesPerSecond")]
+    pub write_rate_bytes_per_second: Option<f64>,
 }
 
 #[derive(Serialize, Deserialize)]

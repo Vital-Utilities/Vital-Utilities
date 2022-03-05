@@ -9,10 +9,34 @@ export interface CpuUsage
 	coreFrequencies: number[];
 	corePercentages: number[];
 }
-export interface DiskUsage
+export interface Disk
 {
-	readBytesPerSecond: number;
-	writeBytesPerSecond: number;
+	name: string;
+	serial?: string;
+	letter?: string;
+	driveType?: string;
+	throughput?: DiskThroughput;
+	load?: DiskLoad;
+	temperatures?: { [key:string]: number };
+	health?: DiskHealth;
+}
+export interface DiskLoad
+{
+	usedSpacePercentage?: number;
+	usedSpaceBytes?: number;
+	totalFreeSpaceBytes?: number;
+	writeActivityPercentage?: number;
+	totalActivityPercentage?: number;
+}
+export interface DiskThroughput
+{
+	readRateBytesPerSecond?: number;
+	writeRateBytesPerSecond?: number;
+}
+export interface DiskHealth
+{
+	totalBytesRead?: number;
+	totalBytesWritten?: number;
 }
 export interface GpuUsage
 {
@@ -69,9 +93,14 @@ export interface ProcessData
 	timeStamp: Date;
 	cpuPercentage: number;
 	memoryKb: number;
-	diskUsage: DiskUsage;
+	diskUsage: ProcessDiskUsage;
 	status: string;
 	gpuUtil?: ProcessGpuUtil;
+}
+export interface ProcessDiskUsage
+{
+	readBytesPerSecond: number;
+	writeBytesPerSecond: number;
 }
 export interface ProcessGpuUtil
 {
@@ -94,4 +123,5 @@ export interface SystemUsage
 	cpuUsage: CpuUsage;
 	memUsage: MemUsage;
 	networkAdapterUsage: NetworkAdapterUsage[];
+	disk: { [key:string]: Disk };
 }

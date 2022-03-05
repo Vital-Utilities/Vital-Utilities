@@ -6,6 +6,10 @@
         public MemUsage MemUsage { get; set; }
         //public GpuUsage[] GpuUsage { get; set; }
         public NetworkAdapterUsage[] NetworkAdapterUsage { get; set; }
+        public Dictionary<string, Disk> Disk { get; set; }
 
     }
+
+
+
 }

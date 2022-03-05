@@ -3,27 +3,26 @@
     windows_subsystem = "windows"
 )]
 
+use std::collections::HashMap;
 use std::string;
 use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
 use chrono::{DateTime, Utc};
 use generated_vital_rust_service_api_def::{
-    NetworkAdapterProperties, NetworkAdapterUsage, NetworkAdapterUtil, ProcessGpuUtil,
-    SendProcessMainWindowTitleMappingRequest,
+    DiskLoad, DiskThroughput, NetworkAdapterProperties, NetworkAdapterUsage, NetworkAdapterUtil,
+    ProcessGpuUtil, SendProcessMainWindowTitleMappingRequest,
 };
 use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
 
-use nvml::struct_wrappers::device::ProcessUtilizationSample;
-use nvml::{Device, NVML};
-use sysinfo::{NetworkExt, PidExt, ProcessorExt, SystemExt};
-use systemstat::Platform;
-use tokio::{join, try_join};
-
 use crate::commands::get_vital_service_ports;
 use crate::generated_vital_rust_service_api_def::{PidProcessTitleMapping, SendUtilizationRequest};
 use crate::windows::get_mainwindowtitles;
+use nvml::{struct_wrappers::device::ProcessUtilizationSample, NVML};
+use sysinfo::{DiskExt, DiskType, NetworkExt, PidExt, ProcessorExt, SystemExt};
+use systemstat::Platform;
+use tokio::join;
 mod api;
 mod commands;
 mod generated_client_api_dto_def;
@@ -76,10 +75,11 @@ async fn main() {
 
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
-        let (cpu_util, mem_util, adapter_util) = join!(
+        let (cpu_util, mem_util, adapter_util, disk) = join!(
             get_cpu_util(&sys_info, &sys_stat),
             get_mem_util(&sys_info),
-            get_net_adapters(&sys_info)
+            get_net_adapters(&sys_info),
+            get_disk_util(&sys_info),
         );
 
         //let mut gpu_usage = Vec::new();
@@ -93,7 +93,7 @@ async fn main() {
                         cpu_usage: cpu_util,
                         mem_usage: mem_util,
                         network_adapter_usage: adapter_util,
-                        //gpu_usage: gpu_usage,
+                        disk, //gpu_usage: gpu_usage,
                     },
                 },
                 format!(
@@ -185,7 +185,7 @@ fn get_process_util(
             },
             cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f64,
             memory_kb: process.memory() as f64,
-            disk_usage: generated_vital_rust_service_api_def::DiskUsage {
+            disk_usage: generated_vital_rust_service_api_def::ProcessDiskUsage {
                 read_bytes_per_second: disk_bytes.read_bytes as f64,
                 write_bytes_per_second: disk_bytes.written_bytes as f64,
             },
@@ -267,6 +267,51 @@ async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUsage>
                 None => None,
             },
         });
+    }
+
+    return list;
+}
+
+async fn get_disk_util(
+    sysinfo: &sysinfo::System,
+) -> HashMap<String, generated_vital_rust_service_api_def::Disk> {
+    let mut list = HashMap::new();
+    let disks = sysinfo.disks();
+
+    for disk in disks {
+        list.insert(
+            disk.mount_point().to_str().unwrap().to_string(),
+            generated_vital_rust_service_api_def::Disk {
+                name: disk.name().to_os_string().into_string().unwrap(),
+                letter: Some(
+                    disk.mount_point()
+                        .as_os_str()
+                        .to_os_string()
+                        .into_string()
+                        .unwrap(),
+                ),
+                drive_type: Some(match disk.type_() {
+                    DiskType::HDD => "HDD".to_string(),
+                    DiskType::SSD => "SSD".to_string(),
+                    DiskType::Unknown(_) => "Unknown".to_string(),
+                }),
+                load: Some(DiskLoad {
+                    used_space_bytes: Some((disk.total_space() - disk.available_space()) as f64),
+                    total_free_space_bytes: Some(disk.total_space() as f64),
+                    used_space_percentage: Some(
+                        (disk.total_space() - disk.available_space()) as f64
+                            / disk.total_space() as f64
+                            * 100 as f64,
+                    ),
+                    total_activity_percentage: None,
+                    write_activity_percentage: None,
+                }),
+                health: None,
+                serial: None,
+                temperatures: None,
+                throughput: None,
+            },
+        );
     }
 
     return list;

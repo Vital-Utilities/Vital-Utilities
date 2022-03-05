@@ -1,4 +1,4 @@
-use crate::generated_client_api_dto_def::{self, ClientSettings, LaunchSettings, SettingsDto};
+use crate::generated_client_api_dto_def::{LaunchSettings, SettingsDto};
 use directories::UserDirs;
 use log::{debug, error, info};
 

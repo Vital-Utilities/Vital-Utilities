@@ -8,8 +8,22 @@
         public DateTime TimeStamp { get; set; }
         public float CpuPercentage { get; set; }
         public float MemoryKb { get; set; }
-        public DiskUsage DiskUsage { get; set; }
+        public ProcessDiskUsage DiskUsage { get; set; }
         public string Status { get; set; }
         public ProcessGpuUtil? GpuUtil { get; set; }
+    }
+
+    public class ProcessDiskUsage
+    {
+        public float ReadBytesPerSecond { get; set; }
+        public float WriteBytesPerSecond { get; set; }
+    }
+
+    public class ProcessGpuUtil
+    {
+        public float? GpuCorePercentage { get; set; }
+        public float? GpuMemPercentage { get; set; }
+        public float? GpuEncodingPercentage { get; set; }
+        public float? GpuDecodingPercentage { get; set; }
     }
 }

@@ -32,8 +32,6 @@ namespace VitalService.Stores
             return HardwarePerformanceService.MachineStaticData;
         }
 
-        public Dictionary<int, float> GetProcessTotalCpuThreadsUsages() => new();
-
         public RamUsages GetRamUsage()
         {
             return HardwarePerformanceService.CurrentRamUsage;
@@ -117,8 +115,6 @@ namespace VitalService.Stores
             return (requestDateRange, model);
         }
 
-
-        public record MetricsModel(IEnumerable<TimeSeriesMachineMetricsModel>? Model);
 
         public Dictionary<int, float> GetProcessTotalCpuUsages()
         {
