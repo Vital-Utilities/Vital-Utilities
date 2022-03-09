@@ -170,6 +170,7 @@ If you want your profiles applied and metrics collected when you log in. You can
     - Auto clean directory with rules
     - Auto copy/move files from one directory to another
 - Investigate ability to identify which threads a process has been executing work on.
+- Vulnerability Alerts for installed applications.
 
 ## Screenshots
 
