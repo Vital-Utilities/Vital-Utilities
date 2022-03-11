@@ -117,7 +117,7 @@ namespace VitalService.Services.PerformanceServices
             public int? ParentProcessId { get; set; }
             public string? ExecutablePath { get; set; }
             public string Name { get; set; } = "";
-            public string? Description { get; set; } // must come after ExecutablePath
+            public string? Description { get; set; }
             public string? MainWindowTitle { get; set; }
         }
         public class PerfObj

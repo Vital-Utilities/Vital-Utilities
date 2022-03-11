@@ -33,6 +33,7 @@ features = [
     "Win32_System_Threading",
     "Win32_UI_WindowsAndMessaging", 
     "Win32_System_StationsAndDesktops",
+    "Win32_System_LibraryLoader",
     "Win32_Foundation"
 ]
 #[target.'cfg(windows)'.dependencies]

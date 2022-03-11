@@ -2,6 +2,11 @@
 //     Changes to this file may cause incorrect behavior and will be lost if
 //     the code is regenerated.
 
+export enum DiskType {
+	Unknown = "Unknown",
+	HDD = "HDD",
+	SSD = "SSD"
+}
 export interface CpuUsage
 {
 	cpuPercentage: number;
@@ -14,7 +19,7 @@ export interface Disk
 	name: string;
 	serial?: string;
 	letter?: string;
-	driveType?: string;
+	diskType?: DiskType;
 	throughput?: DiskThroughput;
 	load?: DiskLoad;
 	temperatures?: { [key:string]: number };
@@ -111,9 +116,6 @@ export interface ProcessGpuUtil
 	gpuMemPercentage?: number;
 	gpuEncodingPercentage?: number;
 	gpuDecodingPercentage?: number;
-}
-export interface SendProcessMainWindowTitleMappingRequest
-{
 }
 export interface SendUtilizationRequest
 {

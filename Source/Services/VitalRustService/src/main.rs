@@ -11,16 +11,16 @@ extern crate nvml_wrapper as nvml;
 use chrono::{DateTime, Utc};
 use generated_vital_rust_service_api_def::{
     DiskLoad, DiskThroughput, NetworkAdapterProperties, NetworkAdapterUsage, NetworkAdapterUtil,
-    ProcessGpuUtil, SendProcessMainWindowTitleMappingRequest,
+    ProcessGpuUtil,
 };
 use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
 
 use crate::commands::get_vital_service_ports;
 use crate::generated_vital_rust_service_api_def::{PidProcessTitleMapping, SendUtilizationRequest};
-use crate::windows::get_mainwindowtitles;
+use crate::windows::get_processdata;
 use nvml::{struct_wrappers::device::ProcessUtilizationSample, NVML};
-use sysinfo::{DiskExt, DiskType, NetworkExt, PidExt, ProcessorExt, SystemExt};
+use sysinfo::{ComponentExt, DiskExt, DiskType, NetworkExt, PidExt, ProcessorExt, SystemExt};
 use systemstat::Platform;
 use tokio::join;
 mod api;
@@ -147,7 +147,7 @@ fn get_process_util(
         p.used_gpu_memory();
     } */
 
-    let id_process_tittle_mapping_vector = get_mainwindowtitles();
+    let id_process_data_mapping_vector = get_processdata();
 
     let cores = sysinfo.physical_core_count();
     for (pid, process) in processes {
@@ -155,15 +155,20 @@ fn get_process_util(
         // get first gpu usage that has this pid
         let process_gpu_util = gpu_usages.iter().find(|sample| sample.pid == pid.as_u32());
         let pid = pid.as_u32();
+        let proc_data = &id_process_data_mapping_vector.get(&pid);
+
         list.push(generated_vital_rust_service_api_def::ProcessData {
             name: process.name().to_string(),
             pid: pid as f64,
-            main_window_title: match id_process_tittle_mapping_vector.get(&pid) {
-                Some(title) => Some(title.to_string()),
+            main_window_title: match proc_data {
+                Some(ob) => Some(ob.title.clone()),
                 None => None,
             },
             description: None,
-            executable_path: None,
+            executable_path: match proc_data {
+                Some(ob) => ob.path.clone(),
+                None => None,
+            },
             parent_pid: if process.parent().is_some() {
                 Some(process.parent().unwrap().as_u32() as f64)
             } else {
@@ -265,21 +270,16 @@ async fn get_disk_util(
     let disks = sysinfo.disks();
 
     for disk in disks {
+        let key = disk.mount_point().to_str().unwrap().to_string();
         list.insert(
             disk.mount_point().to_str().unwrap().to_string(),
             generated_vital_rust_service_api_def::Disk {
-                name: disk.name().to_os_string().into_string().unwrap(),
-                letter: Some(
-                    disk.mount_point()
-                        .as_os_str()
-                        .to_os_string()
-                        .into_string()
-                        .unwrap(),
-                ),
-                drive_type: Some(match disk.type_() {
-                    DiskType::HDD => "HDD".to_string(),
-                    DiskType::SSD => "SSD".to_string(),
-                    DiskType::Unknown(_) => "Unknown".to_string(),
+                name: key.clone(),
+                letter: Some(key.clone()),
+                disk_type: Some(match disk.type_() {
+                    DiskType::HDD => generated_vital_rust_service_api_def::DiskType::Hdd,
+                    DiskType::SSD => generated_vital_rust_service_api_def::DiskType::Ssd,
+                    DiskType::Unknown(_) => generated_vital_rust_service_api_def::DiskType::Unknown,
                 }),
                 load: Some(DiskLoad {
                     used_space_bytes: Some((disk.total_space() - disk.available_space()) as f64),
@@ -287,7 +287,7 @@ async fn get_disk_util(
                     used_space_percentage: Some(
                         (disk.total_space() - disk.available_space()) as f64
                             / disk.total_space() as f64
-                            * 100 as f64,
+                            * 100.0,
                     ),
                     total_activity_percentage: None,
                     write_activity_percentage: None,

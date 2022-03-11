@@ -15,8 +15,6 @@ use serde::{Deserialize, Serialize};
 extern crate serde_derive;
 use std::collections::HashMap;
 
-pub type SendProcessMainWindowTitleMappingRequest = HashMap<String, Option<serde_json::Value>>;
-
 #[derive(Serialize, Deserialize)]
 pub struct GpuUsage {
     #[serde(rename = "coreClockMhz")]
@@ -160,8 +158,8 @@ pub struct CpuUsage {
 
 #[derive(Serialize, Deserialize)]
 pub struct Disk {
-    #[serde(rename = "driveType")]
-    pub drive_type: Option<String>,
+    #[serde(rename = "diskType")]
+    pub disk_type: Option<DiskType>,
 
     #[serde(rename = "health")]
     pub health: Option<DiskHealth>,
@@ -285,4 +283,16 @@ pub struct NetworkAdapterUtil {
 
     #[serde(rename = "sendBps")]
     pub send_bps: f64,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum DiskType {
+    #[serde(rename = "HDD")]
+    Hdd,
+
+    #[serde(rename = "SSD")]
+    Ssd,
+
+    #[serde(rename = "Unknown")]
+    Unknown,
 }

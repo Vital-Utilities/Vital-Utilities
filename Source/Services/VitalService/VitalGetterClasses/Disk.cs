@@ -11,11 +11,17 @@ namespace VitalRustServiceClasses
         public string Name { get; set; }
         public string? Serial { get; set; }
         public string? Letter { get; set; }
-        public string? DriveType { get; set; }
+        public DiskType? DiskType { get; set; }
         public DiskThroughput? Throughput { get; set; } = new();
         public DiskLoad? Load { get; set; } = new();
         public Dictionary<string, float>? Temperatures { get; set; } = new();
         public DiskHealth? Health { get; set; } = new();
+    }
+    public enum DiskType
+    {
+        Unknown,
+        HDD,
+        SSD
     }
     public class DiskLoad
     {
