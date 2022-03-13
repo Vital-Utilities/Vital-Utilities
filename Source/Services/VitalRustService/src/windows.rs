@@ -1,9 +1,22 @@
-use std::{collections::HashMap, mem::size_of_val, str::from_utf8, sync::Mutex};
+use std::{
+    collections::HashMap,
+    ffi::{c_void, CString},
+    mem::size_of_val,
+    str::from_utf8,
+    sync::Mutex,
+};
 
+use log::info;
 use once_cell::sync::OnceCell;
+use serde::__private::from_utf8_lossy;
 use windows::{
+    core::{PCSTR, PSTR, PWSTR},
     Win32::Foundation::*,
     Win32::{
+        Storage::FileSystem::{
+            GetFileInformationByHandle, GetFileVersionInfoA, GetFileVersionInfoSizeA,
+            GetFileVersionInfoW, VerQueryValueA,
+        },
         System::Diagnostics::ToolHelp::{
             CreateToolhelp32Snapshot, Module32First, MODULEENTRY32, TH32CS_SNAPMODULE,
             TH32CS_SNAPMODULE32,
@@ -16,7 +29,7 @@ static WINDOW_TITLES: OnceCell<Mutex<HashMap<u32, String>>> = OnceCell::new();
 
 // function that gets all running windows and their titles
 #[cfg(target_os = "windows")]
-pub fn get_processdata() -> HashMap<u32, WinObject> {
+pub fn get_mainwindowtitles() -> HashMap<u32, String> {
     let main_window_titles;
 
     unsafe {
@@ -42,18 +55,7 @@ pub fn get_processdata() -> HashMap<u32, WinObject> {
         std::mem::drop(&guard);
     }
 
-    let mut main_window_data = HashMap::new();
-    for ele in main_window_titles {
-        main_window_data.insert(
-            ele.0,
-            WinObject {
-                title: ele.1,
-                path: get_proc_path(ele.0),
-            },
-        );
-    }
-
-    return main_window_data;
+    return main_window_titles;
 }
 
 fn lpfn() -> windows::Win32::UI::WindowsAndMessaging::WNDENUMPROC {
@@ -91,10 +93,11 @@ unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
     return true.into();
 }
 
-fn get_proc_path(pid: u32) -> Option<String> {
+pub fn get_process_Path(pid: u32) -> Option<String> {
     let mut path = None;
     unsafe {
         let h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
+
         if h_snap != INVALID_HANDLE_VALUE {
             let mut mod_entry: MODULEENTRY32 = MODULEENTRY32 {
                 ..Default::default()
@@ -113,7 +116,33 @@ fn get_proc_path(pid: u32) -> Option<String> {
     }
     return path;
 }
-pub struct WinObject {
-    pub title: String,
-    pub path: Option<String>,
+
+pub fn get_process_product_name(path: String) -> Option<String> {
+    let mut name = None;
+    unsafe {
+        let mut infoBuffer: [u8; 2048] = [0; 2048];
+        let pat = &path;
+        let infoPtr = infoBuffer.as_mut_ptr() as *mut c_void;
+        let c_str = CString::new(pat.as_str()).unwrap();
+        let pstr = PCSTR(c_str.as_ptr() as *const u8);
+        let verInfoLen = GetFileVersionInfoSizeA(pstr, &mut 0);
+        let ok = GetFileVersionInfoA(pstr, 0, verInfoLen, infoPtr).as_bool();
+
+        let mut nameBuffer: [u8; 2048] = [0; 2048];
+        let namePtr = nameBuffer.as_mut_ptr() as *mut *mut c_void;
+        let mut nameLen = 0;
+        if ok
+            && VerQueryValueA(
+                infoPtr,
+                "\\StringFileInfo\\040904e4\\ProductName",
+                namePtr,
+                &mut nameLen,
+            )
+            .as_bool()
+        {
+            let res = from_utf8_lossy(&nameBuffer);
+            name = Some(res.to_string());
+        }
+    }
+    return name;
 }
