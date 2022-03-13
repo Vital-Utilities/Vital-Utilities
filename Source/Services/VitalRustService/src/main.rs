@@ -128,7 +128,7 @@ fn get_process_util(
         // get first gpu usage that has this pid
 
         let pid = pid.as_u32();
-        let path = None; //windows::get_process_Path(pid);
+        let path = windows::get_process_Path(pid); // takes some time
 
         /*  let proc = winproc::Process::from_id(pid as u32).unwrap();
         let n = proc.threads().unwrap();
