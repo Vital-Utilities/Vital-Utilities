@@ -2,7 +2,6 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-#![allow(non_snake_case)]
 use std::collections::HashMap;
 use std::string;
 use std::time::Duration;
