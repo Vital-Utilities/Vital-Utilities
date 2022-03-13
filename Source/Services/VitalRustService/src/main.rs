@@ -28,10 +28,9 @@ mod api;
 mod commands;
 mod generated_client_api_dto_def;
 mod generated_vital_rust_service_api_def;
-mod network_adapter;
+mod machine;
 mod nvidia;
 mod windows;
-
 use api::post_request;
 use sysinfo::ProcessExt;
 static LOGGER: SimpleLogger = SimpleLogger;
@@ -68,10 +67,10 @@ async fn main() {
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
         let (cpu_util, mem_util, adapter_util, disk) = join!(
-            get_cpu_util(&sys_info, &sys_stat),
-            get_mem_util(&sys_info),
-            get_net_adapters(&sys_info),
-            get_disk_util(&sys_info),
+            machine::get_cpu_util(&sys_info, &sys_stat),
+            machine::get_mem_util(&sys_info),
+            machine::get_net_adapters(&sys_info),
+            machine::get_disk_util(&sys_info),
         );
 
         //let mut gpu_usage = Vec::new();
@@ -105,32 +104,6 @@ async fn main() {
     }
 }
 
-fn get_process_gpu_util(nvml: &Option<NVML>) -> Option<Vec<ProcessUtilizationSample>> {
-    if nvml.is_none() {
-        return None;
-    }
-    let mut process_data = Vec::new();
-    if let Some(nvml) = nvml {
-        let count = nvml.device_count();
-        if count.is_err() {
-            error!("{}", "failed to get device count");
-            return None;
-        }
-
-        for i in 0..count.unwrap() {
-            let device = nvml.device_by_index(i);
-            if let Ok(device) = device {
-                let util = device.process_utilization_stats(None);
-                if util.is_ok() {
-                    process_data.push(util.unwrap());
-                }
-            }
-        }
-    }
-
-    // flat map the vector of vectors
-    return Some(process_data.into_iter().flatten().collect());
-}
 fn get_process_util(
     sysinfo: &sysinfo::System,
     nvml: &Option<NVML>,
@@ -139,7 +112,7 @@ fn get_process_util(
     let mut list = Vec::new();
     let processes = sysinfo.processes();
 
-    let gpu_usages = get_process_gpu_util(&nvml).unwrap();
+    let process_gpu_utilization_samples = nvidia::get_process_gpu_util(&nvml).unwrap_or(Vec::new());
     /*
     let using_compute = gpu_device.running_compute_processes().unwrap();
     let using_graphics = gpu_device.running_graphics_processes().unwrap();
@@ -152,7 +125,7 @@ fn get_process_util(
     for (pid, process) in processes {
         let disk_bytes = process.disk_usage();
         // get first gpu usage that has this pid
-        let process_gpu_util = gpu_usages.iter().find(|sample| sample.pid == pid.as_u32());
+
         let pid = pid.as_u32();
         let path = windows::get_process_Path(pid);
 
@@ -183,12 +156,15 @@ fn get_process_util(
                 write_bytes_per_second: disk_bytes.written_bytes as f64,
             },
             status: Some(process.status().to_string()),
-            gpu_util: match process_gpu_util {
-                Some(process_gpu_util) => Some(ProcessGpuUtil {
-                    gpu_core_percentage: Some(process_gpu_util.sm_util as f64),
-                    gpu_decoding_percentage: Some(process_gpu_util.dec_util as f64),
-                    gpu_encoding_percentage: Some(process_gpu_util.enc_util as f64),
-                    gpu_mem_percentage: Some(process_gpu_util.mem_util as f64),
+            gpu_util: match process_gpu_utilization_samples
+                .iter()
+                .find(|sample| sample.pid == pid)
+            {
+                Some(util) => Some(ProcessGpuUtil {
+                    gpu_core_percentage: Some(util.sm_util as f64),
+                    gpu_decoding_percentage: Some(util.dec_util as f64),
+                    gpu_encoding_percentage: Some(util.enc_util as f64),
+                    gpu_mem_percentage: Some(util.mem_util as f64),
                 }),
                 None => None,
             },
@@ -197,111 +173,6 @@ fn get_process_util(
         });
     }
     return Some(list);
-}
-
-async fn get_mem_util(sysinfo: &sysinfo::System) -> generated_vital_rust_service_api_def::MemUsage {
-    return generated_vital_rust_service_api_def::MemUsage {
-        mem_percentage: sysinfo.used_memory() as f64 / sysinfo.total_memory() as f64 * 100 as f64,
-        mem_total_kb: sysinfo.total_memory() as f64,
-        mem_used_kb: sysinfo.used_memory() as f64,
-        swap_percentage: sysinfo.used_swap() as f64 / sysinfo.total_swap() as f64 * 100 as f64,
-        swap_total_kb: sysinfo.total_swap() as f64,
-        swap_used_kb: sysinfo.used_swap() as f64,
-    };
-}
-
-async fn get_cpu_util(
-    sysinfo: &sysinfo::System,
-    sysstat: &systemstat::System,
-) -> generated_vital_rust_service_api_def::CpuUsage {
-    let mut core_percentages = Vec::new();
-    let mut core_frequencies = Vec::new();
-    for processor in sysinfo.processors() {
-        core_percentages.push(processor.cpu_usage() as f64);
-        core_frequencies.push(processor.frequency() as f64);
-    }
-    return generated_vital_rust_service_api_def::CpuUsage {
-        cpu_percentage: sysinfo.global_processor_info().cpu_usage() as f64,
-        core_percentages,
-        core_frequencies,
-        cpu_temp: sysstat.cpu_temp().unwrap_or(0.0) as f64,
-    };
-}
-async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUsage> {
-    let mut list = Vec::new();
-    let mut utils = Vec::new();
-
-    let networks = sysinfo.networks();
-
-    for data in networks {
-        utils.push(data);
-    }
-
-    for (_, int) in default_net::get_interfaces().into_iter().enumerate() {
-        let stats = utils.get(int.index as usize);
-
-        list.push(NetworkAdapterUsage {
-            properties: NetworkAdapterProperties {
-                name: int.name,
-                description: int.description,
-                mac_address: int.mac_addr.unwrap().address(),
-                i_pv4_address: Some(int.ipv4.into_iter().map(|x| x.addr.to_string()).collect()),
-                i_pv6_address: Some(int.ipv6.into_iter().map(|x| x.addr.to_string()).collect()),
-                dns_suffix: None,
-                speed_bps: None,
-                connection_type: None,
-            },
-            utilisation: match stats {
-                Some(stats) => Some(NetworkAdapterUtil {
-                    send_bps: stats.1.transmitted() as f64,
-                    recieve_bps: stats.1.received() as f64,
-                }),
-                None => None,
-            },
-        });
-    }
-
-    return list;
-}
-
-async fn get_disk_util(
-    sysinfo: &sysinfo::System,
-) -> HashMap<String, generated_vital_rust_service_api_def::Disk> {
-    let mut list = HashMap::new();
-    let disks = sysinfo.disks();
-
-    for disk in disks {
-        let key = disk.mount_point().to_str().unwrap().to_string();
-        list.insert(
-            disk.mount_point().to_str().unwrap().to_string(),
-            generated_vital_rust_service_api_def::Disk {
-                name: key.clone(),
-                letter: Some(key.clone()),
-                disk_type: Some(match disk.type_() {
-                    DiskType::HDD => generated_vital_rust_service_api_def::DiskType::Hdd,
-                    DiskType::SSD => generated_vital_rust_service_api_def::DiskType::Ssd,
-                    DiskType::Unknown(_) => generated_vital_rust_service_api_def::DiskType::Unknown,
-                }),
-                load: Some(DiskLoad {
-                    used_space_bytes: Some((disk.total_space() - disk.available_space()) as f64),
-                    total_free_space_bytes: Some(disk.total_space() as f64),
-                    used_space_percentage: Some(
-                        (disk.total_space() - disk.available_space()) as f64
-                            / disk.total_space() as f64
-                            * 100.0,
-                    ),
-                    total_activity_percentage: None,
-                    write_activity_percentage: None,
-                }),
-                health: None,
-                serial: None,
-                temperatures: None,
-                throughput: None,
-            },
-        );
-    }
-
-    return list;
 }
 
 struct SimpleLogger;
