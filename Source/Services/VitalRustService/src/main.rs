@@ -122,12 +122,13 @@ fn get_process_util(
     } */
 
     let cores = sysinfo.physical_core_count();
+    let main_window_titles = windows::get_mainwindowtitles();
     for (pid, process) in processes {
         let disk_bytes = process.disk_usage();
         // get first gpu usage that has this pid
 
         let pid = pid.as_u32();
-        let path = windows::get_process_Path(pid);
+        let path = None; //windows::get_process_Path(pid);
 
         /*  let proc = winproc::Process::from_id(pid as u32).unwrap();
         let n = proc.threads().unwrap();
@@ -139,7 +140,7 @@ fn get_process_util(
         list.push(generated_vital_rust_service_api_def::ProcessData {
             name: process.name().to_string(),
             pid: pid as f64,
-            main_window_title: match windows::get_mainwindowtitles().get(&pid) {
+            main_window_title: match main_window_titles.get(&pid) {
                 Some(title) => Some(title.to_string()),
                 None => None,
             },
