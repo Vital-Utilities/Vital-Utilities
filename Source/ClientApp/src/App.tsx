@@ -44,7 +44,7 @@ const App: React.FunctionComponent = () => {
     );
 
     useEffect(() => {
-        axios.defaults.baseURL = `https://localhost:${appState.vitalServicePort}`;
+        axios.defaults.baseURL = `http://localhost:${appState.vitalServicePort}`;
         axios.defaults.timeout = 10000;
         axios.defaults.responseType = "json";
         axios.defaults.headers = { "Access-Control-Allow-Origin": "*" };

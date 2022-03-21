@@ -120,7 +120,7 @@ namespace VitalService
 
 
             app.UseCors();
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
