@@ -11,7 +11,7 @@ export const ApiPortHandler: React.FunctionComponent = () => {
     useEffect(() => {
         invoke<LaunchSettings>("get_vital_service_ports")
             .then(response => {
-                if (response.vitalServiceHttpsPort !== appPort) dispatch(updateApiPortAction(response.vitalServiceHttpsPort));
+                if (response.vitalServiceHttpsPort !== appPort) dispatch(updateApiPortAction(response.vitalServiceHttpPort));
             })
             .catch(error => console.error(error));
     });
