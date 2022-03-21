@@ -87,11 +87,8 @@ async fn main() {
                     },
                 },
                 format!(
-                    "https://localhost:{}/api/ingest/Utilization",
-                    vital_service_port
-                        .as_ref()
-                        .unwrap()
-                        .vital_service_https_port
+                    "http://localhost:{}/api/ingest/Utilization",
+                    vital_service_port.as_ref().unwrap().vital_service_http_port
                 ),
             );
 

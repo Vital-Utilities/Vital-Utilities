@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -39,12 +41,45 @@ namespace VitalService.Stores
             var settingsJson = File.ReadAllText(SettingsPath);
 
             Settings = JsonSerializer.Deserialize<SettingsDto>(settingsJson, jsonSetting)!;
+
+            Merge();
         }
 
         public void UpdateSettings(SettingsDto settings)
         {
             File.WriteAllText(SettingsPath, JsonSerializer.Serialize(settings, jsonSetting));
             Settings = settings;
+        }
+        /// <summary>
+        /// Merges settings on disk with settings in memory for very basic migration.
+        /// Takes setting value in file over memory.
+        /// </summary>
+        private void Merge()
+        {
+            var settingsJson = File.ReadAllText(SettingsPath);
+
+            var settings = JsonSerializer.Deserialize<SettingsDto>(settingsJson, jsonSetting)!;
+
+            var fileOnDisk = JObject.Parse(settingsJson);
+
+            var jsonString = JsonSerializer.Serialize(new SettingsDto(), jsonSetting);
+            var jsonInMemory = JObject.Parse(jsonString);
+
+            var propertyNames = jsonInMemory.Properties().Select(p => p.Name);
+
+            var result = new JObject();
+
+            foreach (var property in propertyNames)
+            {
+                JToken value;
+                if (!fileOnDisk.TryGetValue(property, out value))
+                    value = jsonInMemory.GetValue(property);
+
+                result.Add(property, value);
+            }
+
+            Settings = JsonSerializer.Deserialize<SettingsDto>(result.ToString(), jsonSetting)!;
+            UpdateSettings(Settings);
         }
     }
 }

@@ -38,7 +38,7 @@ export const InitialState: VitalState = {
     managedState: { managed: [] },
     processViewState: { processView: {} },
     profileState: { profiles: [] },
-    appState: { appReady: false, signalRConnected: false, httpConnected: false, vitalServicePort: 50031 },
+    appState: { appReady: false, signalRConnected: false, httpConnected: false, vitalServicePort: 50030 },
     //@ts-ignore
     settingsState: { settings: undefined }
 };

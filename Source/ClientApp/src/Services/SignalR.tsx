@@ -29,7 +29,7 @@ const ManagedHubSignalR: React.FunctionComponent = () => {
     }
     React.useEffect(() => {
         // create the connection instance
-        const connection = new HubConnectionBuilder().withUrl(`https://localhost:${appState.vitalServicePort}/ManagedHub`).withAutomaticReconnect().build();
+        const connection = new HubConnectionBuilder().withUrl(`http://localhost:${appState.vitalServicePort}/ManagedHub`).withAutomaticReconnect().build();
         console.log(connection.connectionId);
         // event handlers, you can use these to dispatch actions to update your Redux store
         connection.on("MachineDynamicData", (data: GetMachineDynamicDataResponse) => {

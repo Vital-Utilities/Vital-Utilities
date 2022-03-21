@@ -211,6 +211,9 @@ pub struct InfluxDbSettings {
 
 #[derive(Serialize, Deserialize)]
 pub struct LaunchSettings {
+    #[serde(rename = "vitalServiceHttpPort")]
+    pub vital_service_http_port: f64,
+
     #[serde(rename = "vitalServiceHttpsPort")]
     pub vital_service_https_port: f64,
 }
