@@ -106,6 +106,7 @@ export interface ParentChildModelDto
 export interface LaunchSettings
 {
 	vitalServiceHttpsPort: number;
+	vitalServiceHttpPort: number;
 }
 export interface MetricsSettings
 {

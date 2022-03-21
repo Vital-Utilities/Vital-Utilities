@@ -180,7 +180,7 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
                     let settings = serde_json::from_str::<SettingsDto>(&settings_str);
                     match settings {
                         Ok(mut settings) => {
-                            settings.launch.vital_service_https_port = port_number;
+                            settings.launch.vital_service_http_port = port_number;
 
                             let result = std::fs::write(
                                 &file_path,

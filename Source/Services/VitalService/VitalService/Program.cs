@@ -87,7 +87,7 @@ namespace VitalService
              {
                  var settings = new SettingsStore().Settings;
                  Log.Logger.Information("{@settings}", settings);
-                 webBuilder.UseUrls(new[] { $"https://*:{settings.Launch.VitalServiceHttpsPort}" });
+                 webBuilder.UseUrls(new[] { $"http://*:{settings.Launch.VitalServiceHttpPort}" });
 #if !DEBUG
                  try
                  {

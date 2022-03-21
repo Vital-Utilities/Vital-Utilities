@@ -17,6 +17,7 @@ namespace VitalService.Dtos
         public class LaunchSettings
         {
             public int VitalServiceHttpsPort { get; set; } = 50031;
+            public int VitalServiceHttpPort { get; set; } = 50030;
         }
         //public class LoggingSettings
         //{
