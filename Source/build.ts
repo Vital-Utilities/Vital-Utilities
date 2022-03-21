@@ -51,6 +51,8 @@ function buildSoftware() {
     setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
+    execute(`npm i -g quicktype`);
+    
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
     execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release`);
 
