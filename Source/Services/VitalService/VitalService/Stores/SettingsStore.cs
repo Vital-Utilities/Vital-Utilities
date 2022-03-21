@@ -65,15 +65,15 @@ namespace VitalService.Stores
             var jsonString = JsonSerializer.Serialize(new SettingsDto(), jsonSetting);
             var jsonInMemory = JObject.Parse(jsonString);
 
-            var propertyNames = fileOnDisk.Properties().Select(p => p.Name);
+            var propertyNames = jsonInMemory.Properties().Select(p => p.Name);
 
             var result = new JObject();
 
             foreach (var property in propertyNames)
             {
                 JToken value;
-                if (!jsonInMemory.TryGetValue(property, out value))
-                    value = fileOnDisk.GetValue(property);
+                if (!fileOnDisk.TryGetValue(property, out value))
+                    value = jsonInMemory.GetValue(property);
 
                 result.Add(property, value);
             }
