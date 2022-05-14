@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use log::info;
 use sysinfo::{DiskExt, NetworkExt, ProcessorExt, SystemExt};
 use systemstat::Platform;
 

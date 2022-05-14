@@ -2,7 +2,7 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::string;
 use std::time::Duration;
 use std::{thread, time::Instant};
@@ -126,13 +126,15 @@ fn get_process_util(
         let pid = pid.as_u32();
         let path = windows::get_process_Path(pid); // takes some time
 
-        /*  let proc = winproc::Process::from_id(pid as u32).unwrap();
-        let n = proc.threads().unwrap();
-               for e in n {
-            let t = e;
-            let thread_id = t.id();
-            info!("{:?} {:?}", thread_id, t.ideal_processor());
-        } */
+        let mut description: Option<String> = None; // takes some time
+                                                    /*         if path.is_some() {
+                                                        description = match windows::get_file_description(path.to_owned().unwrap().to_string())
+                                                        {
+                                                            Ok(title) => Some(title),
+                                                            Err(_) => None,
+                                                        };
+                                                    }; */
+        // windows::get_process_ideal_processors(pid); //takes a lot of time
         list.push(generated_vital_rust_service_api_def::ProcessData {
             name: process.name().to_string(),
             pid: pid as f64,
@@ -140,7 +142,7 @@ fn get_process_util(
                 Some(title) => Some(title.to_string()),
                 None => None,
             },
-            description: None,
+            description: description,
             executable_path: path,
             parent_pid: match process.parent() {
                 Some(pid) => Some(pid.as_u32() as f64),
