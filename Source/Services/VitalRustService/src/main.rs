@@ -2,16 +2,19 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
+use std::collections::HashSet;
 use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
-use log::{error, info, LevelFilter};
-use log::{Level, Metadata, Record};
-
 use crate::commands::get_vital_service_ports;
 use crate::generated_vital_rust_service_api_def::SendUtilizationRequest;
 use crate::software::get_process_util;
+use log::{error, info, LevelFilter};
+use log::{Level, Metadata, Record};
 use nvml::NVML;
+use rocket::data::{Limits, ToByteUnit};
+use rocket::serde::{Deserialize, Serialize};
+use rocket::{get, launch, response, routes};
 use sysinfo::SystemExt;
 use systemstat::Platform;
 use tokio::join;
@@ -21,16 +24,21 @@ mod generated_client_api_dto_def;
 mod generated_vital_rust_service_api_def;
 mod machine;
 mod nvidia;
+pub mod rocket_endpoints;
 pub mod software;
 
 use api::post_request;
 static LOGGER: SimpleLogger = SimpleLogger;
 static WAIT_TIME: core::time::Duration = Duration::from_millis(1000);
 
-#[tokio::main]
+#[rocket::main]
 async fn main() {
     let _ = log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info));
+    tokio::spawn(rocket());
 
+    app().await;
+}
+async fn app() {
     let vital_service_port = get_vital_service_ports();
     if vital_service_port.is_err() {
         error!("{}", "failed to get vital service port");
@@ -44,9 +52,7 @@ async fn main() {
             None
         }
     };
-
     let sys_stat = systemstat::System::new();
-
     let mut sys_info = sysinfo::System::new_all();
     sys_info.refresh_all(); // required to get the correct usage as data relies on previous sample
     loop {
@@ -91,7 +97,6 @@ async fn main() {
         info!("time taken: {}", now.elapsed().as_millis());
     }
 }
-
 struct SimpleLogger;
 
 impl log::Log for SimpleLogger {
@@ -106,4 +111,13 @@ impl log::Log for SimpleLogger {
     }
 
     fn flush(&self) {}
+}
+
+async fn rocket() -> Result<(), rocket::Error> {
+    let _rocket = rocket::build()
+        .mount("/", routes![rocket_endpoints::ideal_processors])
+        .launch()
+        .await?;
+
+    Ok(())
 }
