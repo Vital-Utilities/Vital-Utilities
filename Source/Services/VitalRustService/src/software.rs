@@ -1,26 +1,26 @@
+use crate::{
+    generated_vital_rust_service_api_def::{self, ProcessGpuUtil},
+    nvidia,
+};
+use chrono::{DateTime, Utc};
 use core::slice;
+use nvml::NVML;
+use once_cell::sync::OnceCell;
+
 use std::{
     collections::{HashMap, HashSet},
-    ffi::{c_void, CString},
     mem::size_of_val,
     path::Path,
     ptr::null_mut,
     str::from_utf8,
     sync::Mutex,
 };
-
-use log::info;
-use once_cell::sync::OnceCell;
-use serde::__private::from_utf8_lossy;
-use serde::de::Error;
+use sysinfo::{PidExt, ProcessExt, SystemExt};
 use windows::{
-    core::{PCSTR, PSTR, PWSTR},
+    core::PWSTR,
     Win32::Foundation::*,
     Win32::{
-        Storage::FileSystem::{
-            GetFileInformationByHandle, GetFileVersionInfoA, GetFileVersionInfoSizeA,
-            GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueA, VerQueryValueW,
-        },
+        Storage::FileSystem::{GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueW},
         System::Diagnostics::ToolHelp::{
             CreateToolhelp32Snapshot, Module32First, MODULEENTRY32, TH32CS_SNAPMODULE,
             TH32CS_SNAPMODULE32,
@@ -28,6 +28,79 @@ use windows::{
         UI::WindowsAndMessaging::*,
     },
 };
+pub fn get_process_util(
+    sysinfo: &sysinfo::System,
+    nvml: &Option<NVML>,
+    time_stamp: DateTime<Utc>,
+) -> Option<Vec<generated_vital_rust_service_api_def::ProcessData>> {
+    let mut list = Vec::new();
+    let processes = sysinfo.processes();
+
+    let process_gpu_utilization_samples = nvidia::get_process_gpu_util(&nvml).unwrap_or(Vec::new());
+    /*
+    let using_compute = gpu_device.running_compute_processes().unwrap();
+    let using_graphics = gpu_device.running_graphics_processes().unwrap();
+
+    for p in using_compute {
+        p.used_gpu_memory();
+    } */
+
+    let cores = sysinfo.physical_core_count();
+    let main_window_titles = get_mainwindowtitles();
+    for (pid, process) in processes {
+        let disk_bytes = process.disk_usage();
+        // get first gpu usage that has this pid
+
+        let pid = pid.as_u32();
+        let path = get_process_path(pid); // takes some time
+
+        let mut description: Option<String> = None; // takes some time
+                                                    /*         if path.is_some() {
+                                                        description = match windows::get_file_description(path.to_owned().unwrap().to_string())
+                                                        {
+                                                            Ok(title) => Some(title),
+                                                            Err(_) => None,
+                                                        };
+                                                    }; */
+        // windows::get_process_ideal_processors(pid); //takes a lot of time
+        list.push(generated_vital_rust_service_api_def::ProcessData {
+            name: process.name().to_string(),
+            pid: pid as f64,
+            main_window_title: match main_window_titles.get(&pid) {
+                Some(title) => Some(title.to_string()),
+                None => None,
+            },
+            description: description,
+            executable_path: path,
+            parent_pid: match process.parent() {
+                Some(pid) => Some(pid.as_u32() as f64),
+                None => None,
+            },
+            cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f64,
+            memory_kb: process.memory() as f64,
+            disk_usage: generated_vital_rust_service_api_def::ProcessDiskUsage {
+                read_bytes_per_second: disk_bytes.read_bytes as f64,
+                write_bytes_per_second: disk_bytes.written_bytes as f64,
+            },
+            status: Some(process.status().to_string()),
+            gpu_util: match process_gpu_utilization_samples
+                .iter()
+                .find(|sample| sample.pid == pid)
+            {
+                Some(util) => Some(ProcessGpuUtil {
+                    gpu_core_percentage: Some(util.sm_util as f64),
+                    gpu_decoding_percentage: Some(util.dec_util as f64),
+                    gpu_encoding_percentage: Some(util.enc_util as f64),
+                    gpu_mem_percentage: Some(util.mem_util as f64),
+                }),
+                None => None,
+            },
+
+            time_stamp: time_stamp.to_rfc3339(),
+        });
+    }
+    return Some(list);
+}
 
 static WINDOW_TITLES: OnceCell<Mutex<HashMap<u32, String>>> = OnceCell::new();
 
@@ -144,7 +217,7 @@ pub fn get_file_description(path: impl AsRef<Path>) -> Result<String, String> {
     }
 }
 
-pub fn get_process_Path(pid: u32) -> Option<String> {
+fn get_process_path(pid: u32) -> Option<String> {
     let mut path = None;
     unsafe {
         let h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
