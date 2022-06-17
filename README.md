@@ -169,7 +169,7 @@ If you want your profiles applied and metrics collected when you log in. You can
     - Auto empty recyclebin
     - Auto clean directory with rules
     - Auto copy/move files from one directory to another
-- Investigate ability to identify which threads a process has been executing work on.
+- Investigate ability to identify which threads a process has been executing work on. ( Investigation result: Yes, a spike has been successful in Rust )
 - Vulnerability Alerts for installed applications.
 
 ## Screenshots
