@@ -10,7 +10,6 @@ namespace VitalService.Data
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            Database.Migrate();
         }
 
         public DbSet<ManagedModel> ManagedProcesses { get; set; }
