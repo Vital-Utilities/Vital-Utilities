@@ -13,7 +13,6 @@ namespace VitalService.Data
         public MetricDbContext(DbContextOptions<MetricDbContext> options)
             : base(options)
         {
-            Database.Migrate();
         }
 
         public DbSet<TimeSeriesMachineMetricsModel> Metrics { get; set; }

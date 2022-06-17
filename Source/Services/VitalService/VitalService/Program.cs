@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -7,6 +9,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using VitalService.Data;
 using VitalService.Dtos;
 using VitalService.Stores;
 
@@ -65,7 +68,13 @@ namespace VitalService
             Process.Start(rustServiceExe);
 #endif
 
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using (var scope = host.Services.CreateScope())
+            {
+               scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+                scope.ServiceProvider.GetRequiredService<MetricDbContext>().Database.Migrate();
+            }
+            host.Run();
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
