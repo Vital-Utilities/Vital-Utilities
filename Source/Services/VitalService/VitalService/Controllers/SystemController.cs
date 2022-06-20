@@ -52,10 +52,10 @@ namespace VitalService.Controllers
             return Task.FromResult(toReturn);
         }
 
-        [HttpPost("timeseries/relative")]
-        public TimeSeriesMachineMetricsResponse TimeSeriesData([FromBody] GetMachineRelativeTimeSeriesRequest request)
+        [HttpPost("timeseries")]
+        public TimeSeriesMachineMetricsResponse TimeSeriesData([FromBody] GetMachineTimeSeriesRequest request)
         {
-            var (requestDateRange, model) = MachineDataStore.GetMetrics(request.From, request.To);
+            var (requestDateRange, model) = MachineDataStore.GetMetrics(request.Earliest, request.Latest);
 
             return new TimeSeriesMachineMetricsResponse
             {

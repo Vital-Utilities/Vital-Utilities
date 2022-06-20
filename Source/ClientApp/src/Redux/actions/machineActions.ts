@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { GetMachineDynamicDataResponse, GetMachineRelativeTimeSeriesRequest, GetMachineStaticDataResponse, TimeSeriesMachineMetricsResponse } from "../../Dtos/ClientApiDto";
+import { GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "../../Dtos/ClientApiDto";
 
 export type MachineActionTypes = UpdateMachineDynamicDataAction | UpdateMachineStaticDataAction | UpdateMachineTimeSeriesDataAction;
 
@@ -50,9 +50,9 @@ function sendGetMachineDynamicRequest() {
         });
 }
 
-function sendGetMachineTimeSeriesRequest(message: GetMachineRelativeTimeSeriesRequest) {
+function sendGetMachineTimeSeriesRequest(message: GetMachineTimeSeriesRequest) {
     return axios
-        .post<TimeSeriesMachineMetricsResponse>("api/system/timeseries/relative", message, {
+        .post<TimeSeriesMachineMetricsResponse>("api/system/timeseries", message, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -63,7 +63,7 @@ function sendGetMachineTimeSeriesRequest(message: GetMachineRelativeTimeSeriesRe
             return Promise.reject(e);
         });
 }
-export function fetchMachineTimeSeriesDataAction(message: GetMachineRelativeTimeSeriesRequest): AnyAction {
+export function fetchMachineTimeSeriesDataAction(message: GetMachineTimeSeriesRequest): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetMachineTimeSeriesRequest(message)

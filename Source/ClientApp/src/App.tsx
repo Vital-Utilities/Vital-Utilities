@@ -14,12 +14,13 @@ import { Settings } from "./pages/Settings";
 import { ConnnectionIssuePage } from "./pages/ConnectionIssue";
 import { useInterval } from "ahooks";
 import { InfoPage } from "./pages/Info";
-import { fetchMachineDynamicDataAction, fetchMachineStaticDataAction } from "./Redux/actions/machineActions";
+import { fetchMachineDynamicDataAction, fetchMachineStaticDataAction, fetchMachineTimeSeriesDataAction } from "./Redux/actions/machineActions";
 import { useEffect } from "react";
 import axios from "axios";
 import { fetchManagedProcessesAction } from "./Redux/actions/managedModelActions";
 import { updateAppReadyAction } from "./Redux/actions/appActions";
-import { PerformancePage } from "./pages/Performance/Performance";
+import { PerformancePage, relativeTimeOptions, relativeTypeStringOptions } from "./pages/Performance/Performance";
+import moment from "moment";
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App: React.FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -27,7 +28,6 @@ const App: React.FunctionComponent = () => {
     const appState = useSelector<VitalState, AppState>(state => state.appState);
     const [noConnectionModalVisible, setNoConnectionModalVisible] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
-
     React.useEffect(() => {
         if (appState.vitalServicePort !== undefined) {
             dispatch(updateAppReadyAction(true));
@@ -51,10 +51,20 @@ const App: React.FunctionComponent = () => {
     }, [appState.vitalServicePort]);
 
     async function getData() {
+        let relativeTimeOption = window.localStorage.getItem("relativeTimeOption") ?? "Last 1 minute";
+        // eslint-disable-next-line prettier/prettier
+        relativeTimeOption = relativeTimeOption.replaceAll("\"", "") as relativeTypeStringOptions;
         dispatch(fetchMachineStaticDataAction());
+        dispatch(
+            fetchMachineTimeSeriesDataAction({
+                latest: moment().add(1, "minutes").utc().toDate(),
+                earliest: moment().add(relativeTimeOptions[relativeTimeOption], "minutes").utc().toDate()
+            })
+        );
         dispatch(fetchMachineDynamicDataAction());
         dispatch(fetchManagedProcessesAction());
     }
+
     if (!appState.appReady) return <>App Loading...</>;
 
     return (
@@ -86,8 +96,8 @@ const App: React.FunctionComponent = () => {
                     </Menu>
                     <div style={{ width: "auto", justifySelf: "end", marginRight: 20, alignItems: "center", gap: "20px", height: "100%", display: "flex", flexDirection: "row", color: "white" }}>
                         <CpuPerfBadge />
-                        <GpuPerfBadge />
                         <RamUsageBadge />
+                        <GpuPerfBadge />
                         <span>
                             {!appState.httpConnected && (
                                 <span style={{ color: "orange", cursor: "pointer" }} onClick={() => setNoConnectionModalVisible(true)}>
