@@ -246,7 +246,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                         })}
                         {disks &&
                             Object.entries(disks)
-                                .reverse()
+                                .sort((a, b) => b[0].localeCompare(a[0]))
                                 .map((value, index) => {
                                     const otherData = CurrentMetricState?.diskUsageData && Object.entries(CurrentMetricState?.diskUsageData).find(d => d[1].driveLetter === value[1].letter);
                                     return (
