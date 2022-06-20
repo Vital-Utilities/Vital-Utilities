@@ -86,5 +86,6 @@
 
 	<Target Name="PostBuild" AfterTargets="Build" Condition="$(Configuration)=='Debug'">
 		<Exec Command="swagger tofile --yaml --output ./swagger/v1/$(AssemblyName).yaml $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
-	</Target>
+	    <Exec Command="swagger tofile --output ./swagger/v1/swagger.json $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />	
+</Target>
 </Project>
