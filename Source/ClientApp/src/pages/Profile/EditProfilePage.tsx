@@ -211,7 +211,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
                             <th style={{ minWidth: 100, width: 200 }}>Name</th>
                             <th>Priority</th>
                             <th>Affinity</th>
-                            <th></th>
+                            <th>Thread Usage</th>
                         </tr>
                     </thead>
                     <tbody>{view.map(e => renderRow(e))}</tbody>
