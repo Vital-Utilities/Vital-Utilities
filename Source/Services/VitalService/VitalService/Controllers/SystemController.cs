@@ -51,17 +51,6 @@ namespace VitalService.Controllers
             };
             return Task.FromResult(toReturn);
         }
-        //[HttpPost("timeseries/range")]
-        //public TimeSeriesMachineMetrics TimeSeriesDataAsync([FromBody] GetMachineTimeSeriesRequest request)
-        //{
-        //    var getLast = MachineDataStore.GetMetricsBetween(request);
-        //    var toReturn = new TimeSeriesMachineMetrics
-        //    {
-        //        CpuUsageData = getLast.CpuMetrics,
-        //        GpuUsageData = getLast.GpuMetrics,
-        //    };
-        //    return toReturn;
-        //}
 
         [HttpPost("timeseries/relative")]
         public TimeSeriesMachineMetricsResponse TimeSeriesData([FromBody] GetMachineRelativeTimeSeriesRequest request)
