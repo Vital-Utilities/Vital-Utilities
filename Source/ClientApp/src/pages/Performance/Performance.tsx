@@ -224,7 +224,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 onClick={() => {
                                     setClassicViewProps({ ...classicViewProps, selectedKey: "Memory" });
                                 }}
-                                stat={`${getReadableBytesString(dynamicState?.ramUsagesData?.usedMemoryBytes)}/${getReadableBytesString(dynamicState?.ramUsagesData?.totalVisibleMemoryBytes)} (${dynamicState?.ramUsagesData?.totalVisibleMemoryBytes && ((dynamicState?.ramUsagesData?.usedMemoryBytes / dynamicState?.ramUsagesData?.totalVisibleMemoryBytes) * 100).toFixed(0)}%)`}
+                                stat={`${getReadableBytesString(dynamicState?.ramUsagesData?.usedMemoryBytes)}/${getReadableBytesString(dynamicState?.ramUsagesData?.totalVisibleMemoryBytes)} (${dynamicState?.ramUsagesData?.totalVisibleMemoryBytes && ((dynamicState?.ramUsagesData?.usedMemoryBytes / dynamicState?.ramUsagesData?.totalVisibleMemoryBytes) * 100).toFixed(1)}%)`}
                                 type="memory"
                             />
                         )}
@@ -262,7 +262,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             detail={`${value[1].name}`}
                                             stat={
                                                 <>
-                                                    <CaretDownOutlined /> {getReadableBitsPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(0)}%)
+                                                    <CaretDownOutlined /> {getReadableBitsPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
                                                 </>
                                             }
                                         />
