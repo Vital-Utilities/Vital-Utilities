@@ -1,0 +1,1582 @@
+openapi: 3.0.1
+info:
+  title: VitalService
+  version: '1.0'
+paths:
+  /api/Hello:
+    get:
+      tags:
+        - Hello
+      responses:
+        '200':
+          description: Success
+  /api/Ingest/Utilization:
+    post:
+      tags:
+        - Ingest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendUtilizationRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SendUtilizationRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SendUtilizationRequest'
+      responses:
+        '200':
+          description: Success
+  /api/Process:
+    get:
+      tags:
+        - Process
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetAllResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetAllResponse'
+  /api/Process/Managed:
+    get:
+      tags:
+        - Process
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetManagedResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetManagedResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetManagedResponse'
+  /api/Process/RunningProcesses:
+    get:
+      tags:
+        - Process
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetRunningProcessesResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRunningProcessesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetRunningProcessesResponse'
+  /api/Process/ProcessesToAdd:
+    get:
+      tags:
+        - Process
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetProcessesToAddResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetProcessesToAddResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetProcessesToAddResponse'
+  '/api/Process/kill/{id}':
+    post:
+      tags:
+        - Process
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  '/api/Process/openpath/{id}':
+    post:
+      tags:
+        - Process
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  '/api/Process/openproperties/{id}':
+    post:
+      tags:
+        - Process
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /api/Profile:
+    get:
+      tags:
+        - Profile
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfileDto'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfileDto'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfileDto'
+    post:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Success
+  '/api/Profile/{id}':
+    get:
+      tags:
+        - Profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+    delete:
+      tags:
+        - Profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /api/Profile/process:
+    post:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddProccessRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AddProccessRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AddProccessRequest'
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateManagedRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateManagedRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateManagedRequest'
+      responses:
+        '200':
+          description: Success
+  '/api/Profile/process/{id}':
+    delete:
+      tags:
+        - Profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /api/Settings:
+    get:
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/SettingsDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SettingsDto'
+  /api/Settings/SetRunAtStartup:
+    put:
+      tags:
+        - Settings
+      parameters:
+        - name: runAtStartup
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+  /api/System/static:
+    get:
+      tags:
+        - System
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetMachineStaticDataResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMachineStaticDataResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetMachineStaticDataResponse'
+  /api/System/dynamic:
+    get:
+      tags:
+        - System
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/GetMachineDynamicDataResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMachineDynamicDataResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetMachineDynamicDataResponse'
+  /api/System/timeseries:
+    post:
+      tags:
+        - System
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMachineTimeSeriesRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GetMachineTimeSeriesRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/GetMachineTimeSeriesRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesMachineMetricsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesMachineMetricsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesMachineMetricsResponse'
+  /api/System:
+    patch:
+      tags:
+        - System
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    AddProccessRequest:
+      type: object
+      properties:
+        processName:
+          type: string
+          nullable: true
+        alias:
+          type: string
+          nullable: true
+        executionPath:
+          type: string
+          nullable: true
+        processPriority:
+          $ref: '#/components/schemas/ProcessPriorityEnum'
+        affinity:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+        profileId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    CpuData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        numberOfEnabledCore:
+          type: integer
+          format: int32
+        numberOfCores:
+          type: integer
+          format: int32
+        threadCount:
+          type: integer
+          format: int32
+        virtualizationFirmwareEnabled:
+          type: boolean
+        l1CacheSize:
+          type: number
+          format: float
+        l2CacheSize:
+          type: number
+          format: float
+        l3CacheSize:
+          type: number
+          format: float
+      additionalProperties: false
+    CpuUsage:
+      type: object
+      properties:
+        cpuPercentage:
+          type: number
+          format: float
+        cpuTemp:
+          type: number
+          format: float
+        coreFrequencies:
+          type: array
+          items:
+            type: number
+            format: float
+          nullable: true
+        corePercentages:
+          type: array
+          items:
+            type: number
+            format: float
+          nullable: true
+      additionalProperties: false
+    CpuUsageMetricModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        uniqueIdentifier:
+          type: string
+          nullable: true
+        totalCoreUsagePercentage:
+          type: number
+          format: float
+          nullable: true
+        packageTemperature:
+          type: number
+          format: float
+          nullable: true
+        powerDrawWattage:
+          type: number
+          format: float
+          nullable: true
+        coreClocksMhz:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+          nullable: true
+        coresUsagePercentage:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    CpuUsages:
+      type: object
+      properties:
+        coreClocksMhz:
+          type: array
+          items:
+            type: number
+            format: float
+          nullable: true
+        total:
+          type: number
+          format: float
+        powerDrawWattage:
+          type: number
+          format: float
+          nullable: true
+        cores:
+          type: array
+          items:
+            type: number
+            format: float
+          nullable: true
+        temperatureReadings:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+      additionalProperties: false
+    CreateProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Data:
+      type: object
+      properties:
+        dataReadBytes:
+          type: integer
+          format: int64
+          nullable: true
+        dataWrittenBytes:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    DateRange:
+      type: object
+      properties:
+        earliest:
+          type: string
+          format: date-time
+        latest:
+          type: string
+          format: date-time
+      additionalProperties: false
+    Disk:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        serial:
+          type: string
+          nullable: true
+        letter:
+          type: string
+          nullable: true
+        diskType:
+          $ref: '#/components/schemas/DiskType'
+        throughput:
+          $ref: '#/components/schemas/DiskThroughput'
+        load:
+          $ref: '#/components/schemas/DiskLoad'
+        temperatures:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+          nullable: true
+        health:
+          $ref: '#/components/schemas/DiskHealth'
+      additionalProperties: false
+    DiskHealth:
+      type: object
+      properties:
+        totalBytesRead:
+          type: number
+          format: float
+          nullable: true
+        totalBytesWritten:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    DiskLoad:
+      type: object
+      properties:
+        usedSpacePercentage:
+          type: number
+          format: float
+          nullable: true
+        usedSpaceBytes:
+          type: number
+          format: float
+          nullable: true
+        totalFreeSpaceBytes:
+          type: number
+          format: float
+          nullable: true
+        writeActivityPercentage:
+          type: number
+          format: float
+          nullable: true
+        totalActivityPercentage:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    DiskThroughput:
+      type: object
+      properties:
+        readRateBytesPerSecond:
+          type: number
+          format: float
+          nullable: true
+        writeRateBytesPerSecond:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    DiskType:
+      enum:
+        - Unknown
+        - HDD
+        - SSD
+      type: string
+    DiskUsage:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        serial:
+          type: string
+          nullable: true
+        uniqueIdentifier:
+          type: string
+          nullable: true
+        driveType:
+          $ref: '#/components/schemas/DriveType'
+        throughput:
+          $ref: '#/components/schemas/Throughput'
+        load:
+          $ref: '#/components/schemas/Load'
+        temperatures:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        data:
+          $ref: '#/components/schemas/Data'
+        label:
+          type: string
+          nullable: true
+        letter:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DiskUsageMetricModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        uniqueIdentifier:
+          type: string
+          nullable: true
+        serial:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        driveLetter:
+          type: string
+          nullable: true
+        driveType:
+          $ref: '#/components/schemas/DriveType'
+        usedSpacePercentage:
+          type: number
+          format: float
+          nullable: true
+        usedSpaceBytes:
+          type: integer
+          format: int64
+          nullable: true
+        writeActivityPercentage:
+          type: number
+          format: float
+          nullable: true
+        totalActivityPercentage:
+          type: number
+          format: float
+          nullable: true
+        readRateBytesPerSecond:
+          type: number
+          format: double
+          nullable: true
+        writeRateBytesPerSecond:
+          type: number
+          format: double
+          nullable: true
+        dataReadBytes:
+          type: number
+          format: double
+          nullable: true
+        dataWrittenBytes:
+          type: number
+          format: double
+          nullable: true
+        temperatures:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    DiskUsages:
+      type: object
+      properties:
+        disks:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DiskUsage'
+          nullable: true
+      additionalProperties: false
+    DriveType:
+      enum:
+        - Unknown
+        - NoRootDirectory
+        - Removable
+        - Fixed
+        - Network
+        - CDRom
+        - Ram
+      type: string
+    GetAllResponse:
+      type: object
+      properties:
+        managedModels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManagedModelDto'
+          nullable: true
+        processesToAdd:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessToAddDto'
+          nullable: true
+      additionalProperties: false
+    GetMachineDynamicDataResponse:
+      type: object
+      properties:
+        cpuUsageData:
+          $ref: '#/components/schemas/CpuUsages'
+        ramUsagesData:
+          $ref: '#/components/schemas/RamUsages'
+        gpuUsageData:
+          type: array
+          items:
+            $ref: '#/components/schemas/GpuUsages'
+          nullable: true
+        diskUsages:
+          $ref: '#/components/schemas/DiskUsages'
+        networkUsageData:
+          $ref: '#/components/schemas/NetworkAdapters'
+        processCpuUsage:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        processCpuThreadsUsage:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        processThreadCount:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        processRamUsageGb:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        processDiskBytesPerSecActivity:
+          type: object
+          additionalProperties:
+            type: number
+            format: double
+          nullable: true
+        cpuTemperature:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        processGpuUsage:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+      additionalProperties: false
+    GetMachineStaticDataResponse:
+      type: object
+      properties:
+        directXVersion:
+          type: string
+          nullable: true
+        cpu:
+          $ref: '#/components/schemas/CpuData'
+        ram:
+          type: array
+          items:
+            $ref: '#/components/schemas/RamData'
+          nullable: true
+        gpu:
+          type: array
+          items:
+            $ref: '#/components/schemas/GpuData'
+          nullable: true
+      additionalProperties: false
+    GetMachineTimeSeriesRequest:
+      type: object
+      properties:
+        earliest:
+          type: string
+          format: date-time
+        latest:
+          type: string
+          format: date-time
+      additionalProperties: false
+    GetManagedResponse:
+      type: object
+      properties:
+        affinityModels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManagedModelDto'
+          nullable: true
+      additionalProperties: false
+    GetProcessesToAddResponse:
+      type: object
+      properties:
+        processes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessToAddDto'
+          nullable: true
+      additionalProperties: false
+    GetRunningProcessesResponse:
+      type: object
+      properties:
+        processView:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ParentChildModelDto'
+          nullable: true
+      additionalProperties: false
+    GpuData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        memoryTotalBytes:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    GpuUsageMetricModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        uniqueIdentifier:
+          type: string
+          nullable: true
+        coreUsagePercentage:
+          type: number
+          format: float
+          nullable: true
+        vramUsageBytes:
+          type: number
+          format: float
+          nullable: true
+        vramTotalBytes:
+          type: number
+          format: float
+          nullable: true
+        coreTemperature:
+          type: number
+          format: float
+          nullable: true
+        powerDrawWattage:
+          type: number
+          format: float
+          nullable: true
+        fanPercentage:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    GpuUsages:
+      type: object
+      properties:
+        temperatureReadings:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+          nullable: true
+        totalMemoryBytes:
+          type: number
+          format: float
+          nullable: true
+        memoryUsedBytes:
+          type: number
+          format: float
+          nullable: true
+        memoryClockMhz:
+          type: number
+          format: float
+          nullable: true
+        shaderClockMhz:
+          type: number
+          format: float
+          nullable: true
+        coreClockMhz:
+          type: number
+          format: float
+          nullable: true
+        fanPercentage:
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+          nullable: true
+        powerDraw:
+          type: number
+          format: float
+          nullable: true
+        load:
+          $ref: '#/components/schemas/LoadData'
+        pcIe_Throughput:
+          $ref: '#/components/schemas/PCIE_ThroughPut'
+      additionalProperties: false
+    IPInterfaceProperties:
+      type: object
+      properties:
+        iPv4Address:
+          type: string
+          nullable: true
+        iPv6Address:
+          type: string
+          nullable: true
+        dnsSuffix:
+          type: string
+          nullable: true
+        isDnsEnabled:
+          type: boolean
+      additionalProperties: false
+    InfluxDbSettings:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        reportIntervalSeconds:
+          type: integer
+          format: int32
+        endPoint:
+          type: string
+          nullable: true
+        token:
+          type: string
+          nullable: true
+      additionalProperties: false
+    LaunchSettings:
+      type: object
+      properties:
+        vitalServiceHttpsPort:
+          type: integer
+          format: int32
+        vitalServiceHttpPort:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Load:
+      type: object
+      properties:
+        usedSpacePercentage:
+          type: number
+          format: float
+          nullable: true
+        usedSpaceBytes:
+          type: integer
+          format: int64
+          nullable: true
+        totalFreeSpaceBytes:
+          type: integer
+          format: int64
+          nullable: true
+        writeActivityPercentage:
+          type: number
+          format: float
+          nullable: true
+        totalActivityPercentage:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    LoadData:
+      type: object
+      properties:
+        core:
+          type: number
+          format: float
+          nullable: true
+        frameBuffer:
+          type: number
+          format: float
+          nullable: true
+        videoEngine:
+          type: number
+          format: float
+          nullable: true
+        busInterface:
+          type: number
+          format: float
+          nullable: true
+        memory:
+          type: number
+          format: float
+          nullable: true
+        memoryController:
+          type: number
+          format: float
+          nullable: true
+        cuda:
+          type: number
+          format: float
+          nullable: true
+        threeD:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    ManagedModelDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        processName:
+          type: string
+          nullable: true
+        alias:
+          type: string
+          nullable: true
+        processPriority:
+          $ref: '#/components/schemas/ProcessPriorityEnum'
+        affinity:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+        parentProfileId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    MemUsage:
+      type: object
+      properties:
+        memPercentage:
+          type: number
+          format: float
+        memUsedKB:
+          type: number
+          format: float
+        memTotalKB:
+          type: number
+          format: float
+        swapPercentage:
+          type: number
+          format: float
+        swapUsedKB:
+          type: number
+          format: float
+        swapTotalKB:
+          type: number
+          format: float
+      additionalProperties: false
+    MetricsSettings:
+      type: object
+      properties:
+        persistMetrics:
+          type: boolean
+      additionalProperties: false
+    NetAdapterUsage:
+      type: object
+      properties:
+        uploadSpeedBps:
+          type: integer
+          format: int64
+        downloadSpeedBps:
+          type: integer
+          format: int64
+        uploadedBps:
+          type: integer
+          format: int64
+        downloadedBps:
+          type: integer
+          format: int64
+        usagePercentage:
+          type: integer
+          format: int64
+      additionalProperties: false
+    NetworkAdapter:
+      type: object
+      properties:
+        usage:
+          $ref: '#/components/schemas/NetAdapterUsage'
+        properties:
+          $ref: '#/components/schemas/Properties'
+      additionalProperties: false
+    NetworkAdapterProperties:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        macAddress:
+          type: string
+          nullable: true
+        speedBps:
+          type: number
+          format: float
+          nullable: true
+        connectionType:
+          type: string
+          nullable: true
+        iPv4Address:
+          type: array
+          items:
+            type: string
+          nullable: true
+        iPv6Address:
+          type: array
+          items:
+            type: string
+          nullable: true
+        dnsSuffix:
+          type: string
+          nullable: true
+      additionalProperties: false
+    NetworkAdapterUsage:
+      type: object
+      properties:
+        properties:
+          $ref: '#/components/schemas/NetworkAdapterProperties'
+        utilisation:
+          $ref: '#/components/schemas/NetworkAdapterUtil'
+      additionalProperties: false
+    NetworkAdapterUtil:
+      type: object
+      properties:
+        sendBps:
+          type: number
+          format: float
+        recieveBps:
+          type: number
+          format: float
+      additionalProperties: false
+    NetworkAdapters:
+      type: object
+      properties:
+        adapters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/NetworkAdapter'
+          nullable: true
+      additionalProperties: false
+    NetworkUsageMetricModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        uniqueIdentifier:
+          type: string
+          nullable: true
+        uploadSpeedBps:
+          type: integer
+          format: int64
+          nullable: true
+        downloadSpeedBps:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    PCIE_ThroughPut:
+      type: object
+      properties:
+        pcIe_Rx_BytesPerSecond:
+          type: integer
+          format: int64
+          nullable: true
+        pcIe_Tx_BytesPerSecond:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    ParentChildModelDto:
+      type: object
+      properties:
+        parent:
+          $ref: '#/components/schemas/ProcessViewDto'
+        children:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessViewDto'
+          nullable: true
+      additionalProperties: false
+    ProcessData:
+      type: object
+      properties:
+        pid:
+          type: number
+          format: float
+        parentPid:
+          type: number
+          format: float
+          nullable: true
+        executablePath:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        mainWindowTitle:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        timeStamp:
+          type: string
+          format: date-time
+        cpuPercentage:
+          type: number
+          format: float
+        memoryKb:
+          type: number
+          format: float
+        diskUsage:
+          $ref: '#/components/schemas/ProcessDiskUsage'
+        status:
+          type: string
+          nullable: true
+        gpuUtil:
+          $ref: '#/components/schemas/ProcessGpuUtil'
+      additionalProperties: false
+    ProcessDiskUsage:
+      type: object
+      properties:
+        readBytesPerSecond:
+          type: number
+          format: float
+        writeBytesPerSecond:
+          type: number
+          format: float
+      additionalProperties: false
+    ProcessGpuUtil:
+      type: object
+      properties:
+        gpuCorePercentage:
+          type: number
+          format: float
+          nullable: true
+        gpuMemPercentage:
+          type: number
+          format: float
+          nullable: true
+        gpuEncodingPercentage:
+          type: number
+          format: float
+          nullable: true
+        gpuDecodingPercentage:
+          type: number
+          format: float
+          nullable: true
+      additionalProperties: false
+    ProcessPriorityEnum:
+      enum:
+        - DontOverride
+        - Idle
+        - BelowNormal
+        - Normal
+        - AboveNormal
+        - High
+        - RealTime
+      type: string
+    ProcessToAddDto:
+      type: object
+      properties:
+        pid:
+          type: integer
+          format: int32
+        processName:
+          type: string
+          nullable: true
+        mainWindowTitle:
+          type: string
+          nullable: true
+        executionPath:
+          type: string
+          nullable: true
+        canModify:
+          type: boolean
+        affinity:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+        processPriority:
+          $ref: '#/components/schemas/ProcessPriorityEnum'
+      additionalProperties: false
+    ProcessViewDto:
+      type: object
+      properties:
+        processName:
+          type: string
+          nullable: true
+        processTitle:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        id:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ProfileDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          nullable: true
+        managedModelsIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          nullable: true
+        enabled:
+          type: boolean
+        active:
+          type: boolean
+        priority:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+    Properties:
+      type: object
+      properties:
+        ipInterfaceProperties:
+          $ref: '#/components/schemas/IPInterfaceProperties'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        macAddress:
+          type: string
+          nullable: true
+        speedBps:
+          type: integer
+          format: int64
+        connectionType:
+          type: string
+          nullable: true
+      additionalProperties: false
+    RamData:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        partNumber:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: true
+        speedMhz:
+          type: integer
+          format: int32
+          nullable: true
+        slotNumber:
+          type: integer
+          format: int32
+          nullable: true
+        slotChannel:
+          type: string
+          nullable: true
+        configuredClockSpeedMhz:
+          type: integer
+          format: int32
+          nullable: true
+        capacity:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    RamUsageMetricModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        uniqueIdentifier:
+          type: string
+          nullable: true
+        usedMemoryBytes:
+          type: number
+          format: double
+          nullable: true
+        totalVisibleMemoryBytes:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+    RamUsages:
+      type: object
+      properties:
+        usedMemoryBytes:
+          type: number
+          format: double
+        totalVisibleMemoryBytes:
+          type: number
+          format: double
+      additionalProperties: false
+    SendUtilizationRequest:
+      type: object
+      properties:
+        processData:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessData'
+          nullable: true
+        systemUsage:
+          $ref: '#/components/schemas/SystemUsage'
+      additionalProperties: false
+    SettingsDto:
+      type: object
+      properties:
+        runAtStarup:
+          type: boolean
+          nullable: true
+        launch:
+          $ref: '#/components/schemas/LaunchSettings'
+        metrics:
+          $ref: '#/components/schemas/MetricsSettings'
+        influxDb:
+          $ref: '#/components/schemas/InfluxDbSettings'
+      additionalProperties: false
+    SystemUsage:
+      type: object
+      properties:
+        cpuUsage:
+          $ref: '#/components/schemas/CpuUsage'
+        memUsage:
+          $ref: '#/components/schemas/MemUsage'
+        networkAdapterUsage:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkAdapterUsage'
+          nullable: true
+        disk:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Disk'
+          nullable: true
+      additionalProperties: false
+    Throughput:
+      type: object
+      properties:
+        readRateBytesPerSecond:
+          type: integer
+          format: int64
+          nullable: true
+        writeRateBytesPerSecond:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    TimeSeriesMachineMetricsModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        dateTimeOffset:
+          type: string
+          format: date-time
+        cpuUsageData:
+          type: array
+          items:
+            $ref: '#/components/schemas/CpuUsageMetricModel'
+          nullable: true
+        gpuUsageData:
+          type: array
+          items:
+            $ref: '#/components/schemas/GpuUsageMetricModel'
+          nullable: true
+        ramUsageData:
+          $ref: '#/components/schemas/RamUsageMetricModel'
+        networkUsageData:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkUsageMetricModel'
+          nullable: true
+        diskUsageData:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiskUsageMetricModel'
+          nullable: true
+      additionalProperties: false
+    TimeSeriesMachineMetricsResponse:
+      type: object
+      properties:
+        requestRange:
+          $ref: '#/components/schemas/DateRange'
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesMachineMetricsModel'
+          nullable: true
+      additionalProperties: false
+    UpdateManagedRequest:
+      type: object
+      properties:
+        managedModelDto:
+          $ref: '#/components/schemas/ManagedModelDto'
+      additionalProperties: false
+    UpdateProfileRequest:
+      type: object
+      properties:
+        profile:
+          $ref: '#/components/schemas/ProfileDto'
+      additionalProperties: false

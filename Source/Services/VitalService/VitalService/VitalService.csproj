@@ -59,6 +59,7 @@
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
@@ -83,4 +84,7 @@
 		</Content>
 	</ItemGroup>
 
+	<Target Name="PostBuild" AfterTargets="Build" Condition="$(Configuration)=='Debug'">
+		<Exec Command="swagger tofile --yaml --output ./swagger/v1/$(AssemblyName).yaml $(OutputPath)$(AssemblyName).dll v1" WorkingDirectory="$(ProjectDir)" />
+	</Target>
 </Project>

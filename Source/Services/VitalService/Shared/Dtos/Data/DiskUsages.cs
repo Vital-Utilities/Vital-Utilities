@@ -7,8 +7,8 @@ namespace VitalService.Dtos.Data
 {
     public class DiskUsages
     {
-        public ConcurrentDictionary<string, Usage> Disks { get; set; } = new();
-        public class Usage
+        public ConcurrentDictionary<string, DiskUsage> Disks { get; set; } = new();
+        public class DiskUsage
         {
             public string Name { get; set; }
             public string? Serial { get; set; }

@@ -130,9 +130,9 @@ export enum DriveType {
 }
 export interface DiskUsages
 {
-	disks: { [key:string]: Usage };
+	disks: { [key:string]: DiskUsage };
 }
-export interface Usage
+export interface DiskUsage
 {
 	name: string;
 	serial?: string;
@@ -348,7 +348,7 @@ export interface LoadData
 }
 export interface NetworkAdapter
 {
-	usage: Usage;
+	usage: NetAdapterUsage;
 	properties: Properties;
 }
 export interface Properties
@@ -367,7 +367,7 @@ export interface IPInterfaceProperties
 	dnsSuffix?: string;
 	isDnsEnabled: boolean;
 }
-export interface Usage
+export interface NetAdapterUsage
 {
 	uploadSpeedBps: number;
 	downloadSpeedBps: number;

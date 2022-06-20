@@ -462,7 +462,7 @@ namespace VitalService.Services.PerformanceServices
                     foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage))
                     {
 
-                        var disk = new DiskUsages.Usage() { Name = hardwareItem.Name };
+                        var disk = new DiskUsages.DiskUsage() { Name = hardwareItem.Name };
 
                         var generic = hardwareItem as LibreHardwareMonitor.Hardware.Storage.AbstractStorage;
                         var letter = generic?.DriveInfos[0].Name ?? "";

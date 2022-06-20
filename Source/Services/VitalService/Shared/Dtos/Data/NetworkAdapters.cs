@@ -8,7 +8,7 @@ namespace VitalService.Dtos.Coms
 
         public class NetworkAdapter
         {
-            public Usage Usage { get; set; } = new();
+            public NetAdapterUsage Usage { get; set; } = new();
             public Properties Properties { get; set; } = new();
         }
         public class Properties
@@ -28,7 +28,7 @@ namespace VitalService.Dtos.Coms
             public string? DnsSuffix { get; set; }
             public bool IsDnsEnabled { get; set; }
         }
-        public class Usage
+        public class NetAdapterUsage
         {
             public long UploadSpeedBps { get; set; }
             public long DownloadSpeedBps { get; set; }
