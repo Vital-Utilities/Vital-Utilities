@@ -2,7 +2,7 @@
 import { Progress, Badge } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import { RamUsages } from "../Dtos/ClientApiDto";
+import { TimeSeriesMachineMetricsResponse } from "../Dtos/ClientApiDto";
 import { VitalState } from "../Redux/States";
 
 interface props {
@@ -31,7 +31,7 @@ export const ProcessorThreadPerfBadge: React.FunctionComponent<props> = ({ proce
                 <Progress style={{ top: -10 }} strokeColor={processCpuPercentage && getStroke(processCpuPercentage[name])} size={"small"} status={"active"} percent={processCpuPercentage && processCpuPercentage[name]} />
                 Thread load
                 <Progress style={{ top: -10 }} strokeColor={processCpuThreadPercentage && getStroke(processCpuThreadPercentage[name])} size={"small"} status={"active"} percent={processCpuThreadPercentage && processCpuThreadPercentage[name]} />
-                Ram Usage
+                Mem Usage
                 <Progress style={{ top: -10 }} strokeColor={processRamPercentage && getStroke(processRamPercentage[name])} size={"small"} status={"active"} percent={totalRamBytes && processRamPercentage && (processRamPercentage[name] / totalRamBytes) * 100} />
             </div>
         </>
@@ -72,8 +72,8 @@ export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
 };
 
 export const CpuPerfBadge: React.FunctionComponent = () => {
-    const cpuUsagePercentage = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.cpuUsageData?.total);
-
+    const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData[0]?.totalCoreUsagePercentage;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
             CPU
@@ -85,13 +85,14 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
                 }}
                 size={"small"}
                 status={"active"}
-                percent={cpuUsagePercentage && Number.parseFloat(cpuUsagePercentage.toFixed(0))}
+                percent={data && Number.parseFloat(data.toFixed(0))}
             />
         </div>
     );
 };
 export const GpuPerfBadge: React.FunctionComponent = () => {
-    const data = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.gpuUsageData?.[0]?.load?.core);
+    const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.gpuUsageData[0]?.coreUsagePercentage;
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
@@ -110,11 +111,12 @@ export const GpuPerfBadge: React.FunctionComponent = () => {
     );
 };
 export const RamUsageBadge: React.FunctionComponent = () => {
-    const usages = useSelector<VitalState, RamUsages | undefined>(state => state.machineState.dynamic?.ramUsagesData);
-
+    const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.ramUsageData;
+    const usages = data?.usedMemoryBytes && data?.totalVisibleMemoryBytes && (data?.usedMemoryBytes / data?.totalVisibleMemoryBytes) * 100;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
-            RAM
+            Mem
             <Progress
                 style={{ marginLeft: 4, marginTop: -4 }}
                 strokeColor={{
@@ -123,7 +125,7 @@ export const RamUsageBadge: React.FunctionComponent = () => {
                 }}
                 size={"small"}
                 status={"active"}
-                percent={usages && Number.parseFloat(((usages.usedMemoryBytes / usages.totalVisibleMemoryBytes) * 100).toFixed(1))}
+                percent={usages && Number.parseFloat(usages.toFixed(0))}
             />
         </div>
     );

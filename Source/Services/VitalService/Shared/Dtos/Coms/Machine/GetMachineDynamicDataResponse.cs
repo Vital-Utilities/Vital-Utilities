@@ -22,14 +22,7 @@ namespace VitalService.Dtos.Coms
 
     public class GetMachineTimeSeriesRequest
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime Earliest { get; set; }
+        public DateTime Latest { get; set; } 
     }
-
-    public class GetMachineRelativeTimeSeriesRequest
-    {
-        public DateTime From { get; set; }
-        public To To { get; set; } = new To(null, null, null, null);
-    }
-    public record To(int? Months, int? Days, int? Hours, int? Minutes);
 }

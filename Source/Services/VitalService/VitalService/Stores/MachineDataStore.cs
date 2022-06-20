@@ -94,21 +94,17 @@ namespace VitalService.Stores
         {
             return HardwarePerformanceService.CurrentCpuUsage;
         }
-        public (DateRange requestDateRange, TimeSeriesMachineMetricsModel[] model) GetMetrics(DateTime? baseDateUtc, To offset)
+        public (DateRange requestDateRange, TimeSeriesMachineMetricsModel[] model) GetMetrics(DateTime earliest, DateTime latest)
         {
             TimeSeriesMachineMetricsModel[] model = Array.Empty<TimeSeriesMachineMetricsModel>();
-            DateRange requestDateRange = new();
+            DateRange requestDateRange = new(earliest, latest);
             Utilities.Debug.LogExecutionTime("Metrics from cache", () =>
              {
-                 var baseDate = baseDateUtc ?? DateTime.UtcNow;
-                 var cutOff = baseDate.AddMonths(offset.Months ?? 0).AddDays(offset.Days ?? 0).AddHours(offset.Hours ?? 0).AddMinutes(offset.Minutes ?? 0);
-                 bool isNegativeLookup = baseDate > cutOff;
-                 if (isNegativeLookup)
-                     requestDateRange = new DateRange(cutOff, baseDate);
-                 else
-                     requestDateRange = new DateRange(baseDate, cutOff);
-
-                 model = MetricsCache.Where(e => e.Key.UtcDateTime >= requestDateRange.Earliest && e.Key.UtcDateTime <= requestDateRange.Latest).OrderBy(e => e.Value.DateTimeOffset).Select(e => e.Value).ToArray();
+                 model = MetricsCache
+                 .Where(e => e.Key.UtcDateTime >= requestDateRange.Earliest && e.Key.UtcDateTime <= requestDateRange.Latest)
+                 .OrderBy(e => e.Value.DateTimeOffset)
+                 .Select(e => e.Value)
+                 .ToArray();
 
              });
 

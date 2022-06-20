@@ -1,7 +1,6 @@
-import { PlayCircleOutlined, PauseOutlined, CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
-import { useLocalStorageState, useInterval } from "ahooks";
+import { CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { useLocalStorageState } from "ahooks";
 import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
-import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CpuMetricsModel, CpuChartTimeSeries } from "../../components/Charts/CpuChartTimeSeries";
@@ -14,9 +13,8 @@ import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components
 import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
 import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
-import { To, GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../Dtos/UiModel";
-import { fetchMachineTimeSeriesDataAction } from "../../Redux/actions/machineActions";
 import { VitalState } from "../../Redux/States";
 import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
 import { ClassicDiskView } from "./Classic/ClassicDiskView";
@@ -36,12 +34,12 @@ enum cpuMetricViewOptions {
     "Detailed" = "Detailed"
 }
 
-type relativeTypeStringOptions = "Last 1 minute" | "Last 5 minutes" | "Last 15 minutes" /* | "Last 30 minutes" | "Last 1 hour" | "Last 6 hours"  */ /* | "Last 12 hours" | "Last 24 hours" */ /* | "Last 7 days" */;
+export type relativeTypeStringOptions = "Last 1 minute" | "Last 5 minutes" | "Last 15 minutes" /* | "Last 30 minutes" | "Last 1 hour" | "Last 6 hours"  */ /* | "Last 12 hours" | "Last 24 hours" */ /* | "Last 7 days" */;
 
-const relativeTimeOptions: { [key: string]: To } = {
-    "Last 1 minute": { minutes: -1 },
-    "Last 5 minutes": { minutes: -5 },
-    "Last 15 minutes": { minutes: -15 }
+export const relativeTimeOptions: { [key: string]: number } = {
+    "Last 1 minute": -1,
+    "Last 5 minutes": -5,
+    "Last 15 minutes": -15
     /*     "Last 30 minutes": { minutes: -30 },
     "Last 1 hour": { hours: -1 },
     "Last 6 hours": { hours: -6 } */
@@ -54,13 +52,13 @@ export const PerformancePage: React.FunctionComponent = props => {
     const dispatch = useDispatch();
 
     const [cpuMetricView, setCpuMetricView] = React.useState<cpuMetricViewOptions>(cpuMetricViewOptions.General);
-    const [relativeTimeOption, setRelativeTimeOption] = React.useState<relativeTypeStringOptions>("Last 1 minute");
     const [view, setView] = React.useState<viewOptions>(viewOptions.Classic);
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
     const CurrentMetricState = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1];
 
+    const [relativeTimeOption, setRelativeTimeOption] = useLocalStorageState<relativeTypeStringOptions>("relativeTimeOption", { defaultValue: "Last 1 minute" });
     const [hideVirtualAdapters, setHideVirtualAdapters] = useLocalStorageState("hideVirtualAdapters", { defaultValue: false });
 
     const gpuUsageData = dynamicState?.gpuUsageData;
@@ -77,7 +75,6 @@ export const PerformancePage: React.FunctionComponent = props => {
     const disks = dynamicState?.diskUsages?.disks;
     const [pauseTime, setPauseTime] = React.useState(false);
     const [updateRate, setUpdateRate] = React.useState<number>(0);
-    const [metricWindowPeriod, setMetricWindowPeriod] = React.useState<number>(0);
     const [chartable, setChartable] = React.useState<ChartData>();
     const [networkActivityFormat, setNetworkActivityFormat] = useLocalStorageState("networkActivityFormat", { defaultValue: NetworkActivityFormat.BitsPerSecond });
     const [classicCpuGraphView, setClassicCpuGraphView] = useLocalStorageState<"Overall" | "Logical">("classicCpuGraphView", { defaultValue: "Overall" });
@@ -97,30 +94,11 @@ export const PerformancePage: React.FunctionComponent = props => {
                     return 10000;
             }
         };
-        const getWindowPeriodSeconds = (time: relativeTypeStringOptions) => {
-            switch (time) {
-                case "Last 1 minute":
-                case "Last 5 minutes":
-                    return 1;
-                case "Last 15 minutes":
-                    return 5;
-                /*                 case "Last 30 minutes":
-                    return 10;
-                case "Last 1 hour":
-                    return 30;
-                case "Last 6 hours":
-                    return 60; */
-                /*                 case "Last 24 hours":
-                    return 240; */
-                default:
-                    return 10000;
-            }
-        };
+
         setUpdateRate(!pauseTime ? getUpdateRate(relativeTimeOption) : 0);
-        setMetricWindowPeriod(getWindowPeriodSeconds(relativeTimeOption));
     }, [relativeTimeOption, pauseTime]);
 
-    useInterval(
+    /*     useInterval(
         () => {
             if (!pauseTime) getData();
         },
@@ -129,8 +107,13 @@ export const PerformancePage: React.FunctionComponent = props => {
     );
 
     async function getData() {
-        dispatch(fetchMachineTimeSeriesDataAction({ from: moment().utc().toDate(), to: relativeTimeOptions[relativeTimeOption] }));
-    }
+        dispatch(
+            fetchMachineTimeSeriesDataAction({
+                latest: moment().add(1, "minutes").utc().toDate(),
+                earliest: moment().add(relativeTimeOptions[relativeTimeOption], "minutes").utc().toDate()
+            })
+        );
+    } */
 
     function getRamUsageData(e: TimeSeriesMachineMetricsModel): ramMetricsModel {
         const d = e.ramUsageData;
@@ -158,7 +141,7 @@ export const PerformancePage: React.FunctionComponent = props => {
             }) ?? { requestRange: timeSeriesMetrics?.requestRange, cpuMetrics: [], gpuMetrics: [] };
             setChartable({ requestRange: timeSeriesMetrics.requestRange, metrics: f });
         }
-    }, [timeSeriesMetrics, metricWindowPeriod]);
+    }, [timeSeriesMetrics]);
 
     switch (view) {
         case viewOptions.Classic:
@@ -177,7 +160,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                     {view === viewOptions.TimeSeries && (
                         <>
                             <div style={{ alignSelf: "center" }}>Update rate: {updateRate}ms</div>
-                            <div style={{ fontSize: 14, border: "1px solid white", background: "#333", padding: "4px 10px 4px 7px", userSelect: "none", cursor: "pointer" }} onClick={() => setPauseTime(!pauseTime)}>
+                            {/*                             <div style={{ fontSize: 14, border: "1px solid white", background: "#333", padding: "4px 10px 4px 7px", userSelect: "none", cursor: "pointer" }} onClick={() => setPauseTime(!pauseTime)}>
                                 {pauseTime ? (
                                     <div style={{ color: "white", display: "flex", flexWrap: "nowrap", alignItems: "center" }}>
                                         <PlayCircleOutlined key={"1"} /> Resume
@@ -187,7 +170,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         <PauseOutlined key={"2"} /> Pause
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
 
                             <Form.Item label="Time" style={{ marginBottom: "0", width: "200px" }}>
                                 <Select onChange={e => setRelativeTimeOption(e)} value={relativeTimeOption}>
@@ -241,7 +224,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 onClick={() => {
                                     setClassicViewProps({ ...classicViewProps, selectedKey: "Memory" });
                                 }}
-                                stat={`${getReadableBytesString(dynamicState?.ramUsagesData?.usedMemoryBytes)}/${getReadableBytesString(dynamicState?.ramUsagesData?.totalVisibleMemoryBytes)} (${dynamicState?.ramUsagesData?.totalVisibleMemoryBytes && ((dynamicState?.ramUsagesData?.usedMemoryBytes / dynamicState?.ramUsagesData?.totalVisibleMemoryBytes) * 100).toFixed(0)}%)`}
+                                stat={`${getReadableBytesString(dynamicState?.ramUsagesData?.usedMemoryBytes)}/${getReadableBytesString(dynamicState?.ramUsagesData?.totalVisibleMemoryBytes)} (${dynamicState?.ramUsagesData?.totalVisibleMemoryBytes && ((dynamicState?.ramUsagesData?.usedMemoryBytes / dynamicState?.ramUsagesData?.totalVisibleMemoryBytes) * 100).toFixed(1)}%)`}
                                 type="memory"
                             />
                         )}
@@ -263,7 +246,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                         })}
                         {disks &&
                             Object.entries(disks)
-                                .reverse()
+                                .sort((a, b) => b[0].localeCompare(a[0]))
                                 .map((value, index) => {
                                     const otherData = CurrentMetricState?.diskUsageData && Object.entries(CurrentMetricState?.diskUsageData).find(d => d[1].driveLetter === value[1].letter);
                                     return (
@@ -279,7 +262,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             detail={`${value[1].name}`}
                                             stat={
                                                 <>
-                                                    <CaretUpOutlined /> {getReadableBitsPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0)} <CaretDownOutlined /> {getReadableBitsPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0)}
+                                                    <CaretDownOutlined /> {getReadableBitsPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
                                                 </>
                                             }
                                         />
@@ -292,14 +275,14 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         key={`NetAdapter ${index}`}
                                         Key={`NetAdapter ${index}`}
                                         selectedKey={classicViewProps.selectedKey}
-                                        title={`${value[1].properties.connectionType}`}
-                                        detail={`${value[1].properties.name}`}
+                                        title={`${value[1].properties.connectionType} (${value[1].properties.name})`}
+                                        detail={`${value[1].properties.description}`}
                                         onClick={() => {
                                             setClassicViewProps({ ...classicViewProps, selectedKey: `NetAdapter ${index}`, macAddress: value[1].properties.macAddress });
                                         }}
                                         stat={
                                             <>
-                                                <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage.uploadSpeedBps ?? 0)} <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage.downloadSpeedBps ?? 0)}
+                                                <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage.downloadSpeedBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage.uploadSpeedBps ?? 0)}
                                             </>
                                         }
                                         type="network"
@@ -486,7 +469,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                     </Card>
                                 );
                             })}
-                            <Card title="RAM" showExpand>
+                            <Card title="Memory" showExpand>
                                 {view === viewOptions.Info ? (
                                     <InterfaceDetails>
                                         <div>

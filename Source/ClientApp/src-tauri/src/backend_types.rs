@@ -511,35 +511,11 @@ pub struct RamUsages {
 
 #[derive(Serialize, Deserialize)]
 pub struct GetMachineTimeSeriesRequest {
-    #[serde(rename = "from")]
-    pub from: String,
+    #[serde(rename = "earliest")]
+    pub earliest: String,
 
-    #[serde(rename = "to")]
-    pub to: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct GetMachineRelativeTimeSeriesRequest {
-    #[serde(rename = "from")]
-    pub from: String,
-
-    #[serde(rename = "to")]
-    pub to: To,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct To {
-    #[serde(rename = "days")]
-    pub days: Option<f64>,
-
-    #[serde(rename = "hours")]
-    pub hours: Option<f64>,
-
-    #[serde(rename = "minutes")]
-    pub minutes: Option<f64>,
-
-    #[serde(rename = "months")]
-    pub months: Option<f64>,
+    #[serde(rename = "latest")]
+    pub latest: String,
 }
 
 #[derive(Serialize, Deserialize)]

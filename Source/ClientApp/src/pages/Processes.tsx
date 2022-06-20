@@ -7,7 +7,6 @@ import axios from "axios";
 import _ from "lodash";
 import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { ProcessViewState, ProfileState, VitalState } from "../Redux/States";
-import { fetchMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
 import { GetMachineDynamicDataResponse, ParentChildModelDto, ProcessViewDto } from "../Dtos/ClientApiDto";
@@ -127,7 +126,6 @@ export const Processes: React.FunctionComponent = () => {
 
     useInterval(
         () => {
-            dispatch(fetchMachineDynamicDataAction());
             dispatch(fetchRunningProcessesAction());
         },
         2000,
@@ -365,7 +363,7 @@ export const Processes: React.FunctionComponent = () => {
                             Cpu {sortBy.sortBy === SortByEnum.Cpu && sortDirectionRender()}
                         </th>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.Ram && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.Ram)}>
-                            Ram {sortBy.sortBy === SortByEnum.Ram && sortDirectionRender()}
+                            Mem {sortBy.sortBy === SortByEnum.Ram && sortDirectionRender()}
                         </th>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.DiskIO && "active"}`} style={{ width: 100 }} onClick={() => setSort(SortByEnum.DiskIO)}>
                             Disk {sortBy.sortBy === SortByEnum.DiskIO && sortDirectionRender()}
