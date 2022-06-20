@@ -248,20 +248,8 @@ export interface GetMachineDynamicDataResponse
 }
 export interface GetMachineTimeSeriesRequest
 {
-	from: Date;
-	to: Date;
-}
-export interface GetMachineRelativeTimeSeriesRequest
-{
-	from: Date;
-	to: To;
-}
-export interface To
-{
-	months?: number;
-	days?: number;
-	hours?: number;
-	minutes?: number;
+	earliest: Date;
+	latest: Date;
 }
 export interface GetMachineStaticDataResponse
 {

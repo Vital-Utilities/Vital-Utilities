@@ -1,7 +1,6 @@
 import { PlayCircleOutlined, PauseOutlined, CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
-import { useLocalStorageState, useInterval } from "ahooks";
+import { useLocalStorageState } from "ahooks";
 import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
-import moment from "moment";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CpuMetricsModel, CpuChartTimeSeries } from "../../components/Charts/CpuChartTimeSeries";
@@ -14,9 +13,8 @@ import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components
 import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
 import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
-import { To, GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../Dtos/UiModel";
-import { fetchMachineTimeSeriesDataAction } from "../../Redux/actions/machineActions";
 import { VitalState } from "../../Redux/States";
 import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
 import { ClassicDiskView } from "./Classic/ClassicDiskView";
@@ -36,12 +34,12 @@ enum cpuMetricViewOptions {
     "Detailed" = "Detailed"
 }
 
-type relativeTypeStringOptions = "Last 1 minute" | "Last 5 minutes" | "Last 15 minutes" /* | "Last 30 minutes" | "Last 1 hour" | "Last 6 hours"  */ /* | "Last 12 hours" | "Last 24 hours" */ /* | "Last 7 days" */;
+export type relativeTypeStringOptions = "Last 1 minute" | "Last 5 minutes" | "Last 15 minutes" /* | "Last 30 minutes" | "Last 1 hour" | "Last 6 hours"  */ /* | "Last 12 hours" | "Last 24 hours" */ /* | "Last 7 days" */;
 
-const relativeTimeOptions: { [key: string]: To } = {
-    "Last 1 minute": { minutes: -1 },
-    "Last 5 minutes": { minutes: -5 },
-    "Last 15 minutes": { minutes: -15 }
+export const relativeTimeOptions: { [key: string]: number } = {
+    "Last 1 minute": -1,
+    "Last 5 minutes": -5,
+    "Last 15 minutes": -15
     /*     "Last 30 minutes": { minutes: -30 },
     "Last 1 hour": { hours: -1 },
     "Last 6 hours": { hours: -6 } */
@@ -54,13 +52,13 @@ export const PerformancePage: React.FunctionComponent = props => {
     const dispatch = useDispatch();
 
     const [cpuMetricView, setCpuMetricView] = React.useState<cpuMetricViewOptions>(cpuMetricViewOptions.General);
-    const [relativeTimeOption, setRelativeTimeOption] = React.useState<relativeTypeStringOptions>("Last 1 minute");
     const [view, setView] = React.useState<viewOptions>(viewOptions.Classic);
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
     const CurrentMetricState = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1];
 
+    const [relativeTimeOption, setRelativeTimeOption] = useLocalStorageState<relativeTypeStringOptions>("Last 1 minute", { defaultValue: "Last 1 minute" });
     const [hideVirtualAdapters, setHideVirtualAdapters] = useLocalStorageState("hideVirtualAdapters", { defaultValue: false });
 
     const gpuUsageData = dynamicState?.gpuUsageData;
@@ -120,7 +118,7 @@ export const PerformancePage: React.FunctionComponent = props => {
         setMetricWindowPeriod(getWindowPeriodSeconds(relativeTimeOption));
     }, [relativeTimeOption, pauseTime]);
 
-    useInterval(
+    /*     useInterval(
         () => {
             if (!pauseTime) getData();
         },
@@ -129,8 +127,13 @@ export const PerformancePage: React.FunctionComponent = props => {
     );
 
     async function getData() {
-        dispatch(fetchMachineTimeSeriesDataAction({ from: moment().utc().toDate(), to: relativeTimeOptions[relativeTimeOption] }));
-    }
+        dispatch(
+            fetchMachineTimeSeriesDataAction({
+                latest: moment().add(1, "minutes").utc().toDate(),
+                earliest: moment().add(relativeTimeOptions[relativeTimeOption], "minutes").utc().toDate()
+            })
+        );
+    } */
 
     function getRamUsageData(e: TimeSeriesMachineMetricsModel): ramMetricsModel {
         const d = e.ramUsageData;
