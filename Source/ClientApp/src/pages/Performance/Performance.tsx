@@ -275,8 +275,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         key={`NetAdapter ${index}`}
                                         Key={`NetAdapter ${index}`}
                                         selectedKey={classicViewProps.selectedKey}
-                                        title={`${value[1].properties.connectionType}`}
-                                        detail={`${value[1].properties.name}`}
+                                        title={`${value[1].properties.connectionType} (${value[1].properties.name})`}
+                                        detail={`${value[1].properties.description}`}
                                         onClick={() => {
                                             setClassicViewProps({ ...classicViewProps, selectedKey: `NetAdapter ${index}`, macAddress: value[1].properties.macAddress });
                                         }}

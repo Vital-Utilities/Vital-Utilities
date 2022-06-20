@@ -46,7 +46,7 @@ export const ClassicNetworkAdapterView: React.FunctionComponent<{ macAddress: st
 
     return (
         <ClassicLayout
-            header={{ title: `${thisAdapter?.properties?.name}`, deviceName: thisAdapter?.properties?.description }}
+            header={{ title: `${thisAdapter?.properties?.connectionType} (${thisAdapter?.properties?.name})`, deviceName: thisAdapter?.properties?.description }}
             graph={getGraphView()}
             showRange
             bottomItems={
