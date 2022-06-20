@@ -73,10 +73,10 @@ export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
 
 export const CpuPerfBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1].cpuUsageData[0].totalCoreUsagePercentage;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData[0]?.totalCoreUsagePercentage;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
-            Cpu
+            CPU
             <Progress
                 style={{ marginLeft: 4, marginTop: -4 }}
                 strokeColor={{
@@ -92,11 +92,11 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
 };
 export const GpuPerfBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1].gpuUsageData[0].coreUsagePercentage;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.gpuUsageData[0]?.coreUsagePercentage;
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
-            Gpu
+            GPU
             <Progress
                 style={{ marginLeft: 4, marginTop: -4 }}
                 strokeColor={{
@@ -112,7 +112,7 @@ export const GpuPerfBadge: React.FunctionComponent = () => {
 };
 export const RamUsageBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1].ramUsageData;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.ramUsageData;
     const usages = data?.usedMemoryBytes && data?.totalVisibleMemoryBytes && (data?.usedMemoryBytes / data?.totalVisibleMemoryBytes) * 100;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>

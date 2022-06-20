@@ -12,7 +12,7 @@ import { AppState, VitalState } from "./Redux/States";
 import { CpuPerfBadge, GpuPerfBadge, RamUsageBadge } from "./components/PerfBadge";
 import { Settings } from "./pages/Settings";
 import { ConnnectionIssuePage } from "./pages/ConnectionIssue";
-import { useInterval, useLocalStorageState } from "ahooks";
+import { useInterval } from "ahooks";
 import { InfoPage } from "./pages/Info";
 import { fetchMachineDynamicDataAction, fetchMachineStaticDataAction, fetchMachineTimeSeriesDataAction } from "./Redux/actions/machineActions";
 import { useEffect } from "react";
@@ -28,8 +28,6 @@ const App: React.FunctionComponent = () => {
     const appState = useSelector<VitalState, AppState>(state => state.appState);
     const [noConnectionModalVisible, setNoConnectionModalVisible] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
-    const [relativeTimeOption, setRelativeTimeOption] = useLocalStorageState<relativeTypeStringOptions>("Last 1 minute", { defaultValue: "Last 1 minute" });
-
     React.useEffect(() => {
         if (appState.vitalServicePort !== undefined) {
             dispatch(updateAppReadyAction(true));
@@ -53,6 +51,9 @@ const App: React.FunctionComponent = () => {
     }, [appState.vitalServicePort]);
 
     async function getData() {
+        let relativeTimeOption = window.localStorage.getItem("relativeTimeOption") ?? "Last 1 minute";
+        // eslint-disable-next-line prettier/prettier
+        relativeTimeOption = relativeTimeOption.replaceAll("\"", "") as relativeTypeStringOptions;
         dispatch(fetchMachineStaticDataAction());
         dispatch(
             fetchMachineTimeSeriesDataAction({
@@ -95,8 +96,8 @@ const App: React.FunctionComponent = () => {
                     </Menu>
                     <div style={{ width: "auto", justifySelf: "end", marginRight: 20, alignItems: "center", gap: "20px", height: "100%", display: "flex", flexDirection: "row", color: "white" }}>
                         <CpuPerfBadge />
-                        <GpuPerfBadge />
                         <RamUsageBadge />
+                        <GpuPerfBadge />
                         <span>
                             {!appState.httpConnected && (
                                 <span style={{ color: "orange", cursor: "pointer" }} onClick={() => setNoConnectionModalVisible(true)}>
