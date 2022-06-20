@@ -5,7 +5,7 @@ use crate::{
     APP_HANDLE,
 };
 use log::{debug, error, info};
-use sysinfo::{ProcessExt, System, SystemExt};
+use sysinfo::{Pid, ProcessExt, System, SystemExt};
 use tauri::{api::path::document_dir, AppHandle, Manager};
 
 #[tauri::command]
@@ -136,7 +136,7 @@ pub fn restart_vital_service() -> Result<String, String> {
     match get_running_vital_service_pid() {
         Some(pid) => {
             info!("Found an existing Vital Service instance running, killing it");
-            let end_process_result = end_process(pid as u32);
+            let end_process_result = end_process(pid);
 
             if end_process_result.is_err() {
                 return Err(end_process_result.unwrap_err());
@@ -253,7 +253,7 @@ pub fn open_url(url: &str) -> Result<(), String> {
     }
 }
 
-pub fn end_process(pid: u32) -> Result<(), String> {
+pub fn end_process(pid: Pid) -> Result<(), String> {
     if !cfg!(feature = "release") {
         info!("Debug mode: not killing process with pid: {}", pid);
         return Err("Debug mode: not killing process".to_string());
@@ -261,7 +261,7 @@ pub fn end_process(pid: u32) -> Result<(), String> {
 
     info!("Killing process with pid: {}", pid);
     let s = System::new_all();
-    let process = s.process(pid.try_into().unwrap());
+    let process = s.process(pid);
     match process {
         Some(process) => {
             let result = process.kill();
@@ -305,15 +305,15 @@ pub fn start_vital_service() -> Result<String, String> {
 
 pub fn is_vital_service_running() -> bool {
     let s = System::new_all();
-    for _process in s.process_by_name("VitalService") {
+    for _process in s.processes_by_exact_name("VitalService") {
         return true;
     }
     return false;
 }
 
-pub fn get_running_vital_service_pid() -> Option<usize> {
+pub fn get_running_vital_service_pid() -> Option<Pid> {
     let s = System::new_all();
-    for _process in s.process_by_name("VitalService") {
+    for _process in s.processes_by_exact_name("VitalService") {
         return Some(_process.pid());
     }
     return None;

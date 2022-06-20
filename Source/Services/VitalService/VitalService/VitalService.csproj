@@ -44,18 +44,18 @@
 	<ItemGroup>
 		<PackageReference Include="InfluxDB.Client" Version="3.2.0" />
 		<PackageReference Include="JM.LinqFaster" Version="1.1.2" />
-		<PackageReference Include="LibreHardwareMonitorLib" Version="0.8.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+		<PackageReference Include="LibreHardwareMonitorLib" Version="0.9.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
-		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.1" />
+		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.4" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
 		<PackageReference Include="Octokit" Version="0.50.0" />
-		<PackageReference Include="Sentry.AspNetCore" Version="3.12.3" />
+		<PackageReference Include="Sentry.AspNetCore" Version="3.18.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
