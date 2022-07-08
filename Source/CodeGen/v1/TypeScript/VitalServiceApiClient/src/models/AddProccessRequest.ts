@@ -31,19 +31,19 @@ export interface AddProccessRequest {
      * @type {string}
      * @memberof AddProccessRequest
      */
-    processName?: string | null;
+    processName?: string;
     /**
      * 
      * @type {string}
      * @memberof AddProccessRequest
      */
-    alias?: string | null;
+    alias?: string;
     /**
      * 
      * @type {string}
      * @memberof AddProccessRequest
      */
-    executionPath?: string | null;
+    executionPath?: string;
     /**
      * 
      * @type {ProcessPriorityEnum}
@@ -55,7 +55,7 @@ export interface AddProccessRequest {
      * @type {Array<number>}
      * @memberof AddProccessRequest
      */
-    affinity?: Array<number> | null;
+    affinity?: Array<number>;
     /**
      * 
      * @type {number}

@@ -43,7 +43,7 @@ export interface TimeSeriesMachineMetricsResponse {
      * @type {Array<TimeSeriesMachineMetricsModel>}
      * @memberof TimeSeriesMachineMetricsResponse
      */
-    metrics?: Array<TimeSeriesMachineMetricsModel> | null;
+    metrics?: Array<TimeSeriesMachineMetricsModel>;
 }
 
 /**
@@ -66,7 +66,7 @@ export function TimeSeriesMachineMetricsResponseFromJSONTyped(json: any, ignoreD
     return {
         
         'requestRange': !exists(json, 'requestRange') ? undefined : DateRangeFromJSON(json['requestRange']),
-        'metrics': !exists(json, 'metrics') ? undefined : (json['metrics'] === null ? null : (json['metrics'] as Array<any>).map(TimeSeriesMachineMetricsModelFromJSON)),
+        'metrics': !exists(json, 'metrics') ? undefined : ((json['metrics'] as Array<any>).map(TimeSeriesMachineMetricsModelFromJSON)),
     };
 }
 
@@ -80,7 +80,7 @@ export function TimeSeriesMachineMetricsResponseToJSON(value?: TimeSeriesMachine
     return {
         
         'requestRange': DateRangeToJSON(value.requestRange),
-        'metrics': value.metrics === undefined ? undefined : (value.metrics === null ? null : (value.metrics as Array<any>).map(TimeSeriesMachineMetricsModelToJSON)),
+        'metrics': value.metrics === undefined ? undefined : ((value.metrics as Array<any>).map(TimeSeriesMachineMetricsModelToJSON)),
     };
 }
 

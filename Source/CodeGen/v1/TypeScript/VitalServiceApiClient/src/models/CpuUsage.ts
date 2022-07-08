@@ -36,13 +36,13 @@ export interface CpuUsage {
      * @type {Array<number>}
      * @memberof CpuUsage
      */
-    coreFrequencies?: Array<number> | null;
+    coreFrequencies?: Array<number>;
     /**
      * 
      * @type {Array<number>}
      * @memberof CpuUsage
      */
-    corePercentages?: Array<number> | null;
+    corePercentages?: Array<number>;
 }
 
 /**

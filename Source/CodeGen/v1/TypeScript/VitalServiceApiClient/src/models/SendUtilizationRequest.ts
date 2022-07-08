@@ -37,7 +37,7 @@ export interface SendUtilizationRequest {
      * @type {Array<ProcessData>}
      * @memberof SendUtilizationRequest
      */
-    processData?: Array<ProcessData> | null;
+    processData?: Array<ProcessData>;
     /**
      * 
      * @type {SystemUsage}
@@ -65,7 +65,7 @@ export function SendUtilizationRequestFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'processData': !exists(json, 'processData') ? undefined : (json['processData'] === null ? null : (json['processData'] as Array<any>).map(ProcessDataFromJSON)),
+        'processData': !exists(json, 'processData') ? undefined : ((json['processData'] as Array<any>).map(ProcessDataFromJSON)),
         'systemUsage': !exists(json, 'systemUsage') ? undefined : SystemUsageFromJSON(json['systemUsage']),
     };
 }
@@ -79,7 +79,7 @@ export function SendUtilizationRequestToJSON(value?: SendUtilizationRequest | nu
     }
     return {
         
-        'processData': value.processData === undefined ? undefined : (value.processData === null ? null : (value.processData as Array<any>).map(ProcessDataToJSON)),
+        'processData': value.processData === undefined ? undefined : ((value.processData as Array<any>).map(ProcessDataToJSON)),
         'systemUsage': SystemUsageToJSON(value.systemUsage),
     };
 }

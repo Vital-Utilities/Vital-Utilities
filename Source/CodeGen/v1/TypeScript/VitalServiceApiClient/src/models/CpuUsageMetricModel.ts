@@ -24,43 +24,43 @@ export interface CpuUsageMetricModel {
      * @type {number}
      * @memberof CpuUsageMetricModel
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof CpuUsageMetricModel
      */
-    uniqueIdentifier?: string | null;
+    uniqueIdentifier: string | null;
     /**
      * 
      * @type {number}
      * @memberof CpuUsageMetricModel
      */
-    totalCoreUsagePercentage?: number | null;
+    totalCoreUsagePercentage: number | null;
     /**
      * 
      * @type {number}
      * @memberof CpuUsageMetricModel
      */
-    packageTemperature?: number | null;
+    packageTemperature: number | null;
     /**
      * 
      * @type {number}
      * @memberof CpuUsageMetricModel
      */
-    powerDrawWattage?: number | null;
+    powerDrawWattage: number | null;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof CpuUsageMetricModel
      */
-    coreClocksMhz?: { [key: string]: number; } | null;
+    coreClocksMhz: { [key: string]: number; } | null;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof CpuUsageMetricModel
      */
-    coresUsagePercentage?: { [key: string]: number; } | null;
+    coresUsagePercentage: { [key: string]: number; } | null;
 }
 
 /**
@@ -68,6 +68,13 @@ export interface CpuUsageMetricModel {
  */
 export function instanceOfCpuUsageMetricModel(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "uniqueIdentifier" in value;
+    isInstance = isInstance && "totalCoreUsagePercentage" in value;
+    isInstance = isInstance && "packageTemperature" in value;
+    isInstance = isInstance && "powerDrawWattage" in value;
+    isInstance = isInstance && "coreClocksMhz" in value;
+    isInstance = isInstance && "coresUsagePercentage" in value;
 
     return isInstance;
 }
@@ -82,13 +89,13 @@ export function CpuUsageMetricModelFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
-        'totalCoreUsagePercentage': !exists(json, 'totalCoreUsagePercentage') ? undefined : json['totalCoreUsagePercentage'],
-        'packageTemperature': !exists(json, 'packageTemperature') ? undefined : json['packageTemperature'],
-        'powerDrawWattage': !exists(json, 'powerDrawWattage') ? undefined : json['powerDrawWattage'],
-        'coreClocksMhz': !exists(json, 'coreClocksMhz') ? undefined : json['coreClocksMhz'],
-        'coresUsagePercentage': !exists(json, 'coresUsagePercentage') ? undefined : json['coresUsagePercentage'],
+        'id': json['id'],
+        'uniqueIdentifier': json['uniqueIdentifier'],
+        'totalCoreUsagePercentage': json['totalCoreUsagePercentage'],
+        'packageTemperature': json['packageTemperature'],
+        'powerDrawWattage': json['powerDrawWattage'],
+        'coreClocksMhz': json['coreClocksMhz'],
+        'coresUsagePercentage': json['coresUsagePercentage'],
     };
 }
 

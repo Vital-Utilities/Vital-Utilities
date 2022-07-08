@@ -31,7 +31,7 @@ export interface NetworkAdapters {
      * @type {{ [key: string]: NetworkAdapter; }}
      * @memberof NetworkAdapters
      */
-    adapters?: { [key: string]: NetworkAdapter; } | null;
+    adapters?: { [key: string]: NetworkAdapter; };
 }
 
 /**
@@ -53,7 +53,7 @@ export function NetworkAdaptersFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'adapters': !exists(json, 'adapters') ? undefined : (json['adapters'] === null ? null : mapValues(json['adapters'], NetworkAdapterFromJSON)),
+        'adapters': !exists(json, 'adapters') ? undefined : (mapValues(json['adapters'], NetworkAdapterFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function NetworkAdaptersToJSON(value?: NetworkAdapters | null): any {
     }
     return {
         
-        'adapters': value.adapters === undefined ? undefined : (value.adapters === null ? null : mapValues(value.adapters, NetworkAdapterToJSON)),
+        'adapters': value.adapters === undefined ? undefined : (mapValues(value.adapters, NetworkAdapterToJSON)),
     };
 }
 

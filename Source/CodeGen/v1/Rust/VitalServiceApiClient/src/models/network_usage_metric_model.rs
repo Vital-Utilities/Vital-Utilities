@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct NetworkUsageMetricModel {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "uniqueIdentifier")]
     pub unique_identifier: Option<String>,
-    #[serde(rename = "uploadSpeedBps", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "uploadSpeedBps")]
     pub upload_speed_bps: Option<i64>,
-    #[serde(rename = "downloadSpeedBps", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "downloadSpeedBps")]
     pub download_speed_bps: Option<i64>,
 }
 
 impl NetworkUsageMetricModel {
-    pub fn new() -> NetworkUsageMetricModel {
+    pub fn new(id: i32, unique_identifier: Option<String>, upload_speed_bps: Option<i64>, download_speed_bps: Option<i64>) -> NetworkUsageMetricModel {
         NetworkUsageMetricModel {
-            id: None,
-            unique_identifier: None,
-            upload_speed_bps: None,
-            download_speed_bps: None,
+            id,
+            unique_identifier,
+            upload_speed_bps,
+            download_speed_bps,
         }
     }
 }

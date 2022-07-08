@@ -13,32 +13,32 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct TimeSeriesMachineMetricsModel {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "dateTimeOffset", skip_serializing_if = "Option::is_none")]
-    pub date_time_offset: Option<String>,
-    #[serde(rename = "cpuUsageData", skip_serializing_if = "Option::is_none")]
-    pub cpu_usage_data: Option<Vec<crate::models::CpuUsageMetricModel>>,
-    #[serde(rename = "gpuUsageData", skip_serializing_if = "Option::is_none")]
-    pub gpu_usage_data: Option<Vec<crate::models::GpuUsageMetricModel>>,
-    #[serde(rename = "ramUsageData", skip_serializing_if = "Option::is_none")]
-    pub ram_usage_data: Option<Box<crate::models::RamUsageMetricModel>>,
-    #[serde(rename = "networkUsageData", skip_serializing_if = "Option::is_none")]
-    pub network_usage_data: Option<Vec<crate::models::NetworkUsageMetricModel>>,
-    #[serde(rename = "diskUsageData", skip_serializing_if = "Option::is_none")]
-    pub disk_usage_data: Option<Vec<crate::models::DiskUsageMetricModel>>,
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "dateTimeOffset")]
+    pub date_time_offset: String,
+    #[serde(rename = "cpuUsageData")]
+    pub cpu_usage_data: Vec<crate::models::CpuUsageMetricModel>,
+    #[serde(rename = "gpuUsageData")]
+    pub gpu_usage_data: Vec<crate::models::GpuUsageMetricModel>,
+    #[serde(rename = "ramUsageData")]
+    pub ram_usage_data: Box<crate::models::RamUsageMetricModel>,
+    #[serde(rename = "networkUsageData")]
+    pub network_usage_data: Vec<crate::models::NetworkUsageMetricModel>,
+    #[serde(rename = "diskUsageData")]
+    pub disk_usage_data: Vec<crate::models::DiskUsageMetricModel>,
 }
 
 impl TimeSeriesMachineMetricsModel {
-    pub fn new() -> TimeSeriesMachineMetricsModel {
+    pub fn new(id: i32, date_time_offset: String, cpu_usage_data: Vec<crate::models::CpuUsageMetricModel>, gpu_usage_data: Vec<crate::models::GpuUsageMetricModel>, ram_usage_data: crate::models::RamUsageMetricModel, network_usage_data: Vec<crate::models::NetworkUsageMetricModel>, disk_usage_data: Vec<crate::models::DiskUsageMetricModel>) -> TimeSeriesMachineMetricsModel {
         TimeSeriesMachineMetricsModel {
-            id: None,
-            date_time_offset: None,
-            cpu_usage_data: None,
-            gpu_usage_data: None,
-            ram_usage_data: None,
-            network_usage_data: None,
-            disk_usage_data: None,
+            id,
+            date_time_offset,
+            cpu_usage_data,
+            gpu_usage_data,
+            ram_usage_data: Box::new(ram_usage_data),
+            network_usage_data,
+            disk_usage_data,
         }
     }
 }

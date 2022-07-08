@@ -49,7 +49,7 @@ export interface Disk {
      * @type {string}
      * @memberof Disk
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}

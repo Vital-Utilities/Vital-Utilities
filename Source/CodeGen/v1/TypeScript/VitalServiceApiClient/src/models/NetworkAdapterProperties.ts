@@ -24,7 +24,7 @@ export interface NetworkAdapterProperties {
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
@@ -36,7 +36,7 @@ export interface NetworkAdapterProperties {
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    macAddress?: string | null;
+    macAddress?: string;
     /**
      * 
      * @type {number}

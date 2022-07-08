@@ -55,13 +55,13 @@ export interface GetMachineStaticDataResponse {
      * @type {Array<RamData>}
      * @memberof GetMachineStaticDataResponse
      */
-    ram?: Array<RamData> | null;
+    ram?: Array<RamData>;
     /**
      * 
      * @type {Array<GpuData>}
      * @memberof GetMachineStaticDataResponse
      */
-    gpu?: Array<GpuData> | null;
+    gpu?: Array<GpuData>;
 }
 
 /**
@@ -85,8 +85,8 @@ export function GetMachineStaticDataResponseFromJSONTyped(json: any, ignoreDiscr
         
         'directXVersion': !exists(json, 'directXVersion') ? undefined : json['directXVersion'],
         'cpu': !exists(json, 'cpu') ? undefined : CpuDataFromJSON(json['cpu']),
-        'ram': !exists(json, 'ram') ? undefined : (json['ram'] === null ? null : (json['ram'] as Array<any>).map(RamDataFromJSON)),
-        'gpu': !exists(json, 'gpu') ? undefined : (json['gpu'] === null ? null : (json['gpu'] as Array<any>).map(GpuDataFromJSON)),
+        'ram': !exists(json, 'ram') ? undefined : ((json['ram'] as Array<any>).map(RamDataFromJSON)),
+        'gpu': !exists(json, 'gpu') ? undefined : ((json['gpu'] as Array<any>).map(GpuDataFromJSON)),
     };
 }
 
@@ -101,8 +101,8 @@ export function GetMachineStaticDataResponseToJSON(value?: GetMachineStaticDataR
         
         'directXVersion': value.directXVersion,
         'cpu': CpuDataToJSON(value.cpu),
-        'ram': value.ram === undefined ? undefined : (value.ram === null ? null : (value.ram as Array<any>).map(RamDataToJSON)),
-        'gpu': value.gpu === undefined ? undefined : (value.gpu === null ? null : (value.gpu as Array<any>).map(GpuDataToJSON)),
+        'ram': value.ram === undefined ? undefined : ((value.ram as Array<any>).map(RamDataToJSON)),
+        'gpu': value.gpu === undefined ? undefined : ((value.gpu as Array<any>).map(GpuDataToJSON)),
     };
 }
 

@@ -37,7 +37,7 @@ export interface ParentChildModelDto {
      * @type {Set<ProcessViewDto>}
      * @memberof ParentChildModelDto
      */
-    children?: Set<ProcessViewDto> | null;
+    children?: Set<ProcessViewDto>;
 }
 
 /**
@@ -60,7 +60,7 @@ export function ParentChildModelDtoFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'parent': !exists(json, 'parent') ? undefined : ProcessViewDtoFromJSON(json['parent']),
-        'children': !exists(json, 'children') ? undefined : (json['children'] === null ? null : new Set((json['children'] as Array<any>).map(ProcessViewDtoFromJSON))),
+        'children': !exists(json, 'children') ? undefined : (new Set((json['children'] as Array<any>).map(ProcessViewDtoFromJSON))),
     };
 }
 
@@ -74,7 +74,7 @@ export function ParentChildModelDtoToJSON(value?: ParentChildModelDto | null): a
     return {
         
         'parent': ProcessViewDtoToJSON(value.parent),
-        'children': value.children === undefined ? undefined : (value.children === null ? null : Array.from(value.children as Set<any>).map(ProcessViewDtoToJSON)),
+        'children': value.children === undefined ? undefined : (Array.from(value.children as Set<any>).map(ProcessViewDtoToJSON)),
     };
 }
 

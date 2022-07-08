@@ -31,7 +31,7 @@ export interface GetRunningProcessesResponse {
      * @type {{ [key: string]: ParentChildModelDto; }}
      * @memberof GetRunningProcessesResponse
      */
-    processView?: { [key: string]: ParentChildModelDto; } | null;
+    processView?: { [key: string]: ParentChildModelDto; };
 }
 
 /**
@@ -53,7 +53,7 @@ export function GetRunningProcessesResponseFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
-        'processView': !exists(json, 'processView') ? undefined : (json['processView'] === null ? null : mapValues(json['processView'], ParentChildModelDtoFromJSON)),
+        'processView': !exists(json, 'processView') ? undefined : (mapValues(json['processView'], ParentChildModelDtoFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function GetRunningProcessesResponseToJSON(value?: GetRunningProcessesRes
     }
     return {
         
-        'processView': value.processView === undefined ? undefined : (value.processView === null ? null : mapValues(value.processView, ParentChildModelDtoToJSON)),
+        'processView': value.processView === undefined ? undefined : (mapValues(value.processView, ParentChildModelDtoToJSON)),
     };
 }
 

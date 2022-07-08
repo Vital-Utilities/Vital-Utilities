@@ -31,7 +31,7 @@ export interface DiskUsages {
      * @type {{ [key: string]: DiskUsage; }}
      * @memberof DiskUsages
      */
-    disks?: { [key: string]: DiskUsage; } | null;
+    disks?: { [key: string]: DiskUsage; };
 }
 
 /**
@@ -53,7 +53,7 @@ export function DiskUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'disks': !exists(json, 'disks') ? undefined : (json['disks'] === null ? null : mapValues(json['disks'], DiskUsageFromJSON)),
+        'disks': !exists(json, 'disks') ? undefined : (mapValues(json['disks'], DiskUsageFromJSON)),
     };
 }
 
@@ -66,7 +66,7 @@ export function DiskUsagesToJSON(value?: DiskUsages | null): any {
     }
     return {
         
-        'disks': value.disks === undefined ? undefined : (value.disks === null ? null : mapValues(value.disks, DiskUsageToJSON)),
+        'disks': value.disks === undefined ? undefined : (mapValues(value.disks, DiskUsageToJSON)),
     };
 }
 

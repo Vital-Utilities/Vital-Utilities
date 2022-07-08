@@ -43,19 +43,19 @@ export interface ManagedModel {
      * @type {string}
      * @memberof ManagedModel
      */
-    processName?: string | null;
+    processName?: string;
     /**
      * 
      * @type {string}
      * @memberof ManagedModel
      */
-    executionPath?: string | null;
+    executionPath?: string;
     /**
      * 
      * @type {string}
      * @memberof ManagedModel
      */
-    alias?: string | null;
+    alias?: string;
     /**
      * 
      * @type {ProcessPriorityEnum}
@@ -67,7 +67,7 @@ export interface ManagedModel {
      * @type {string}
      * @memberof ManagedModel
      */
-    affinityBinary?: string | null;
+    affinityBinary?: string;
     /**
      * 
      * @type {number}

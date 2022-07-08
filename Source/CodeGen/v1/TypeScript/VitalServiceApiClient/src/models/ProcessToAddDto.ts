@@ -37,13 +37,13 @@ export interface ProcessToAddDto {
      * @type {string}
      * @memberof ProcessToAddDto
      */
-    processName?: string | null;
+    processName?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessToAddDto
      */
-    mainWindowTitle?: string | null;
+    mainWindowTitle?: string;
     /**
      * 
      * @type {string}
@@ -61,7 +61,7 @@ export interface ProcessToAddDto {
      * @type {Array<number>}
      * @memberof ProcessToAddDto
      */
-    affinity?: Array<number> | null;
+    affinity?: Array<number>;
     /**
      * 
      * @type {ProcessPriorityEnum}

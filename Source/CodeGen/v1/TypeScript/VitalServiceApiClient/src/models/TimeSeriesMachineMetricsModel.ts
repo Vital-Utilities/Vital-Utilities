@@ -55,43 +55,43 @@ export interface TimeSeriesMachineMetricsModel {
      * @type {number}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {Date}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    dateTimeOffset?: Date;
+    dateTimeOffset: Date;
     /**
      * 
      * @type {Array<CpuUsageMetricModel>}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    cpuUsageData?: Array<CpuUsageMetricModel> | null;
+    cpuUsageData: Array<CpuUsageMetricModel>;
     /**
      * 
      * @type {Array<GpuUsageMetricModel>}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    gpuUsageData?: Array<GpuUsageMetricModel> | null;
+    gpuUsageData: Array<GpuUsageMetricModel>;
     /**
      * 
      * @type {RamUsageMetricModel}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    ramUsageData?: RamUsageMetricModel;
+    ramUsageData: RamUsageMetricModel;
     /**
      * 
      * @type {Array<NetworkUsageMetricModel>}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    networkUsageData?: Array<NetworkUsageMetricModel> | null;
+    networkUsageData: Array<NetworkUsageMetricModel>;
     /**
      * 
      * @type {Array<DiskUsageMetricModel>}
      * @memberof TimeSeriesMachineMetricsModel
      */
-    diskUsageData?: Array<DiskUsageMetricModel> | null;
+    diskUsageData: Array<DiskUsageMetricModel>;
 }
 
 /**
@@ -99,6 +99,13 @@ export interface TimeSeriesMachineMetricsModel {
  */
 export function instanceOfTimeSeriesMachineMetricsModel(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "dateTimeOffset" in value;
+    isInstance = isInstance && "cpuUsageData" in value;
+    isInstance = isInstance && "gpuUsageData" in value;
+    isInstance = isInstance && "ramUsageData" in value;
+    isInstance = isInstance && "networkUsageData" in value;
+    isInstance = isInstance && "diskUsageData" in value;
 
     return isInstance;
 }
@@ -113,13 +120,13 @@ export function TimeSeriesMachineMetricsModelFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'dateTimeOffset': !exists(json, 'dateTimeOffset') ? undefined : (new Date(json['dateTimeOffset'])),
-        'cpuUsageData': !exists(json, 'cpuUsageData') ? undefined : (json['cpuUsageData'] === null ? null : (json['cpuUsageData'] as Array<any>).map(CpuUsageMetricModelFromJSON)),
-        'gpuUsageData': !exists(json, 'gpuUsageData') ? undefined : (json['gpuUsageData'] === null ? null : (json['gpuUsageData'] as Array<any>).map(GpuUsageMetricModelFromJSON)),
-        'ramUsageData': !exists(json, 'ramUsageData') ? undefined : RamUsageMetricModelFromJSON(json['ramUsageData']),
-        'networkUsageData': !exists(json, 'networkUsageData') ? undefined : (json['networkUsageData'] === null ? null : (json['networkUsageData'] as Array<any>).map(NetworkUsageMetricModelFromJSON)),
-        'diskUsageData': !exists(json, 'diskUsageData') ? undefined : (json['diskUsageData'] === null ? null : (json['diskUsageData'] as Array<any>).map(DiskUsageMetricModelFromJSON)),
+        'id': json['id'],
+        'dateTimeOffset': (new Date(json['dateTimeOffset'])),
+        'cpuUsageData': ((json['cpuUsageData'] as Array<any>).map(CpuUsageMetricModelFromJSON)),
+        'gpuUsageData': ((json['gpuUsageData'] as Array<any>).map(GpuUsageMetricModelFromJSON)),
+        'ramUsageData': RamUsageMetricModelFromJSON(json['ramUsageData']),
+        'networkUsageData': ((json['networkUsageData'] as Array<any>).map(NetworkUsageMetricModelFromJSON)),
+        'diskUsageData': ((json['diskUsageData'] as Array<any>).map(DiskUsageMetricModelFromJSON)),
     };
 }
 
@@ -133,12 +140,12 @@ export function TimeSeriesMachineMetricsModelToJSON(value?: TimeSeriesMachineMet
     return {
         
         'id': value.id,
-        'dateTimeOffset': value.dateTimeOffset === undefined ? undefined : (value.dateTimeOffset.toISOString()),
-        'cpuUsageData': value.cpuUsageData === undefined ? undefined : (value.cpuUsageData === null ? null : (value.cpuUsageData as Array<any>).map(CpuUsageMetricModelToJSON)),
-        'gpuUsageData': value.gpuUsageData === undefined ? undefined : (value.gpuUsageData === null ? null : (value.gpuUsageData as Array<any>).map(GpuUsageMetricModelToJSON)),
+        'dateTimeOffset': (value.dateTimeOffset.toISOString()),
+        'cpuUsageData': ((value.cpuUsageData as Array<any>).map(CpuUsageMetricModelToJSON)),
+        'gpuUsageData': ((value.gpuUsageData as Array<any>).map(GpuUsageMetricModelToJSON)),
         'ramUsageData': RamUsageMetricModelToJSON(value.ramUsageData),
-        'networkUsageData': value.networkUsageData === undefined ? undefined : (value.networkUsageData === null ? null : (value.networkUsageData as Array<any>).map(NetworkUsageMetricModelToJSON)),
-        'diskUsageData': value.diskUsageData === undefined ? undefined : (value.diskUsageData === null ? null : (value.diskUsageData as Array<any>).map(DiskUsageMetricModelToJSON)),
+        'networkUsageData': ((value.networkUsageData as Array<any>).map(NetworkUsageMetricModelToJSON)),
+        'diskUsageData': ((value.diskUsageData as Array<any>).map(DiskUsageMetricModelToJSON)),
     };
 }
 

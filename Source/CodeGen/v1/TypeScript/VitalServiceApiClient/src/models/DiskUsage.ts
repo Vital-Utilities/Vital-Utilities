@@ -49,7 +49,7 @@ export interface DiskUsage {
      * @type {string}
      * @memberof DiskUsage
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
@@ -85,7 +85,7 @@ export interface DiskUsage {
      * @type {{ [key: string]: number; }}
      * @memberof DiskUsage
      */
-    temperatures?: { [key: string]: number; } | null;
+    temperatures?: { [key: string]: number; };
     /**
      * 
      * @type {Data}
@@ -97,13 +97,13 @@ export interface DiskUsage {
      * @type {string}
      * @memberof DiskUsage
      */
-    label?: string | null;
+    label?: string;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    letter?: string | null;
+    letter?: string;
 }
 
 /**

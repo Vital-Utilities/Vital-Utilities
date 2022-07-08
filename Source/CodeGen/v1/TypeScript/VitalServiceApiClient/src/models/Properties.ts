@@ -37,7 +37,7 @@ export interface Properties {
      * @type {string}
      * @memberof Properties
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {string}
@@ -49,7 +49,7 @@ export interface Properties {
      * @type {string}
      * @memberof Properties
      */
-    macAddress?: string | null;
+    macAddress?: string;
     /**
      * 
      * @type {number}
@@ -61,7 +61,7 @@ export interface Properties {
      * @type {string}
      * @memberof Properties
      */
-    connectionType?: string | null;
+    connectionType?: string;
 }
 
 /**

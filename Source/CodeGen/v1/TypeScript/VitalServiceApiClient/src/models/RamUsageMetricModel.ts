@@ -24,25 +24,25 @@ export interface RamUsageMetricModel {
      * @type {number}
      * @memberof RamUsageMetricModel
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof RamUsageMetricModel
      */
-    uniqueIdentifier?: string | null;
+    uniqueIdentifier: string | null;
     /**
      * 
      * @type {number}
      * @memberof RamUsageMetricModel
      */
-    usedMemoryBytes?: number | null;
+    usedMemoryBytes: number | null;
     /**
      * 
      * @type {number}
      * @memberof RamUsageMetricModel
      */
-    totalVisibleMemoryBytes?: number | null;
+    totalVisibleMemoryBytes: number | null;
 }
 
 /**
@@ -50,6 +50,10 @@ export interface RamUsageMetricModel {
  */
 export function instanceOfRamUsageMetricModel(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "uniqueIdentifier" in value;
+    isInstance = isInstance && "usedMemoryBytes" in value;
+    isInstance = isInstance && "totalVisibleMemoryBytes" in value;
 
     return isInstance;
 }
@@ -64,10 +68,10 @@ export function RamUsageMetricModelFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
-        'usedMemoryBytes': !exists(json, 'usedMemoryBytes') ? undefined : json['usedMemoryBytes'],
-        'totalVisibleMemoryBytes': !exists(json, 'totalVisibleMemoryBytes') ? undefined : json['totalVisibleMemoryBytes'],
+        'id': json['id'],
+        'uniqueIdentifier': json['uniqueIdentifier'],
+        'usedMemoryBytes': json['usedMemoryBytes'],
+        'totalVisibleMemoryBytes': json['totalVisibleMemoryBytes'],
     };
 }
 

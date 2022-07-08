@@ -24,7 +24,7 @@ export interface ProcessViewDto {
      * @type {string}
      * @memberof ProcessViewDto
      */
-    processName?: string | null;
+    processName?: string;
     /**
      * 
      * @type {string}

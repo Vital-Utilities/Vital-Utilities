@@ -844,16 +844,13 @@
         "type": "object",
         "properties": {
           "processName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "alias": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "executionPath": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "processPriority": {
             "$ref": "#/components/schemas/ProcessPriorityEnum"
@@ -863,8 +860,7 @@
             "items": {
               "type": "integer",
               "format": "int32"
-            },
-            "nullable": true
+            }
           },
           "profileId": {
             "type": "integer",
@@ -886,8 +882,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "numberOfEnabledCore": {
             "type": "integer",
@@ -935,21 +930,28 @@
             "items": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           },
           "corePercentages": {
             "type": "array",
             "items": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
       },
       "CpuUsageMetricModel": {
+        "required": [
+          "coreClocksMhz",
+          "coresUsagePercentage",
+          "id",
+          "packageTemperature",
+          "powerDrawWattage",
+          "totalCoreUsagePercentage",
+          "uniqueIdentifier"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1004,8 +1006,7 @@
             "items": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           },
           "total": {
             "type": "number",
@@ -1021,16 +1022,14 @@
             "items": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           },
           "temperatureReadings": {
             "type": "object",
             "additionalProperties": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1039,8 +1038,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1079,8 +1077,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "serial": {
             "type": "string",
@@ -1189,8 +1186,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "serial": {
             "type": "string",
@@ -1214,24 +1210,38 @@
             "additionalProperties": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           },
           "data": {
             "$ref": "#/components/schemas/Data"
           },
           "label": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "letter": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
       "DiskUsageMetricModel": {
+        "required": [
+          "dataReadBytes",
+          "dataWrittenBytes",
+          "driveLetter",
+          "driveType",
+          "id",
+          "name",
+          "readRateBytesPerSecond",
+          "serial",
+          "temperatures",
+          "totalActivityPercentage",
+          "uniqueIdentifier",
+          "usedSpaceBytes",
+          "usedSpacePercentage",
+          "writeActivityPercentage",
+          "writeRateBytesPerSecond"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1316,8 +1326,7 @@
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/DiskUsage"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1341,15 +1350,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ManagedModelDto"
-            },
-            "nullable": true
+            }
           },
           "processesToAdd": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProcessToAddDto"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1449,15 +1456,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RamData"
-            },
-            "nullable": true
+            }
           },
           "gpu": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GpuData"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1498,8 +1503,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProcessToAddDto"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1511,8 +1515,7 @@
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/ParentChildModelDto"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1521,8 +1524,7 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "memoryTotalBytes": {
             "type": "number",
@@ -1533,6 +1535,16 @@
         "additionalProperties": false
       },
       "GpuUsageMetricModel": {
+        "required": [
+          "coreTemperature",
+          "coreUsagePercentage",
+          "fanPercentage",
+          "id",
+          "powerDrawWattage",
+          "uniqueIdentifier",
+          "vramTotalBytes",
+          "vramUsageBytes"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1588,8 +1600,7 @@
             "additionalProperties": {
               "type": "number",
               "format": "float"
-            },
-            "nullable": true
+            }
           },
           "totalMemoryBytes": {
             "type": "number",
@@ -1788,23 +1799,19 @@
             "format": "int32"
           },
           "processName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "executionPath": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "alias": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "processPriority": {
             "$ref": "#/components/schemas/ProcessPriorityEnum"
           },
           "affinityBinary": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "parentProfileId": {
             "type": "integer",
@@ -1824,12 +1831,10 @@
             "format": "int32"
           },
           "processName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "alias": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "processPriority": {
             "$ref": "#/components/schemas/ProcessPriorityEnum"
@@ -1839,8 +1844,7 @@
             "items": {
               "type": "integer",
               "format": "int32"
-            },
-            "nullable": true
+            }
           },
           "parentProfileId": {
             "type": "integer",
@@ -1933,16 +1937,14 @@
         "type": "object",
         "properties": {
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "description": {
             "type": "string",
             "nullable": true
           },
           "macAddress": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "speedBps": {
             "type": "number",
@@ -2007,13 +2009,18 @@
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/NetworkAdapter"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
       },
       "NetworkUsageMetricModel": {
+        "required": [
+          "downloadSpeedBps",
+          "id",
+          "uniqueIdentifier",
+          "uploadSpeedBps"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -2064,8 +2071,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProcessViewDto"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -2095,8 +2101,7 @@
             "nullable": true
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "timeStamp": {
             "type": "string",
@@ -2183,12 +2188,10 @@
             "format": "int32"
           },
           "processName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "mainWindowTitle": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "executionPath": {
             "type": "string",
@@ -2202,8 +2205,7 @@
             "items": {
               "type": "integer",
               "format": "int32"
-            },
-            "nullable": true
+            }
           },
           "processPriority": {
             "$ref": "#/components/schemas/ProcessPriorityEnum"
@@ -2215,8 +2217,7 @@
         "type": "object",
         "properties": {
           "processName": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "processTitle": {
             "type": "string",
@@ -2241,16 +2242,14 @@
             "format": "int32"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "managedModelsIds": {
             "type": "array",
             "items": {
               "type": "integer",
               "format": "int32"
-            },
-            "nullable": true
+            }
           },
           "enabled": {
             "type": "boolean"
@@ -2274,15 +2273,13 @@
             "format": "int32"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "managedModels": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ManagedModel"
-            },
-            "nullable": true
+            }
           },
           "enabled": {
             "type": "boolean"
@@ -2302,24 +2299,21 @@
             "$ref": "#/components/schemas/IPInterfaceProperties"
           },
           "name": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "description": {
             "type": "string",
             "nullable": true
           },
           "macAddress": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "speedBps": {
             "type": "integer",
             "format": "int64"
           },
           "connectionType": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2367,6 +2361,12 @@
         "additionalProperties": false
       },
       "RamUsageMetricModel": {
+        "required": [
+          "id",
+          "totalVisibleMemoryBytes",
+          "uniqueIdentifier",
+          "usedMemoryBytes"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -2411,8 +2411,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ProcessData"
-            },
-            "nullable": true
+            }
           },
           "systemUsage": {
             "$ref": "#/components/schemas/SystemUsage"
@@ -2452,15 +2451,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/NetworkAdapterUsage"
-            },
-            "nullable": true
+            }
           },
           "disk": {
             "type": "object",
             "additionalProperties": {
               "$ref": "#/components/schemas/Disk"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -2482,6 +2479,15 @@
         "additionalProperties": false
       },
       "TimeSeriesMachineMetricsModel": {
+        "required": [
+          "cpuUsageData",
+          "dateTimeOffset",
+          "diskUsageData",
+          "gpuUsageData",
+          "id",
+          "networkUsageData",
+          "ramUsageData"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -2496,15 +2502,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CpuUsageMetricModel"
-            },
-            "nullable": true
+            }
           },
           "gpuUsageData": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GpuUsageMetricModel"
-            },
-            "nullable": true
+            }
           },
           "ramUsageData": {
             "$ref": "#/components/schemas/RamUsageMetricModel"
@@ -2513,15 +2517,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/NetworkUsageMetricModel"
-            },
-            "nullable": true
+            }
           },
           "diskUsageData": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/DiskUsageMetricModel"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -2536,8 +2538,7 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TimeSeriesMachineMetricsModel"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false

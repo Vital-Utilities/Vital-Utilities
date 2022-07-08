@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct RamUsageMetricModel {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "uniqueIdentifier")]
     pub unique_identifier: Option<String>,
-    #[serde(rename = "usedMemoryBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "usedMemoryBytes")]
     pub used_memory_bytes: Option<f64>,
-    #[serde(rename = "totalVisibleMemoryBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "totalVisibleMemoryBytes")]
     pub total_visible_memory_bytes: Option<f64>,
 }
 
 impl RamUsageMetricModel {
-    pub fn new() -> RamUsageMetricModel {
+    pub fn new(id: i32, unique_identifier: Option<String>, used_memory_bytes: Option<f64>, total_visible_memory_bytes: Option<f64>) -> RamUsageMetricModel {
         RamUsageMetricModel {
-            id: None,
-            unique_identifier: None,
-            used_memory_bytes: None,
-            total_visible_memory_bytes: None,
+            id,
+            unique_identifier,
+            used_memory_bytes,
+            total_visible_memory_bytes,
         }
     }
 }

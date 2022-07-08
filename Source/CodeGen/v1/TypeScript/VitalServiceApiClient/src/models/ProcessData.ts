@@ -67,7 +67,7 @@ export interface ProcessData {
      * @type {string}
      * @memberof ProcessData
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Date}

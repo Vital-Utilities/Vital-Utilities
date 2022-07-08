@@ -24,7 +24,7 @@ export interface CpuUsages {
      * @type {Array<number>}
      * @memberof CpuUsages
      */
-    coreClocksMhz?: Array<number> | null;
+    coreClocksMhz?: Array<number>;
     /**
      * 
      * @type {number}
@@ -42,13 +42,13 @@ export interface CpuUsages {
      * @type {Array<number>}
      * @memberof CpuUsages
      */
-    cores?: Array<number> | null;
+    cores?: Array<number>;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof CpuUsages
      */
-    temperatureReadings?: { [key: string]: number; } | null;
+    temperatureReadings?: { [key: string]: number; };
 }
 
 /**

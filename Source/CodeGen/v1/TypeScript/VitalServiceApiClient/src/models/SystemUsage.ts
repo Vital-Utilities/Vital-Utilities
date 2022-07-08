@@ -61,13 +61,13 @@ export interface SystemUsage {
      * @type {Array<NetworkAdapterUsage>}
      * @memberof SystemUsage
      */
-    networkAdapterUsage?: Array<NetworkAdapterUsage> | null;
+    networkAdapterUsage?: Array<NetworkAdapterUsage>;
     /**
      * 
      * @type {{ [key: string]: Disk; }}
      * @memberof SystemUsage
      */
-    disk?: { [key: string]: Disk; } | null;
+    disk?: { [key: string]: Disk; };
 }
 
 /**
@@ -91,8 +91,8 @@ export function SystemUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'cpuUsage': !exists(json, 'cpuUsage') ? undefined : CpuUsageFromJSON(json['cpuUsage']),
         'memUsage': !exists(json, 'memUsage') ? undefined : MemUsageFromJSON(json['memUsage']),
-        'networkAdapterUsage': !exists(json, 'networkAdapterUsage') ? undefined : (json['networkAdapterUsage'] === null ? null : (json['networkAdapterUsage'] as Array<any>).map(NetworkAdapterUsageFromJSON)),
-        'disk': !exists(json, 'disk') ? undefined : (json['disk'] === null ? null : mapValues(json['disk'], DiskFromJSON)),
+        'networkAdapterUsage': !exists(json, 'networkAdapterUsage') ? undefined : ((json['networkAdapterUsage'] as Array<any>).map(NetworkAdapterUsageFromJSON)),
+        'disk': !exists(json, 'disk') ? undefined : (mapValues(json['disk'], DiskFromJSON)),
     };
 }
 
@@ -107,8 +107,8 @@ export function SystemUsageToJSON(value?: SystemUsage | null): any {
         
         'cpuUsage': CpuUsageToJSON(value.cpuUsage),
         'memUsage': MemUsageToJSON(value.memUsage),
-        'networkAdapterUsage': value.networkAdapterUsage === undefined ? undefined : (value.networkAdapterUsage === null ? null : (value.networkAdapterUsage as Array<any>).map(NetworkAdapterUsageToJSON)),
-        'disk': value.disk === undefined ? undefined : (value.disk === null ? null : mapValues(value.disk, DiskToJSON)),
+        'networkAdapterUsage': value.networkAdapterUsage === undefined ? undefined : ((value.networkAdapterUsage as Array<any>).map(NetworkAdapterUsageToJSON)),
+        'disk': value.disk === undefined ? undefined : (mapValues(value.disk, DiskToJSON)),
     };
 }
 

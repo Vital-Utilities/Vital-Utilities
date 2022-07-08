@@ -24,7 +24,7 @@ export interface CreateProfileRequest {
      * @type {string}
      * @memberof CreateProfileRequest
      */
-    name?: string | null;
+    name?: string;
 }
 
 /**

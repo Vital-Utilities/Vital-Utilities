@@ -24,7 +24,7 @@ export interface GpuData {
      * @type {string}
      * @memberof GpuData
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {number}

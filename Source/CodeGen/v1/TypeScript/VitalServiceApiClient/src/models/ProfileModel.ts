@@ -37,13 +37,13 @@ export interface ProfileModel {
      * @type {string}
      * @memberof ProfileModel
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Array<ManagedModel>}
      * @memberof ProfileModel
      */
-    managedModels?: Array<ManagedModel> | null;
+    managedModels?: Array<ManagedModel>;
     /**
      * 
      * @type {boolean}
@@ -79,7 +79,7 @@ export function ProfileModelFromJSONTyped(json: any, ignoreDiscriminator: boolea
         
         'id': !exists(json, 'id') ? undefined : json['id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
-        'managedModels': !exists(json, 'managedModels') ? undefined : (json['managedModels'] === null ? null : (json['managedModels'] as Array<any>).map(ManagedModelFromJSON)),
+        'managedModels': !exists(json, 'managedModels') ? undefined : ((json['managedModels'] as Array<any>).map(ManagedModelFromJSON)),
         'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
         'priority': !exists(json, 'priority') ? undefined : json['priority'],
     };
@@ -96,7 +96,7 @@ export function ProfileModelToJSON(value?: ProfileModel | null): any {
         
         'id': value.id,
         'name': value.name,
-        'managedModels': value.managedModels === undefined ? undefined : (value.managedModels === null ? null : (value.managedModels as Array<any>).map(ManagedModelToJSON)),
+        'managedModels': value.managedModels === undefined ? undefined : ((value.managedModels as Array<any>).map(ManagedModelToJSON)),
         'enabled': value.enabled,
         'priority': value.priority,
     };

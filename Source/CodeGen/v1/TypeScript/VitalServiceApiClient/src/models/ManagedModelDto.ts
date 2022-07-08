@@ -37,13 +37,13 @@ export interface ManagedModelDto {
      * @type {string}
      * @memberof ManagedModelDto
      */
-    processName?: string | null;
+    processName?: string;
     /**
      * 
      * @type {string}
      * @memberof ManagedModelDto
      */
-    alias?: string | null;
+    alias?: string;
     /**
      * 
      * @type {ProcessPriorityEnum}
@@ -55,7 +55,7 @@ export interface ManagedModelDto {
      * @type {Array<number>}
      * @memberof ManagedModelDto
      */
-    affinity?: Array<number> | null;
+    affinity?: Array<number>;
     /**
      * 
      * @type {number}

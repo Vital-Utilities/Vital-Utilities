@@ -24,25 +24,25 @@ export interface NetworkUsageMetricModel {
      * @type {number}
      * @memberof NetworkUsageMetricModel
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof NetworkUsageMetricModel
      */
-    uniqueIdentifier?: string | null;
+    uniqueIdentifier: string | null;
     /**
      * 
      * @type {number}
      * @memberof NetworkUsageMetricModel
      */
-    uploadSpeedBps?: number | null;
+    uploadSpeedBps: number | null;
     /**
      * 
      * @type {number}
      * @memberof NetworkUsageMetricModel
      */
-    downloadSpeedBps?: number | null;
+    downloadSpeedBps: number | null;
 }
 
 /**
@@ -50,6 +50,10 @@ export interface NetworkUsageMetricModel {
  */
 export function instanceOfNetworkUsageMetricModel(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "uniqueIdentifier" in value;
+    isInstance = isInstance && "uploadSpeedBps" in value;
+    isInstance = isInstance && "downloadSpeedBps" in value;
 
     return isInstance;
 }
@@ -64,10 +68,10 @@ export function NetworkUsageMetricModelFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
-        'uploadSpeedBps': !exists(json, 'uploadSpeedBps') ? undefined : json['uploadSpeedBps'],
-        'downloadSpeedBps': !exists(json, 'downloadSpeedBps') ? undefined : json['downloadSpeedBps'],
+        'id': json['id'],
+        'uniqueIdentifier': json['uniqueIdentifier'],
+        'uploadSpeedBps': json['uploadSpeedBps'],
+        'downloadSpeedBps': json['downloadSpeedBps'],
     };
 }
 

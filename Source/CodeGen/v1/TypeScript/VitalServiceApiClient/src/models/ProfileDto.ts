@@ -30,13 +30,13 @@ export interface ProfileDto {
      * @type {string}
      * @memberof ProfileDto
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {Array<number>}
      * @memberof ProfileDto
      */
-    managedModelsIds?: Array<number> | null;
+    managedModelsIds?: Array<number>;
     /**
      * 
      * @type {boolean}

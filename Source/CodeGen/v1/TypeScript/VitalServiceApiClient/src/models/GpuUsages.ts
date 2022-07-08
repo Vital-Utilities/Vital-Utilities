@@ -37,7 +37,7 @@ export interface GpuUsages {
      * @type {{ [key: string]: number; }}
      * @memberof GpuUsages
      */
-    temperatureReadings?: { [key: string]: number; } | null;
+    temperatureReadings?: { [key: string]: number; };
     /**
      * 
      * @type {number}

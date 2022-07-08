@@ -75,7 +75,8 @@ namespace VitalService
             });
             services.AddSwaggerGen(options =>
             {
-
+                options.SupportNonNullableReferenceTypes();
+                options.SchemaFilter<AddSwaggerRequiredSchemaFilter>();
             });
 
             services.AddResponseCompression();

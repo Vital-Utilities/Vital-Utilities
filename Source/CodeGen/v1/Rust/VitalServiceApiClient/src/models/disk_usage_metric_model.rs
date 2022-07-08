@@ -13,56 +13,56 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct DiskUsageMetricModel {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "uniqueIdentifier")]
     pub unique_identifier: Option<String>,
-    #[serde(rename = "serial", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "serial")]
     pub serial: Option<String>,
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "name")]
     pub name: Option<String>,
-    #[serde(rename = "driveLetter", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "driveLetter")]
     pub drive_letter: Option<String>,
-    #[serde(rename = "driveType", skip_serializing_if = "Option::is_none")]
-    pub drive_type: Option<crate::models::DriveType>,
-    #[serde(rename = "usedSpacePercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "driveType")]
+    pub drive_type: crate::models::DriveType,
+    #[serde(rename = "usedSpacePercentage")]
     pub used_space_percentage: Option<f32>,
-    #[serde(rename = "usedSpaceBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "usedSpaceBytes")]
     pub used_space_bytes: Option<i64>,
-    #[serde(rename = "writeActivityPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "writeActivityPercentage")]
     pub write_activity_percentage: Option<f32>,
-    #[serde(rename = "totalActivityPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "totalActivityPercentage")]
     pub total_activity_percentage: Option<f32>,
-    #[serde(rename = "readRateBytesPerSecond", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "readRateBytesPerSecond")]
     pub read_rate_bytes_per_second: Option<f64>,
-    #[serde(rename = "writeRateBytesPerSecond", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "writeRateBytesPerSecond")]
     pub write_rate_bytes_per_second: Option<f64>,
-    #[serde(rename = "dataReadBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dataReadBytes")]
     pub data_read_bytes: Option<f64>,
-    #[serde(rename = "dataWrittenBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dataWrittenBytes")]
     pub data_written_bytes: Option<f64>,
-    #[serde(rename = "temperatures", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "temperatures")]
     pub temperatures: Option<::std::collections::HashMap<String, f32>>,
 }
 
 impl DiskUsageMetricModel {
-    pub fn new() -> DiskUsageMetricModel {
+    pub fn new(id: i32, unique_identifier: Option<String>, serial: Option<String>, name: Option<String>, drive_letter: Option<String>, drive_type: crate::models::DriveType, used_space_percentage: Option<f32>, used_space_bytes: Option<i64>, write_activity_percentage: Option<f32>, total_activity_percentage: Option<f32>, read_rate_bytes_per_second: Option<f64>, write_rate_bytes_per_second: Option<f64>, data_read_bytes: Option<f64>, data_written_bytes: Option<f64>, temperatures: Option<::std::collections::HashMap<String, f32>>) -> DiskUsageMetricModel {
         DiskUsageMetricModel {
-            id: None,
-            unique_identifier: None,
-            serial: None,
-            name: None,
-            drive_letter: None,
-            drive_type: None,
-            used_space_percentage: None,
-            used_space_bytes: None,
-            write_activity_percentage: None,
-            total_activity_percentage: None,
-            read_rate_bytes_per_second: None,
-            write_rate_bytes_per_second: None,
-            data_read_bytes: None,
-            data_written_bytes: None,
-            temperatures: None,
+            id,
+            unique_identifier,
+            serial,
+            name,
+            drive_letter,
+            drive_type,
+            used_space_percentage,
+            used_space_bytes,
+            write_activity_percentage,
+            total_activity_percentage,
+            read_rate_bytes_per_second,
+            write_rate_bytes_per_second,
+            data_read_bytes,
+            data_written_bytes,
+            temperatures,
         }
     }
 }

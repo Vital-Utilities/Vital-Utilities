@@ -13,35 +13,35 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GpuUsageMetricModel {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "uniqueIdentifier")]
     pub unique_identifier: Option<String>,
-    #[serde(rename = "coreUsagePercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "coreUsagePercentage")]
     pub core_usage_percentage: Option<f32>,
-    #[serde(rename = "vramUsageBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "vramUsageBytes")]
     pub vram_usage_bytes: Option<f32>,
-    #[serde(rename = "vramTotalBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "vramTotalBytes")]
     pub vram_total_bytes: Option<f32>,
-    #[serde(rename = "coreTemperature", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "coreTemperature")]
     pub core_temperature: Option<f32>,
-    #[serde(rename = "powerDrawWattage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "powerDrawWattage")]
     pub power_draw_wattage: Option<f32>,
-    #[serde(rename = "fanPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "fanPercentage")]
     pub fan_percentage: Option<::std::collections::HashMap<String, f32>>,
 }
 
 impl GpuUsageMetricModel {
-    pub fn new() -> GpuUsageMetricModel {
+    pub fn new(id: i32, unique_identifier: Option<String>, core_usage_percentage: Option<f32>, vram_usage_bytes: Option<f32>, vram_total_bytes: Option<f32>, core_temperature: Option<f32>, power_draw_wattage: Option<f32>, fan_percentage: Option<::std::collections::HashMap<String, f32>>) -> GpuUsageMetricModel {
         GpuUsageMetricModel {
-            id: None,
-            unique_identifier: None,
-            core_usage_percentage: None,
-            vram_usage_bytes: None,
-            vram_total_bytes: None,
-            core_temperature: None,
-            power_draw_wattage: None,
-            fan_percentage: None,
+            id,
+            unique_identifier,
+            core_usage_percentage,
+            vram_usage_bytes,
+            vram_total_bytes,
+            core_temperature,
+            power_draw_wattage,
+            fan_percentage,
         }
     }
 }

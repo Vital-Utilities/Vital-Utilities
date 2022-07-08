@@ -24,7 +24,7 @@ export interface CpuData {
      * @type {string}
      * @memberof CpuData
      */
-    name?: string | null;
+    name?: string;
     /**
      * 
      * @type {number}
