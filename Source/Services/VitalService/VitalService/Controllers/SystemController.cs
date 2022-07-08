@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -23,6 +24,7 @@ namespace VitalService.Controllers
             HardwarePerformanceService = hardwarePerformanceService;
         }
 
+        [ProducesResponseType(typeof(GetMachineStaticDataResponse), StatusCodes.Status200OK)]
         [HttpGet("static")]
         public GetMachineStaticDataResponse StaticData()
         {
@@ -30,8 +32,9 @@ namespace VitalService.Controllers
             return MachineDataStore.GetStaticData();
         }
 
+        [ProducesResponseType(typeof(GetMachineDynamicDataResponse), StatusCodes.Status200OK)]
         [HttpGet("dynamic")]
-        public Task<GetMachineDynamicDataResponse> DynamicDataAsync()
+        public GetMachineDynamicDataResponse DynamicDataAsync()
         {
             var processCpuUsage = MachineDataStore.GetProcessCpuUsages();
 
@@ -49,9 +52,10 @@ namespace VitalService.Controllers
                 ProcessGpuUsage = MachineDataStore.GetProcessGpuUsage(),
                 //ProcessThreadCount = MachineDataStore.GetProcessMetrics(MachineDataStore.MetricType.ThreadCount)
             };
-            return Task.FromResult(toReturn);
+            return toReturn;
         }
 
+        [ProducesResponseType(typeof(TimeSeriesMachineMetricsResponse), StatusCodes.Status200OK)]
         [HttpPost("timeseries")]
         public TimeSeriesMachineMetricsResponse TimeSeriesData([FromBody] GetMachineTimeSeriesRequest request)
         {
@@ -63,13 +67,5 @@ namespace VitalService.Controllers
                 Metrics = model
             };
         }
-
-        [HttpPatch]
-        public Task SetFastestCores()
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

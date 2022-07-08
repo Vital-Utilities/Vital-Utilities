@@ -21,6 +21,7 @@
         "watch": "copy-and-watch --watch src/**/*.{html,json} src/**/{fonts,images}/* dist/"
     },
     "dependencies": {
+        "@vital/vitalservice": "../../../CodeGen/v1/TypeScript/VitalServiceApiClient",
         "@ant-design/icons": "^4.7.0",
         "@microsoft/signalr": "^6.0.6",
         "@sentry/browser": "^7.2.0",

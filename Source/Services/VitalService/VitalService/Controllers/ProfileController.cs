@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,12 +24,16 @@ namespace VitalService.Controllers
             ProcessStore = affinityStore;
         }
 
+        [ProducesResponseType(typeof(ProfileDto[]), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<ProfileDto[]>> Get()
         {
             var result = await ProfileStore.GetAllAsync();
             return Ok(result.Select(e => e.ToDto()));
         }
+
+        [ProducesResponseType(typeof(ProfileDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileDto>> GetAsync(int id)
         {
@@ -38,6 +43,7 @@ namespace VitalService.Controllers
             return Ok(result.ToDto());
         }
 
+        [ProducesResponseType(typeof(ProfileModel), StatusCodes.Status200OK)]
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateProfileRequest request)
         {
@@ -45,6 +51,8 @@ namespace VitalService.Controllers
             return Ok(model);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [Route("process")]
         [HttpPost]
         public async Task<ActionResult> AddProcess([FromBody] AddProccessRequest request)
@@ -61,6 +69,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [Route("process")]
         [HttpPut]
         public async Task<ActionResult> UpdateProcess([FromBody] UpdateManagedRequest request)
@@ -82,6 +92,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpDelete("process/{id}")]
         public async Task<ActionResult> DeleteProcess(int id)
         {
@@ -94,6 +106,7 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] UpdateProfileRequest request)
         {
@@ -103,6 +116,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

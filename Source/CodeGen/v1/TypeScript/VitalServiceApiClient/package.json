@@ -1,0 +1,19 @@
+{
+  "name": "VitalService",
+  "version": "0.0.1",
+  "description": "OpenAPI client for VitalService",
+  "author": "OpenAPI-Generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GIT_USER_ID/GIT_REPO_ID.git"
+  },
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "typescript": "^4.0"
+  }
+}

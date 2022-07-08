@@ -1,0 +1,20 @@
+# GpuUsages
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**temperature_readings** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
+**total_memory_bytes** | Option<**f32**> |  | [optional]
+**memory_used_bytes** | Option<**f32**> |  | [optional]
+**memory_clock_mhz** | Option<**f32**> |  | [optional]
+**shader_clock_mhz** | Option<**f32**> |  | [optional]
+**core_clock_mhz** | Option<**f32**> |  | [optional]
+**fan_percentage** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
+**power_draw** | Option<**f32**> |  | [optional]
+**load** | Option<[**crate::models::LoadData**](LoadData.md)> |  | [optional]
+**pc_ie_throughput** | Option<[**crate::models::PcieThroughPut**](PCIE_ThroughPut.md)> |  | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
