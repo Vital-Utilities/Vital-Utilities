@@ -1,7 +1,7 @@
+import { DiskUsageMetricModel } from "@vital/vitalservice";
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { DiskUsageMetricModel } from "../../Dtos/ClientApiDto";
 import { getReadableBytesString, getReadableBytesPerSecondString } from "../FormatUtils";
 import { ChartData, CustomTooltip, customUnitFlags, formatXAxis } from "./Shared";
 

@@ -668,6 +668,9 @@ components:
           nullable: true
       additionalProperties: false
     DateRange:
+      required:
+        - earliest
+        - latest
       type: object
       properties:
         earliest:
@@ -1742,6 +1745,9 @@ components:
             $ref: '#/components/schemas/DiskUsageMetricModel'
       additionalProperties: false
     TimeSeriesMachineMetricsResponse:
+      required:
+        - metrics
+        - requestRange
       type: object
       properties:
         requestRange:

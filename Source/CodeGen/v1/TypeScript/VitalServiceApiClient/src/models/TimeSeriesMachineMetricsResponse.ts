@@ -37,13 +37,13 @@ export interface TimeSeriesMachineMetricsResponse {
      * @type {DateRange}
      * @memberof TimeSeriesMachineMetricsResponse
      */
-    requestRange?: DateRange;
+    requestRange: DateRange;
     /**
      * 
      * @type {Array<TimeSeriesMachineMetricsModel>}
      * @memberof TimeSeriesMachineMetricsResponse
      */
-    metrics?: Array<TimeSeriesMachineMetricsModel>;
+    metrics: Array<TimeSeriesMachineMetricsModel>;
 }
 
 /**
@@ -51,6 +51,8 @@ export interface TimeSeriesMachineMetricsResponse {
  */
 export function instanceOfTimeSeriesMachineMetricsResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "requestRange" in value;
+    isInstance = isInstance && "metrics" in value;
 
     return isInstance;
 }
@@ -65,8 +67,8 @@ export function TimeSeriesMachineMetricsResponseFromJSONTyped(json: any, ignoreD
     }
     return {
         
-        'requestRange': !exists(json, 'requestRange') ? undefined : DateRangeFromJSON(json['requestRange']),
-        'metrics': !exists(json, 'metrics') ? undefined : ((json['metrics'] as Array<any>).map(TimeSeriesMachineMetricsModelFromJSON)),
+        'requestRange': DateRangeFromJSON(json['requestRange']),
+        'metrics': ((json['metrics'] as Array<any>).map(TimeSeriesMachineMetricsModelFromJSON)),
     };
 }
 
@@ -80,7 +82,7 @@ export function TimeSeriesMachineMetricsResponseToJSON(value?: TimeSeriesMachine
     return {
         
         'requestRange': DateRangeToJSON(value.requestRange),
-        'metrics': value.metrics === undefined ? undefined : ((value.metrics as Array<any>).map(TimeSeriesMachineMetricsModelToJSON)),
+        'metrics': ((value.metrics as Array<any>).map(TimeSeriesMachineMetricsModelToJSON)),
     };
 }
 

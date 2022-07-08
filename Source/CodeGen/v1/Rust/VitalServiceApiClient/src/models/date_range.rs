@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct DateRange {
-    #[serde(rename = "earliest", skip_serializing_if = "Option::is_none")]
-    pub earliest: Option<String>,
-    #[serde(rename = "latest", skip_serializing_if = "Option::is_none")]
-    pub latest: Option<String>,
+    #[serde(rename = "earliest")]
+    pub earliest: String,
+    #[serde(rename = "latest")]
+    pub latest: String,
 }
 
 impl DateRange {
-    pub fn new() -> DateRange {
+    pub fn new(earliest: String, latest: String) -> DateRange {
         DateRange {
-            earliest: None,
-            latest: None,
+            earliest,
+            latest,
         }
     }
 }

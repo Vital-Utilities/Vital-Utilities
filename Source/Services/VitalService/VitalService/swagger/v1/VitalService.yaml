@@ -508,6 +508,13 @@ paths:
 components:
   schemas:
     AddProccessRequest:
+      required:
+        - affinity
+        - alias
+        - executionPath
+        - processName
+        - processPriority
+        - profileId
       type: object
       properties:
         processName:
@@ -528,12 +535,23 @@ components:
           format: int32
       additionalProperties: false
     ClientSettings:
+      required:
+        - alwaysOnTop
       type: object
       properties:
         alwaysOnTop:
           type: boolean
       additionalProperties: false
     CpuData:
+      required:
+        - l1CacheSize
+        - l2CacheSize
+        - l3CacheSize
+        - name
+        - numberOfCores
+        - numberOfEnabledCore
+        - threadCount
+        - virtualizationFirmwareEnabled
       type: object
       properties:
         name:
@@ -624,6 +642,12 @@ components:
           nullable: true
       additionalProperties: false
     CpuUsages:
+      required:
+        - coreClocksMhz
+        - cores
+        - powerDrawWattage
+        - temperatureReadings
+        - total
       type: object
       properties:
         coreClocksMhz:
@@ -650,12 +674,17 @@ components:
             format: float
       additionalProperties: false
     CreateProfileRequest:
+      required:
+        - name
       type: object
       properties:
         name:
           type: string
       additionalProperties: false
     Data:
+      required:
+        - dataReadBytes
+        - dataWrittenBytes
       type: object
       properties:
         dataReadBytes:
@@ -668,6 +697,9 @@ components:
           nullable: true
       additionalProperties: false
     DateRange:
+      required:
+        - earliest
+        - latest
       type: object
       properties:
         earliest:
@@ -759,6 +791,17 @@ components:
         - SSD
       type: string
     DiskUsage:
+      required:
+        - data
+        - driveType
+        - label
+        - letter
+        - load
+        - name
+        - serial
+        - temperatures
+        - throughput
+        - uniqueIdentifier
       type: object
       properties:
         name:
@@ -864,6 +907,8 @@ components:
           nullable: true
       additionalProperties: false
     DiskUsages:
+      required:
+        - disks
       type: object
       properties:
         disks:
@@ -882,6 +927,9 @@ components:
         - Ram
       type: string
     GetAllResponse:
+      required:
+        - managedModels
+        - processesToAdd
       type: object
       properties:
         managedModels:
@@ -894,6 +942,19 @@ components:
             $ref: '#/components/schemas/ProcessToAddDto'
       additionalProperties: false
     GetMachineDynamicDataResponse:
+      required:
+        - cpuTemperature
+        - cpuUsageData
+        - diskUsages
+        - gpuUsageData
+        - networkUsageData
+        - processCpuThreadsUsage
+        - processCpuUsage
+        - processDiskBytesPerSecActivity
+        - processGpuUsage
+        - processRamUsageGb
+        - processThreadCount
+        - ramUsagesData
       type: object
       properties:
         cpuUsageData:
@@ -953,6 +1014,11 @@ components:
           nullable: true
       additionalProperties: false
     GetMachineStaticDataResponse:
+      required:
+        - cpu
+        - directXVersion
+        - gpu
+        - ram
       type: object
       properties:
         directXVersion:
@@ -970,6 +1036,9 @@ components:
             $ref: '#/components/schemas/GpuData'
       additionalProperties: false
     GetMachineTimeSeriesRequest:
+      required:
+        - earliest
+        - latest
       type: object
       properties:
         earliest:
@@ -990,6 +1059,8 @@ components:
             $ref: '#/components/schemas/ManagedModelDto'
       additionalProperties: false
     GetProcessesToAddResponse:
+      required:
+        - processes
       type: object
       properties:
         processes:
@@ -1006,6 +1077,9 @@ components:
             $ref: '#/components/schemas/ParentChildModelDto'
       additionalProperties: false
     GpuData:
+      required:
+        - memoryTotalBytes
+        - name
       type: object
       properties:
         name:
@@ -1062,6 +1136,17 @@ components:
           nullable: true
       additionalProperties: false
     GpuUsages:
+      required:
+        - coreClockMhz
+        - fanPercentage
+        - load
+        - memoryClockMhz
+        - memoryUsedBytes
+        - pCIe_Throughput
+        - powerDraw
+        - shaderClockMhz
+        - temperatureReadings
+        - totalMemoryBytes
       type: object
       properties:
         temperatureReadings:
@@ -1106,6 +1191,11 @@ components:
           $ref: '#/components/schemas/PCIE_ThroughPut'
       additionalProperties: false
     IPInterfaceProperties:
+      required:
+        - dnsSuffix
+        - iPv4Address
+        - iPv6Address
+        - isDnsEnabled
       type: object
       properties:
         iPv4Address:
@@ -1152,6 +1242,12 @@ components:
           format: int32
       additionalProperties: false
     Load:
+      required:
+        - totalActivityPercentage
+        - totalFreeSpaceBytes
+        - usedSpaceBytes
+        - usedSpacePercentage
+        - writeActivityPercentage
       type: object
       properties:
         usedSpacePercentage:
@@ -1176,6 +1272,15 @@ components:
           nullable: true
       additionalProperties: false
     LoadData:
+      required:
+        - busInterface
+        - core
+        - cuda
+        - frameBuffer
+        - memory
+        - memoryController
+        - threeD
+        - videoEngine
       type: object
       properties:
         core:
@@ -1234,6 +1339,13 @@ components:
           $ref: '#/components/schemas/ProfileModel'
       additionalProperties: false
     ManagedModelDto:
+      required:
+        - affinity
+        - alias
+        - id
+        - parentProfileId
+        - processName
+        - processPriority
       type: object
       properties:
         id:
@@ -1285,6 +1397,12 @@ components:
           type: boolean
       additionalProperties: false
     NetAdapterUsage:
+      required:
+        - downloadedBps
+        - downloadSpeedBps
+        - uploadedBps
+        - uploadSpeedBps
+        - usagePercentage
       type: object
       properties:
         uploadSpeedBps:
@@ -1304,6 +1422,9 @@ components:
           format: int64
       additionalProperties: false
     NetworkAdapter:
+      required:
+        - properties
+        - usage
       type: object
       properties:
         usage:
@@ -1361,6 +1482,8 @@ components:
           format: float
       additionalProperties: false
     NetworkAdapters:
+      required:
+        - adapters
       type: object
       properties:
         adapters:
@@ -1392,6 +1515,9 @@ components:
           nullable: true
       additionalProperties: false
     PCIE_ThroughPut:
+      required:
+        - pCIe_Rx_BytesPerSecond
+        - pCIe_Tx_BytesPerSecond
       type: object
       properties:
         pcIe_Rx_BytesPerSecond:
@@ -1493,6 +1619,14 @@ components:
         - RealTime
       type: string
     ProcessToAddDto:
+      required:
+        - affinity
+        - canModify
+        - executionPath
+        - mainWindowTitle
+        - pid
+        - processName
+        - processPriority
       type: object
       properties:
         pid:
@@ -1516,6 +1650,11 @@ components:
           $ref: '#/components/schemas/ProcessPriorityEnum'
       additionalProperties: false
     ProcessViewDto:
+      required:
+        - description
+        - id
+        - processName
+        - processTitle
       type: object
       properties:
         processName:
@@ -1531,6 +1670,13 @@ components:
           format: int32
       additionalProperties: false
     ProfileDto:
+      required:
+        - active
+        - enabled
+        - id
+        - managedModelsIds
+        - name
+        - priority
       type: object
       properties:
         id:
@@ -1572,6 +1718,13 @@ components:
           nullable: true
       additionalProperties: false
     Properties:
+      required:
+        - connectionType
+        - description
+        - iPInterfaceProperties
+        - macAddress
+        - name
+        - speedBps
       type: object
       properties:
         ipInterfaceProperties:
@@ -1590,6 +1743,15 @@ components:
           type: string
       additionalProperties: false
     RamData:
+      required:
+        - capacity
+        - configuredClockSpeedMhz
+        - name
+        - partNumber
+        - slotChannel
+        - slotNumber
+        - speedMhz
+        - type
       type: object
       properties:
         name:
@@ -1645,6 +1807,9 @@ components:
           nullable: true
       additionalProperties: false
     RamUsages:
+      required:
+        - totalVisibleMemoryBytes
+        - usedMemoryBytes
       type: object
       properties:
         usedMemoryBytes:
@@ -1694,6 +1859,9 @@ components:
             $ref: '#/components/schemas/Disk'
       additionalProperties: false
     Throughput:
+      required:
+        - readRateBytesPerSecond
+        - writeRateBytesPerSecond
       type: object
       properties:
         readRateBytesPerSecond:
@@ -1742,6 +1910,9 @@ components:
             $ref: '#/components/schemas/DiskUsageMetricModel'
       additionalProperties: false
     TimeSeriesMachineMetricsResponse:
+      required:
+        - metrics
+        - requestRange
       type: object
       properties:
         requestRange:
@@ -1752,12 +1923,16 @@ components:
             $ref: '#/components/schemas/TimeSeriesMachineMetricsModel'
       additionalProperties: false
     UpdateManagedRequest:
+      required:
+        - managedModelDto
       type: object
       properties:
         managedModelDto:
           $ref: '#/components/schemas/ManagedModelDto'
       additionalProperties: false
     UpdateProfileRequest:
+      required:
+        - profile
       type: object
       properties:
         profile:

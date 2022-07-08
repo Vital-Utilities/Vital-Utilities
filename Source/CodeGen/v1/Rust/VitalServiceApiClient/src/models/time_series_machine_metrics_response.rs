@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct TimeSeriesMachineMetricsResponse {
-    #[serde(rename = "requestRange", skip_serializing_if = "Option::is_none")]
-    pub request_range: Option<Box<crate::models::DateRange>>,
-    #[serde(rename = "metrics", skip_serializing_if = "Option::is_none")]
-    pub metrics: Option<Vec<crate::models::TimeSeriesMachineMetricsModel>>,
+    #[serde(rename = "requestRange")]
+    pub request_range: Box<crate::models::DateRange>,
+    #[serde(rename = "metrics")]
+    pub metrics: Vec<crate::models::TimeSeriesMachineMetricsModel>,
 }
 
 impl TimeSeriesMachineMetricsResponse {
-    pub fn new() -> TimeSeriesMachineMetricsResponse {
+    pub fn new(request_range: crate::models::DateRange, metrics: Vec<crate::models::TimeSeriesMachineMetricsModel>) -> TimeSeriesMachineMetricsResponse {
         TimeSeriesMachineMetricsResponse {
-            request_range: None,
-            metrics: None,
+            request_range: Box::new(request_range),
+            metrics,
         }
     }
 }

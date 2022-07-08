@@ -1060,6 +1060,10 @@
         "additionalProperties": false
       },
       "DateRange": {
+        "required": [
+          "earliest",
+          "latest"
+        ],
         "type": "object",
         "properties": {
           "earliest": {
@@ -2529,6 +2533,10 @@
         "additionalProperties": false
       },
       "TimeSeriesMachineMetricsResponse": {
+        "required": [
+          "metrics",
+          "requestRange"
+        ],
         "type": "object",
         "properties": {
           "requestRange": {

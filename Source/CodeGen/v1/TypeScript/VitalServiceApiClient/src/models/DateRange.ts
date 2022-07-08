@@ -24,13 +24,13 @@ export interface DateRange {
      * @type {Date}
      * @memberof DateRange
      */
-    earliest?: Date;
+    earliest: Date;
     /**
      * 
      * @type {Date}
      * @memberof DateRange
      */
-    latest?: Date;
+    latest: Date;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface DateRange {
  */
 export function instanceOfDateRange(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "earliest" in value;
+    isInstance = isInstance && "latest" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function DateRangeFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'earliest': !exists(json, 'earliest') ? undefined : (new Date(json['earliest'])),
-        'latest': !exists(json, 'latest') ? undefined : (new Date(json['latest'])),
+        'earliest': (new Date(json['earliest'])),
+        'latest': (new Date(json['latest'])),
     };
 }
 
@@ -66,8 +68,8 @@ export function DateRangeToJSON(value?: DateRange | null): any {
     }
     return {
         
-        'earliest': value.earliest === undefined ? undefined : (value.earliest.toISOString()),
-        'latest': value.latest === undefined ? undefined : (value.latest.toISOString()),
+        'earliest': (value.earliest.toISOString()),
+        'latest': (value.latest.toISOString()),
     };
 }
 

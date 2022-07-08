@@ -8,7 +8,9 @@ namespace VitalService.Dtos.Coms.Process
 {
     public class DeleteManagedRequest
     {
+        [SwaggerRequired]
         public int ProcessId { get; set; }
+        [SwaggerRequired]
         public int ParentProfileId { get; set; }
     }
 }
