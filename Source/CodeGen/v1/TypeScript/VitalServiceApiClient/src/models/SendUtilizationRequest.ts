@@ -37,13 +37,13 @@ export interface SendUtilizationRequest {
      * @type {Array<ProcessData>}
      * @memberof SendUtilizationRequest
      */
-    processData?: Array<ProcessData>;
+    processData: Array<ProcessData>;
     /**
      * 
      * @type {SystemUsage}
      * @memberof SendUtilizationRequest
      */
-    systemUsage?: SystemUsage;
+    systemUsage: SystemUsage;
 }
 
 /**
@@ -51,6 +51,8 @@ export interface SendUtilizationRequest {
  */
 export function instanceOfSendUtilizationRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "processData" in value;
+    isInstance = isInstance && "systemUsage" in value;
 
     return isInstance;
 }
@@ -65,8 +67,8 @@ export function SendUtilizationRequestFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'processData': !exists(json, 'processData') ? undefined : ((json['processData'] as Array<any>).map(ProcessDataFromJSON)),
-        'systemUsage': !exists(json, 'systemUsage') ? undefined : SystemUsageFromJSON(json['systemUsage']),
+        'processData': ((json['processData'] as Array<any>).map(ProcessDataFromJSON)),
+        'systemUsage': SystemUsageFromJSON(json['systemUsage']),
     };
 }
 
@@ -79,7 +81,7 @@ export function SendUtilizationRequestToJSON(value?: SendUtilizationRequest | nu
     }
     return {
         
-        'processData': value.processData === undefined ? undefined : ((value.processData as Array<any>).map(ProcessDataToJSON)),
+        'processData': ((value.processData as Array<any>).map(ProcessDataToJSON)),
         'systemUsage': SystemUsageToJSON(value.systemUsage),
     };
 }

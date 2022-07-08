@@ -18,7 +18,6 @@ import type {
   AddProccessRequest,
   CreateProfileRequest,
   ProfileDto,
-  ProfileModel,
   UpdateManagedRequest,
   UpdateProfileRequest,
 } from '../models';
@@ -29,8 +28,6 @@ import {
     CreateProfileRequestToJSON,
     ProfileDtoFromJSON,
     ProfileDtoToJSON,
-    ProfileModelFromJSON,
-    ProfileModelToJSON,
     UpdateManagedRequestFromJSON,
     UpdateManagedRequestToJSON,
     UpdateProfileRequestFromJSON,
@@ -151,7 +148,7 @@ export class ProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProfilePostRaw(requestParameters: ApiProfilePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProfileModel>> {
+    async apiProfilePostRaw(requestParameters: ApiProfilePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProfileDto>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -166,12 +163,12 @@ export class ProfileApi extends runtime.BaseAPI {
             body: CreateProfileRequestToJSON(requestParameters.createProfileRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileModelFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileDtoFromJSON(jsonValue));
     }
 
     /**
      */
-    async apiProfilePost(requestParameters: ApiProfilePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileModel> {
+    async apiProfilePost(requestParameters: ApiProfilePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileDto> {
         const response = await this.apiProfilePostRaw(requestParameters, initOverrides);
         return await response.value();
     }

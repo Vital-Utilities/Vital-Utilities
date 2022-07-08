@@ -13,18 +13,18 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { NetAdapterUsage } from './NetAdapterUsage';
+import {
+    NetAdapterUsageFromJSON,
+    NetAdapterUsageFromJSONTyped,
+    NetAdapterUsageToJSON,
+} from './NetAdapterUsage';
 import type { NetworkAdapterProperties } from './NetworkAdapterProperties';
 import {
     NetworkAdapterPropertiesFromJSON,
     NetworkAdapterPropertiesFromJSONTyped,
     NetworkAdapterPropertiesToJSON,
 } from './NetworkAdapterProperties';
-import type { NetworkAdapterUtil } from './NetworkAdapterUtil';
-import {
-    NetworkAdapterUtilFromJSON,
-    NetworkAdapterUtilFromJSONTyped,
-    NetworkAdapterUtilToJSON,
-} from './NetworkAdapterUtil';
 
 /**
  * 
@@ -34,16 +34,16 @@ import {
 export interface NetworkAdapterUsage {
     /**
      * 
+     * @type {NetAdapterUsage}
+     * @memberof NetworkAdapterUsage
+     */
+    usage: NetAdapterUsage;
+    /**
+     * 
      * @type {NetworkAdapterProperties}
      * @memberof NetworkAdapterUsage
      */
-    properties?: NetworkAdapterProperties;
-    /**
-     * 
-     * @type {NetworkAdapterUtil}
-     * @memberof NetworkAdapterUsage
-     */
-    utilisation?: NetworkAdapterUtil;
+    properties: NetworkAdapterProperties;
 }
 
 /**
@@ -51,6 +51,8 @@ export interface NetworkAdapterUsage {
  */
 export function instanceOfNetworkAdapterUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "usage" in value;
+    isInstance = isInstance && "properties" in value;
 
     return isInstance;
 }
@@ -65,8 +67,8 @@ export function NetworkAdapterUsageFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'properties': !exists(json, 'properties') ? undefined : NetworkAdapterPropertiesFromJSON(json['properties']),
-        'utilisation': !exists(json, 'utilisation') ? undefined : NetworkAdapterUtilFromJSON(json['utilisation']),
+        'usage': NetAdapterUsageFromJSON(json['usage']),
+        'properties': NetworkAdapterPropertiesFromJSON(json['properties']),
     };
 }
 
@@ -79,8 +81,8 @@ export function NetworkAdapterUsageToJSON(value?: NetworkAdapterUsage | null): a
     }
     return {
         
+        'usage': NetAdapterUsageToJSON(value.usage),
         'properties': NetworkAdapterPropertiesToJSON(value.properties),
-        'utilisation': NetworkAdapterUtilToJSON(value.utilisation),
     };
 }
 

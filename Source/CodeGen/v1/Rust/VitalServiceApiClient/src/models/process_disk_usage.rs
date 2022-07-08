@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessDiskUsage {
-    #[serde(rename = "readBytesPerSecond", skip_serializing_if = "Option::is_none")]
-    pub read_bytes_per_second: Option<f32>,
-    #[serde(rename = "writeBytesPerSecond", skip_serializing_if = "Option::is_none")]
-    pub write_bytes_per_second: Option<f32>,
+    #[serde(rename = "readBytesPerSecond")]
+    pub read_bytes_per_second: f32,
+    #[serde(rename = "writeBytesPerSecond")]
+    pub write_bytes_per_second: f32,
 }
 
 impl ProcessDiskUsage {
-    pub fn new() -> ProcessDiskUsage {
+    pub fn new(read_bytes_per_second: f32, write_bytes_per_second: f32) -> ProcessDiskUsage {
         ProcessDiskUsage {
-            read_bytes_per_second: None,
-            write_bytes_per_second: None,
+            read_bytes_per_second,
+            write_bytes_per_second,
         }
     }
 }

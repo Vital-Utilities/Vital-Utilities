@@ -1,7 +1,7 @@
+import { ManagedModelDto, UpdateManagedRequest } from "@vital/vitalservice";
 import { Input, Button, Form, message } from "antd";
 import axios from "axios";
 import React from "react";
-import { ManagedModelDto, UpdateManagedRequest } from "../../Dtos/ClientApiDto";
 import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
 import { ProcessPriority } from "./ProcessPriority";
 

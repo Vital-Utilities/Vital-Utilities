@@ -24,13 +24,13 @@ export interface ProcessDiskUsage {
      * @type {number}
      * @memberof ProcessDiskUsage
      */
-    readBytesPerSecond?: number;
+    readBytesPerSecond: number;
     /**
      * 
      * @type {number}
      * @memberof ProcessDiskUsage
      */
-    writeBytesPerSecond?: number;
+    writeBytesPerSecond: number;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface ProcessDiskUsage {
  */
 export function instanceOfProcessDiskUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "readBytesPerSecond" in value;
+    isInstance = isInstance && "writeBytesPerSecond" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function ProcessDiskUsageFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'readBytesPerSecond': !exists(json, 'readBytesPerSecond') ? undefined : json['readBytesPerSecond'],
-        'writeBytesPerSecond': !exists(json, 'writeBytesPerSecond') ? undefined : json['writeBytesPerSecond'],
+        'readBytesPerSecond': json['readBytesPerSecond'],
+        'writeBytesPerSecond': json['writeBytesPerSecond'],
     };
 }
 

@@ -13,47 +13,47 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessData {
-    #[serde(rename = "pid", skip_serializing_if = "Option::is_none")]
-    pub pid: Option<f32>,
-    #[serde(rename = "parentPid", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "pid")]
+    pub pid: f32,
+    #[serde(rename = "parentPid")]
     pub parent_pid: Option<f32>,
-    #[serde(rename = "executablePath", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "executablePath")]
     pub executable_path: Option<String>,
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "description")]
     pub description: Option<String>,
-    #[serde(rename = "mainWindowTitle", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "mainWindowTitle")]
     pub main_window_title: Option<String>,
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(rename = "timeStamp", skip_serializing_if = "Option::is_none")]
-    pub time_stamp: Option<String>,
-    #[serde(rename = "cpuPercentage", skip_serializing_if = "Option::is_none")]
-    pub cpu_percentage: Option<f32>,
-    #[serde(rename = "memoryKb", skip_serializing_if = "Option::is_none")]
-    pub memory_kb: Option<f32>,
-    #[serde(rename = "diskUsage", skip_serializing_if = "Option::is_none")]
-    pub disk_usage: Option<Box<crate::models::ProcessDiskUsage>>,
-    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "timeStamp")]
+    pub time_stamp: String,
+    #[serde(rename = "cpuPercentage")]
+    pub cpu_percentage: f32,
+    #[serde(rename = "memoryKb")]
+    pub memory_kb: f32,
+    #[serde(rename = "diskUsage")]
+    pub disk_usage: Box<crate::models::ProcessDiskUsage>,
+    #[serde(rename = "status")]
     pub status: Option<String>,
-    #[serde(rename = "gpuUtil", skip_serializing_if = "Option::is_none")]
-    pub gpu_util: Option<Box<crate::models::ProcessGpuUtil>>,
+    #[serde(rename = "gpuUtil")]
+    pub gpu_util: Box<crate::models::ProcessGpuUtil>,
 }
 
 impl ProcessData {
-    pub fn new() -> ProcessData {
+    pub fn new(pid: f32, parent_pid: Option<f32>, executable_path: Option<String>, description: Option<String>, main_window_title: Option<String>, name: String, time_stamp: String, cpu_percentage: f32, memory_kb: f32, disk_usage: crate::models::ProcessDiskUsage, status: Option<String>, gpu_util: crate::models::ProcessGpuUtil) -> ProcessData {
         ProcessData {
-            pid: None,
-            parent_pid: None,
-            executable_path: None,
-            description: None,
-            main_window_title: None,
-            name: None,
-            time_stamp: None,
-            cpu_percentage: None,
-            memory_kb: None,
-            disk_usage: None,
-            status: None,
-            gpu_util: None,
+            pid,
+            parent_pid,
+            executable_path,
+            description,
+            main_window_title,
+            name,
+            time_stamp,
+            cpu_percentage,
+            memory_kb,
+            disk_usage: Box::new(disk_usage),
+            status,
+            gpu_util: Box::new(gpu_util),
         }
     }
 }

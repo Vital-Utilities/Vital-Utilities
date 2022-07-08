@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct SystemUsage {
-    #[serde(rename = "cpuUsage", skip_serializing_if = "Option::is_none")]
-    pub cpu_usage: Option<Box<crate::models::CpuUsage>>,
-    #[serde(rename = "memUsage", skip_serializing_if = "Option::is_none")]
-    pub mem_usage: Option<Box<crate::models::MemUsage>>,
-    #[serde(rename = "networkAdapterUsage", skip_serializing_if = "Option::is_none")]
-    pub network_adapter_usage: Option<Vec<crate::models::NetworkAdapterUsage>>,
-    #[serde(rename = "disk", skip_serializing_if = "Option::is_none")]
-    pub disk: Option<::std::collections::HashMap<String, crate::models::Disk>>,
+    #[serde(rename = "cpuUsage")]
+    pub cpu_usage: Box<crate::models::CpuUsage>,
+    #[serde(rename = "memUsage")]
+    pub mem_usage: Box<crate::models::MemoryUsage>,
+    #[serde(rename = "networkAdapterUsage")]
+    pub network_adapter_usage: Vec<crate::models::NetworkAdapterUsage>,
+    #[serde(rename = "diskUsage")]
+    pub disk_usage: ::std::collections::HashMap<String, crate::models::DiskUsage>,
 }
 
 impl SystemUsage {
-    pub fn new() -> SystemUsage {
+    pub fn new(cpu_usage: crate::models::CpuUsage, mem_usage: crate::models::MemoryUsage, network_adapter_usage: Vec<crate::models::NetworkAdapterUsage>, disk_usage: ::std::collections::HashMap<String, crate::models::DiskUsage>) -> SystemUsage {
         SystemUsage {
-            cpu_usage: None,
-            mem_usage: None,
-            network_adapter_usage: None,
-            disk: None,
+            cpu_usage: Box::new(cpu_usage),
+            mem_usage: Box::new(mem_usage),
+            network_adapter_usage,
+            disk_usage,
         }
     }
 }

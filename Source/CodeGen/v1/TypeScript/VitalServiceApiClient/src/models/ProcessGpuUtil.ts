@@ -24,25 +24,25 @@ export interface ProcessGpuUtil {
      * @type {number}
      * @memberof ProcessGpuUtil
      */
-    gpuCorePercentage?: number | null;
+    gpuCorePercentage: number | null;
     /**
      * 
      * @type {number}
      * @memberof ProcessGpuUtil
      */
-    gpuMemPercentage?: number | null;
+    gpuMemPercentage: number | null;
     /**
      * 
      * @type {number}
      * @memberof ProcessGpuUtil
      */
-    gpuEncodingPercentage?: number | null;
+    gpuEncodingPercentage: number | null;
     /**
      * 
      * @type {number}
      * @memberof ProcessGpuUtil
      */
-    gpuDecodingPercentage?: number | null;
+    gpuDecodingPercentage: number | null;
 }
 
 /**
@@ -50,6 +50,10 @@ export interface ProcessGpuUtil {
  */
 export function instanceOfProcessGpuUtil(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "gpuCorePercentage" in value;
+    isInstance = isInstance && "gpuMemPercentage" in value;
+    isInstance = isInstance && "gpuEncodingPercentage" in value;
+    isInstance = isInstance && "gpuDecodingPercentage" in value;
 
     return isInstance;
 }
@@ -64,10 +68,10 @@ export function ProcessGpuUtilFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'gpuCorePercentage': !exists(json, 'gpuCorePercentage') ? undefined : json['gpuCorePercentage'],
-        'gpuMemPercentage': !exists(json, 'gpuMemPercentage') ? undefined : json['gpuMemPercentage'],
-        'gpuEncodingPercentage': !exists(json, 'gpuEncodingPercentage') ? undefined : json['gpuEncodingPercentage'],
-        'gpuDecodingPercentage': !exists(json, 'gpuDecodingPercentage') ? undefined : json['gpuDecodingPercentage'],
+        'gpuCorePercentage': json['gpuCorePercentage'],
+        'gpuMemPercentage': json['gpuMemPercentage'],
+        'gpuEncodingPercentage': json['gpuEncodingPercentage'],
+        'gpuDecodingPercentage': json['gpuDecodingPercentage'],
     };
 }
 

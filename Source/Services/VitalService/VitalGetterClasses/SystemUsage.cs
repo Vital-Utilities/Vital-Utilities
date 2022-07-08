@@ -1,12 +1,20 @@
-﻿namespace VitalRustServiceClasses
+﻿using VitalService;
+using VitalService.Dtos.Coms;
+using VitalService.Dtos.Data;
+
+namespace VitalRustServiceClasses
 {
     public class SystemUsage
     {
+        [SwaggerRequired]
         public CpuUsage CpuUsage { get; set; }
-        public MemUsage MemUsage { get; set; }
+        [SwaggerRequired]
+        public MemoryUsage MemUsage { get; set; }
         //public GpuUsage[] GpuUsage { get; set; }
+        [SwaggerRequired]
         public NetworkAdapterUsage[] NetworkAdapterUsage { get; set; }
-        public Dictionary<string, Disk> Disk { get; set; }
+        [SwaggerRequired]
+        public Dictionary<string, DiskUsage> DiskUsage { get; set; }
 
     }
 

@@ -22,18 +22,18 @@ namespace VitalService.Services.PerformanceServices
     public class HardwarePerformanceService : IHostedService
     {
         public GetMachineStaticDataResponse MachineStaticData { get; set; } = new();
-        public RamUsages CurrentRamUsage { get { lastServiceAccess = DateTime.Now; return ramUsageData; } }
+        public MemoryUsage CurrentRamUsage { get { lastServiceAccess = DateTime.Now; return ramUsageData; } }
         public List<GpuUsages> CurrentGpuUsage { get { lastServiceAccess = DateTime.Now; return gpuUsageData; } }
-        public CpuUsages CurrentCpuUsage { get { lastServiceAccess = DateTime.Now; return cpuUsageData; } }
+        public CpuUsage CurrentCpuUsage { get { lastServiceAccess = DateTime.Now; return cpuUsageData; } }
         public DiskUsages CurrentDiskUsages { get { lastServiceAccess = DateTime.Now; return diskUsagesData; } }
 
 
-        public NetworkAdapters CurrentNetworkUsage { get { lastServiceAccess = DateTime.Now; return networkUsageData; } }
+        public Dtos.Coms.NetworkAdapterUsages CurrentNetworkUsage { get { lastServiceAccess = DateTime.Now; return networkUsageData; } }
 
         private List<GpuUsages> gpuUsageData = new();
-        private CpuUsages cpuUsageData = new();
-        private RamUsages ramUsageData = new();
-        private NetworkAdapters networkUsageData = new();
+        private CpuUsage cpuUsageData = new();
+        private MemoryUsage ramUsageData = new();
+        private Dtos.Coms.NetworkAdapterUsages networkUsageData = new();
         private bool IsUpdatingCpuUsage { get; set; }
         private bool IsUpdatingDiskUsage { get; set; }
         private bool IsUpdatingNetworkUsage { get; set; }
@@ -41,8 +41,8 @@ namespace VitalService.Services.PerformanceServices
         private Timer AutoThrottlerTimer { get; set; }
         private DateTime lastServiceAccess;
         private DiskUsages diskUsagesData = new();
-        private VitalRustServiceClasses.CpuUsage cpuDataFromRust;
-        private VitalRustServiceClasses.MemUsage memDataFromRust;
+        private CpuUsage cpuDataFromRust;
+        private MemoryUsage memDataFromRust;
         //private VitalRustServiceClasses.GpuUsage[] gpuDataFromRust;
 
         public bool ThrottleActive { get; private set; }
@@ -184,22 +184,22 @@ namespace VitalService.Services.PerformanceServices
                     Utilities.Debug.LogExecutionTime("GetAllNetworkInterfaces", () => adapters = NetworkInterface.GetAllNetworkInterfaces().ToDictionary(k => k.Name, v => v));
 
 
-                    var toReturn = new NetworkAdapters();
+                    var toReturn = new Dtos.Coms.NetworkAdapterUsages();
                     foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Network))
                     {
                         if (adapters!.TryGetValue(hardwareItem.Name, out var adapter)
                         && adapter.OperationalStatus is not OperationalStatus.Down or OperationalStatus.Unknown or OperationalStatus.NotPresent)
                         {
                             var ipProperties = adapter.GetIPProperties();
-                            var adapterObj = new NetworkAdapters.NetworkAdapter()
+                            var adapterObj = new Dtos.Coms.NetworkAdapterUsage()
                             {
-                                Properties = new NetworkAdapters.Properties
+                                Properties = new Dtos.Coms.NetworkAdapterProperties
                                 {
                                     Name = adapter.Name,
                                     Description = adapter.Description,
                                     SpeedBps = adapter.Speed,
                                     ConnectionType = Enum.GetName(adapter.NetworkInterfaceType) ?? "Unknown",
-                                    IPInterfaceProperties = new NetworkAdapters.IPInterfaceProperties()
+                                    IPInterfaceProperties = new Dtos.Coms.IPInterfaceProperties()
                                     {
                                         IPv4Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.Address.ToString(),
                                         IPv6Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)?.Address.ToString(),
@@ -372,10 +372,10 @@ namespace VitalService.Services.PerformanceServices
                                         switch (sensor.Name)
                                         {
                                             case "GPU PCIe Rx":
-                                                gpu.PCIe_Throughput.PCIe_Rx_BytesPerSecond = value;
+                                                gpu.PCIe.PCIe_RxBytesPerSecond = value;
                                                 break;
                                             case "GPU PCIe Tx":
-                                                gpu.PCIe_Throughput.PCIe_Tx_BytesPerSecond = value;
+                                                gpu.PCIe.PCIe_TxBytesPerSecond = value;
                                                 break;
 
                                             default:
@@ -403,7 +403,7 @@ namespace VitalService.Services.PerformanceServices
             {
                 Utilities.Debug.LogExecutionTime(null, () =>
                 {
-                    var toReturn = new CpuUsages();
+                    var toReturn = new CpuUsage();
 
                     foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Cpu))
                     {
@@ -429,9 +429,9 @@ namespace VitalService.Services.PerformanceServices
                     }
                     if (cpuDataFromRust is not null)
                     {
-                        toReturn.CoreClocksMhz = cpuDataFromRust.CoreFrequencies;
-                        toReturn.Total = (float)Math.Round(cpuDataFromRust.CpuPercentage);
-                        toReturn.Cores = cpuDataFromRust.CorePercentages;
+                        toReturn.CoreClocksMhz = cpuDataFromRust.CoreClocksMhz;
+                        toReturn.Total = (float)Math.Round(cpuDataFromRust.Total);
+                        toReturn.CorePercentages = cpuDataFromRust.CorePercentages;
                     }
                     cpuUsageData = toReturn;
                 });
@@ -462,7 +462,7 @@ namespace VitalService.Services.PerformanceServices
                     foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage))
                     {
 
-                        var disk = new DiskUsages.DiskUsage() { Name = hardwareItem.Name };
+                        var disk = new DiskUsage { Name = hardwareItem.Name };
 
                         var generic = hardwareItem as LibreHardwareMonitor.Hardware.Storage.AbstractStorage;
                         var letter = generic?.DriveInfos[0].Name ?? "";
@@ -494,10 +494,10 @@ namespace VitalService.Services.PerformanceServices
                                 switch (sensor.SensorType)
                                 {
                                     case SensorType.Data when sensor.Name == "Data Read":
-                                        disk.Data.DataReadBytes = (ulong)(sensor.Value * 1e+9);
+                                        disk.Data.TotalBytesRead = (ulong)(sensor.Value * 1e+9);
                                         break;
                                     case SensorType.Data when sensor.Name is "Data Written" or "Total Bytes Written":
-                                        disk.Data.DataWrittenBytes = (ulong)(sensor.Value * 1e+9);
+                                        disk.Data.TotalBytesWritten = (ulong)(sensor.Value * 1e+9);
                                         break;
 
                                     case SensorType.Throughput when sensor.Name == "Read Rate":
@@ -577,10 +577,10 @@ namespace VitalService.Services.PerformanceServices
                 if (memDataFromRust is null)
                     return;
 
-                ramUsageData = new RamUsages
+                ramUsageData = new MemoryUsage
                 {
-                    UsedMemoryBytes = memDataFromRust.MemUsedKB * 1000,
-                    TotalVisibleMemoryBytes = memDataFromRust.MemTotalKB * 1000
+                    UsedMemoryBytes = memDataFromRust.UsedMemoryBytes,
+                    TotalVisibleMemoryBytes = memDataFromRust.TotalVisibleMemoryBytes
                 };
             });
         }

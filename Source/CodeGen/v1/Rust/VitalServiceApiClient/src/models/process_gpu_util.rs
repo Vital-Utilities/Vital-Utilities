@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessGpuUtil {
-    #[serde(rename = "gpuCorePercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gpuCorePercentage")]
     pub gpu_core_percentage: Option<f32>,
-    #[serde(rename = "gpuMemPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gpuMemPercentage")]
     pub gpu_mem_percentage: Option<f32>,
-    #[serde(rename = "gpuEncodingPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gpuEncodingPercentage")]
     pub gpu_encoding_percentage: Option<f32>,
-    #[serde(rename = "gpuDecodingPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "gpuDecodingPercentage")]
     pub gpu_decoding_percentage: Option<f32>,
 }
 
 impl ProcessGpuUtil {
-    pub fn new() -> ProcessGpuUtil {
+    pub fn new(gpu_core_percentage: Option<f32>, gpu_mem_percentage: Option<f32>, gpu_encoding_percentage: Option<f32>, gpu_decoding_percentage: Option<f32>) -> ProcessGpuUtil {
         ProcessGpuUtil {
-            gpu_core_percentage: None,
-            gpu_mem_percentage: None,
-            gpu_encoding_percentage: None,
-            gpu_decoding_percentage: None,
+            gpu_core_percentage,
+            gpu_mem_percentage,
+            gpu_encoding_percentage,
+            gpu_decoding_percentage,
         }
     }
 }

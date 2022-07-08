@@ -1,11 +1,10 @@
-# DiskThroughput
+# NetworkAdapterUsages
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**read_rate_bytes_per_second** | Option<**f32**> |  | [optional]
-**write_rate_bytes_per_second** | Option<**f32**> |  | [optional]
+**adapters** | [**::std::collections::HashMap<String, crate::models::NetworkAdapterUsage>**](NetworkAdapterUsage.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

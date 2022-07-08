@@ -34,6 +34,12 @@ import {
 export interface GpuUsages {
     /**
      * 
+     * @type {string}
+     * @memberof GpuUsages
+     */
+    name: string | null;
+    /**
+     * 
      * @type {{ [key: string]: number; }}
      * @memberof GpuUsages
      */
@@ -91,7 +97,7 @@ export interface GpuUsages {
      * @type {PCIEThroughPut}
      * @memberof GpuUsages
      */
-    pcIeThroughput?: PCIEThroughPut;
+    pcIe?: PCIEThroughPut;
 }
 
 /**
@@ -99,6 +105,7 @@ export interface GpuUsages {
  */
 export function instanceOfGpuUsages(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
     isInstance = isInstance && "temperatureReadings" in value;
     isInstance = isInstance && "totalMemoryBytes" in value;
     isInstance = isInstance && "memoryUsedBytes" in value;
@@ -122,6 +129,7 @@ export function GpuUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
+        'name': json['name'],
         'temperatureReadings': json['temperatureReadings'],
         'totalMemoryBytes': json['totalMemoryBytes'],
         'memoryUsedBytes': json['memoryUsedBytes'],
@@ -131,7 +139,7 @@ export function GpuUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'fanPercentage': json['fanPercentage'],
         'powerDraw': json['powerDraw'],
         'load': LoadDataFromJSON(json['load']),
-        'pcIeThroughput': !exists(json, 'pcIe_Throughput') ? undefined : PCIEThroughPutFromJSON(json['pcIe_Throughput']),
+        'pcIe': !exists(json, 'pcIe') ? undefined : PCIEThroughPutFromJSON(json['pcIe']),
     };
 }
 
@@ -144,6 +152,7 @@ export function GpuUsagesToJSON(value?: GpuUsages | null): any {
     }
     return {
         
+        'name': value.name,
         'temperatureReadings': value.temperatureReadings,
         'totalMemoryBytes': value.totalMemoryBytes,
         'memoryUsedBytes': value.memoryUsedBytes,
@@ -153,7 +162,7 @@ export function GpuUsagesToJSON(value?: GpuUsages | null): any {
         'fanPercentage': value.fanPercentage,
         'powerDraw': value.powerDraw,
         'load': LoadDataToJSON(value.load),
-        'pcIe_Throughput': PCIEThroughPutToJSON(value.pcIeThroughput),
+        'pcIe': PCIEThroughPutToJSON(value.pcIe),
     };
 }
 

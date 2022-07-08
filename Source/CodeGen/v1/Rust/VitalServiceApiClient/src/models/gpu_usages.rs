@@ -13,6 +13,8 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GpuUsages {
+    #[serde(rename = "name")]
+    pub name: Option<String>,
     #[serde(rename = "temperatureReadings")]
     pub temperature_readings: ::std::collections::HashMap<String, f32>,
     #[serde(rename = "totalMemoryBytes")]
@@ -31,13 +33,14 @@ pub struct GpuUsages {
     pub power_draw: Option<f32>,
     #[serde(rename = "load")]
     pub load: Box<crate::models::LoadData>,
-    #[serde(rename = "pcIe_Throughput", skip_serializing_if = "Option::is_none")]
-    pub pc_ie_throughput: Option<Box<crate::models::PcieThroughPut>>,
+    #[serde(rename = "pcIe", skip_serializing_if = "Option::is_none")]
+    pub pc_ie: Option<Box<crate::models::PcieThroughPut>>,
 }
 
 impl GpuUsages {
-    pub fn new(temperature_readings: ::std::collections::HashMap<String, f32>, total_memory_bytes: Option<f32>, memory_used_bytes: Option<f32>, memory_clock_mhz: Option<f32>, shader_clock_mhz: Option<f32>, core_clock_mhz: Option<f32>, fan_percentage: Option<::std::collections::HashMap<String, f32>>, power_draw: Option<f32>, load: crate::models::LoadData) -> GpuUsages {
+    pub fn new(name: Option<String>, temperature_readings: ::std::collections::HashMap<String, f32>, total_memory_bytes: Option<f32>, memory_used_bytes: Option<f32>, memory_clock_mhz: Option<f32>, shader_clock_mhz: Option<f32>, core_clock_mhz: Option<f32>, fan_percentage: Option<::std::collections::HashMap<String, f32>>, power_draw: Option<f32>, load: crate::models::LoadData) -> GpuUsages {
         GpuUsages {
+            name,
             temperature_readings,
             total_memory_bytes,
             memory_used_bytes,
@@ -47,7 +50,7 @@ impl GpuUsages {
             fan_percentage,
             power_draw,
             load: Box::new(load),
-            pc_ie_throughput: None,
+            pc_ie: None,
         }
     }
 }

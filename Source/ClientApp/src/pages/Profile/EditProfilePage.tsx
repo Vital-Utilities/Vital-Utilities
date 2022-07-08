@@ -4,7 +4,6 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Breadcrumb, Button, Input, notification, Popconfirm } from "antd";
 import { useEffect } from "react";
-import { ManagedModelDto, ProcessPriorityEnum, ProfileDto, UpdateProfileRequest } from "../../Dtos/ClientApiDto";
 import { EditProcess } from "./EditProcess";
 import "../home.scss";
 import { AffinityRenderer } from "../../components/Affinity/AffinityRenderer";
@@ -17,6 +16,7 @@ import { VitalState, ManagedState, MachineState } from "../../Redux/States";
 import axios from "axios";
 import { recieveDeleteManagedProcessAction as recieveDeleteManagedProcessAction } from "../../Redux/actions/managedModelActions";
 import { Table } from "../../components/Table";
+import { ProfileDto, ManagedModelDto, ProcessPriorityEnum, UpdateProfileRequest } from "@vital/vitalservice";
 
 export const EditProfilePage: React.FunctionComponent = () => {
     // @ts-ignore

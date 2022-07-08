@@ -31,7 +31,7 @@ export interface GetRunningProcessesResponse {
      * @type {{ [key: string]: ParentChildModelDto; }}
      * @memberof GetRunningProcessesResponse
      */
-    processView?: { [key: string]: ParentChildModelDto; };
+    processView: { [key: string]: ParentChildModelDto; };
 }
 
 /**
@@ -39,6 +39,7 @@ export interface GetRunningProcessesResponse {
  */
 export function instanceOfGetRunningProcessesResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "processView" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function GetRunningProcessesResponseFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
-        'processView': !exists(json, 'processView') ? undefined : (mapValues(json['processView'], ParentChildModelDtoFromJSON)),
+        'processView': (mapValues(json['processView'], ParentChildModelDtoFromJSON)),
     };
 }
 
@@ -66,7 +67,7 @@ export function GetRunningProcessesResponseToJSON(value?: GetRunningProcessesRes
     }
     return {
         
-        'processView': value.processView === undefined ? undefined : (mapValues(value.processView, ParentChildModelDtoToJSON)),
+        'processView': (mapValues(value.processView, ParentChildModelDtoToJSON)),
     };
 }
 

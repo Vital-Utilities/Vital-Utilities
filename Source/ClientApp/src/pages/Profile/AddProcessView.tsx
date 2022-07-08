@@ -2,10 +2,10 @@ import { Form, Input, Button } from "antd";
 import axios from "axios";
 import React from "react";
 import { useSelector } from "react-redux";
-import { AddProccessRequest, ProcessPriorityEnum } from "../../Dtos/ClientApiDto";
 import { VitalState } from "../../Redux/States";
 import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
 import { ProcessPriority } from "./ProcessPriority";
+import { AddProccessRequest, ProcessPriorityEnum } from "@vital/vitalservice";
 
 interface AddProcessViewProps {
     name: string;

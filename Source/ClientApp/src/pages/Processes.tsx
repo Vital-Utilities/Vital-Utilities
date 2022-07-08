@@ -9,11 +9,11 @@ import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-des
 import { ProcessViewState, ProfileState, VitalState } from "../Redux/States";
 import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
-import { GetMachineDynamicDataResponse, ParentChildModelDto, ProcessViewDto } from "../Dtos/ClientApiDto";
 import { getProcessCPUPercentColor } from "../components/PerfBadge";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../components/FormatUtils";
 import { openUrl } from "../Utilities/TauriCommands";
 import { Table } from "../components/Table";
+import { ParentChildModelDto, GetMachineDynamicDataResponse, ProcessViewDto } from "@vital/vitalservice";
 
 enum SortByEnum {
     "Description" = "Description",
@@ -44,10 +44,26 @@ export const Processes: React.FunctionComponent = () => {
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Description, descending: false });
     const dispatch = useDispatch();
 
-    const totalRam = (dto: ParentChildModelDto) => valueOrZero(processRamGb?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 1);
-    const totalCpu = (dto: ParentChildModelDto) => valueOrZero(processCpuPercentage?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 1);
-    const totalDiskActivity = (dto: ParentChildModelDto) => valueOrZero(processBytesPerSecActivity?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 1);
-    const totalGpuActivity = (dto: ParentChildModelDto) => valueOrZero(processGpuPercentage?.[dto.parent.id]) + dto.children.flatMap(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 1);
+    const totalRam = (dto: ParentChildModelDto) =>
+        valueOrZero(processRamGb?.[dto.parent.id]) +
+        Array.from(dto.children.values())
+            .flatMap(e => valueOrZero(processRamGb?.[e.id]))
+            .reduce((a, b) => a + b, 1);
+    const totalCpu = (dto: ParentChildModelDto) =>
+        valueOrZero(processCpuPercentage?.[dto.parent.id]) +
+        Array.from(dto.children.values())
+            .flatMap(e => valueOrZero(processCpuPercentage?.[e.id]))
+            .reduce((a, b) => a + b, 1);
+    const totalDiskActivity = (dto: ParentChildModelDto) =>
+        valueOrZero(processBytesPerSecActivity?.[dto.parent.id]) +
+        Array.from(dto.children.values())
+            .flatMap(e => valueOrZero(processBytesPerSecActivity?.[e.id]))
+            .reduce((a, b) => a + b, 1);
+    const totalGpuActivity = (dto: ParentChildModelDto) =>
+        valueOrZero(processGpuPercentage?.[dto.parent.id]) +
+        Array.from(dto.children.values())
+            .flatMap(e => valueOrZero(processGpuPercentage?.[e.id]))
+            .reduce((a, b) => a + b, 1);
     useEffect(() => {
         render();
         function render() {
@@ -181,7 +197,7 @@ export const Processes: React.FunctionComponent = () => {
 
     function renderProcess(e: ParentChildModelDto): React.ReactNode {
         const returnValue: React.ReactNode[] = [];
-        const hasChildren = e.children.length > 0;
+        const hasChildren = e.children.size > 0;
         if (hasChildren) hasChildrenRender();
         else noChildrenRender();
 
@@ -190,9 +206,9 @@ export const Processes: React.FunctionComponent = () => {
                 <Dropdown key={`dropdown - ${e.parent.id}`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
                     <tr className="process">
                         <td
-                            style={e.children.length === 0 ? { paddingLeft: 40 } : { cursor: "pointer" }}
+                            style={e.children.size === 0 ? { paddingLeft: 40 } : { cursor: "pointer" }}
                             onClick={() => {
-                                if (e.children.length === 0) return;
+                                if (e.children.size === 0) return;
                                 if (expandedIds.find(f => f === e.parent.id) === undefined) {
                                     const copy = { ...expandedIds };
                                     copy.push(e.parent.id);
@@ -202,10 +218,10 @@ export const Processes: React.FunctionComponent = () => {
                             }}
                         >
                             <div>
-                                <span>{e.parent.description || e.parent.processName}</span>
+                                <span>{e.parent.description ?? e.parent.processName}</span>
                             </div>
                         </td>
-                        <td title={e.parent.processTitle} style={{ maxWidth: 250 }}>
+                        <td title={e.parent.processTitle ?? undefined} style={{ maxWidth: 250 }}>
                             <p style={{ margin: 0 }} className="cut-text">
                                 {e.parent.processTitle}
                             </p>
@@ -222,10 +238,11 @@ export const Processes: React.FunctionComponent = () => {
         }
 
         function hasChildrenRender() {
-            const totalCpu = valueOrZero(processCpuPercentage?.[e.parent.id]) + e.children.map(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
-            const totalRam = valueOrZero(processRamGb?.[e.parent.id]) + e.children.map(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 0);
-            const diskBytesPerSecActivity = valueOrZero(processBytesPerSecActivity?.[e.parent.id]) + e.children.map(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 0);
-            const gpuActivity = valueOrZero(processGpuPercentage?.[e.parent.id]) + e.children.map(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
+            const values = Array.from(e.children.values());
+            const totalCpu = valueOrZero(processCpuPercentage?.[e.parent.id]) + values.map(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
+            const totalRam = valueOrZero(processRamGb?.[e.parent.id]) + values.map(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 0);
+            const diskBytesPerSecActivity = valueOrZero(processBytesPerSecActivity?.[e.parent.id]) + values.map(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 0);
+            const gpuActivity = valueOrZero(processGpuPercentage?.[e.parent.id]) + values.map(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
 
             returnValue.push(
                 <Dropdown key={`dropdown - ${e.parent.id}`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
@@ -245,11 +262,11 @@ export const Processes: React.FunctionComponent = () => {
                             <div>
                                 <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <CaretRightOutlined /> : <CaretDownOutlined />}</span>
                                 <span>
-                                    {e.parent.description || e.parent.processName} {`(+${e.children.length})`}
+                                    {e.parent.description ?? e.parent.processName} {`(+${e.children.size})`}
                                 </span>
                             </div>
                         </td>
-                        <td title={e.parent.processTitle} style={{ maxWidth: 250 }}>
+                        <td title={e.parent.processTitle ?? undefined} style={{ maxWidth: 250 }}>
                             <p style={{ margin: 0 }} className="cut-text">
                                 {e.parent.processTitle}
                             </p>
@@ -286,7 +303,7 @@ export const Processes: React.FunctionComponent = () => {
                                     <span>{e.parent.description || e.parent.processName}</span>
                                 </div>
                             </td>
-                            <td title={e.parent.processTitle} style={{ maxWidth: 250 }}>
+                            <td title={e.parent.processTitle ?? undefined} style={{ maxWidth: 250 }}>
                                 <p style={{ margin: 0 }} className="cut-text">
                                     {e.parent.processTitle}
                                 </p>
@@ -301,13 +318,13 @@ export const Processes: React.FunctionComponent = () => {
                     </Dropdown>
                 );
                 returnValue.push(
-                    e.children.map(c => {
+                    values.map(c => {
                         const cpuPercentage = valueOrZero(processCpuPercentage?.[c.id]);
                         return (
                             <Dropdown key={`dropdown - ${c.id}`} overlay={contextMenu(c)} trigger={["contextMenu"]}>
                                 <tr key={c.id} className="child process">
                                     <td style={{ paddingLeft: 70, maxWidth: 200 }}>{c.description || c.processName}</td>
-                                    <td title={c.processTitle} style={{ maxWidth: 250 }}>
+                                    <td title={c.processTitle ?? undefined} style={{ maxWidth: 250 }}>
                                         <p style={{ margin: 0 }} className="cut-text">
                                             {c.processTitle}
                                         </p>

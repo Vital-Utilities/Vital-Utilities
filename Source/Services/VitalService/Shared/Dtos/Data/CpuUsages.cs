@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VitalService.Dtos.Coms
 {
-    public class CpuUsages
+    public class CpuUsage
     {
         [SwaggerRequired]
         public List<float> CoreClocksMhz { get; set; } = new();
@@ -12,7 +12,8 @@ namespace VitalService.Dtos.Coms
         [SwaggerRequired]
         public float? PowerDrawWattage { get; set; }
         [SwaggerRequired]
-        public List<float> Cores { get; set; } = new();
+        public List<float> CorePercentages { get; set; } = new();
+
         [SwaggerRequired]
         public ConcurrentDictionary<string, float> TemperatureReadings { get; set; } = new();
 

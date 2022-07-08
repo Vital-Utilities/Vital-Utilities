@@ -8,10 +8,11 @@ Name | Type | Description | Notes
 **serial** | Option<**String**> |  | 
 **unique_identifier** | Option<**String**> |  | 
 **drive_type** | [**crate::models::DriveType**](DriveType.md) |  | 
+**disk_type** | [**crate::models::DiskType**](DiskType.md) |  | 
 **throughput** | [**crate::models::Throughput**](Throughput.md) |  | 
-**load** | [**crate::models::Load**](Load.md) |  | 
+**load** | [**crate::models::DiskLoad**](DiskLoad.md) |  | 
 **temperatures** | **::std::collections::HashMap<String, f32>** |  | 
-**data** | [**crate::models::Data**](Data.md) |  | 
+**data** | [**crate::models::DiskHealth**](DiskHealth.md) |  | 
 **label** | **String** |  | 
 **letter** | **String** |  | 
 

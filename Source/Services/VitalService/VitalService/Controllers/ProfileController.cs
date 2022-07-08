@@ -43,12 +43,12 @@ namespace VitalService.Controllers
             return Ok(result.ToDto());
         }
 
-        [ProducesResponseType(typeof(ProfileModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProfileDto), StatusCodes.Status200OK)]
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateProfileRequest request)
         {
             var model = await ProfileStore.Create(new ProfileModel(request.Name));
-            return Ok(model);
+            return Ok(model.ToDto());
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]

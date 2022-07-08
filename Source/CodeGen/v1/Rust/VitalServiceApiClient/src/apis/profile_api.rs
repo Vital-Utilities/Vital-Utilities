@@ -158,7 +158,7 @@ pub async fn api_profile_id_get(configuration: &configuration::Configuration, id
     }
 }
 
-pub async fn api_profile_post(configuration: &configuration::Configuration, create_profile_request: Option<crate::models::CreateProfileRequest>) -> Result<crate::models::ProfileModel, Error<ApiProfilePostError>> {
+pub async fn api_profile_post(configuration: &configuration::Configuration, create_profile_request: Option<crate::models::CreateProfileRequest>) -> Result<crate::models::ProfileDto, Error<ApiProfilePostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;

@@ -118,7 +118,7 @@ export const PerformancePage: React.FunctionComponent = props => {
     function getRamUsageData(e: TimeSeriesMachineMetricsModel): ramMetricsModel {
         const d = e.ramUsageData;
         const freeMemory = d.totalVisibleMemoryBytes && d.usedMemoryBytes && d.totalVisibleMemoryBytes - d.usedMemoryBytes;
-        return { ...d, dateTimeOffset: e.dateTimeOffset, usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes, freePhysicalMemory: freeMemory };
+        return { ...d, dateTimeOffset: e.dateTimeOffset, usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes ?? undefined, freePhysicalMemory: freeMemory ?? undefined };
     }
     useEffect(() => {
         if (timeSeriesMetrics?.metrics && timeSeriesMetrics.requestRange) {
@@ -132,7 +132,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                     }) as gpuMetricsModel[],
                     ramMetrics: getRamUsageData(e),
                     networkMetrics: e.networkUsageData.map(d => {
-                        return { dateTimeOffset: e.dateTimeOffset, macAddress: d.uniqueIdentifier, uploadSpeedBps: d.uploadSpeedBps !== undefined ? -MBpsToMbps(d.uploadSpeedBps) : null, downloadSpeedBps: d.downloadSpeedBps !== undefined ? MBpsToMbps(d.downloadSpeedBps) : null };
+                        return { dateTimeOffset: e.dateTimeOffset, macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -MBpsToMbps(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && MBpsToMbps(d.downloadSpeedBps)) ?? null };
                     }) as networkMetricsModel[],
                     diskMetrics: e.diskUsageData.map(d => {
                         return { ...d, dateTimeOffset: e.dateTimeOffset };
@@ -444,8 +444,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                                 <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryController?.toFixed(0)}%`}</div>
                                                             </div>
                                                             <div>
-                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe_Throughput?.pcIe_Rx_BytesPerSecond)}`}</div>
-                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe_Throughput?.pcIe_Tx_BytesPerSecond)}`}</div>
+                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeRxBytesPerSecond)}`}</div>
+                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeTxBytesPerSecond)}`}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -530,9 +530,9 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                         <div>
                                                             <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Network</h4>
                                                             <div>
-                                                                {value.properties.ipInterfaceProperties.dnsSuffix && <div>DNS Name: {value.properties.ipInterfaceProperties.dnsSuffix}</div>}
-                                                                {value.properties.ipInterfaceProperties.iPv4Address && <div>IPv4 Address: {value.properties.ipInterfaceProperties.iPv4Address}</div>}
-                                                                {value.properties.ipInterfaceProperties.iPv6Address && <div>IPv6 Address: {value.properties.ipInterfaceProperties.iPv6Address}</div>}
+                                                                {value.properties?.ipInterfaceProperties?.dnsSuffix && <div>DNS Name: {value.properties.ipInterfaceProperties.dnsSuffix}</div>}
+                                                                {value.properties?.ipInterfaceProperties?.iPv4Address && <div>IPv4 Address: {value.properties.ipInterfaceProperties.iPv4Address}</div>}
+                                                                {value.properties?.ipInterfaceProperties?.iPv6Address && <div>IPv6 Address: {value.properties.ipInterfaceProperties.iPv6Address}</div>}
                                                             </div>
                                                             <div>
                                                                 <div>MAC Address: {value.properties.macAddress}</div>
@@ -584,8 +584,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Health</h4>
                                                         <div>
-                                                            <div>Data written: {getReadableBytesString(value.data.dataWrittenBytes)}</div>
-                                                            <div>Data read: {getReadableBytesString(value.data.dataReadBytes)}</div>
+                                                            <div>Data written: {getReadableBytesString(value.data.totalBytesRead)}</div>
+                                                            <div>Data read: {getReadableBytesString(value.data.totalBytesWritten)}</div>
                                                         </div>
                                                     </div>
                                                     <div>

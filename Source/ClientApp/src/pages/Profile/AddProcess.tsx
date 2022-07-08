@@ -7,8 +7,8 @@ import { AddProcessView } from "./AddProcessView";
 import { useSelector } from "react-redux";
 import { VitalState, MachineState } from "../../Redux/States";
 import axios from "axios";
-import { GetProcessesToAddResponse, ManagedModelDto, ProcessToAddDto, ProfileDto } from "../../Dtos/ClientApiDto";
 import { Table } from "../../components/Table";
+import { ProfileDto, ManagedModelDto, ProcessToAddDto, GetProcessesToAddResponse } from "@vital/vitalservice";
 
 enum Pages {
     Select,
@@ -24,7 +24,7 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
     const [data, setData] = React.useState<
         {
             key: string;
-            values: [ProcessToAddDto, ...ProcessToAddDto[]];
+            values: ProcessToAddDto[];
         }[]
     >([]);
     const [unManagedProcesses, setUnManagedProcesses] = React.useState<ProcessToAddDto[]>();

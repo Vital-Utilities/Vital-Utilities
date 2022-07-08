@@ -12,14 +12,14 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct NetworkAdapters {
+pub struct NetworkAdapterUsages {
     #[serde(rename = "adapters")]
-    pub adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapter>,
+    pub adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapterUsage>,
 }
 
-impl NetworkAdapters {
-    pub fn new(adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapter>) -> NetworkAdapters {
-        NetworkAdapters {
+impl NetworkAdapterUsages {
+    pub fn new(adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapterUsage>) -> NetworkAdapterUsages {
+        NetworkAdapterUsages {
             adapters,
         }
     }

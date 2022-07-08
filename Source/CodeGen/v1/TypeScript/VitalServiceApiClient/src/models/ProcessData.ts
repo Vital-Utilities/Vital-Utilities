@@ -37,73 +37,73 @@ export interface ProcessData {
      * @type {number}
      * @memberof ProcessData
      */
-    pid?: number;
+    pid: number;
     /**
      * 
      * @type {number}
      * @memberof ProcessData
      */
-    parentPid?: number | null;
+    parentPid: number | null;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    executablePath?: string | null;
+    executablePath: string | null;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    description?: string | null;
+    description: string | null;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    mainWindowTitle?: string | null;
+    mainWindowTitle: string | null;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {Date}
      * @memberof ProcessData
      */
-    timeStamp?: Date;
+    timeStamp: Date;
     /**
      * 
      * @type {number}
      * @memberof ProcessData
      */
-    cpuPercentage?: number;
+    cpuPercentage: number;
     /**
      * 
      * @type {number}
      * @memberof ProcessData
      */
-    memoryKb?: number;
+    memoryKb: number;
     /**
      * 
      * @type {ProcessDiskUsage}
      * @memberof ProcessData
      */
-    diskUsage?: ProcessDiskUsage;
+    diskUsage: ProcessDiskUsage;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    status?: string | null;
+    status: string | null;
     /**
      * 
      * @type {ProcessGpuUtil}
      * @memberof ProcessData
      */
-    gpuUtil?: ProcessGpuUtil;
+    gpuUtil: ProcessGpuUtil;
 }
 
 /**
@@ -111,6 +111,18 @@ export interface ProcessData {
  */
 export function instanceOfProcessData(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "pid" in value;
+    isInstance = isInstance && "parentPid" in value;
+    isInstance = isInstance && "executablePath" in value;
+    isInstance = isInstance && "description" in value;
+    isInstance = isInstance && "mainWindowTitle" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "timeStamp" in value;
+    isInstance = isInstance && "cpuPercentage" in value;
+    isInstance = isInstance && "memoryKb" in value;
+    isInstance = isInstance && "diskUsage" in value;
+    isInstance = isInstance && "status" in value;
+    isInstance = isInstance && "gpuUtil" in value;
 
     return isInstance;
 }
@@ -125,18 +137,18 @@ export function ProcessDataFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'pid': !exists(json, 'pid') ? undefined : json['pid'],
-        'parentPid': !exists(json, 'parentPid') ? undefined : json['parentPid'],
-        'executablePath': !exists(json, 'executablePath') ? undefined : json['executablePath'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'mainWindowTitle': !exists(json, 'mainWindowTitle') ? undefined : json['mainWindowTitle'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'timeStamp': !exists(json, 'timeStamp') ? undefined : (new Date(json['timeStamp'])),
-        'cpuPercentage': !exists(json, 'cpuPercentage') ? undefined : json['cpuPercentage'],
-        'memoryKb': !exists(json, 'memoryKb') ? undefined : json['memoryKb'],
-        'diskUsage': !exists(json, 'diskUsage') ? undefined : ProcessDiskUsageFromJSON(json['diskUsage']),
-        'status': !exists(json, 'status') ? undefined : json['status'],
-        'gpuUtil': !exists(json, 'gpuUtil') ? undefined : ProcessGpuUtilFromJSON(json['gpuUtil']),
+        'pid': json['pid'],
+        'parentPid': json['parentPid'],
+        'executablePath': json['executablePath'],
+        'description': json['description'],
+        'mainWindowTitle': json['mainWindowTitle'],
+        'name': json['name'],
+        'timeStamp': (new Date(json['timeStamp'])),
+        'cpuPercentage': json['cpuPercentage'],
+        'memoryKb': json['memoryKb'],
+        'diskUsage': ProcessDiskUsageFromJSON(json['diskUsage']),
+        'status': json['status'],
+        'gpuUtil': ProcessGpuUtilFromJSON(json['gpuUtil']),
     };
 }
 
@@ -155,7 +167,7 @@ export function ProcessDataToJSON(value?: ProcessData | null): any {
         'description': value.description,
         'mainWindowTitle': value.mainWindowTitle,
         'name': value.name,
-        'timeStamp': value.timeStamp === undefined ? undefined : (value.timeStamp.toISOString()),
+        'timeStamp': (value.timeStamp.toISOString()),
         'cpuPercentage': value.cpuPercentage,
         'memoryKb': value.memoryKb,
         'diskUsage': ProcessDiskUsageToJSON(value.diskUsage),

@@ -32,7 +32,7 @@ namespace VitalService.Stores
             return HardwarePerformanceService.MachineStaticData;
         }
 
-        public RamUsages GetRamUsage()
+        public MemoryUsage GetRamUsage()
         {
             return HardwarePerformanceService.CurrentRamUsage;
         }
@@ -41,7 +41,7 @@ namespace VitalService.Stores
         {
             return HardwarePerformanceService.CurrentGpuUsage;
         }
-        public NetworkAdapters GetNetworkUsage()
+        public NetworkAdapterUsages GetNetworkUsage()
         {
             return HardwarePerformanceService.CurrentNetworkUsage;
         }
@@ -90,7 +90,7 @@ namespace VitalService.Stores
             return metrics;
         }
 
-        public CpuUsages GetCpuUsage()
+        public CpuUsage GetCpuUsage()
         {
             return HardwarePerformanceService.CurrentCpuUsage;
         }

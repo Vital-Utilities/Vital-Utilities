@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct SendUtilizationRequest {
-    #[serde(rename = "processData", skip_serializing_if = "Option::is_none")]
-    pub process_data: Option<Vec<crate::models::ProcessData>>,
-    #[serde(rename = "systemUsage", skip_serializing_if = "Option::is_none")]
-    pub system_usage: Option<Box<crate::models::SystemUsage>>,
+    #[serde(rename = "processData")]
+    pub process_data: Vec<crate::models::ProcessData>,
+    #[serde(rename = "systemUsage")]
+    pub system_usage: Box<crate::models::SystemUsage>,
 }
 
 impl SendUtilizationRequest {
-    pub fn new() -> SendUtilizationRequest {
+    pub fn new(process_data: Vec<crate::models::ProcessData>, system_usage: crate::models::SystemUsage) -> SendUtilizationRequest {
         SendUtilizationRequest {
-            process_data: None,
-            system_usage: None,
+            process_data,
+            system_usage: Box::new(system_usage),
         }
     }
 }

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Layout, Form, Radio, Button, Input } from "antd";
-import { SettingsDto } from "../Dtos/ClientApiDto";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { VitalState } from "../Redux/States";
 import { fetchSettingsAction } from "../Redux/actions/settingsAction";
 import { useRustClientSettings } from "../Utilities/TauriCommands";
+import { SettingsDto } from "@vital/vitalservice";
 
 const { Content } = Layout;
 

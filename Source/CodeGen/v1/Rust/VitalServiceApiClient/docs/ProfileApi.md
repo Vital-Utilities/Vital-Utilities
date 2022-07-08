@@ -98,7 +98,7 @@ No authorization required
 
 ## api_profile_post
 
-> crate::models::ProfileModel api_profile_post(create_profile_request)
+> crate::models::ProfileDto api_profile_post(create_profile_request)
 
 
 ### Parameters
@@ -110,7 +110,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**crate::models::ProfileModel**](ProfileModel.md)
+[**crate::models::ProfileDto**](ProfileDto.md)
 
 ### Authorization
 

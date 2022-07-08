@@ -16,39 +16,60 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface RamUsages
+ * @interface MemoryUsage
  */
-export interface RamUsages {
+export interface MemoryUsage {
     /**
      * 
      * @type {number}
-     * @memberof RamUsages
+     * @memberof MemoryUsage
      */
     usedMemoryBytes: number;
     /**
      * 
      * @type {number}
-     * @memberof RamUsages
+     * @memberof MemoryUsage
      */
     totalVisibleMemoryBytes: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    swapPercentage: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    swapUsedKB: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    swapTotalKB: number;
 }
 
 /**
- * Check if a given object implements the RamUsages interface.
+ * Check if a given object implements the MemoryUsage interface.
  */
-export function instanceOfRamUsages(value: object): boolean {
+export function instanceOfMemoryUsage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "usedMemoryBytes" in value;
     isInstance = isInstance && "totalVisibleMemoryBytes" in value;
+    isInstance = isInstance && "swapPercentage" in value;
+    isInstance = isInstance && "swapUsedKB" in value;
+    isInstance = isInstance && "swapTotalKB" in value;
 
     return isInstance;
 }
 
-export function RamUsagesFromJSON(json: any): RamUsages {
-    return RamUsagesFromJSONTyped(json, false);
+export function MemoryUsageFromJSON(json: any): MemoryUsage {
+    return MemoryUsageFromJSONTyped(json, false);
 }
 
-export function RamUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean): RamUsages {
+export function MemoryUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean): MemoryUsage {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -56,10 +77,13 @@ export function RamUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         
         'usedMemoryBytes': json['usedMemoryBytes'],
         'totalVisibleMemoryBytes': json['totalVisibleMemoryBytes'],
+        'swapPercentage': json['swapPercentage'],
+        'swapUsedKB': json['swapUsedKB'],
+        'swapTotalKB': json['swapTotalKB'],
     };
 }
 
-export function RamUsagesToJSON(value?: RamUsages | null): any {
+export function MemoryUsageToJSON(value?: MemoryUsage | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -70,6 +94,9 @@ export function RamUsagesToJSON(value?: RamUsages | null): any {
         
         'usedMemoryBytes': value.usedMemoryBytes,
         'totalVisibleMemoryBytes': value.totalVisibleMemoryBytes,
+        'swapPercentage': value.swapPercentage,
+        'swapUsedKB': value.swapUsedKB,
+        'swapTotalKB': value.swapTotalKB,
     };
 }
 

@@ -13,12 +13,12 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { CpuUsages } from './CpuUsages';
+import type { CpuUsage } from './CpuUsage';
 import {
-    CpuUsagesFromJSON,
-    CpuUsagesFromJSONTyped,
-    CpuUsagesToJSON,
-} from './CpuUsages';
+    CpuUsageFromJSON,
+    CpuUsageFromJSONTyped,
+    CpuUsageToJSON,
+} from './CpuUsage';
 import type { DiskUsages } from './DiskUsages';
 import {
     DiskUsagesFromJSON,
@@ -31,18 +31,18 @@ import {
     GpuUsagesFromJSONTyped,
     GpuUsagesToJSON,
 } from './GpuUsages';
-import type { NetworkAdapters } from './NetworkAdapters';
+import type { MemoryUsage } from './MemoryUsage';
 import {
-    NetworkAdaptersFromJSON,
-    NetworkAdaptersFromJSONTyped,
-    NetworkAdaptersToJSON,
-} from './NetworkAdapters';
-import type { RamUsages } from './RamUsages';
+    MemoryUsageFromJSON,
+    MemoryUsageFromJSONTyped,
+    MemoryUsageToJSON,
+} from './MemoryUsage';
+import type { NetworkAdapterUsages } from './NetworkAdapterUsages';
 import {
-    RamUsagesFromJSON,
-    RamUsagesFromJSONTyped,
-    RamUsagesToJSON,
-} from './RamUsages';
+    NetworkAdapterUsagesFromJSON,
+    NetworkAdapterUsagesFromJSONTyped,
+    NetworkAdapterUsagesToJSON,
+} from './NetworkAdapterUsages';
 
 /**
  * 
@@ -52,16 +52,16 @@ import {
 export interface GetMachineDynamicDataResponse {
     /**
      * 
-     * @type {CpuUsages}
+     * @type {CpuUsage}
      * @memberof GetMachineDynamicDataResponse
      */
-    cpuUsageData: CpuUsages;
+    cpuUsageData: CpuUsage;
     /**
      * 
-     * @type {RamUsages}
+     * @type {MemoryUsage}
      * @memberof GetMachineDynamicDataResponse
      */
-    ramUsagesData: RamUsages;
+    ramUsagesData: MemoryUsage;
     /**
      * 
      * @type {Array<GpuUsages>}
@@ -76,10 +76,10 @@ export interface GetMachineDynamicDataResponse {
     diskUsages: DiskUsages;
     /**
      * 
-     * @type {NetworkAdapters}
+     * @type {NetworkAdapterUsages}
      * @memberof GetMachineDynamicDataResponse
      */
-    networkUsageData: NetworkAdapters;
+    networkUsageData: NetworkAdapterUsages;
     /**
      * 
      * @type {{ [key: string]: number; }}
@@ -155,11 +155,11 @@ export function GetMachineDynamicDataResponseFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'cpuUsageData': CpuUsagesFromJSON(json['cpuUsageData']),
-        'ramUsagesData': RamUsagesFromJSON(json['ramUsagesData']),
+        'cpuUsageData': CpuUsageFromJSON(json['cpuUsageData']),
+        'ramUsagesData': MemoryUsageFromJSON(json['ramUsagesData']),
         'gpuUsageData': (json['gpuUsageData'] === null ? null : (json['gpuUsageData'] as Array<any>).map(GpuUsagesFromJSON)),
         'diskUsages': DiskUsagesFromJSON(json['diskUsages']),
-        'networkUsageData': NetworkAdaptersFromJSON(json['networkUsageData']),
+        'networkUsageData': NetworkAdapterUsagesFromJSON(json['networkUsageData']),
         'processCpuUsage': json['processCpuUsage'],
         'processCpuThreadsUsage': json['processCpuThreadsUsage'],
         'processThreadCount': json['processThreadCount'],
@@ -179,11 +179,11 @@ export function GetMachineDynamicDataResponseToJSON(value?: GetMachineDynamicDat
     }
     return {
         
-        'cpuUsageData': CpuUsagesToJSON(value.cpuUsageData),
-        'ramUsagesData': RamUsagesToJSON(value.ramUsagesData),
+        'cpuUsageData': CpuUsageToJSON(value.cpuUsageData),
+        'ramUsagesData': MemoryUsageToJSON(value.ramUsagesData),
         'gpuUsageData': (value.gpuUsageData === null ? null : (value.gpuUsageData as Array<any>).map(GpuUsagesToJSON)),
         'diskUsages': DiskUsagesToJSON(value.diskUsages),
-        'networkUsageData': NetworkAdaptersToJSON(value.networkUsageData),
+        'networkUsageData': NetworkAdapterUsagesToJSON(value.networkUsageData),
         'processCpuUsage': value.processCpuUsage,
         'processCpuThreadsUsage': value.processCpuThreadsUsage,
         'processThreadCount': value.processThreadCount,

@@ -13,24 +13,30 @@
  */
 
 import { exists, mapValues } from '../runtime';
-import type { Data } from './Data';
+import type { DiskHealth } from './DiskHealth';
 import {
-    DataFromJSON,
-    DataFromJSONTyped,
-    DataToJSON,
-} from './Data';
+    DiskHealthFromJSON,
+    DiskHealthFromJSONTyped,
+    DiskHealthToJSON,
+} from './DiskHealth';
+import type { DiskLoad } from './DiskLoad';
+import {
+    DiskLoadFromJSON,
+    DiskLoadFromJSONTyped,
+    DiskLoadToJSON,
+} from './DiskLoad';
+import type { DiskType } from './DiskType';
+import {
+    DiskTypeFromJSON,
+    DiskTypeFromJSONTyped,
+    DiskTypeToJSON,
+} from './DiskType';
 import type { DriveType } from './DriveType';
 import {
     DriveTypeFromJSON,
     DriveTypeFromJSONTyped,
     DriveTypeToJSON,
 } from './DriveType';
-import type { Load } from './Load';
-import {
-    LoadFromJSON,
-    LoadFromJSONTyped,
-    LoadToJSON,
-} from './Load';
 import type { Throughput } from './Throughput';
 import {
     ThroughputFromJSON,
@@ -70,16 +76,22 @@ export interface DiskUsage {
     driveType: DriveType;
     /**
      * 
+     * @type {DiskType}
+     * @memberof DiskUsage
+     */
+    diskType: DiskType;
+    /**
+     * 
      * @type {Throughput}
      * @memberof DiskUsage
      */
     throughput: Throughput;
     /**
      * 
-     * @type {Load}
+     * @type {DiskLoad}
      * @memberof DiskUsage
      */
-    load: Load;
+    load: DiskLoad;
     /**
      * 
      * @type {{ [key: string]: number; }}
@@ -88,10 +100,10 @@ export interface DiskUsage {
     temperatures: { [key: string]: number; };
     /**
      * 
-     * @type {Data}
+     * @type {DiskHealth}
      * @memberof DiskUsage
      */
-    data: Data;
+    data: DiskHealth;
     /**
      * 
      * @type {string}
@@ -115,6 +127,7 @@ export function instanceOfDiskUsage(value: object): boolean {
     isInstance = isInstance && "serial" in value;
     isInstance = isInstance && "uniqueIdentifier" in value;
     isInstance = isInstance && "driveType" in value;
+    isInstance = isInstance && "diskType" in value;
     isInstance = isInstance && "throughput" in value;
     isInstance = isInstance && "load" in value;
     isInstance = isInstance && "temperatures" in value;
@@ -139,10 +152,11 @@ export function DiskUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'serial': json['serial'],
         'uniqueIdentifier': json['uniqueIdentifier'],
         'driveType': DriveTypeFromJSON(json['driveType']),
+        'diskType': DiskTypeFromJSON(json['diskType']),
         'throughput': ThroughputFromJSON(json['throughput']),
-        'load': LoadFromJSON(json['load']),
+        'load': DiskLoadFromJSON(json['load']),
         'temperatures': json['temperatures'],
-        'data': DataFromJSON(json['data']),
+        'data': DiskHealthFromJSON(json['data']),
         'label': json['label'],
         'letter': json['letter'],
     };
@@ -161,10 +175,11 @@ export function DiskUsageToJSON(value?: DiskUsage | null): any {
         'serial': value.serial,
         'uniqueIdentifier': value.uniqueIdentifier,
         'driveType': DriveTypeToJSON(value.driveType),
+        'diskType': DiskTypeToJSON(value.diskType),
         'throughput': ThroughputToJSON(value.throughput),
-        'load': LoadToJSON(value.load),
+        'load': DiskLoadToJSON(value.load),
         'temperatures': value.temperatures,
-        'data': DataToJSON(value.data),
+        'data': DiskHealthToJSON(value.data),
         'label': value.label,
         'letter': value.letter,
     };

@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**name** | Option<**String**> |  | 
 **temperature_readings** | **::std::collections::HashMap<String, f32>** |  | 
 **total_memory_bytes** | Option<**f32**> |  | 
 **memory_used_bytes** | Option<**f32**> |  | 
@@ -13,7 +14,7 @@ Name | Type | Description | Notes
 **fan_percentage** | Option<**::std::collections::HashMap<String, f32>**> |  | 
 **power_draw** | Option<**f32**> |  | 
 **load** | [**crate::models::LoadData**](LoadData.md) |  | 
-**pc_ie_throughput** | Option<[**crate::models::PcieThroughPut**](PCIE_ThroughPut.md)> |  | [optional]
+**pc_ie** | Option<[**crate::models::PcieThroughPut**](PCIE_ThroughPut.md)> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

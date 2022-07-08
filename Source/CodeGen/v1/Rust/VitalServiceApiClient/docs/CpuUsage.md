@@ -4,10 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**cpu_percentage** | Option<**f32**> |  | [optional]
-**cpu_temp** | Option<**f32**> |  | [optional]
-**core_frequencies** | Option<**Vec<f32>**> |  | [optional]
-**core_percentages** | Option<**Vec<f32>**> |  | [optional]
+**core_clocks_mhz** | **Vec<f32>** |  | 
+**total** | **f32** |  | 
+**power_draw_wattage** | Option<**f32**> |  | 
+**core_percentages** | **Vec<f32>** |  | 
+**temperature_readings** | **::std::collections::HashMap<String, f32>** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

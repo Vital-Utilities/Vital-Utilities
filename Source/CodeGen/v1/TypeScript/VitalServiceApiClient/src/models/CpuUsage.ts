@@ -21,28 +21,34 @@ import { exists, mapValues } from '../runtime';
 export interface CpuUsage {
     /**
      * 
-     * @type {number}
+     * @type {Array<number>}
      * @memberof CpuUsage
      */
-    cpuPercentage?: number;
+    coreClocksMhz: Array<number>;
     /**
      * 
      * @type {number}
      * @memberof CpuUsage
      */
-    cpuTemp?: number;
+    total: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuUsage
+     */
+    powerDrawWattage: number | null;
     /**
      * 
      * @type {Array<number>}
      * @memberof CpuUsage
      */
-    coreFrequencies?: Array<number>;
+    corePercentages: Array<number>;
     /**
      * 
-     * @type {Array<number>}
+     * @type {{ [key: string]: number; }}
      * @memberof CpuUsage
      */
-    corePercentages?: Array<number>;
+    temperatureReadings: { [key: string]: number; };
 }
 
 /**
@@ -50,6 +56,11 @@ export interface CpuUsage {
  */
 export function instanceOfCpuUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "coreClocksMhz" in value;
+    isInstance = isInstance && "total" in value;
+    isInstance = isInstance && "powerDrawWattage" in value;
+    isInstance = isInstance && "corePercentages" in value;
+    isInstance = isInstance && "temperatureReadings" in value;
 
     return isInstance;
 }
@@ -64,10 +75,11 @@ export function CpuUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'cpuPercentage': !exists(json, 'cpuPercentage') ? undefined : json['cpuPercentage'],
-        'cpuTemp': !exists(json, 'cpuTemp') ? undefined : json['cpuTemp'],
-        'coreFrequencies': !exists(json, 'coreFrequencies') ? undefined : json['coreFrequencies'],
-        'corePercentages': !exists(json, 'corePercentages') ? undefined : json['corePercentages'],
+        'coreClocksMhz': json['coreClocksMhz'],
+        'total': json['total'],
+        'powerDrawWattage': json['powerDrawWattage'],
+        'corePercentages': json['corePercentages'],
+        'temperatureReadings': json['temperatureReadings'],
     };
 }
 
@@ -80,10 +92,11 @@ export function CpuUsageToJSON(value?: CpuUsage | null): any {
     }
     return {
         
-        'cpuPercentage': value.cpuPercentage,
-        'cpuTemp': value.cpuTemp,
-        'coreFrequencies': value.coreFrequencies,
+        'coreClocksMhz': value.coreClocksMhz,
+        'total': value.total,
+        'powerDrawWattage': value.powerDrawWattage,
         'corePercentages': value.corePercentages,
+        'temperatureReadings': value.temperatureReadings,
     };
 }
 

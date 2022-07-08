@@ -12,18 +12,27 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct RamUsages {
+pub struct MemoryUsage {
     #[serde(rename = "usedMemoryBytes")]
     pub used_memory_bytes: f64,
     #[serde(rename = "totalVisibleMemoryBytes")]
     pub total_visible_memory_bytes: f64,
+    #[serde(rename = "swapPercentage")]
+    pub swap_percentage: f32,
+    #[serde(rename = "swapUsedKB")]
+    pub swap_used_kb: f32,
+    #[serde(rename = "swapTotalKB")]
+    pub swap_total_kb: f32,
 }
 
-impl RamUsages {
-    pub fn new(used_memory_bytes: f64, total_visible_memory_bytes: f64) -> RamUsages {
-        RamUsages {
+impl MemoryUsage {
+    pub fn new(used_memory_bytes: f64, total_visible_memory_bytes: f64, swap_percentage: f32, swap_used_kb: f32, swap_total_kb: f32) -> MemoryUsage {
+        MemoryUsage {
             used_memory_bytes,
             total_visible_memory_bytes,
+            swap_percentage,
+            swap_used_kb,
+            swap_total_kb,
         }
     }
 }

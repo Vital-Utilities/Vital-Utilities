@@ -52,8 +52,8 @@ export function PCIEThroughPutFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'pcIeRxBytesPerSecond': !exists(json, 'pcIe_Rx_BytesPerSecond') ? undefined : json['pcIe_Rx_BytesPerSecond'],
-        'pcIeTxBytesPerSecond': !exists(json, 'pcIe_Tx_BytesPerSecond') ? undefined : json['pcIe_Tx_BytesPerSecond'],
+        'pcIeRxBytesPerSecond': !exists(json, 'pcIe_RxBytesPerSecond') ? undefined : json['pcIe_RxBytesPerSecond'],
+        'pcIeTxBytesPerSecond': !exists(json, 'pcIe_TxBytesPerSecond') ? undefined : json['pcIe_TxBytesPerSecond'],
     };
 }
 
@@ -66,8 +66,8 @@ export function PCIEThroughPutToJSON(value?: PCIEThroughPut | null): any {
     }
     return {
         
-        'pcIe_Rx_BytesPerSecond': value.pcIeRxBytesPerSecond,
-        'pcIe_Tx_BytesPerSecond': value.pcIeTxBytesPerSecond,
+        'pcIe_RxBytesPerSecond': value.pcIeRxBytesPerSecond,
+        'pcIe_TxBytesPerSecond': value.pcIeTxBytesPerSecond,
     };
 }
 

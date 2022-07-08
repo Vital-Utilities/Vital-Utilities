@@ -13,35 +13,29 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct NetworkAdapterProperties {
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "ipInterfaceProperties", skip_serializing_if = "Option::is_none")]
+    pub ip_interface_properties: Option<Box<crate::models::IpInterfaceProperties>>,
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "description")]
     pub description: Option<String>,
-    #[serde(rename = "macAddress", skip_serializing_if = "Option::is_none")]
-    pub mac_address: Option<String>,
-    #[serde(rename = "speedBps", skip_serializing_if = "Option::is_none")]
-    pub speed_bps: Option<f32>,
-    #[serde(rename = "connectionType", skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
-    #[serde(rename = "iPv4Address", skip_serializing_if = "Option::is_none")]
-    pub i_pv4_address: Option<Vec<String>>,
-    #[serde(rename = "iPv6Address", skip_serializing_if = "Option::is_none")]
-    pub i_pv6_address: Option<Vec<String>>,
-    #[serde(rename = "dnsSuffix", skip_serializing_if = "Option::is_none")]
-    pub dns_suffix: Option<String>,
+    #[serde(rename = "macAddress")]
+    pub mac_address: String,
+    #[serde(rename = "speedBps")]
+    pub speed_bps: i64,
+    #[serde(rename = "connectionType")]
+    pub connection_type: String,
 }
 
 impl NetworkAdapterProperties {
-    pub fn new() -> NetworkAdapterProperties {
+    pub fn new(name: String, description: Option<String>, mac_address: String, speed_bps: i64, connection_type: String) -> NetworkAdapterProperties {
         NetworkAdapterProperties {
-            name: None,
-            description: None,
-            mac_address: None,
-            speed_bps: None,
-            connection_type: None,
-            i_pv4_address: None,
-            i_pv6_address: None,
-            dns_suffix: None,
+            ip_interface_properties: None,
+            name,
+            description,
+            mac_address,
+            speed_bps,
+            connection_type,
         }
     }
 }

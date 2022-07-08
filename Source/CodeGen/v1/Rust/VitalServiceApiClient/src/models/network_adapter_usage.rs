@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct NetworkAdapterUsage {
-    #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
-    pub properties: Option<Box<crate::models::NetworkAdapterProperties>>,
-    #[serde(rename = "utilisation", skip_serializing_if = "Option::is_none")]
-    pub utilisation: Option<Box<crate::models::NetworkAdapterUtil>>,
+    #[serde(rename = "usage")]
+    pub usage: Box<crate::models::NetAdapterUsage>,
+    #[serde(rename = "properties")]
+    pub properties: Box<crate::models::NetworkAdapterProperties>,
 }
 
 impl NetworkAdapterUsage {
-    pub fn new() -> NetworkAdapterUsage {
+    pub fn new(usage: crate::models::NetAdapterUsage, properties: crate::models::NetworkAdapterProperties) -> NetworkAdapterUsage {
         NetworkAdapterUsage {
-            properties: None,
-            utilisation: None,
+            usage: Box::new(usage),
+            properties: Box::new(properties),
         }
     }
 }

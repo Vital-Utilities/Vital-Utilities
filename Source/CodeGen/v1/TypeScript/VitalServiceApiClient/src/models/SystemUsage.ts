@@ -19,18 +19,18 @@ import {
     CpuUsageFromJSONTyped,
     CpuUsageToJSON,
 } from './CpuUsage';
-import type { Disk } from './Disk';
+import type { DiskUsage } from './DiskUsage';
 import {
-    DiskFromJSON,
-    DiskFromJSONTyped,
-    DiskToJSON,
-} from './Disk';
-import type { MemUsage } from './MemUsage';
+    DiskUsageFromJSON,
+    DiskUsageFromJSONTyped,
+    DiskUsageToJSON,
+} from './DiskUsage';
+import type { MemoryUsage } from './MemoryUsage';
 import {
-    MemUsageFromJSON,
-    MemUsageFromJSONTyped,
-    MemUsageToJSON,
-} from './MemUsage';
+    MemoryUsageFromJSON,
+    MemoryUsageFromJSONTyped,
+    MemoryUsageToJSON,
+} from './MemoryUsage';
 import type { NetworkAdapterUsage } from './NetworkAdapterUsage';
 import {
     NetworkAdapterUsageFromJSON,
@@ -49,25 +49,25 @@ export interface SystemUsage {
      * @type {CpuUsage}
      * @memberof SystemUsage
      */
-    cpuUsage?: CpuUsage;
+    cpuUsage: CpuUsage;
     /**
      * 
-     * @type {MemUsage}
+     * @type {MemoryUsage}
      * @memberof SystemUsage
      */
-    memUsage?: MemUsage;
+    memUsage: MemoryUsage;
     /**
      * 
      * @type {Array<NetworkAdapterUsage>}
      * @memberof SystemUsage
      */
-    networkAdapterUsage?: Array<NetworkAdapterUsage>;
+    networkAdapterUsage: Array<NetworkAdapterUsage>;
     /**
      * 
-     * @type {{ [key: string]: Disk; }}
+     * @type {{ [key: string]: DiskUsage; }}
      * @memberof SystemUsage
      */
-    disk?: { [key: string]: Disk; };
+    diskUsage: { [key: string]: DiskUsage; };
 }
 
 /**
@@ -75,6 +75,10 @@ export interface SystemUsage {
  */
 export function instanceOfSystemUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "cpuUsage" in value;
+    isInstance = isInstance && "memUsage" in value;
+    isInstance = isInstance && "networkAdapterUsage" in value;
+    isInstance = isInstance && "diskUsage" in value;
 
     return isInstance;
 }
@@ -89,10 +93,10 @@ export function SystemUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'cpuUsage': !exists(json, 'cpuUsage') ? undefined : CpuUsageFromJSON(json['cpuUsage']),
-        'memUsage': !exists(json, 'memUsage') ? undefined : MemUsageFromJSON(json['memUsage']),
-        'networkAdapterUsage': !exists(json, 'networkAdapterUsage') ? undefined : ((json['networkAdapterUsage'] as Array<any>).map(NetworkAdapterUsageFromJSON)),
-        'disk': !exists(json, 'disk') ? undefined : (mapValues(json['disk'], DiskFromJSON)),
+        'cpuUsage': CpuUsageFromJSON(json['cpuUsage']),
+        'memUsage': MemoryUsageFromJSON(json['memUsage']),
+        'networkAdapterUsage': ((json['networkAdapterUsage'] as Array<any>).map(NetworkAdapterUsageFromJSON)),
+        'diskUsage': (mapValues(json['diskUsage'], DiskUsageFromJSON)),
     };
 }
 
@@ -106,9 +110,9 @@ export function SystemUsageToJSON(value?: SystemUsage | null): any {
     return {
         
         'cpuUsage': CpuUsageToJSON(value.cpuUsage),
-        'memUsage': MemUsageToJSON(value.memUsage),
-        'networkAdapterUsage': value.networkAdapterUsage === undefined ? undefined : ((value.networkAdapterUsage as Array<any>).map(NetworkAdapterUsageToJSON)),
-        'disk': value.disk === undefined ? undefined : (mapValues(value.disk, DiskToJSON)),
+        'memUsage': MemoryUsageToJSON(value.memUsage),
+        'networkAdapterUsage': ((value.networkAdapterUsage as Array<any>).map(NetworkAdapterUsageToJSON)),
+        'diskUsage': (mapValues(value.diskUsage, DiskUsageToJSON)),
     };
 }
 

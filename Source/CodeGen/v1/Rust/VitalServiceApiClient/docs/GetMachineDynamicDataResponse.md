@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**cpu_usage_data** | [**crate::models::CpuUsages**](CpuUsages.md) |  | 
-**ram_usages_data** | [**crate::models::RamUsages**](RamUsages.md) |  | 
+**cpu_usage_data** | [**crate::models::CpuUsage**](CpuUsage.md) |  | 
+**ram_usages_data** | [**crate::models::MemoryUsage**](MemoryUsage.md) |  | 
 **gpu_usage_data** | Option<[**Vec<crate::models::GpuUsages>**](GpuUsages.md)> |  | 
 **disk_usages** | [**crate::models::DiskUsages**](DiskUsages.md) |  | 
-**network_usage_data** | [**crate::models::NetworkAdapters**](NetworkAdapters.md) |  | 
+**network_usage_data** | [**crate::models::NetworkAdapterUsages**](NetworkAdapterUsages.md) |  | 
 **process_cpu_usage** | Option<**::std::collections::HashMap<String, f32>**> |  | 
 **process_cpu_threads_usage** | Option<**::std::collections::HashMap<String, f32>**> |  | 
 **process_thread_count** | Option<**::std::collections::HashMap<String, f32>**> |  | 

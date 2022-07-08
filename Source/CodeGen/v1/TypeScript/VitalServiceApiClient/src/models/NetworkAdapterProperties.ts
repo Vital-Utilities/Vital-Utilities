@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { IPInterfaceProperties } from './IPInterfaceProperties';
+import {
+    IPInterfacePropertiesFromJSON,
+    IPInterfacePropertiesFromJSONTyped,
+    IPInterfacePropertiesToJSON,
+} from './IPInterfaceProperties';
+
 /**
  * 
  * @export
@@ -21,52 +28,40 @@ import { exists, mapValues } from '../runtime';
 export interface NetworkAdapterProperties {
     /**
      * 
-     * @type {string}
+     * @type {IPInterfaceProperties}
      * @memberof NetworkAdapterProperties
      */
-    name?: string;
+    ipInterfaceProperties?: IPInterfaceProperties;
     /**
      * 
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    description?: string | null;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    macAddress?: string;
+    description: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof NetworkAdapterProperties
+     */
+    macAddress: string;
     /**
      * 
      * @type {number}
      * @memberof NetworkAdapterProperties
      */
-    speedBps?: number | null;
+    speedBps: number;
     /**
      * 
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    connectionType?: string | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof NetworkAdapterProperties
-     */
-    iPv4Address?: Array<string> | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof NetworkAdapterProperties
-     */
-    iPv6Address?: Array<string> | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof NetworkAdapterProperties
-     */
-    dnsSuffix?: string | null;
+    connectionType: string;
 }
 
 /**
@@ -74,6 +69,11 @@ export interface NetworkAdapterProperties {
  */
 export function instanceOfNetworkAdapterProperties(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "description" in value;
+    isInstance = isInstance && "macAddress" in value;
+    isInstance = isInstance && "speedBps" in value;
+    isInstance = isInstance && "connectionType" in value;
 
     return isInstance;
 }
@@ -88,14 +88,12 @@ export function NetworkAdapterPropertiesFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'macAddress': !exists(json, 'macAddress') ? undefined : json['macAddress'],
-        'speedBps': !exists(json, 'speedBps') ? undefined : json['speedBps'],
-        'connectionType': !exists(json, 'connectionType') ? undefined : json['connectionType'],
-        'iPv4Address': !exists(json, 'iPv4Address') ? undefined : json['iPv4Address'],
-        'iPv6Address': !exists(json, 'iPv6Address') ? undefined : json['iPv6Address'],
-        'dnsSuffix': !exists(json, 'dnsSuffix') ? undefined : json['dnsSuffix'],
+        'ipInterfaceProperties': !exists(json, 'ipInterfaceProperties') ? undefined : IPInterfacePropertiesFromJSON(json['ipInterfaceProperties']),
+        'name': json['name'],
+        'description': json['description'],
+        'macAddress': json['macAddress'],
+        'speedBps': json['speedBps'],
+        'connectionType': json['connectionType'],
     };
 }
 
@@ -108,14 +106,12 @@ export function NetworkAdapterPropertiesToJSON(value?: NetworkAdapterProperties 
     }
     return {
         
+        'ipInterfaceProperties': IPInterfacePropertiesToJSON(value.ipInterfaceProperties),
         'name': value.name,
         'description': value.description,
         'macAddress': value.macAddress,
         'speedBps': value.speedBps,
         'connectionType': value.connectionType,
-        'iPv4Address': value.iPv4Address,
-        'iPv6Address': value.iPv6Address,
-        'dnsSuffix': value.dnsSuffix,
     };
 }
 

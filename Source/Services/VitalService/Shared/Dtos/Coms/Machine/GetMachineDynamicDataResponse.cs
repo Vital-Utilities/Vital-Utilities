@@ -7,15 +7,15 @@ namespace VitalService.Dtos.Coms
     public class GetMachineDynamicDataResponse
     {
         [SwaggerRequired]
-        public CpuUsages? CpuUsageData { get; set; }
+        public CpuUsage? CpuUsageData { get; set; }
         [SwaggerRequired]
-        public RamUsages? RamUsagesData { get; set; }
+        public MemoryUsage? RamUsagesData { get; set; }
         [SwaggerRequired]
         public List<GpuUsages>? GpuUsageData { get; set; }
         [SwaggerRequired]
         public DiskUsages? DiskUsages { get; set; }
         [SwaggerRequired]
-        public NetworkAdapters? NetworkUsageData { get; set; }
+        public NetworkAdapterUsages? NetworkUsageData { get; set; }
         [SwaggerRequired]
         public IDictionary<int, float>? ProcessCpuUsage { get; set; }
         [SwaggerRequired]

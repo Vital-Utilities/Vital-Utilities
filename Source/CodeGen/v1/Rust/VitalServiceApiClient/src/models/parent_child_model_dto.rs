@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ParentChildModelDto {
-    #[serde(rename = "parent", skip_serializing_if = "Option::is_none")]
-    pub parent: Option<Box<crate::models::ProcessViewDto>>,
-    #[serde(rename = "children", skip_serializing_if = "Option::is_none")]
-    pub children: Option<Vec<crate::models::ProcessViewDto>>,
+    #[serde(rename = "parent")]
+    pub parent: Box<crate::models::ProcessViewDto>,
+    #[serde(rename = "children")]
+    pub children: Vec<crate::models::ProcessViewDto>,
 }
 
 impl ParentChildModelDto {
-    pub fn new() -> ParentChildModelDto {
+    pub fn new(parent: crate::models::ProcessViewDto, children: Vec<crate::models::ProcessViewDto>) -> ParentChildModelDto {
         ParentChildModelDto {
-            parent: None,
-            children: None,
+            parent: Box::new(parent),
+            children,
         }
     }
 }

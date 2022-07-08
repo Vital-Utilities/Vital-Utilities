@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetRunningProcessesResponse {
-    #[serde(rename = "processView", skip_serializing_if = "Option::is_none")]
-    pub process_view: Option<::std::collections::HashMap<String, crate::models::ParentChildModelDto>>,
+    #[serde(rename = "processView")]
+    pub process_view: ::std::collections::HashMap<String, crate::models::ParentChildModelDto>,
 }
 
 impl GetRunningProcessesResponse {
-    pub fn new() -> GetRunningProcessesResponse {
+    pub fn new(process_view: ::std::collections::HashMap<String, crate::models::ParentChildModelDto>) -> GetRunningProcessesResponse {
         GetRunningProcessesResponse {
-            process_view: None,
+            process_view,
         }
     }
 }

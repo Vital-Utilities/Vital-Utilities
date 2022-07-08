@@ -14,15 +14,15 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetMachineDynamicDataResponse {
     #[serde(rename = "cpuUsageData")]
-    pub cpu_usage_data: Box<crate::models::CpuUsages>,
+    pub cpu_usage_data: Box<crate::models::CpuUsage>,
     #[serde(rename = "ramUsagesData")]
-    pub ram_usages_data: Box<crate::models::RamUsages>,
+    pub ram_usages_data: Box<crate::models::MemoryUsage>,
     #[serde(rename = "gpuUsageData")]
     pub gpu_usage_data: Option<Vec<crate::models::GpuUsages>>,
     #[serde(rename = "diskUsages")]
     pub disk_usages: Box<crate::models::DiskUsages>,
     #[serde(rename = "networkUsageData")]
-    pub network_usage_data: Box<crate::models::NetworkAdapters>,
+    pub network_usage_data: Box<crate::models::NetworkAdapterUsages>,
     #[serde(rename = "processCpuUsage")]
     pub process_cpu_usage: Option<::std::collections::HashMap<String, f32>>,
     #[serde(rename = "processCpuThreadsUsage")]
@@ -40,7 +40,7 @@ pub struct GetMachineDynamicDataResponse {
 }
 
 impl GetMachineDynamicDataResponse {
-    pub fn new(cpu_usage_data: crate::models::CpuUsages, ram_usages_data: crate::models::RamUsages, gpu_usage_data: Option<Vec<crate::models::GpuUsages>>, disk_usages: crate::models::DiskUsages, network_usage_data: crate::models::NetworkAdapters, process_cpu_usage: Option<::std::collections::HashMap<String, f32>>, process_cpu_threads_usage: Option<::std::collections::HashMap<String, f32>>, process_thread_count: Option<::std::collections::HashMap<String, f32>>, process_ram_usage_gb: Option<::std::collections::HashMap<String, f32>>, process_disk_bytes_per_sec_activity: Option<::std::collections::HashMap<String, f64>>, cpu_temperature: Option<::std::collections::HashMap<String, f32>>, process_gpu_usage: Option<::std::collections::HashMap<String, f32>>) -> GetMachineDynamicDataResponse {
+    pub fn new(cpu_usage_data: crate::models::CpuUsage, ram_usages_data: crate::models::MemoryUsage, gpu_usage_data: Option<Vec<crate::models::GpuUsages>>, disk_usages: crate::models::DiskUsages, network_usage_data: crate::models::NetworkAdapterUsages, process_cpu_usage: Option<::std::collections::HashMap<String, f32>>, process_cpu_threads_usage: Option<::std::collections::HashMap<String, f32>>, process_thread_count: Option<::std::collections::HashMap<String, f32>>, process_ram_usage_gb: Option<::std::collections::HashMap<String, f32>>, process_disk_bytes_per_sec_activity: Option<::std::collections::HashMap<String, f64>>, cpu_temperature: Option<::std::collections::HashMap<String, f32>>, process_gpu_usage: Option<::std::collections::HashMap<String, f32>>) -> GetMachineDynamicDataResponse {
         GetMachineDynamicDataResponse {
             cpu_usage_data: Box::new(cpu_usage_data),
             ram_usages_data: Box::new(ram_usages_data),
