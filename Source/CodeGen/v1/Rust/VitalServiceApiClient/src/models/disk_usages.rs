@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct DiskUsages {
-    #[serde(rename = "disks", skip_serializing_if = "Option::is_none")]
-    pub disks: Option<::std::collections::HashMap<String, crate::models::DiskUsage>>,
+    #[serde(rename = "disks")]
+    pub disks: ::std::collections::HashMap<String, crate::models::DiskUsage>,
 }
 
 impl DiskUsages {
-    pub fn new() -> DiskUsages {
+    pub fn new(disks: ::std::collections::HashMap<String, crate::models::DiskUsage>) -> DiskUsages {
         DiskUsages {
-            disks: None,
+            disks,
         }
     }
 }

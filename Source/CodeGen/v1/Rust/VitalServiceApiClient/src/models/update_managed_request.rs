@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct UpdateManagedRequest {
-    #[serde(rename = "managedModelDto", skip_serializing_if = "Option::is_none")]
-    pub managed_model_dto: Option<Box<crate::models::ManagedModelDto>>,
+    #[serde(rename = "managedModelDto")]
+    pub managed_model_dto: Box<crate::models::ManagedModelDto>,
 }
 
 impl UpdateManagedRequest {
-    pub fn new() -> UpdateManagedRequest {
+    pub fn new(managed_model_dto: crate::models::ManagedModelDto) -> UpdateManagedRequest {
         UpdateManagedRequest {
-            managed_model_dto: None,
+            managed_model_dto: Box::new(managed_model_dto),
         }
     }
 }

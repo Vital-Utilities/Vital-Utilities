@@ -37,31 +37,31 @@ export interface Properties {
      * @type {string}
      * @memberof Properties
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof Properties
      */
-    description?: string | null;
+    description: string | null;
     /**
      * 
      * @type {string}
      * @memberof Properties
      */
-    macAddress?: string;
+    macAddress: string;
     /**
      * 
      * @type {number}
      * @memberof Properties
      */
-    speedBps?: number;
+    speedBps: number;
     /**
      * 
      * @type {string}
      * @memberof Properties
      */
-    connectionType?: string;
+    connectionType: string;
 }
 
 /**
@@ -69,6 +69,11 @@ export interface Properties {
  */
 export function instanceOfProperties(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "description" in value;
+    isInstance = isInstance && "macAddress" in value;
+    isInstance = isInstance && "speedBps" in value;
+    isInstance = isInstance && "connectionType" in value;
 
     return isInstance;
 }
@@ -84,11 +89,11 @@ export function PropertiesFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'ipInterfaceProperties': !exists(json, 'ipInterfaceProperties') ? undefined : IPInterfacePropertiesFromJSON(json['ipInterfaceProperties']),
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'macAddress': !exists(json, 'macAddress') ? undefined : json['macAddress'],
-        'speedBps': !exists(json, 'speedBps') ? undefined : json['speedBps'],
-        'connectionType': !exists(json, 'connectionType') ? undefined : json['connectionType'],
+        'name': json['name'],
+        'description': json['description'],
+        'macAddress': json['macAddress'],
+        'speedBps': json['speedBps'],
+        'connectionType': json['connectionType'],
     };
 }
 

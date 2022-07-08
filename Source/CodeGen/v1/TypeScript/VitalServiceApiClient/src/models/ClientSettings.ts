@@ -24,7 +24,7 @@ export interface ClientSettings {
      * @type {boolean}
      * @memberof ClientSettings
      */
-    alwaysOnTop?: boolean;
+    alwaysOnTop: boolean;
 }
 
 /**
@@ -32,6 +32,7 @@ export interface ClientSettings {
  */
 export function instanceOfClientSettings(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "alwaysOnTop" in value;
 
     return isInstance;
 }
@@ -46,7 +47,7 @@ export function ClientSettingsFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'alwaysOnTop': !exists(json, 'alwaysOnTop') ? undefined : json['alwaysOnTop'],
+        'alwaysOnTop': json['alwaysOnTop'],
     };
 }
 

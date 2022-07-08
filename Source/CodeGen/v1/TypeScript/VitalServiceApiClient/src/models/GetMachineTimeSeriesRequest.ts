@@ -24,13 +24,13 @@ export interface GetMachineTimeSeriesRequest {
      * @type {Date}
      * @memberof GetMachineTimeSeriesRequest
      */
-    earliest?: Date;
+    earliest: Date;
     /**
      * 
      * @type {Date}
      * @memberof GetMachineTimeSeriesRequest
      */
-    latest?: Date;
+    latest: Date;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface GetMachineTimeSeriesRequest {
  */
 export function instanceOfGetMachineTimeSeriesRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "earliest" in value;
+    isInstance = isInstance && "latest" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function GetMachineTimeSeriesRequestFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
-        'earliest': !exists(json, 'earliest') ? undefined : (new Date(json['earliest'])),
-        'latest': !exists(json, 'latest') ? undefined : (new Date(json['latest'])),
+        'earliest': (new Date(json['earliest'])),
+        'latest': (new Date(json['latest'])),
     };
 }
 
@@ -66,8 +68,8 @@ export function GetMachineTimeSeriesRequestToJSON(value?: GetMachineTimeSeriesRe
     }
     return {
         
-        'earliest': value.earliest === undefined ? undefined : (value.earliest.toISOString()),
-        'latest': value.latest === undefined ? undefined : (value.latest.toISOString()),
+        'earliest': (value.earliest.toISOString()),
+        'latest': (value.latest.toISOString()),
     };
 }
 

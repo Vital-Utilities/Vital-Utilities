@@ -24,13 +24,13 @@ export interface RamUsages {
      * @type {number}
      * @memberof RamUsages
      */
-    usedMemoryBytes?: number;
+    usedMemoryBytes: number;
     /**
      * 
      * @type {number}
      * @memberof RamUsages
      */
-    totalVisibleMemoryBytes?: number;
+    totalVisibleMemoryBytes: number;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface RamUsages {
  */
 export function instanceOfRamUsages(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "usedMemoryBytes" in value;
+    isInstance = isInstance && "totalVisibleMemoryBytes" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function RamUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'usedMemoryBytes': !exists(json, 'usedMemoryBytes') ? undefined : json['usedMemoryBytes'],
-        'totalVisibleMemoryBytes': !exists(json, 'totalVisibleMemoryBytes') ? undefined : json['totalVisibleMemoryBytes'],
+        'usedMemoryBytes': json['usedMemoryBytes'],
+        'totalVisibleMemoryBytes': json['totalVisibleMemoryBytes'],
     };
 }
 

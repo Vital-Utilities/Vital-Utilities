@@ -49,61 +49,61 @@ export interface DiskUsage {
      * @type {string}
      * @memberof DiskUsage
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    serial?: string | null;
+    serial: string | null;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    uniqueIdentifier?: string | null;
+    uniqueIdentifier: string | null;
     /**
      * 
      * @type {DriveType}
      * @memberof DiskUsage
      */
-    driveType?: DriveType;
+    driveType: DriveType;
     /**
      * 
      * @type {Throughput}
      * @memberof DiskUsage
      */
-    throughput?: Throughput;
+    throughput: Throughput;
     /**
      * 
      * @type {Load}
      * @memberof DiskUsage
      */
-    load?: Load;
+    load: Load;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof DiskUsage
      */
-    temperatures?: { [key: string]: number; };
+    temperatures: { [key: string]: number; };
     /**
      * 
      * @type {Data}
      * @memberof DiskUsage
      */
-    data?: Data;
+    data: Data;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    label?: string;
+    label: string;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    letter?: string;
+    letter: string;
 }
 
 /**
@@ -111,6 +111,16 @@ export interface DiskUsage {
  */
 export function instanceOfDiskUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "serial" in value;
+    isInstance = isInstance && "uniqueIdentifier" in value;
+    isInstance = isInstance && "driveType" in value;
+    isInstance = isInstance && "throughput" in value;
+    isInstance = isInstance && "load" in value;
+    isInstance = isInstance && "temperatures" in value;
+    isInstance = isInstance && "data" in value;
+    isInstance = isInstance && "label" in value;
+    isInstance = isInstance && "letter" in value;
 
     return isInstance;
 }
@@ -125,16 +135,16 @@ export function DiskUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'serial': !exists(json, 'serial') ? undefined : json['serial'],
-        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
-        'driveType': !exists(json, 'driveType') ? undefined : DriveTypeFromJSON(json['driveType']),
-        'throughput': !exists(json, 'throughput') ? undefined : ThroughputFromJSON(json['throughput']),
-        'load': !exists(json, 'load') ? undefined : LoadFromJSON(json['load']),
-        'temperatures': !exists(json, 'temperatures') ? undefined : json['temperatures'],
-        'data': !exists(json, 'data') ? undefined : DataFromJSON(json['data']),
-        'label': !exists(json, 'label') ? undefined : json['label'],
-        'letter': !exists(json, 'letter') ? undefined : json['letter'],
+        'name': json['name'],
+        'serial': json['serial'],
+        'uniqueIdentifier': json['uniqueIdentifier'],
+        'driveType': DriveTypeFromJSON(json['driveType']),
+        'throughput': ThroughputFromJSON(json['throughput']),
+        'load': LoadFromJSON(json['load']),
+        'temperatures': json['temperatures'],
+        'data': DataFromJSON(json['data']),
+        'label': json['label'],
+        'letter': json['letter'],
     };
 }
 

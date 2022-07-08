@@ -24,31 +24,31 @@ export interface Load {
      * @type {number}
      * @memberof Load
      */
-    usedSpacePercentage?: number | null;
+    usedSpacePercentage: number | null;
     /**
      * 
      * @type {number}
      * @memberof Load
      */
-    usedSpaceBytes?: number | null;
+    usedSpaceBytes: number | null;
     /**
      * 
      * @type {number}
      * @memberof Load
      */
-    totalFreeSpaceBytes?: number | null;
+    totalFreeSpaceBytes: number | null;
     /**
      * 
      * @type {number}
      * @memberof Load
      */
-    writeActivityPercentage?: number | null;
+    writeActivityPercentage: number | null;
     /**
      * 
      * @type {number}
      * @memberof Load
      */
-    totalActivityPercentage?: number | null;
+    totalActivityPercentage: number | null;
 }
 
 /**
@@ -56,6 +56,11 @@ export interface Load {
  */
 export function instanceOfLoad(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "usedSpacePercentage" in value;
+    isInstance = isInstance && "usedSpaceBytes" in value;
+    isInstance = isInstance && "totalFreeSpaceBytes" in value;
+    isInstance = isInstance && "writeActivityPercentage" in value;
+    isInstance = isInstance && "totalActivityPercentage" in value;
 
     return isInstance;
 }
@@ -70,11 +75,11 @@ export function LoadFromJSONTyped(json: any, ignoreDiscriminator: boolean): Load
     }
     return {
         
-        'usedSpacePercentage': !exists(json, 'usedSpacePercentage') ? undefined : json['usedSpacePercentage'],
-        'usedSpaceBytes': !exists(json, 'usedSpaceBytes') ? undefined : json['usedSpaceBytes'],
-        'totalFreeSpaceBytes': !exists(json, 'totalFreeSpaceBytes') ? undefined : json['totalFreeSpaceBytes'],
-        'writeActivityPercentage': !exists(json, 'writeActivityPercentage') ? undefined : json['writeActivityPercentage'],
-        'totalActivityPercentage': !exists(json, 'totalActivityPercentage') ? undefined : json['totalActivityPercentage'],
+        'usedSpacePercentage': json['usedSpacePercentage'],
+        'usedSpaceBytes': json['usedSpaceBytes'],
+        'totalFreeSpaceBytes': json['totalFreeSpaceBytes'],
+        'writeActivityPercentage': json['writeActivityPercentage'],
+        'totalActivityPercentage': json['totalActivityPercentage'],
     };
 }
 

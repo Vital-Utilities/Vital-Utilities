@@ -31,7 +31,7 @@ export interface UpdateProfileRequest {
      * @type {ProfileDto}
      * @memberof UpdateProfileRequest
      */
-    profile?: ProfileDto;
+    profile: ProfileDto;
 }
 
 /**
@@ -39,6 +39,7 @@ export interface UpdateProfileRequest {
  */
 export function instanceOfUpdateProfileRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "profile" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function UpdateProfileRequestFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'profile': !exists(json, 'profile') ? undefined : ProfileDtoFromJSON(json['profile']),
+        'profile': ProfileDtoFromJSON(json['profile']),
     };
 }
 

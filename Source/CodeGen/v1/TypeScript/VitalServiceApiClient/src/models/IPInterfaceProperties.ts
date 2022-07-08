@@ -24,25 +24,25 @@ export interface IPInterfaceProperties {
      * @type {string}
      * @memberof IPInterfaceProperties
      */
-    iPv4Address?: string | null;
+    iPv4Address: string | null;
     /**
      * 
      * @type {string}
      * @memberof IPInterfaceProperties
      */
-    iPv6Address?: string | null;
+    iPv6Address: string | null;
     /**
      * 
      * @type {string}
      * @memberof IPInterfaceProperties
      */
-    dnsSuffix?: string | null;
+    dnsSuffix: string | null;
     /**
      * 
      * @type {boolean}
      * @memberof IPInterfaceProperties
      */
-    isDnsEnabled?: boolean;
+    isDnsEnabled: boolean;
 }
 
 /**
@@ -50,6 +50,10 @@ export interface IPInterfaceProperties {
  */
 export function instanceOfIPInterfaceProperties(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "iPv4Address" in value;
+    isInstance = isInstance && "iPv6Address" in value;
+    isInstance = isInstance && "dnsSuffix" in value;
+    isInstance = isInstance && "isDnsEnabled" in value;
 
     return isInstance;
 }
@@ -64,10 +68,10 @@ export function IPInterfacePropertiesFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'iPv4Address': !exists(json, 'iPv4Address') ? undefined : json['iPv4Address'],
-        'iPv6Address': !exists(json, 'iPv6Address') ? undefined : json['iPv6Address'],
-        'dnsSuffix': !exists(json, 'dnsSuffix') ? undefined : json['dnsSuffix'],
-        'isDnsEnabled': !exists(json, 'isDnsEnabled') ? undefined : json['isDnsEnabled'],
+        'iPv4Address': json['iPv4Address'],
+        'iPv6Address': json['iPv6Address'],
+        'dnsSuffix': json['dnsSuffix'],
+        'isDnsEnabled': json['isDnsEnabled'],
     };
 }
 

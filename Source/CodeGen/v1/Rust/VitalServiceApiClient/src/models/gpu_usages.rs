@@ -13,40 +13,40 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GpuUsages {
-    #[serde(rename = "temperatureReadings", skip_serializing_if = "Option::is_none")]
-    pub temperature_readings: Option<::std::collections::HashMap<String, f32>>,
-    #[serde(rename = "totalMemoryBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "temperatureReadings")]
+    pub temperature_readings: ::std::collections::HashMap<String, f32>,
+    #[serde(rename = "totalMemoryBytes")]
     pub total_memory_bytes: Option<f32>,
-    #[serde(rename = "memoryUsedBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "memoryUsedBytes")]
     pub memory_used_bytes: Option<f32>,
-    #[serde(rename = "memoryClockMhz", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "memoryClockMhz")]
     pub memory_clock_mhz: Option<f32>,
-    #[serde(rename = "shaderClockMhz", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "shaderClockMhz")]
     pub shader_clock_mhz: Option<f32>,
-    #[serde(rename = "coreClockMhz", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "coreClockMhz")]
     pub core_clock_mhz: Option<f32>,
-    #[serde(rename = "fanPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "fanPercentage")]
     pub fan_percentage: Option<::std::collections::HashMap<String, f32>>,
-    #[serde(rename = "powerDraw", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "powerDraw")]
     pub power_draw: Option<f32>,
-    #[serde(rename = "load", skip_serializing_if = "Option::is_none")]
-    pub load: Option<Box<crate::models::LoadData>>,
+    #[serde(rename = "load")]
+    pub load: Box<crate::models::LoadData>,
     #[serde(rename = "pcIe_Throughput", skip_serializing_if = "Option::is_none")]
     pub pc_ie_throughput: Option<Box<crate::models::PcieThroughPut>>,
 }
 
 impl GpuUsages {
-    pub fn new() -> GpuUsages {
+    pub fn new(temperature_readings: ::std::collections::HashMap<String, f32>, total_memory_bytes: Option<f32>, memory_used_bytes: Option<f32>, memory_clock_mhz: Option<f32>, shader_clock_mhz: Option<f32>, core_clock_mhz: Option<f32>, fan_percentage: Option<::std::collections::HashMap<String, f32>>, power_draw: Option<f32>, load: crate::models::LoadData) -> GpuUsages {
         GpuUsages {
-            temperature_readings: None,
-            total_memory_bytes: None,
-            memory_used_bytes: None,
-            memory_clock_mhz: None,
-            shader_clock_mhz: None,
-            core_clock_mhz: None,
-            fan_percentage: None,
-            power_draw: None,
-            load: None,
+            temperature_readings,
+            total_memory_bytes,
+            memory_used_bytes,
+            memory_clock_mhz,
+            shader_clock_mhz,
+            core_clock_mhz,
+            fan_percentage,
+            power_draw,
+            load: Box::new(load),
             pc_ie_throughput: None,
         }
     }

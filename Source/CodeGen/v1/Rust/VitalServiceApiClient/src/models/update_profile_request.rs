@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct UpdateProfileRequest {
-    #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
-    pub profile: Option<Box<crate::models::ProfileDto>>,
+    #[serde(rename = "profile")]
+    pub profile: Box<crate::models::ProfileDto>,
 }
 
 impl UpdateProfileRequest {
-    pub fn new() -> UpdateProfileRequest {
+    pub fn new(profile: crate::models::ProfileDto) -> UpdateProfileRequest {
         UpdateProfileRequest {
-            profile: None,
+            profile: Box::new(profile),
         }
     }
 }

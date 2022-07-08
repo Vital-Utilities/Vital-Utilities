@@ -24,49 +24,49 @@ export interface RamData {
      * @type {string}
      * @memberof RamData
      */
-    name?: string | null;
+    name: string | null;
     /**
      * 
      * @type {string}
      * @memberof RamData
      */
-    partNumber?: string | null;
+    partNumber: string | null;
     /**
      * 
      * @type {string}
      * @memberof RamData
      */
-    type?: string | null;
+    type: string | null;
     /**
      * 
      * @type {number}
      * @memberof RamData
      */
-    speedMhz?: number | null;
+    speedMhz: number | null;
     /**
      * 
      * @type {number}
      * @memberof RamData
      */
-    slotNumber?: number | null;
+    slotNumber: number | null;
     /**
      * 
      * @type {string}
      * @memberof RamData
      */
-    slotChannel?: string | null;
+    slotChannel: string | null;
     /**
      * 
      * @type {number}
      * @memberof RamData
      */
-    configuredClockSpeedMhz?: number | null;
+    configuredClockSpeedMhz: number | null;
     /**
      * 
      * @type {number}
      * @memberof RamData
      */
-    capacity?: number | null;
+    capacity: number | null;
 }
 
 /**
@@ -74,6 +74,14 @@ export interface RamData {
  */
 export function instanceOfRamData(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "partNumber" in value;
+    isInstance = isInstance && "type" in value;
+    isInstance = isInstance && "speedMhz" in value;
+    isInstance = isInstance && "slotNumber" in value;
+    isInstance = isInstance && "slotChannel" in value;
+    isInstance = isInstance && "configuredClockSpeedMhz" in value;
+    isInstance = isInstance && "capacity" in value;
 
     return isInstance;
 }
@@ -88,14 +96,14 @@ export function RamDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): R
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'partNumber': !exists(json, 'partNumber') ? undefined : json['partNumber'],
-        'type': !exists(json, 'type') ? undefined : json['type'],
-        'speedMhz': !exists(json, 'speedMhz') ? undefined : json['speedMhz'],
-        'slotNumber': !exists(json, 'slotNumber') ? undefined : json['slotNumber'],
-        'slotChannel': !exists(json, 'slotChannel') ? undefined : json['slotChannel'],
-        'configuredClockSpeedMhz': !exists(json, 'configuredClockSpeedMhz') ? undefined : json['configuredClockSpeedMhz'],
-        'capacity': !exists(json, 'capacity') ? undefined : json['capacity'],
+        'name': json['name'],
+        'partNumber': json['partNumber'],
+        'type': json['type'],
+        'speedMhz': json['speedMhz'],
+        'slotNumber': json['slotNumber'],
+        'slotChannel': json['slotChannel'],
+        'configuredClockSpeedMhz': json['configuredClockSpeedMhz'],
+        'capacity': json['capacity'],
     };
 }
 

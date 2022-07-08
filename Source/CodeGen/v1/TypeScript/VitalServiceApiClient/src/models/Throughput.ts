@@ -24,13 +24,13 @@ export interface Throughput {
      * @type {number}
      * @memberof Throughput
      */
-    readRateBytesPerSecond?: number | null;
+    readRateBytesPerSecond: number | null;
     /**
      * 
      * @type {number}
      * @memberof Throughput
      */
-    writeRateBytesPerSecond?: number | null;
+    writeRateBytesPerSecond: number | null;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface Throughput {
  */
 export function instanceOfThroughput(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "readRateBytesPerSecond" in value;
+    isInstance = isInstance && "writeRateBytesPerSecond" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function ThroughputFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'readRateBytesPerSecond': !exists(json, 'readRateBytesPerSecond') ? undefined : json['readRateBytesPerSecond'],
-        'writeRateBytesPerSecond': !exists(json, 'writeRateBytesPerSecond') ? undefined : json['writeRateBytesPerSecond'],
+        'readRateBytesPerSecond': json['readRateBytesPerSecond'],
+        'writeRateBytesPerSecond': json['writeRateBytesPerSecond'],
     };
 }
 

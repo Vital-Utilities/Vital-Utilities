@@ -13,32 +13,32 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessToAddDto {
-    #[serde(rename = "pid", skip_serializing_if = "Option::is_none")]
-    pub pid: Option<i32>,
-    #[serde(rename = "processName", skip_serializing_if = "Option::is_none")]
-    pub process_name: Option<String>,
-    #[serde(rename = "mainWindowTitle", skip_serializing_if = "Option::is_none")]
-    pub main_window_title: Option<String>,
-    #[serde(rename = "executionPath", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "pid")]
+    pub pid: i32,
+    #[serde(rename = "processName")]
+    pub process_name: String,
+    #[serde(rename = "mainWindowTitle")]
+    pub main_window_title: String,
+    #[serde(rename = "executionPath")]
     pub execution_path: Option<String>,
-    #[serde(rename = "canModify", skip_serializing_if = "Option::is_none")]
-    pub can_modify: Option<bool>,
-    #[serde(rename = "affinity", skip_serializing_if = "Option::is_none")]
-    pub affinity: Option<Vec<i32>>,
-    #[serde(rename = "processPriority", skip_serializing_if = "Option::is_none")]
-    pub process_priority: Option<crate::models::ProcessPriorityEnum>,
+    #[serde(rename = "canModify")]
+    pub can_modify: bool,
+    #[serde(rename = "affinity")]
+    pub affinity: Vec<i32>,
+    #[serde(rename = "processPriority")]
+    pub process_priority: crate::models::ProcessPriorityEnum,
 }
 
 impl ProcessToAddDto {
-    pub fn new() -> ProcessToAddDto {
+    pub fn new(pid: i32, process_name: String, main_window_title: String, execution_path: Option<String>, can_modify: bool, affinity: Vec<i32>, process_priority: crate::models::ProcessPriorityEnum) -> ProcessToAddDto {
         ProcessToAddDto {
-            pid: None,
-            process_name: None,
-            main_window_title: None,
-            execution_path: None,
-            can_modify: None,
-            affinity: None,
-            process_priority: None,
+            pid,
+            process_name,
+            main_window_title,
+            execution_path,
+            can_modify,
+            affinity,
+            process_priority,
         }
     }
 }

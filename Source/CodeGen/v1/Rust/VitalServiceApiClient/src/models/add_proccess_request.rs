@@ -13,29 +13,29 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct AddProccessRequest {
-    #[serde(rename = "processName", skip_serializing_if = "Option::is_none")]
-    pub process_name: Option<String>,
-    #[serde(rename = "alias", skip_serializing_if = "Option::is_none")]
-    pub alias: Option<String>,
-    #[serde(rename = "executionPath", skip_serializing_if = "Option::is_none")]
-    pub execution_path: Option<String>,
-    #[serde(rename = "processPriority", skip_serializing_if = "Option::is_none")]
-    pub process_priority: Option<crate::models::ProcessPriorityEnum>,
-    #[serde(rename = "affinity", skip_serializing_if = "Option::is_none")]
-    pub affinity: Option<Vec<i32>>,
-    #[serde(rename = "profileId", skip_serializing_if = "Option::is_none")]
-    pub profile_id: Option<i32>,
+    #[serde(rename = "processName")]
+    pub process_name: String,
+    #[serde(rename = "alias")]
+    pub alias: String,
+    #[serde(rename = "executionPath")]
+    pub execution_path: String,
+    #[serde(rename = "processPriority")]
+    pub process_priority: crate::models::ProcessPriorityEnum,
+    #[serde(rename = "affinity")]
+    pub affinity: Vec<i32>,
+    #[serde(rename = "profileId")]
+    pub profile_id: i32,
 }
 
 impl AddProccessRequest {
-    pub fn new() -> AddProccessRequest {
+    pub fn new(process_name: String, alias: String, execution_path: String, process_priority: crate::models::ProcessPriorityEnum, affinity: Vec<i32>, profile_id: i32) -> AddProccessRequest {
         AddProccessRequest {
-            process_name: None,
-            alias: None,
-            execution_path: None,
-            process_priority: None,
-            affinity: None,
-            profile_id: None,
+            process_name,
+            alias,
+            execution_path,
+            process_priority,
+            affinity,
+            profile_id,
         }
     }
 }

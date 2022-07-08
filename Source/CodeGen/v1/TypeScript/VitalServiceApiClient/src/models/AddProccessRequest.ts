@@ -31,37 +31,37 @@ export interface AddProccessRequest {
      * @type {string}
      * @memberof AddProccessRequest
      */
-    processName?: string;
+    processName: string;
     /**
      * 
      * @type {string}
      * @memberof AddProccessRequest
      */
-    alias?: string;
+    alias: string;
     /**
      * 
      * @type {string}
      * @memberof AddProccessRequest
      */
-    executionPath?: string;
+    executionPath: string;
     /**
      * 
      * @type {ProcessPriorityEnum}
      * @memberof AddProccessRequest
      */
-    processPriority?: ProcessPriorityEnum;
+    processPriority: ProcessPriorityEnum;
     /**
      * 
      * @type {Array<number>}
      * @memberof AddProccessRequest
      */
-    affinity?: Array<number>;
+    affinity: Array<number>;
     /**
      * 
      * @type {number}
      * @memberof AddProccessRequest
      */
-    profileId?: number;
+    profileId: number;
 }
 
 /**
@@ -69,6 +69,12 @@ export interface AddProccessRequest {
  */
 export function instanceOfAddProccessRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "processName" in value;
+    isInstance = isInstance && "alias" in value;
+    isInstance = isInstance && "executionPath" in value;
+    isInstance = isInstance && "processPriority" in value;
+    isInstance = isInstance && "affinity" in value;
+    isInstance = isInstance && "profileId" in value;
 
     return isInstance;
 }
@@ -83,12 +89,12 @@ export function AddProccessRequestFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'processName': !exists(json, 'processName') ? undefined : json['processName'],
-        'alias': !exists(json, 'alias') ? undefined : json['alias'],
-        'executionPath': !exists(json, 'executionPath') ? undefined : json['executionPath'],
-        'processPriority': !exists(json, 'processPriority') ? undefined : ProcessPriorityEnumFromJSON(json['processPriority']),
-        'affinity': !exists(json, 'affinity') ? undefined : json['affinity'],
-        'profileId': !exists(json, 'profileId') ? undefined : json['profileId'],
+        'processName': json['processName'],
+        'alias': json['alias'],
+        'executionPath': json['executionPath'],
+        'processPriority': ProcessPriorityEnumFromJSON(json['processPriority']),
+        'affinity': json['affinity'],
+        'profileId': json['profileId'],
     };
 }
 

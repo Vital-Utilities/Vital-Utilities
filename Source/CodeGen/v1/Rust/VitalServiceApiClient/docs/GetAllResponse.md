@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**managed_models** | Option<[**Vec<crate::models::ManagedModelDto>**](ManagedModelDto.md)> |  | [optional]
-**processes_to_add** | Option<[**Vec<crate::models::ProcessToAddDto>**](ProcessToAddDto.md)> |  | [optional]
+**managed_models** | [**Vec<crate::models::ManagedModelDto>**](ManagedModelDto.md) |  | 
+**processes_to_add** | [**Vec<crate::models::ProcessToAddDto>**](ProcessToAddDto.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

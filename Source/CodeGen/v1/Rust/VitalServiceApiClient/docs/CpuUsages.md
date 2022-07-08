@@ -4,11 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**core_clocks_mhz** | Option<**Vec<f32>**> |  | [optional]
-**total** | Option<**f32**> |  | [optional]
-**power_draw_wattage** | Option<**f32**> |  | [optional]
-**cores** | Option<**Vec<f32>**> |  | [optional]
-**temperature_readings** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
+**core_clocks_mhz** | **Vec<f32>** |  | 
+**total** | **f32** |  | 
+**power_draw_wattage** | Option<**f32**> |  | 
+**cores** | **Vec<f32>** |  | 
+**temperature_readings** | **::std::collections::HashMap<String, f32>** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

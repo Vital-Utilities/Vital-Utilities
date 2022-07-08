@@ -43,25 +43,25 @@ export interface GetMachineStaticDataResponse {
      * @type {string}
      * @memberof GetMachineStaticDataResponse
      */
-    directXVersion?: string | null;
+    directXVersion: string | null;
     /**
      * 
      * @type {CpuData}
      * @memberof GetMachineStaticDataResponse
      */
-    cpu?: CpuData;
+    cpu: CpuData;
     /**
      * 
      * @type {Array<RamData>}
      * @memberof GetMachineStaticDataResponse
      */
-    ram?: Array<RamData>;
+    ram: Array<RamData>;
     /**
      * 
      * @type {Array<GpuData>}
      * @memberof GetMachineStaticDataResponse
      */
-    gpu?: Array<GpuData>;
+    gpu: Array<GpuData>;
 }
 
 /**
@@ -69,6 +69,10 @@ export interface GetMachineStaticDataResponse {
  */
 export function instanceOfGetMachineStaticDataResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "directXVersion" in value;
+    isInstance = isInstance && "cpu" in value;
+    isInstance = isInstance && "ram" in value;
+    isInstance = isInstance && "gpu" in value;
 
     return isInstance;
 }
@@ -83,10 +87,10 @@ export function GetMachineStaticDataResponseFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'directXVersion': !exists(json, 'directXVersion') ? undefined : json['directXVersion'],
-        'cpu': !exists(json, 'cpu') ? undefined : CpuDataFromJSON(json['cpu']),
-        'ram': !exists(json, 'ram') ? undefined : ((json['ram'] as Array<any>).map(RamDataFromJSON)),
-        'gpu': !exists(json, 'gpu') ? undefined : ((json['gpu'] as Array<any>).map(GpuDataFromJSON)),
+        'directXVersion': json['directXVersion'],
+        'cpu': CpuDataFromJSON(json['cpu']),
+        'ram': ((json['ram'] as Array<any>).map(RamDataFromJSON)),
+        'gpu': ((json['gpu'] as Array<any>).map(GpuDataFromJSON)),
     };
 }
 
@@ -101,8 +105,8 @@ export function GetMachineStaticDataResponseToJSON(value?: GetMachineStaticDataR
         
         'directXVersion': value.directXVersion,
         'cpu': CpuDataToJSON(value.cpu),
-        'ram': value.ram === undefined ? undefined : ((value.ram as Array<any>).map(RamDataToJSON)),
-        'gpu': value.gpu === undefined ? undefined : ((value.gpu as Array<any>).map(GpuDataToJSON)),
+        'ram': ((value.ram as Array<any>).map(RamDataToJSON)),
+        'gpu': ((value.gpu as Array<any>).map(GpuDataToJSON)),
     };
 }
 

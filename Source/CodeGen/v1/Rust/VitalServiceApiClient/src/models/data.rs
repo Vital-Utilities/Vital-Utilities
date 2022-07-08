@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct Data {
-    #[serde(rename = "dataReadBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dataReadBytes")]
     pub data_read_bytes: Option<i64>,
-    #[serde(rename = "dataWrittenBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "dataWrittenBytes")]
     pub data_written_bytes: Option<i64>,
 }
 
 impl Data {
-    pub fn new() -> Data {
+    pub fn new(data_read_bytes: Option<i64>, data_written_bytes: Option<i64>) -> Data {
         Data {
-            data_read_bytes: None,
-            data_written_bytes: None,
+            data_read_bytes,
+            data_written_bytes,
         }
     }
 }

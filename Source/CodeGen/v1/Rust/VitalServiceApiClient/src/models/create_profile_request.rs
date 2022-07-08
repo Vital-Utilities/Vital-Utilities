@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CreateProfileRequest {
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    #[serde(rename = "name")]
+    pub name: String,
 }
 
 impl CreateProfileRequest {
-    pub fn new() -> CreateProfileRequest {
+    pub fn new(name: String) -> CreateProfileRequest {
         CreateProfileRequest {
-            name: None,
+            name,
         }
     }
 }

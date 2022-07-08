@@ -13,35 +13,35 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct RamData {
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "name")]
     pub name: Option<String>,
-    #[serde(rename = "partNumber", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "partNumber")]
     pub part_number: Option<String>,
-    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "type")]
     pub _type: Option<String>,
-    #[serde(rename = "speedMhz", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "speedMhz")]
     pub speed_mhz: Option<i32>,
-    #[serde(rename = "slotNumber", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "slotNumber")]
     pub slot_number: Option<i32>,
-    #[serde(rename = "slotChannel", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "slotChannel")]
     pub slot_channel: Option<String>,
-    #[serde(rename = "configuredClockSpeedMhz", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "configuredClockSpeedMhz")]
     pub configured_clock_speed_mhz: Option<i32>,
-    #[serde(rename = "capacity", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "capacity")]
     pub capacity: Option<f64>,
 }
 
 impl RamData {
-    pub fn new() -> RamData {
+    pub fn new(name: Option<String>, part_number: Option<String>, _type: Option<String>, speed_mhz: Option<i32>, slot_number: Option<i32>, slot_channel: Option<String>, configured_clock_speed_mhz: Option<i32>, capacity: Option<f64>) -> RamData {
         RamData {
-            name: None,
-            part_number: None,
-            _type: None,
-            speed_mhz: None,
-            slot_number: None,
-            slot_channel: None,
-            configured_clock_speed_mhz: None,
-            capacity: None,
+            name,
+            part_number,
+            _type,
+            speed_mhz,
+            slot_number,
+            slot_channel,
+            configured_clock_speed_mhz,
+            capacity,
         }
     }
 }

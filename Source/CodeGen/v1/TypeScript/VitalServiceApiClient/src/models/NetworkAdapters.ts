@@ -31,7 +31,7 @@ export interface NetworkAdapters {
      * @type {{ [key: string]: NetworkAdapter; }}
      * @memberof NetworkAdapters
      */
-    adapters?: { [key: string]: NetworkAdapter; };
+    adapters: { [key: string]: NetworkAdapter; };
 }
 
 /**
@@ -39,6 +39,7 @@ export interface NetworkAdapters {
  */
 export function instanceOfNetworkAdapters(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "adapters" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function NetworkAdaptersFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'adapters': !exists(json, 'adapters') ? undefined : (mapValues(json['adapters'], NetworkAdapterFromJSON)),
+        'adapters': (mapValues(json['adapters'], NetworkAdapterFromJSON)),
     };
 }
 
@@ -66,7 +67,7 @@ export function NetworkAdaptersToJSON(value?: NetworkAdapters | null): any {
     }
     return {
         
-        'adapters': value.adapters === undefined ? undefined : (mapValues(value.adapters, NetworkAdapterToJSON)),
+        'adapters': (mapValues(value.adapters, NetworkAdapterToJSON)),
     };
 }
 

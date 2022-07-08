@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct NetworkAdapters {
-    #[serde(rename = "adapters", skip_serializing_if = "Option::is_none")]
-    pub adapters: Option<::std::collections::HashMap<String, crate::models::NetworkAdapter>>,
+    #[serde(rename = "adapters")]
+    pub adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapter>,
 }
 
 impl NetworkAdapters {
-    pub fn new() -> NetworkAdapters {
+    pub fn new(adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapter>) -> NetworkAdapters {
         NetworkAdapters {
-            adapters: None,
+            adapters,
         }
     }
 }

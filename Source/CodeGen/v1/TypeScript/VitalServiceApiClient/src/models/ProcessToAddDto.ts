@@ -31,43 +31,43 @@ export interface ProcessToAddDto {
      * @type {number}
      * @memberof ProcessToAddDto
      */
-    pid?: number;
+    pid: number;
     /**
      * 
      * @type {string}
      * @memberof ProcessToAddDto
      */
-    processName?: string;
+    processName: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessToAddDto
      */
-    mainWindowTitle?: string;
+    mainWindowTitle: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessToAddDto
      */
-    executionPath?: string | null;
+    executionPath: string | null;
     /**
      * 
      * @type {boolean}
      * @memberof ProcessToAddDto
      */
-    canModify?: boolean;
+    canModify: boolean;
     /**
      * 
      * @type {Array<number>}
      * @memberof ProcessToAddDto
      */
-    affinity?: Array<number>;
+    affinity: Array<number>;
     /**
      * 
      * @type {ProcessPriorityEnum}
      * @memberof ProcessToAddDto
      */
-    processPriority?: ProcessPriorityEnum;
+    processPriority: ProcessPriorityEnum;
 }
 
 /**
@@ -75,6 +75,13 @@ export interface ProcessToAddDto {
  */
 export function instanceOfProcessToAddDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "pid" in value;
+    isInstance = isInstance && "processName" in value;
+    isInstance = isInstance && "mainWindowTitle" in value;
+    isInstance = isInstance && "executionPath" in value;
+    isInstance = isInstance && "canModify" in value;
+    isInstance = isInstance && "affinity" in value;
+    isInstance = isInstance && "processPriority" in value;
 
     return isInstance;
 }
@@ -89,13 +96,13 @@ export function ProcessToAddDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'pid': !exists(json, 'pid') ? undefined : json['pid'],
-        'processName': !exists(json, 'processName') ? undefined : json['processName'],
-        'mainWindowTitle': !exists(json, 'mainWindowTitle') ? undefined : json['mainWindowTitle'],
-        'executionPath': !exists(json, 'executionPath') ? undefined : json['executionPath'],
-        'canModify': !exists(json, 'canModify') ? undefined : json['canModify'],
-        'affinity': !exists(json, 'affinity') ? undefined : json['affinity'],
-        'processPriority': !exists(json, 'processPriority') ? undefined : ProcessPriorityEnumFromJSON(json['processPriority']),
+        'pid': json['pid'],
+        'processName': json['processName'],
+        'mainWindowTitle': json['mainWindowTitle'],
+        'executionPath': json['executionPath'],
+        'canModify': json['canModify'],
+        'affinity': json['affinity'],
+        'processPriority': ProcessPriorityEnumFromJSON(json['processPriority']),
     };
 }
 

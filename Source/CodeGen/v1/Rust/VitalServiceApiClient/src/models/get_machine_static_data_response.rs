@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetMachineStaticDataResponse {
-    #[serde(rename = "directXVersion", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "directXVersion")]
     pub direct_x_version: Option<String>,
-    #[serde(rename = "cpu", skip_serializing_if = "Option::is_none")]
-    pub cpu: Option<Box<crate::models::CpuData>>,
-    #[serde(rename = "ram", skip_serializing_if = "Option::is_none")]
-    pub ram: Option<Vec<crate::models::RamData>>,
-    #[serde(rename = "gpu", skip_serializing_if = "Option::is_none")]
-    pub gpu: Option<Vec<crate::models::GpuData>>,
+    #[serde(rename = "cpu")]
+    pub cpu: Box<crate::models::CpuData>,
+    #[serde(rename = "ram")]
+    pub ram: Vec<crate::models::RamData>,
+    #[serde(rename = "gpu")]
+    pub gpu: Vec<crate::models::GpuData>,
 }
 
 impl GetMachineStaticDataResponse {
-    pub fn new() -> GetMachineStaticDataResponse {
+    pub fn new(direct_x_version: Option<String>, cpu: crate::models::CpuData, ram: Vec<crate::models::RamData>, gpu: Vec<crate::models::GpuData>) -> GetMachineStaticDataResponse {
         GetMachineStaticDataResponse {
-            direct_x_version: None,
-            cpu: None,
-            ram: None,
-            gpu: None,
+            direct_x_version,
+            cpu: Box::new(cpu),
+            ram,
+            gpu,
         }
     }
 }

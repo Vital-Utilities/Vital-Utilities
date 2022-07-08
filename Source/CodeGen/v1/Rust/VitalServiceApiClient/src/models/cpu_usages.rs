@@ -13,26 +13,26 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CpuUsages {
-    #[serde(rename = "coreClocksMhz", skip_serializing_if = "Option::is_none")]
-    pub core_clocks_mhz: Option<Vec<f32>>,
-    #[serde(rename = "total", skip_serializing_if = "Option::is_none")]
-    pub total: Option<f32>,
-    #[serde(rename = "powerDrawWattage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "coreClocksMhz")]
+    pub core_clocks_mhz: Vec<f32>,
+    #[serde(rename = "total")]
+    pub total: f32,
+    #[serde(rename = "powerDrawWattage")]
     pub power_draw_wattage: Option<f32>,
-    #[serde(rename = "cores", skip_serializing_if = "Option::is_none")]
-    pub cores: Option<Vec<f32>>,
-    #[serde(rename = "temperatureReadings", skip_serializing_if = "Option::is_none")]
-    pub temperature_readings: Option<::std::collections::HashMap<String, f32>>,
+    #[serde(rename = "cores")]
+    pub cores: Vec<f32>,
+    #[serde(rename = "temperatureReadings")]
+    pub temperature_readings: ::std::collections::HashMap<String, f32>,
 }
 
 impl CpuUsages {
-    pub fn new() -> CpuUsages {
+    pub fn new(core_clocks_mhz: Vec<f32>, total: f32, power_draw_wattage: Option<f32>, cores: Vec<f32>, temperature_readings: ::std::collections::HashMap<String, f32>) -> CpuUsages {
         CpuUsages {
-            core_clocks_mhz: None,
-            total: None,
-            power_draw_wattage: None,
-            cores: None,
-            temperature_readings: None,
+            core_clocks_mhz,
+            total,
+            power_draw_wattage,
+            cores,
+            temperature_readings,
         }
     }
 }

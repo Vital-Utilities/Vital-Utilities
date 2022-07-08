@@ -13,29 +13,29 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ManagedModelDto {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "processName", skip_serializing_if = "Option::is_none")]
-    pub process_name: Option<String>,
-    #[serde(rename = "alias", skip_serializing_if = "Option::is_none")]
-    pub alias: Option<String>,
-    #[serde(rename = "processPriority", skip_serializing_if = "Option::is_none")]
-    pub process_priority: Option<crate::models::ProcessPriorityEnum>,
-    #[serde(rename = "affinity", skip_serializing_if = "Option::is_none")]
-    pub affinity: Option<Vec<i32>>,
-    #[serde(rename = "parentProfileId", skip_serializing_if = "Option::is_none")]
-    pub parent_profile_id: Option<i32>,
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "processName")]
+    pub process_name: String,
+    #[serde(rename = "alias")]
+    pub alias: String,
+    #[serde(rename = "processPriority")]
+    pub process_priority: crate::models::ProcessPriorityEnum,
+    #[serde(rename = "affinity")]
+    pub affinity: Vec<i32>,
+    #[serde(rename = "parentProfileId")]
+    pub parent_profile_id: i32,
 }
 
 impl ManagedModelDto {
-    pub fn new() -> ManagedModelDto {
+    pub fn new(id: i32, process_name: String, alias: String, process_priority: crate::models::ProcessPriorityEnum, affinity: Vec<i32>, parent_profile_id: i32) -> ManagedModelDto {
         ManagedModelDto {
-            id: None,
-            process_name: None,
-            alias: None,
-            process_priority: None,
-            affinity: None,
-            parent_profile_id: None,
+            id,
+            process_name,
+            alias,
+            process_priority,
+            affinity,
+            parent_profile_id,
         }
     }
 }

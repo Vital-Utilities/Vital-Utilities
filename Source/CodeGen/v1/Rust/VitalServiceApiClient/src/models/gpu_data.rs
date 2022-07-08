@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GpuData {
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(rename = "memoryTotalBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "memoryTotalBytes")]
     pub memory_total_bytes: Option<f32>,
 }
 
 impl GpuData {
-    pub fn new() -> GpuData {
+    pub fn new(name: String, memory_total_bytes: Option<f32>) -> GpuData {
         GpuData {
-            name: None,
-            memory_total_bytes: None,
+            name,
+            memory_total_bytes,
         }
     }
 }

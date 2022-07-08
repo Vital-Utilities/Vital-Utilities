@@ -31,7 +31,7 @@ export interface GetProcessesToAddResponse {
      * @type {Array<ProcessToAddDto>}
      * @memberof GetProcessesToAddResponse
      */
-    processes?: Array<ProcessToAddDto>;
+    processes: Array<ProcessToAddDto>;
 }
 
 /**
@@ -39,6 +39,7 @@ export interface GetProcessesToAddResponse {
  */
 export function instanceOfGetProcessesToAddResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "processes" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function GetProcessesToAddResponseFromJSONTyped(json: any, ignoreDiscrimi
     }
     return {
         
-        'processes': !exists(json, 'processes') ? undefined : ((json['processes'] as Array<any>).map(ProcessToAddDtoFromJSON)),
+        'processes': ((json['processes'] as Array<any>).map(ProcessToAddDtoFromJSON)),
     };
 }
 
@@ -66,7 +67,7 @@ export function GetProcessesToAddResponseToJSON(value?: GetProcessesToAddRespons
     }
     return {
         
-        'processes': value.processes === undefined ? undefined : ((value.processes as Array<any>).map(ProcessToAddDtoToJSON)),
+        'processes': ((value.processes as Array<any>).map(ProcessToAddDtoToJSON)),
     };
 }
 

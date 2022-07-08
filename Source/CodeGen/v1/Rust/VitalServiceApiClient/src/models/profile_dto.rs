@@ -13,29 +13,29 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProfileDto {
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(rename = "managedModelsIds", skip_serializing_if = "Option::is_none")]
-    pub managed_models_ids: Option<Vec<i32>>,
-    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    #[serde(rename = "active", skip_serializing_if = "Option::is_none")]
-    pub active: Option<bool>,
-    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "id")]
+    pub id: i32,
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "managedModelsIds")]
+    pub managed_models_ids: Vec<i32>,
+    #[serde(rename = "enabled")]
+    pub enabled: bool,
+    #[serde(rename = "active")]
+    pub active: bool,
+    #[serde(rename = "priority")]
     pub priority: Option<i32>,
 }
 
 impl ProfileDto {
-    pub fn new() -> ProfileDto {
+    pub fn new(id: i32, name: String, managed_models_ids: Vec<i32>, enabled: bool, active: bool, priority: Option<i32>) -> ProfileDto {
         ProfileDto {
-            id: None,
-            name: None,
-            managed_models_ids: None,
-            enabled: None,
-            active: None,
-            priority: None,
+            id,
+            name,
+            managed_models_ids,
+            enabled,
+            active,
+            priority,
         }
     }
 }

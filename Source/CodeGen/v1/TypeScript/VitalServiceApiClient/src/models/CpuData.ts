@@ -24,49 +24,49 @@ export interface CpuData {
      * @type {string}
      * @memberof CpuData
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {number}
      * @memberof CpuData
      */
-    numberOfEnabledCore?: number;
+    numberOfEnabledCore: number;
     /**
      * 
      * @type {number}
      * @memberof CpuData
      */
-    numberOfCores?: number;
+    numberOfCores: number;
     /**
      * 
      * @type {number}
      * @memberof CpuData
      */
-    threadCount?: number;
+    threadCount: number;
     /**
      * 
      * @type {boolean}
      * @memberof CpuData
      */
-    virtualizationFirmwareEnabled?: boolean;
+    virtualizationFirmwareEnabled: boolean;
     /**
      * 
      * @type {number}
      * @memberof CpuData
      */
-    l1CacheSize?: number;
+    l1CacheSize: number;
     /**
      * 
      * @type {number}
      * @memberof CpuData
      */
-    l2CacheSize?: number;
+    l2CacheSize: number;
     /**
      * 
      * @type {number}
      * @memberof CpuData
      */
-    l3CacheSize?: number;
+    l3CacheSize: number;
 }
 
 /**
@@ -74,6 +74,14 @@ export interface CpuData {
  */
 export function instanceOfCpuData(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "numberOfEnabledCore" in value;
+    isInstance = isInstance && "numberOfCores" in value;
+    isInstance = isInstance && "threadCount" in value;
+    isInstance = isInstance && "virtualizationFirmwareEnabled" in value;
+    isInstance = isInstance && "l1CacheSize" in value;
+    isInstance = isInstance && "l2CacheSize" in value;
+    isInstance = isInstance && "l3CacheSize" in value;
 
     return isInstance;
 }
@@ -88,14 +96,14 @@ export function CpuDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): C
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'numberOfEnabledCore': !exists(json, 'numberOfEnabledCore') ? undefined : json['numberOfEnabledCore'],
-        'numberOfCores': !exists(json, 'numberOfCores') ? undefined : json['numberOfCores'],
-        'threadCount': !exists(json, 'threadCount') ? undefined : json['threadCount'],
-        'virtualizationFirmwareEnabled': !exists(json, 'virtualizationFirmwareEnabled') ? undefined : json['virtualizationFirmwareEnabled'],
-        'l1CacheSize': !exists(json, 'l1CacheSize') ? undefined : json['l1CacheSize'],
-        'l2CacheSize': !exists(json, 'l2CacheSize') ? undefined : json['l2CacheSize'],
-        'l3CacheSize': !exists(json, 'l3CacheSize') ? undefined : json['l3CacheSize'],
+        'name': json['name'],
+        'numberOfEnabledCore': json['numberOfEnabledCore'],
+        'numberOfCores': json['numberOfCores'],
+        'threadCount': json['threadCount'],
+        'virtualizationFirmwareEnabled': json['virtualizationFirmwareEnabled'],
+        'l1CacheSize': json['l1CacheSize'],
+        'l2CacheSize': json['l2CacheSize'],
+        'l3CacheSize': json['l3CacheSize'],
     };
 }
 

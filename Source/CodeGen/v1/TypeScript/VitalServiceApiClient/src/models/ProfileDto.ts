@@ -24,37 +24,37 @@ export interface ProfileDto {
      * @type {number}
      * @memberof ProfileDto
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof ProfileDto
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {Array<number>}
      * @memberof ProfileDto
      */
-    managedModelsIds?: Array<number>;
+    managedModelsIds: Array<number>;
     /**
      * 
      * @type {boolean}
      * @memberof ProfileDto
      */
-    enabled?: boolean;
+    enabled: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ProfileDto
      */
-    active?: boolean;
+    active: boolean;
     /**
      * 
      * @type {number}
      * @memberof ProfileDto
      */
-    priority?: number | null;
+    priority: number | null;
 }
 
 /**
@@ -62,6 +62,12 @@ export interface ProfileDto {
  */
 export function instanceOfProfileDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "managedModelsIds" in value;
+    isInstance = isInstance && "enabled" in value;
+    isInstance = isInstance && "active" in value;
+    isInstance = isInstance && "priority" in value;
 
     return isInstance;
 }
@@ -76,12 +82,12 @@ export function ProfileDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'managedModelsIds': !exists(json, 'managedModelsIds') ? undefined : json['managedModelsIds'],
-        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
-        'active': !exists(json, 'active') ? undefined : json['active'],
-        'priority': !exists(json, 'priority') ? undefined : json['priority'],
+        'id': json['id'],
+        'name': json['name'],
+        'managedModelsIds': json['managedModelsIds'],
+        'enabled': json['enabled'],
+        'active': json['active'],
+        'priority': json['priority'],
     };
 }
 

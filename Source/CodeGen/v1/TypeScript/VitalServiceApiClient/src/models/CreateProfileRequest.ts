@@ -24,7 +24,7 @@ export interface CreateProfileRequest {
      * @type {string}
      * @memberof CreateProfileRequest
      */
-    name?: string;
+    name: string;
 }
 
 /**
@@ -32,6 +32,7 @@ export interface CreateProfileRequest {
  */
 export function instanceOfCreateProfileRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
 
     return isInstance;
 }
@@ -46,7 +47,7 @@ export function CreateProfileRequestFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'name': json['name'],
     };
 }
 

@@ -37,55 +37,55 @@ export interface GpuUsages {
      * @type {{ [key: string]: number; }}
      * @memberof GpuUsages
      */
-    temperatureReadings?: { [key: string]: number; };
+    temperatureReadings: { [key: string]: number; };
     /**
      * 
      * @type {number}
      * @memberof GpuUsages
      */
-    totalMemoryBytes?: number | null;
+    totalMemoryBytes: number | null;
     /**
      * 
      * @type {number}
      * @memberof GpuUsages
      */
-    memoryUsedBytes?: number | null;
+    memoryUsedBytes: number | null;
     /**
      * 
      * @type {number}
      * @memberof GpuUsages
      */
-    memoryClockMhz?: number | null;
+    memoryClockMhz: number | null;
     /**
      * 
      * @type {number}
      * @memberof GpuUsages
      */
-    shaderClockMhz?: number | null;
+    shaderClockMhz: number | null;
     /**
      * 
      * @type {number}
      * @memberof GpuUsages
      */
-    coreClockMhz?: number | null;
+    coreClockMhz: number | null;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GpuUsages
      */
-    fanPercentage?: { [key: string]: number; } | null;
+    fanPercentage: { [key: string]: number; } | null;
     /**
      * 
      * @type {number}
      * @memberof GpuUsages
      */
-    powerDraw?: number | null;
+    powerDraw: number | null;
     /**
      * 
      * @type {LoadData}
      * @memberof GpuUsages
      */
-    load?: LoadData;
+    load: LoadData;
     /**
      * 
      * @type {PCIEThroughPut}
@@ -99,6 +99,15 @@ export interface GpuUsages {
  */
 export function instanceOfGpuUsages(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "temperatureReadings" in value;
+    isInstance = isInstance && "totalMemoryBytes" in value;
+    isInstance = isInstance && "memoryUsedBytes" in value;
+    isInstance = isInstance && "memoryClockMhz" in value;
+    isInstance = isInstance && "shaderClockMhz" in value;
+    isInstance = isInstance && "coreClockMhz" in value;
+    isInstance = isInstance && "fanPercentage" in value;
+    isInstance = isInstance && "powerDraw" in value;
+    isInstance = isInstance && "load" in value;
 
     return isInstance;
 }
@@ -113,15 +122,15 @@ export function GpuUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'temperatureReadings': !exists(json, 'temperatureReadings') ? undefined : json['temperatureReadings'],
-        'totalMemoryBytes': !exists(json, 'totalMemoryBytes') ? undefined : json['totalMemoryBytes'],
-        'memoryUsedBytes': !exists(json, 'memoryUsedBytes') ? undefined : json['memoryUsedBytes'],
-        'memoryClockMhz': !exists(json, 'memoryClockMhz') ? undefined : json['memoryClockMhz'],
-        'shaderClockMhz': !exists(json, 'shaderClockMhz') ? undefined : json['shaderClockMhz'],
-        'coreClockMhz': !exists(json, 'coreClockMhz') ? undefined : json['coreClockMhz'],
-        'fanPercentage': !exists(json, 'fanPercentage') ? undefined : json['fanPercentage'],
-        'powerDraw': !exists(json, 'powerDraw') ? undefined : json['powerDraw'],
-        'load': !exists(json, 'load') ? undefined : LoadDataFromJSON(json['load']),
+        'temperatureReadings': json['temperatureReadings'],
+        'totalMemoryBytes': json['totalMemoryBytes'],
+        'memoryUsedBytes': json['memoryUsedBytes'],
+        'memoryClockMhz': json['memoryClockMhz'],
+        'shaderClockMhz': json['shaderClockMhz'],
+        'coreClockMhz': json['coreClockMhz'],
+        'fanPercentage': json['fanPercentage'],
+        'powerDraw': json['powerDraw'],
+        'load': LoadDataFromJSON(json['load']),
         'pcIeThroughput': !exists(json, 'pcIe_Throughput') ? undefined : PCIEThroughPutFromJSON(json['pcIe_Throughput']),
     };
 }

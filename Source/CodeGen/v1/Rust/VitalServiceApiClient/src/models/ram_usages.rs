@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct RamUsages {
-    #[serde(rename = "usedMemoryBytes", skip_serializing_if = "Option::is_none")]
-    pub used_memory_bytes: Option<f64>,
-    #[serde(rename = "totalVisibleMemoryBytes", skip_serializing_if = "Option::is_none")]
-    pub total_visible_memory_bytes: Option<f64>,
+    #[serde(rename = "usedMemoryBytes")]
+    pub used_memory_bytes: f64,
+    #[serde(rename = "totalVisibleMemoryBytes")]
+    pub total_visible_memory_bytes: f64,
 }
 
 impl RamUsages {
-    pub fn new() -> RamUsages {
+    pub fn new(used_memory_bytes: f64, total_visible_memory_bytes: f64) -> RamUsages {
         RamUsages {
-            used_memory_bytes: None,
-            total_visible_memory_bytes: None,
+            used_memory_bytes,
+            total_visible_memory_bytes,
         }
     }
 }

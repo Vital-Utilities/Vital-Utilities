@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessViewDto {
-    #[serde(rename = "processName", skip_serializing_if = "Option::is_none")]
-    pub process_name: Option<String>,
-    #[serde(rename = "processTitle", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "processName")]
+    pub process_name: String,
+    #[serde(rename = "processTitle")]
     pub process_title: Option<String>,
-    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "description")]
     pub description: Option<String>,
-    #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
+    #[serde(rename = "id")]
+    pub id: i32,
 }
 
 impl ProcessViewDto {
-    pub fn new() -> ProcessViewDto {
+    pub fn new(process_name: String, process_title: Option<String>, description: Option<String>, id: i32) -> ProcessViewDto {
         ProcessViewDto {
-            process_name: None,
-            process_title: None,
-            description: None,
-            id: None,
+            process_name,
+            process_title,
+            description,
+            id,
         }
     }
 }

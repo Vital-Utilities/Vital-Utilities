@@ -13,41 +13,41 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct DiskUsage {
-    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
-    #[serde(rename = "serial", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "serial")]
     pub serial: Option<String>,
-    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "uniqueIdentifier")]
     pub unique_identifier: Option<String>,
-    #[serde(rename = "driveType", skip_serializing_if = "Option::is_none")]
-    pub drive_type: Option<crate::models::DriveType>,
-    #[serde(rename = "throughput", skip_serializing_if = "Option::is_none")]
-    pub throughput: Option<Box<crate::models::Throughput>>,
-    #[serde(rename = "load", skip_serializing_if = "Option::is_none")]
-    pub load: Option<Box<crate::models::Load>>,
-    #[serde(rename = "temperatures", skip_serializing_if = "Option::is_none")]
-    pub temperatures: Option<::std::collections::HashMap<String, f32>>,
-    #[serde(rename = "data", skip_serializing_if = "Option::is_none")]
-    pub data: Option<Box<crate::models::Data>>,
-    #[serde(rename = "label", skip_serializing_if = "Option::is_none")]
-    pub label: Option<String>,
-    #[serde(rename = "letter", skip_serializing_if = "Option::is_none")]
-    pub letter: Option<String>,
+    #[serde(rename = "driveType")]
+    pub drive_type: crate::models::DriveType,
+    #[serde(rename = "throughput")]
+    pub throughput: Box<crate::models::Throughput>,
+    #[serde(rename = "load")]
+    pub load: Box<crate::models::Load>,
+    #[serde(rename = "temperatures")]
+    pub temperatures: ::std::collections::HashMap<String, f32>,
+    #[serde(rename = "data")]
+    pub data: Box<crate::models::Data>,
+    #[serde(rename = "label")]
+    pub label: String,
+    #[serde(rename = "letter")]
+    pub letter: String,
 }
 
 impl DiskUsage {
-    pub fn new() -> DiskUsage {
+    pub fn new(name: String, serial: Option<String>, unique_identifier: Option<String>, drive_type: crate::models::DriveType, throughput: crate::models::Throughput, load: crate::models::Load, temperatures: ::std::collections::HashMap<String, f32>, data: crate::models::Data, label: String, letter: String) -> DiskUsage {
         DiskUsage {
-            name: None,
-            serial: None,
-            unique_identifier: None,
-            drive_type: None,
-            throughput: None,
-            load: None,
-            temperatures: None,
-            data: None,
-            label: None,
-            letter: None,
+            name,
+            serial,
+            unique_identifier,
+            drive_type,
+            throughput: Box::new(throughput),
+            load: Box::new(load),
+            temperatures,
+            data: Box::new(data),
+            label,
+            letter,
         }
     }
 }

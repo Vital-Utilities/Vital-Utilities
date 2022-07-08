@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetProcessesToAddResponse {
-    #[serde(rename = "processes", skip_serializing_if = "Option::is_none")]
-    pub processes: Option<Vec<crate::models::ProcessToAddDto>>,
+    #[serde(rename = "processes")]
+    pub processes: Vec<crate::models::ProcessToAddDto>,
 }
 
 impl GetProcessesToAddResponse {
-    pub fn new() -> GetProcessesToAddResponse {
+    pub fn new(processes: Vec<crate::models::ProcessToAddDto>) -> GetProcessesToAddResponse {
         GetProcessesToAddResponse {
-            processes: None,
+            processes,
         }
     }
 }

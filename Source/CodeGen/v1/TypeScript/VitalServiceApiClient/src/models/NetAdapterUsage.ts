@@ -24,31 +24,31 @@ export interface NetAdapterUsage {
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    uploadSpeedBps?: number;
+    uploadSpeedBps: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    downloadSpeedBps?: number;
+    downloadSpeedBps: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    uploadedBps?: number;
+    uploadedBps: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    downloadedBps?: number;
+    downloadedBps: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    usagePercentage?: number;
+    usagePercentage: number;
 }
 
 /**
@@ -56,6 +56,11 @@ export interface NetAdapterUsage {
  */
 export function instanceOfNetAdapterUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "uploadSpeedBps" in value;
+    isInstance = isInstance && "downloadSpeedBps" in value;
+    isInstance = isInstance && "uploadedBps" in value;
+    isInstance = isInstance && "downloadedBps" in value;
+    isInstance = isInstance && "usagePercentage" in value;
 
     return isInstance;
 }
@@ -70,11 +75,11 @@ export function NetAdapterUsageFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'uploadSpeedBps': !exists(json, 'uploadSpeedBps') ? undefined : json['uploadSpeedBps'],
-        'downloadSpeedBps': !exists(json, 'downloadSpeedBps') ? undefined : json['downloadSpeedBps'],
-        'uploadedBps': !exists(json, 'uploadedBps') ? undefined : json['uploadedBps'],
-        'downloadedBps': !exists(json, 'downloadedBps') ? undefined : json['downloadedBps'],
-        'usagePercentage': !exists(json, 'usagePercentage') ? undefined : json['usagePercentage'],
+        'uploadSpeedBps': json['uploadSpeedBps'],
+        'downloadSpeedBps': json['downloadSpeedBps'],
+        'uploadedBps': json['uploadedBps'],
+        'downloadedBps': json['downloadedBps'],
+        'usagePercentage': json['usagePercentage'],
     };
 }
 

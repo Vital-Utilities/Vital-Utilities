@@ -24,13 +24,13 @@ export interface GpuData {
      * @type {string}
      * @memberof GpuData
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {number}
      * @memberof GpuData
      */
-    memoryTotalBytes?: number | null;
+    memoryTotalBytes: number | null;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface GpuData {
  */
 export function instanceOfGpuData(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "memoryTotalBytes" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function GpuDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): G
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'memoryTotalBytes': !exists(json, 'memoryTotalBytes') ? undefined : json['memoryTotalBytes'],
+        'name': json['name'],
+        'memoryTotalBytes': json['memoryTotalBytes'],
     };
 }
 

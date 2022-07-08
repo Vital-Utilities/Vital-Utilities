@@ -24,31 +24,31 @@ export interface CpuUsages {
      * @type {Array<number>}
      * @memberof CpuUsages
      */
-    coreClocksMhz?: Array<number>;
+    coreClocksMhz: Array<number>;
     /**
      * 
      * @type {number}
      * @memberof CpuUsages
      */
-    total?: number;
+    total: number;
     /**
      * 
      * @type {number}
      * @memberof CpuUsages
      */
-    powerDrawWattage?: number | null;
+    powerDrawWattage: number | null;
     /**
      * 
      * @type {Array<number>}
      * @memberof CpuUsages
      */
-    cores?: Array<number>;
+    cores: Array<number>;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof CpuUsages
      */
-    temperatureReadings?: { [key: string]: number; };
+    temperatureReadings: { [key: string]: number; };
 }
 
 /**
@@ -56,6 +56,11 @@ export interface CpuUsages {
  */
 export function instanceOfCpuUsages(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "coreClocksMhz" in value;
+    isInstance = isInstance && "total" in value;
+    isInstance = isInstance && "powerDrawWattage" in value;
+    isInstance = isInstance && "cores" in value;
+    isInstance = isInstance && "temperatureReadings" in value;
 
     return isInstance;
 }
@@ -70,11 +75,11 @@ export function CpuUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'coreClocksMhz': !exists(json, 'coreClocksMhz') ? undefined : json['coreClocksMhz'],
-        'total': !exists(json, 'total') ? undefined : json['total'],
-        'powerDrawWattage': !exists(json, 'powerDrawWattage') ? undefined : json['powerDrawWattage'],
-        'cores': !exists(json, 'cores') ? undefined : json['cores'],
-        'temperatureReadings': !exists(json, 'temperatureReadings') ? undefined : json['temperatureReadings'],
+        'coreClocksMhz': json['coreClocksMhz'],
+        'total': json['total'],
+        'powerDrawWattage': json['powerDrawWattage'],
+        'cores': json['cores'],
+        'temperatureReadings': json['temperatureReadings'],
     };
 }
 

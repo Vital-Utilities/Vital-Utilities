@@ -13,26 +13,26 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct Load {
-    #[serde(rename = "usedSpacePercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "usedSpacePercentage")]
     pub used_space_percentage: Option<f32>,
-    #[serde(rename = "usedSpaceBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "usedSpaceBytes")]
     pub used_space_bytes: Option<i64>,
-    #[serde(rename = "totalFreeSpaceBytes", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "totalFreeSpaceBytes")]
     pub total_free_space_bytes: Option<i64>,
-    #[serde(rename = "writeActivityPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "writeActivityPercentage")]
     pub write_activity_percentage: Option<f32>,
-    #[serde(rename = "totalActivityPercentage", skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "totalActivityPercentage")]
     pub total_activity_percentage: Option<f32>,
 }
 
 impl Load {
-    pub fn new() -> Load {
+    pub fn new(used_space_percentage: Option<f32>, used_space_bytes: Option<i64>, total_free_space_bytes: Option<i64>, write_activity_percentage: Option<f32>, total_activity_percentage: Option<f32>) -> Load {
         Load {
-            used_space_percentage: None,
-            used_space_bytes: None,
-            total_free_space_bytes: None,
-            write_activity_percentage: None,
-            total_activity_percentage: None,
+            used_space_percentage,
+            used_space_bytes,
+            total_free_space_bytes,
+            write_activity_percentage,
+            total_activity_percentage,
         }
     }
 }

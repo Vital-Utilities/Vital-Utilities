@@ -24,49 +24,49 @@ export interface LoadData {
      * @type {number}
      * @memberof LoadData
      */
-    core?: number | null;
+    core: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    frameBuffer?: number | null;
+    frameBuffer: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    videoEngine?: number | null;
+    videoEngine: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    busInterface?: number | null;
+    busInterface: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    memory?: number | null;
+    memory: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    memoryController?: number | null;
+    memoryController: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    cuda?: number | null;
+    cuda: number | null;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    threeD?: number | null;
+    threeD: number | null;
 }
 
 /**
@@ -74,6 +74,14 @@ export interface LoadData {
  */
 export function instanceOfLoadData(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "core" in value;
+    isInstance = isInstance && "frameBuffer" in value;
+    isInstance = isInstance && "videoEngine" in value;
+    isInstance = isInstance && "busInterface" in value;
+    isInstance = isInstance && "memory" in value;
+    isInstance = isInstance && "memoryController" in value;
+    isInstance = isInstance && "cuda" in value;
+    isInstance = isInstance && "threeD" in value;
 
     return isInstance;
 }
@@ -88,14 +96,14 @@ export function LoadDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'core': !exists(json, 'core') ? undefined : json['core'],
-        'frameBuffer': !exists(json, 'frameBuffer') ? undefined : json['frameBuffer'],
-        'videoEngine': !exists(json, 'videoEngine') ? undefined : json['videoEngine'],
-        'busInterface': !exists(json, 'busInterface') ? undefined : json['busInterface'],
-        'memory': !exists(json, 'memory') ? undefined : json['memory'],
-        'memoryController': !exists(json, 'memoryController') ? undefined : json['memoryController'],
-        'cuda': !exists(json, 'cuda') ? undefined : json['cuda'],
-        'threeD': !exists(json, 'threeD') ? undefined : json['threeD'],
+        'core': json['core'],
+        'frameBuffer': json['frameBuffer'],
+        'videoEngine': json['videoEngine'],
+        'busInterface': json['busInterface'],
+        'memory': json['memory'],
+        'memoryController': json['memoryController'],
+        'cuda': json['cuda'],
+        'threeD': json['threeD'],
     };
 }
 

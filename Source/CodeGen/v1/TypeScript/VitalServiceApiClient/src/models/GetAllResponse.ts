@@ -37,13 +37,13 @@ export interface GetAllResponse {
      * @type {Array<ManagedModelDto>}
      * @memberof GetAllResponse
      */
-    managedModels?: Array<ManagedModelDto>;
+    managedModels: Array<ManagedModelDto>;
     /**
      * 
      * @type {Array<ProcessToAddDto>}
      * @memberof GetAllResponse
      */
-    processesToAdd?: Array<ProcessToAddDto>;
+    processesToAdd: Array<ProcessToAddDto>;
 }
 
 /**
@@ -51,6 +51,8 @@ export interface GetAllResponse {
  */
 export function instanceOfGetAllResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "managedModels" in value;
+    isInstance = isInstance && "processesToAdd" in value;
 
     return isInstance;
 }
@@ -65,8 +67,8 @@ export function GetAllResponseFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'managedModels': !exists(json, 'managedModels') ? undefined : ((json['managedModels'] as Array<any>).map(ManagedModelDtoFromJSON)),
-        'processesToAdd': !exists(json, 'processesToAdd') ? undefined : ((json['processesToAdd'] as Array<any>).map(ProcessToAddDtoFromJSON)),
+        'managedModels': ((json['managedModels'] as Array<any>).map(ManagedModelDtoFromJSON)),
+        'processesToAdd': ((json['processesToAdd'] as Array<any>).map(ProcessToAddDtoFromJSON)),
     };
 }
 
@@ -79,8 +81,8 @@ export function GetAllResponseToJSON(value?: GetAllResponse | null): any {
     }
     return {
         
-        'managedModels': value.managedModels === undefined ? undefined : ((value.managedModels as Array<any>).map(ManagedModelDtoToJSON)),
-        'processesToAdd': value.processesToAdd === undefined ? undefined : ((value.processesToAdd as Array<any>).map(ProcessToAddDtoToJSON)),
+        'managedModels': ((value.managedModels as Array<any>).map(ManagedModelDtoToJSON)),
+        'processesToAdd': ((value.processesToAdd as Array<any>).map(ProcessToAddDtoToJSON)),
     };
 }
 

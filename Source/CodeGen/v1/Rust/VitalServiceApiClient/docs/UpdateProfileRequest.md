@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | Option<[**crate::models::ProfileDto**](ProfileDto.md)> |  | [optional]
+**profile** | [**crate::models::ProfileDto**](ProfileDto.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

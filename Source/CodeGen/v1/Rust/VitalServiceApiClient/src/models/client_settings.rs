@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClientSettings {
-    #[serde(rename = "alwaysOnTop", skip_serializing_if = "Option::is_none")]
-    pub always_on_top: Option<bool>,
+    #[serde(rename = "alwaysOnTop")]
+    pub always_on_top: bool,
 }
 
 impl ClientSettings {
-    pub fn new() -> ClientSettings {
+    pub fn new(always_on_top: bool) -> ClientSettings {
         ClientSettings {
-            always_on_top: None,
+            always_on_top,
         }
     }
 }

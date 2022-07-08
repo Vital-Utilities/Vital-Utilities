@@ -31,7 +31,7 @@ export interface UpdateManagedRequest {
      * @type {ManagedModelDto}
      * @memberof UpdateManagedRequest
      */
-    managedModelDto?: ManagedModelDto;
+    managedModelDto: ManagedModelDto;
 }
 
 /**
@@ -39,6 +39,7 @@ export interface UpdateManagedRequest {
  */
 export function instanceOfUpdateManagedRequest(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "managedModelDto" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function UpdateManagedRequestFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
-        'managedModelDto': !exists(json, 'managedModelDto') ? undefined : ManagedModelDtoFromJSON(json['managedModelDto']),
+        'managedModelDto': ManagedModelDtoFromJSON(json['managedModelDto']),
     };
 }
 

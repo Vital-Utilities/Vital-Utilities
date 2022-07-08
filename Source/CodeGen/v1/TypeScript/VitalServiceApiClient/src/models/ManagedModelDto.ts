@@ -31,37 +31,37 @@ export interface ManagedModelDto {
      * @type {number}
      * @memberof ManagedModelDto
      */
-    id?: number;
+    id: number;
     /**
      * 
      * @type {string}
      * @memberof ManagedModelDto
      */
-    processName?: string;
+    processName: string;
     /**
      * 
      * @type {string}
      * @memberof ManagedModelDto
      */
-    alias?: string;
+    alias: string;
     /**
      * 
      * @type {ProcessPriorityEnum}
      * @memberof ManagedModelDto
      */
-    processPriority?: ProcessPriorityEnum;
+    processPriority: ProcessPriorityEnum;
     /**
      * 
      * @type {Array<number>}
      * @memberof ManagedModelDto
      */
-    affinity?: Array<number>;
+    affinity: Array<number>;
     /**
      * 
      * @type {number}
      * @memberof ManagedModelDto
      */
-    parentProfileId?: number;
+    parentProfileId: number;
 }
 
 /**
@@ -69,6 +69,12 @@ export interface ManagedModelDto {
  */
 export function instanceOfManagedModelDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "processName" in value;
+    isInstance = isInstance && "alias" in value;
+    isInstance = isInstance && "processPriority" in value;
+    isInstance = isInstance && "affinity" in value;
+    isInstance = isInstance && "parentProfileId" in value;
 
     return isInstance;
 }
@@ -83,12 +89,12 @@ export function ManagedModelDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'processName': !exists(json, 'processName') ? undefined : json['processName'],
-        'alias': !exists(json, 'alias') ? undefined : json['alias'],
-        'processPriority': !exists(json, 'processPriority') ? undefined : ProcessPriorityEnumFromJSON(json['processPriority']),
-        'affinity': !exists(json, 'affinity') ? undefined : json['affinity'],
-        'parentProfileId': !exists(json, 'parentProfileId') ? undefined : json['parentProfileId'],
+        'id': json['id'],
+        'processName': json['processName'],
+        'alias': json['alias'],
+        'processPriority': ProcessPriorityEnumFromJSON(json['processPriority']),
+        'affinity': json['affinity'],
+        'parentProfileId': json['parentProfileId'],
     };
 }
 

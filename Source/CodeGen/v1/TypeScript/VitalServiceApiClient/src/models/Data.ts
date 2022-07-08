@@ -24,13 +24,13 @@ export interface Data {
      * @type {number}
      * @memberof Data
      */
-    dataReadBytes?: number | null;
+    dataReadBytes: number | null;
     /**
      * 
      * @type {number}
      * @memberof Data
      */
-    dataWrittenBytes?: number | null;
+    dataWrittenBytes: number | null;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface Data {
  */
 export function instanceOfData(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "dataReadBytes" in value;
+    isInstance = isInstance && "dataWrittenBytes" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function DataFromJSONTyped(json: any, ignoreDiscriminator: boolean): Data
     }
     return {
         
-        'dataReadBytes': !exists(json, 'dataReadBytes') ? undefined : json['dataReadBytes'],
-        'dataWrittenBytes': !exists(json, 'dataWrittenBytes') ? undefined : json['dataWrittenBytes'],
+        'dataReadBytes': json['dataReadBytes'],
+        'dataWrittenBytes': json['dataWrittenBytes'],
     };
 }
 
