@@ -26,6 +26,7 @@ pub enum ApiProfileGetError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProfileIdDeleteError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 
@@ -33,6 +34,7 @@ pub enum ApiProfileIdDeleteError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProfileIdGetError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 
@@ -47,6 +49,7 @@ pub enum ApiProfilePostError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProfileProcessIdDeleteError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 
@@ -54,6 +57,7 @@ pub enum ApiProfileProcessIdDeleteError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProfileProcessPostError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 
@@ -61,6 +65,7 @@ pub enum ApiProfileProcessPostError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProfileProcessPutError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 
@@ -153,7 +158,7 @@ pub async fn api_profile_id_get(configuration: &configuration::Configuration, id
     }
 }
 
-pub async fn api_profile_post(configuration: &configuration::Configuration, create_profile_request: Option<crate::models::CreateProfileRequest>) -> Result<(), Error<ApiProfilePostError>> {
+pub async fn api_profile_post(configuration: &configuration::Configuration, create_profile_request: Option<crate::models::CreateProfileRequest>) -> Result<crate::models::ProfileModel, Error<ApiProfilePostError>> {
     let local_var_configuration = configuration;
 
     let local_var_client = &local_var_configuration.client;
@@ -173,7 +178,7 @@ pub async fn api_profile_post(configuration: &configuration::Configuration, crea
     let local_var_content = local_var_resp.text().await?;
 
     if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-        Ok(())
+        serde_json::from_str(&local_var_content).map_err(Error::from)
     } else {
         let local_var_entity: Option<ApiProfilePostError> = serde_json::from_str(&local_var_content).ok();
         let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };

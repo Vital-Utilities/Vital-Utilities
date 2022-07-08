@@ -63,7 +63,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: text/plain, application/json, text/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -98,7 +98,7 @@ No authorization required
 
 ## api_profile_post
 
-> api_profile_post(create_profile_request)
+> crate::models::ProfileModel api_profile_post(create_profile_request)
 
 
 ### Parameters
@@ -110,7 +110,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
- (empty response body)
+[**crate::models::ProfileModel**](ProfileModel.md)
 
 ### Authorization
 
@@ -119,7 +119,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json, text/json, application/*+json
-- **Accept**: Not defined
+- **Accept**: text/plain, application/json, text/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -147,7 +147,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: Not defined
+- **Accept**: text/plain, application/json, text/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -175,7 +175,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json, text/json, application/*+json
-- **Accept**: Not defined
+- **Accept**: text/plain, application/json, text/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -203,7 +203,7 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json, text/json, application/*+json
-- **Accept**: Not defined
+- **Accept**: text/plain, application/json, text/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

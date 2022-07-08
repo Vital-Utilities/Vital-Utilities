@@ -8,7 +8,7 @@ specifiers:
   '@sentry/browser': ^7.2.0
   '@sentry/react': ^7.2.0
   '@sentry/tracing': ^7.2.0
-  '@tauri-apps/api': 1.0.1
+  '@tauri-apps/api': 1.0.2
   '@tauri-apps/cli': 1.0.0
   '@testing-library/jest-dom': ^5.16.2
   '@testing-library/react': ^12.1.2
@@ -22,7 +22,7 @@ specifiers:
   '@types/recharts': ^1.8.23
   '@typescript-eslint/eslint-plugin': ^5.10.2
   '@typescript-eslint/parser': ^5.10.2
-  '@vital/vitalservice': ../../../CodeGen/v1/TypeScript/VitalServiceApiClient
+  '@vital/vitalservice': ../CodeGen/v1/TypeScript/VitalServiceApiClient
   ahooks: ^3.5.0
   antd: ^4.18.5
   axios: ^0.21.4
@@ -76,8 +76,8 @@ dependencies:
   '@sentry/browser': 7.5.1
   '@sentry/react': 7.5.1_react@17.0.2
   '@sentry/tracing': 7.5.1
-  '@tauri-apps/api': 1.0.1
-  '@vital/vitalservice': link:../../../CodeGen/v1/TypeScript/VitalServiceApiClient
+  '@tauri-apps/api': 1.0.2
+  '@vital/vitalservice': link:../CodeGen/v1/TypeScript/VitalServiceApiClient
   ahooks: 3.5.2_react@17.0.2
   antd: 4.21.5_sfoxds7t5ydpegc3knd667wn6m
   axios: 0.21.4
@@ -2225,11 +2225,9 @@ packages:
       - supports-color
     dev: false
 
-  /@tauri-apps/api/1.0.1:
-    resolution: {integrity: sha512-TJwKkXxtF52kN9Auu5TWD2AE4ssqTrsfdpIrixYwRb3gQ/FuYwvZjrMc9weYpgsW2cMhVNkvKgneNXF/4n04lw==}
+  /@tauri-apps/api/1.0.2:
+    resolution: {integrity: sha512-yuNW0oeJ1/ZA7wNF1KgxhHrSu5viPVzY/UgUczzN5ptLM8dH15Juy5rEGkoHfeXGju90Y/l22hi3BtIrp/za+w==}
     engines: {node: '>= 12.22.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
-    dependencies:
-      type-fest: 2.13.1
     dev: false
 
   /@tauri-apps/cli-darwin-arm64/1.0.0:
@@ -10951,11 +10949,6 @@ packages:
   /type-fest/0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
-
-  /type-fest/2.13.1:
-    resolution: {integrity: sha512-hXYyrPFwETT2swFLHeoKtJrvSF/ftG/sA15/8nGaLuaDGfVAaq8DYFpu4yOyV4tzp082WqnTEoMsm3flKMI2FQ==}
-    engines: {node: '>=12.20'}
-    dev: false
 
   /type-is/1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}

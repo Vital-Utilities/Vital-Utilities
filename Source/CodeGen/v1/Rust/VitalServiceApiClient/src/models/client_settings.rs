@@ -12,15 +12,15 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct MetricsSettings {
-    #[serde(rename = "persistMetrics")]
-    pub persist_metrics: bool,
+pub struct ClientSettings {
+    #[serde(rename = "alwaysOnTop", skip_serializing_if = "Option::is_none")]
+    pub always_on_top: Option<bool>,
 }
 
-impl MetricsSettings {
-    pub fn new(persist_metrics: bool) -> MetricsSettings {
-        MetricsSettings {
-            persist_metrics,
+impl ClientSettings {
+    pub fn new() -> ClientSettings {
+        ClientSettings {
+            always_on_top: None,
         }
     }
 }

@@ -31,7 +31,7 @@ export interface GetManagedResponse {
      * @type {Array<ManagedModelDto>}
      * @memberof GetManagedResponse
      */
-    affinityModels?: Array<ManagedModelDto> | null;
+    affinityModels: Array<ManagedModelDto>;
 }
 
 /**
@@ -39,6 +39,7 @@ export interface GetManagedResponse {
  */
 export function instanceOfGetManagedResponse(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "affinityModels" in value;
 
     return isInstance;
 }
@@ -53,7 +54,7 @@ export function GetManagedResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'affinityModels': !exists(json, 'affinityModels') ? undefined : (json['affinityModels'] === null ? null : (json['affinityModels'] as Array<any>).map(ManagedModelDtoFromJSON)),
+        'affinityModels': ((json['affinityModels'] as Array<any>).map(ManagedModelDtoFromJSON)),
     };
 }
 
@@ -66,7 +67,7 @@ export function GetManagedResponseToJSON(value?: GetManagedResponse | null): any
     }
     return {
         
-        'affinityModels': value.affinityModels === undefined ? undefined : (value.affinityModels === null ? null : (value.affinityModels as Array<any>).map(ManagedModelDtoToJSON)),
+        'affinityModels': ((value.affinityModels as Array<any>).map(ManagedModelDtoToJSON)),
     };
 }
 

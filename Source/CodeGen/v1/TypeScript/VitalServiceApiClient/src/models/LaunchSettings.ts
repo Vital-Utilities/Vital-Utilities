@@ -24,13 +24,13 @@ export interface LaunchSettings {
      * @type {number}
      * @memberof LaunchSettings
      */
-    vitalServiceHttpsPort?: number;
+    vitalServiceHttpsPort: number;
     /**
      * 
      * @type {number}
      * @memberof LaunchSettings
      */
-    vitalServiceHttpPort?: number;
+    vitalServiceHttpPort: number;
 }
 
 /**
@@ -38,6 +38,8 @@ export interface LaunchSettings {
  */
 export function instanceOfLaunchSettings(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "vitalServiceHttpsPort" in value;
+    isInstance = isInstance && "vitalServiceHttpPort" in value;
 
     return isInstance;
 }
@@ -52,8 +54,8 @@ export function LaunchSettingsFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'vitalServiceHttpsPort': !exists(json, 'vitalServiceHttpsPort') ? undefined : json['vitalServiceHttpsPort'],
-        'vitalServiceHttpPort': !exists(json, 'vitalServiceHttpPort') ? undefined : json['vitalServiceHttpPort'],
+        'vitalServiceHttpsPort': json['vitalServiceHttpsPort'],
+        'vitalServiceHttpPort': json['vitalServiceHttpPort'],
     };
 }
 

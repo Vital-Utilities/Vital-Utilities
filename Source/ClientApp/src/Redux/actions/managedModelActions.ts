@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AnyAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { ManagedModelDto, GetManagedResponse } from "../../Dtos/ClientApiDto";
+import { ManagedModelDto } from "@vital/vitalservice";
+import { processApi } from "./api";
 
 export type ManagedActionTypes = FetchAllManagedAction | AddManagedAction | UpdateManagedAction | DeleteManagedAction;
 
@@ -47,16 +47,16 @@ function recieveDeleteManaged(id: number) {
 }
 
 async function sendFetchManagedProcessesRequest() {
-    return axios
-        .get<GetManagedResponse>("api/Process/Managed")
-        .then(response => response.data)
+    return processApi
+        .apiProcessManagedGet()
+        .then(response => response)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
         });
 }
 
-async function fetchManagedProcesses(): Promise<ManagedModelDto[]> {
+async function fetchManagedProcesses() {
     const result = await sendFetchManagedProcessesRequest();
     return result.affinityModels;
 }
@@ -72,6 +72,7 @@ export function fetchManagedProcessesAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         fetchManagedProcesses()
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             .then(result => dispatch(recieveAllManaged(result)))
             .catch(e => Promise.reject(e));
     };

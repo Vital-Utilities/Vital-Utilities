@@ -701,6 +701,36 @@
         }
       }
     },
+    "/api/Settings/DontUse": {
+      "get": {
+        "tags": [
+          "Settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSettings"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSettings"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSettings"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
     "/api/System/static": {
       "get": {
         "tags": [
@@ -839,6 +869,15 @@
           "profileId": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientSettings": {
+        "type": "object",
+        "properties": {
+          "alwaysOnTop": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1438,14 +1477,16 @@
         "additionalProperties": false
       },
       "GetManagedResponse": {
+        "required": [
+          "affinityModels"
+        ],
         "type": "object",
         "properties": {
           "affinityModels": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ManagedModelDto"
-            },
-            "nullable": true
+            }
           }
         },
         "additionalProperties": false
@@ -1620,6 +1661,12 @@
         "additionalProperties": false
       },
       "InfluxDbSettings": {
+        "required": [
+          "enabled",
+          "endPoint",
+          "reportIntervalSeconds",
+          "token"
+        ],
         "type": "object",
         "properties": {
           "enabled": {
@@ -1630,17 +1677,19 @@
             "format": "int32"
           },
           "endPoint": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "token": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           }
         },
         "additionalProperties": false
       },
       "LaunchSettings": {
+        "required": [
+          "vitalServiceHttpPort",
+          "vitalServiceHttpsPort"
+        ],
         "type": "object",
         "properties": {
           "vitalServiceHttpsPort": {
@@ -1831,6 +1880,9 @@
         "additionalProperties": false
       },
       "MetricsSettings": {
+        "required": [
+          "persistMetrics"
+        ],
         "type": "object",
         "properties": {
           "persistMetrics": {

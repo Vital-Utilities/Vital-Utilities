@@ -4,8 +4,6 @@
 // @ts-ignore
 const fs = require("fs");
 
-execute("quicktype --src ./src/Dtos/ClientApiDto.ts --lang Rust --out ./src-tauri/src/backend_types.rs --visibility public");
-
 let resultFileContent = fs.readFileSync("./src-tauri/src/backend_types.rs", "utf-8");
 
 resultFileContent = "use serde::{Deserialize, Serialize}; \n" + resultFileContent;

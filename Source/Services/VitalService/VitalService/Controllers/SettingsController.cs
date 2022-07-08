@@ -67,6 +67,17 @@ $rootFolder.DeleteFolder('',$null)";
             process.Start();
         }
 
+        /// <summary>
+        /// Hacky way of generating unused C# classes but used in other services.
+        /// </summary>
+        [Obsolete]
+        [ProducesResponseType(typeof(ClientSettings), StatusCodes.Status200OK)]
+        [HttpGet("DontUse")]
+        public void DontUse()
+        {
 
+        }
     }
+
+
 }

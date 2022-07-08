@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AddProccessRequest';
+export * from './ClientSettings';
 export * from './CpuData';
 export * from './CpuUsage';
 export * from './CpuUsageMetricModel';
@@ -32,6 +33,7 @@ export * from './InfluxDbSettings';
 export * from './LaunchSettings';
 export * from './Load';
 export * from './LoadData';
+export * from './ManagedModel';
 export * from './ManagedModelDto';
 export * from './MemUsage';
 export * from './MetricsSettings';
@@ -51,6 +53,7 @@ export * from './ProcessPriorityEnum';
 export * from './ProcessToAddDto';
 export * from './ProcessViewDto';
 export * from './ProfileDto';
+export * from './ProfileModel';
 export * from './Properties';
 export * from './RamData';
 export * from './RamUsageMetricModel';

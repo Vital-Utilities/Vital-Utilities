@@ -13,14 +13,14 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetManagedResponse {
-    #[serde(rename = "affinityModels", skip_serializing_if = "Option::is_none")]
-    pub affinity_models: Option<Vec<crate::models::ManagedModelDto>>,
+    #[serde(rename = "affinityModels")]
+    pub affinity_models: Vec<crate::models::ManagedModelDto>,
 }
 
 impl GetManagedResponse {
-    pub fn new() -> GetManagedResponse {
+    pub fn new(affinity_models: Vec<crate::models::ManagedModelDto>) -> GetManagedResponse {
         GetManagedResponse {
-            affinity_models: None,
+            affinity_models,
         }
     }
 }

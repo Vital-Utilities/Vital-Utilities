@@ -66,29 +66,6 @@ export class SystemApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiSystemPatchRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/System`,
-            method: 'PATCH',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiSystemPatch(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiSystemPatchRaw(initOverrides);
-    }
-
-    /**
-     */
     async apiSystemStaticGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetMachineStaticDataResponse>> {
         const queryParameters: any = {};
 

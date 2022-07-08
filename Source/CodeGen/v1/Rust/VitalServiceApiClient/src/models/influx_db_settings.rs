@@ -13,23 +13,23 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct InfluxDbSettings {
-    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
-    pub enabled: Option<bool>,
-    #[serde(rename = "reportIntervalSeconds", skip_serializing_if = "Option::is_none")]
-    pub report_interval_seconds: Option<i32>,
-    #[serde(rename = "endPoint", skip_serializing_if = "Option::is_none")]
-    pub end_point: Option<String>,
-    #[serde(rename = "token", skip_serializing_if = "Option::is_none")]
-    pub token: Option<String>,
+    #[serde(rename = "enabled")]
+    pub enabled: bool,
+    #[serde(rename = "reportIntervalSeconds")]
+    pub report_interval_seconds: i32,
+    #[serde(rename = "endPoint")]
+    pub end_point: String,
+    #[serde(rename = "token")]
+    pub token: String,
 }
 
 impl InfluxDbSettings {
-    pub fn new() -> InfluxDbSettings {
+    pub fn new(enabled: bool, report_interval_seconds: i32, end_point: String, token: String) -> InfluxDbSettings {
         InfluxDbSettings {
-            enabled: None,
-            report_interval_seconds: None,
-            end_point: None,
-            token: None,
+            enabled,
+            report_interval_seconds,
+            end_point,
+            token,
         }
     }
 }

@@ -42,10 +42,10 @@ Class | Method | HTTP request | Description
 *ProfileApi* | [**api_profile_process_post**](docs/ProfileApi.md#api_profile_process_post) | **POST** /api/Profile/process | 
 *ProfileApi* | [**api_profile_process_put**](docs/ProfileApi.md#api_profile_process_put) | **PUT** /api/Profile/process | 
 *ProfileApi* | [**api_profile_put**](docs/ProfileApi.md#api_profile_put) | **PUT** /api/Profile | 
+*SettingsApi* | [**api_settings_dont_use_get**](docs/SettingsApi.md#api_settings_dont_use_get) | **GET** /api/Settings/DontUse | 
 *SettingsApi* | [**api_settings_get**](docs/SettingsApi.md#api_settings_get) | **GET** /api/Settings | 
 *SettingsApi* | [**api_settings_set_run_at_startup_put**](docs/SettingsApi.md#api_settings_set_run_at_startup_put) | **PUT** /api/Settings/SetRunAtStartup | 
 *SystemApi* | [**api_system_dynamic_get**](docs/SystemApi.md#api_system_dynamic_get) | **GET** /api/System/dynamic | 
-*SystemApi* | [**api_system_patch**](docs/SystemApi.md#api_system_patch) | **PATCH** /api/System | 
 *SystemApi* | [**api_system_static_get**](docs/SystemApi.md#api_system_static_get) | **GET** /api/System/static | 
 *SystemApi* | [**api_system_timeseries_post**](docs/SystemApi.md#api_system_timeseries_post) | **POST** /api/System/timeseries | 
 
@@ -53,6 +53,7 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [AddProccessRequest](docs/AddProccessRequest.md)
+ - [ClientSettings](docs/ClientSettings.md)
  - [CpuData](docs/CpuData.md)
  - [CpuUsage](docs/CpuUsage.md)
  - [CpuUsageMetricModel](docs/CpuUsageMetricModel.md)
@@ -84,6 +85,7 @@ Class | Method | HTTP request | Description
  - [LaunchSettings](docs/LaunchSettings.md)
  - [Load](docs/Load.md)
  - [LoadData](docs/LoadData.md)
+ - [ManagedModel](docs/ManagedModel.md)
  - [ManagedModelDto](docs/ManagedModelDto.md)
  - [MemUsage](docs/MemUsage.md)
  - [MetricsSettings](docs/MetricsSettings.md)
@@ -103,6 +105,7 @@ Class | Method | HTTP request | Description
  - [ProcessToAddDto](docs/ProcessToAddDto.md)
  - [ProcessViewDto](docs/ProcessViewDto.md)
  - [ProfileDto](docs/ProfileDto.md)
+ - [ProfileModel](docs/ProfileModel.md)
  - [Properties](docs/Properties.md)
  - [RamData](docs/RamData.md)
  - [RamUsageMetricModel](docs/RamUsageMetricModel.md)

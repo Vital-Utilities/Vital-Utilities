@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct LaunchSettings {
-    #[serde(rename = "vitalServiceHttpsPort", skip_serializing_if = "Option::is_none")]
-    pub vital_service_https_port: Option<i32>,
-    #[serde(rename = "vitalServiceHttpPort", skip_serializing_if = "Option::is_none")]
-    pub vital_service_http_port: Option<i32>,
+    #[serde(rename = "vitalServiceHttpsPort")]
+    pub vital_service_https_port: i32,
+    #[serde(rename = "vitalServiceHttpPort")]
+    pub vital_service_http_port: i32,
 }
 
 impl LaunchSettings {
-    pub fn new() -> LaunchSettings {
+    pub fn new(vital_service_https_port: i32, vital_service_http_port: i32) -> LaunchSettings {
         LaunchSettings {
-            vital_service_https_port: None,
-            vital_service_http_port: None,
+            vital_service_https_port,
+            vital_service_http_port,
         }
     }
 }

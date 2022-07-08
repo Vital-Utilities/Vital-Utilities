@@ -40,6 +40,7 @@ pub enum ApiProcessManagedGetError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProcessOpenpathIdPostError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 
@@ -47,6 +48,7 @@ pub enum ApiProcessOpenpathIdPostError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ApiProcessOpenpropertiesIdPostError {
+    Status404(i32),
     UnknownValue(serde_json::Value),
 }
 

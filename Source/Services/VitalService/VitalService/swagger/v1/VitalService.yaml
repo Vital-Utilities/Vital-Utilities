@@ -425,6 +425,24 @@ paths:
       responses:
         '200':
           description: Success
+  /api/Settings/DontUse:
+    get:
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ClientSettings'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientSettings'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ClientSettings'
+      deprecated: true
   /api/System/static:
     get:
       tags:
@@ -512,6 +530,12 @@ components:
         profileId:
           type: integer
           format: int32
+      additionalProperties: false
+    ClientSettings:
+      type: object
+      properties:
+        alwaysOnTop:
+          type: boolean
       additionalProperties: false
     CpuData:
       type: object
@@ -953,13 +977,14 @@ components:
           format: date-time
       additionalProperties: false
     GetManagedResponse:
+      required:
+        - affinityModels
       type: object
       properties:
         affinityModels:
           type: array
           items:
             $ref: '#/components/schemas/ManagedModelDto'
-          nullable: true
       additionalProperties: false
     GetProcessesToAddResponse:
       type: object
@@ -1088,6 +1113,11 @@ components:
           type: boolean
       additionalProperties: false
     InfluxDbSettings:
+      required:
+        - enabled
+        - endPoint
+        - reportIntervalSeconds
+        - token
       type: object
       properties:
         enabled:
@@ -1097,12 +1127,13 @@ components:
           format: int32
         endPoint:
           type: string
-          nullable: true
         token:
           type: string
-          nullable: true
       additionalProperties: false
     LaunchSettings:
+      required:
+        - vitalServiceHttpPort
+        - vitalServiceHttpsPort
       type: object
       properties:
         vitalServiceHttpsPort:
@@ -1245,6 +1276,8 @@ components:
           format: float
       additionalProperties: false
     MetricsSettings:
+      required:
+        - persistMetrics
       type: object
       properties:
         persistMetrics:

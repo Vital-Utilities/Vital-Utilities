@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AnyAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { GetRunningProcessesResponse, ProcessViewDto } from "../../Dtos/ClientApiDto";
+import { GetRunningProcessesResponse, ProcessViewDto } from "@vital/vitalservice";
+import { processApi } from "./api";
 
 export type ProcessViewActionTypes = FetchAllProcessViewAction | AddProcessViewAction | UpdateProcessViewAction | DeleteProcessViewAction;
 
@@ -47,9 +47,9 @@ function recieveDeleteProcessView(id: number) {
 }
 
 function fetchProcessView() {
-    return axios
-        .get<GetRunningProcessesResponse>("api/Process/RunningProcesses")
-        .then(response => response.data)
+    return processApi
+        .apiProcessRunningProcessesGet()
+        .then(response => response)
         .catch(e => Promise.reject(e));
 }
 

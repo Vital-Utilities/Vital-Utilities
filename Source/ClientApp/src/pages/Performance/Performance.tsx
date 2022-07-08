@@ -1,4 +1,5 @@
 import { CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "@vital/vitalservice";
 import { useLocalStorageState } from "ahooks";
 import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
 import React, { useEffect } from "react";
@@ -13,7 +14,6 @@ import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components
 import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
 import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../Dtos/UiModel";
 import { VitalState } from "../../Redux/States";
 import { ClassicCpuChartView } from "./Classic/ClassicCpuView";

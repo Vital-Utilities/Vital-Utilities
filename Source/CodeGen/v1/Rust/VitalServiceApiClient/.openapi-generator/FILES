@@ -4,6 +4,7 @@
 Cargo.toml
 README.md
 docs/AddProccessRequest.md
+docs/ClientSettings.md
 docs/CpuData.md
 docs/CpuUsage.md
 docs/CpuUsageMetricModel.md
@@ -37,6 +38,7 @@ docs/IpInterfaceProperties.md
 docs/LaunchSettings.md
 docs/Load.md
 docs/LoadData.md
+docs/ManagedModel.md
 docs/ManagedModelDto.md
 docs/MemUsage.md
 docs/MetricsSettings.md
@@ -58,6 +60,7 @@ docs/ProcessToAddDto.md
 docs/ProcessViewDto.md
 docs/ProfileApi.md
 docs/ProfileDto.md
+docs/ProfileModel.md
 docs/Properties.md
 docs/RamData.md
 docs/RamUsageMetricModel.md
@@ -83,6 +86,7 @@ src/apis/settings_api.rs
 src/apis/system_api.rs
 src/lib.rs
 src/models/add_proccess_request.rs
+src/models/client_settings.rs
 src/models/cpu_data.rs
 src/models/cpu_usage.rs
 src/models/cpu_usage_metric_model.rs
@@ -114,6 +118,7 @@ src/models/ip_interface_properties.rs
 src/models/launch_settings.rs
 src/models/load.rs
 src/models/load_data.rs
+src/models/managed_model.rs
 src/models/managed_model_dto.rs
 src/models/mem_usage.rs
 src/models/metrics_settings.rs
@@ -134,6 +139,7 @@ src/models/process_priority_enum.rs
 src/models/process_to_add_dto.rs
 src/models/process_view_dto.rs
 src/models/profile_dto.rs
+src/models/profile_model.rs
 src/models/properties.rs
 src/models/ram_data.rs
 src/models/ram_usage_metric_model.rs

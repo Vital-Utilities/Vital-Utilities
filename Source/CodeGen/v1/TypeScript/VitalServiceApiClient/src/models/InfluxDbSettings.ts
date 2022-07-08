@@ -24,25 +24,25 @@ export interface InfluxDbSettings {
      * @type {boolean}
      * @memberof InfluxDbSettings
      */
-    enabled?: boolean;
+    enabled: boolean;
     /**
      * 
      * @type {number}
      * @memberof InfluxDbSettings
      */
-    reportIntervalSeconds?: number;
+    reportIntervalSeconds: number;
     /**
      * 
      * @type {string}
      * @memberof InfluxDbSettings
      */
-    endPoint?: string | null;
+    endPoint: string;
     /**
      * 
      * @type {string}
      * @memberof InfluxDbSettings
      */
-    token?: string | null;
+    token: string;
 }
 
 /**
@@ -50,6 +50,10 @@ export interface InfluxDbSettings {
  */
 export function instanceOfInfluxDbSettings(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "enabled" in value;
+    isInstance = isInstance && "reportIntervalSeconds" in value;
+    isInstance = isInstance && "endPoint" in value;
+    isInstance = isInstance && "token" in value;
 
     return isInstance;
 }
@@ -64,10 +68,10 @@ export function InfluxDbSettingsFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'enabled': !exists(json, 'enabled') ? undefined : json['enabled'],
-        'reportIntervalSeconds': !exists(json, 'reportIntervalSeconds') ? undefined : json['reportIntervalSeconds'],
-        'endPoint': !exists(json, 'endPoint') ? undefined : json['endPoint'],
-        'token': !exists(json, 'token') ? undefined : json['token'],
+        'enabled': json['enabled'],
+        'reportIntervalSeconds': json['reportIntervalSeconds'],
+        'endPoint': json['endPoint'],
+        'token': json['token'],
     };
 }
 

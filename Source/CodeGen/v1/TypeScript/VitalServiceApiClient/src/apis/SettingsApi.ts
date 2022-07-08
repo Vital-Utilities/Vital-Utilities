@@ -15,9 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
+  ClientSettings,
   SettingsDto,
 } from '../models';
 import {
+    ClientSettingsFromJSON,
+    ClientSettingsToJSON,
     SettingsDtoFromJSON,
     SettingsDtoToJSON,
 } from '../models';
@@ -30,6 +33,30 @@ export interface ApiSettingsSetRunAtStartupPutRequest {
  * 
  */
 export class SettingsApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async apiSettingsDontUseGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ClientSettings>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/Settings/DontUse`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ClientSettingsFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiSettingsDontUseGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ClientSettings> {
+        const response = await this.apiSettingsDontUseGetRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      */

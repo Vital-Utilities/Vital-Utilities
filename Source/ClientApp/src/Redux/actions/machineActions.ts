@@ -1,7 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "../../Dtos/ClientApiDto";
-
+import { ApiSystemTimeseriesPostRequest, GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
+import { systemApi } from "./api";
 export type MachineActionTypes = UpdateMachineDynamicDataAction | UpdateMachineStaticDataAction | UpdateMachineTimeSeriesDataAction;
 
 const UPDATE_MACHINE_DYNAMIC_DATA = "UPDATE_MACHINE_DYNAMIC_DATA";
@@ -32,32 +31,28 @@ function recieveMachineStaticData(message: GetMachineStaticDataResponse) {
     return { type: UPDATE_MACHINE_STATIC_DATA, message: message };
 }
 async function sendGetMachineStaticRequest() {
-    return axios
-        .get<GetMachineStaticDataResponse>("api/system/static")
-        .then(response => response.data)
+    return systemApi
+        .apiSystemStaticGet()
+        .then(response => response)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
         });
 }
 function sendGetMachineDynamicRequest() {
-    return axios
-        .get<GetMachineDynamicDataResponse>("api/system/dynamic")
-        .then(response => response.data)
+    return systemApi
+        .apiSystemDynamicGet()
+        .then(response => response)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
         });
 }
 
-function sendGetMachineTimeSeriesRequest(message: GetMachineTimeSeriesRequest) {
-    return axios
-        .post<TimeSeriesMachineMetricsResponse>("api/system/timeseries", message, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => response.data)
+function sendGetMachineTimeSeriesRequest(message: ApiSystemTimeseriesPostRequest) {
+    return systemApi
+        .apiSystemTimeseriesPost(message)
+        .then(response => response)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
@@ -66,7 +61,7 @@ function sendGetMachineTimeSeriesRequest(message: GetMachineTimeSeriesRequest) {
 export function fetchMachineTimeSeriesDataAction(message: GetMachineTimeSeriesRequest): AnyAction {
     //@ts-ignore
     return function (dispatch) {
-        return sendGetMachineTimeSeriesRequest(message)
+        return sendGetMachineTimeSeriesRequest({ getMachineTimeSeriesRequest: message })
             .then(result => dispatch(recieveMachineTimeSeriesData(result)))
             .catch(e => console.error(e));
     };

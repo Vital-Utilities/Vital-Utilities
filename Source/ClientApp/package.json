@@ -21,13 +21,13 @@
         "watch": "copy-and-watch --watch src/**/*.{html,json} src/**/{fonts,images}/* dist/"
     },
     "dependencies": {
-        "@vital/vitalservice": "../../../CodeGen/v1/TypeScript/VitalServiceApiClient",
+        "@vital/vitalservice": "../CodeGen/v1/TypeScript/VitalServiceApiClient",
         "@ant-design/icons": "^4.7.0",
         "@microsoft/signalr": "^6.0.6",
         "@sentry/browser": "^7.2.0",
         "@sentry/react": "^7.2.0",
         "@sentry/tracing": "^7.2.0",
-        "@tauri-apps/api": "1.0.1",
+        "@tauri-apps/api": "1.0.2",
         "ahooks": "^3.5.0",
         "antd": "^4.18.5",
         "axios": "^0.21.4",

@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { SettingsDto } from "../../Dtos/ClientApiDto";
+import { SettingsDto } from "@vital/vitalservice";
+import { settingsApi } from "./api";
 
 export type SettingsActionTypes = GetSettingsAction;
 
@@ -16,9 +16,9 @@ interface GetSettingsAction {
 }
 
 function sendGetSettingsRequest() {
-    return axios
-        .get<SettingsDto>("api/settings")
-        .then(response => response.data)
+    return settingsApi
+        .apiSettingsGet()
+        .then(response => response)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);

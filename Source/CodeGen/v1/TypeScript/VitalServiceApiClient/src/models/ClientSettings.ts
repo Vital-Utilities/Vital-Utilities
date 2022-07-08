@@ -16,42 +16,41 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface MetricsSettings
+ * @interface ClientSettings
  */
-export interface MetricsSettings {
+export interface ClientSettings {
     /**
      * 
      * @type {boolean}
-     * @memberof MetricsSettings
+     * @memberof ClientSettings
      */
-    persistMetrics: boolean;
+    alwaysOnTop?: boolean;
 }
 
 /**
- * Check if a given object implements the MetricsSettings interface.
+ * Check if a given object implements the ClientSettings interface.
  */
-export function instanceOfMetricsSettings(value: object): boolean {
+export function instanceOfClientSettings(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "persistMetrics" in value;
 
     return isInstance;
 }
 
-export function MetricsSettingsFromJSON(json: any): MetricsSettings {
-    return MetricsSettingsFromJSONTyped(json, false);
+export function ClientSettingsFromJSON(json: any): ClientSettings {
+    return ClientSettingsFromJSONTyped(json, false);
 }
 
-export function MetricsSettingsFromJSONTyped(json: any, ignoreDiscriminator: boolean): MetricsSettings {
+export function ClientSettingsFromJSONTyped(json: any, ignoreDiscriminator: boolean): ClientSettings {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'persistMetrics': json['persistMetrics'],
+        'alwaysOnTop': !exists(json, 'alwaysOnTop') ? undefined : json['alwaysOnTop'],
     };
 }
 
-export function MetricsSettingsToJSON(value?: MetricsSettings | null): any {
+export function ClientSettingsToJSON(value?: ClientSettings | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,7 +59,7 @@ export function MetricsSettingsToJSON(value?: MetricsSettings | null): any {
     }
     return {
         
-        'persistMetrics': value.persistMetrics,
+        'alwaysOnTop': value.alwaysOnTop,
     };
 }
 
