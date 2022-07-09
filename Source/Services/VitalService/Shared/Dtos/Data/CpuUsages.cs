@@ -5,10 +5,12 @@ namespace VitalService.Dtos.Coms
 {
     public class CpuUsage
     {
-        
+        public string Name { get; set; }
+        public string? Brand { get; set; }
+        public string? VendorId { get; set; }
         public List<int> CoreClocksMhz { get; set; } = new();
         
-        public float Total { get; set; }
+        public float TotalCorePercentage { get; set; }
         
         public float? PowerDrawWattage { get; set; }
         

@@ -108,7 +108,7 @@ namespace VitalService.Services
                     {
                         new CpuUsageMetricModel(
                             HardwarePerformanceService.MachineStaticData.Cpu.Name,
-                            HardwarePerformanceService.CurrentCpuUsage.Total,
+                            HardwarePerformanceService.CurrentCpuUsage.TotalCorePercentage,
                             HardwarePerformanceService.CurrentCpuUsage.TemperatureReadings.GetValueOrDefault("CPU Package"),
                             HardwarePerformanceService.CurrentCpuUsage.PowerDrawWattage,
                             HardwarePerformanceService.CurrentCpuUsage.CorePercentages.Select((e,i) => new KeyValuePair<int, float>(i, e)).ToDictionary(k=> k.Key, v=> v.Value),

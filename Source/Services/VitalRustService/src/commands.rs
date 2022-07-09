@@ -1,6 +1,6 @@
 use directories::UserDirs;
 use log::{debug, error, info};
-use openapi::models::{LaunchSettings, SettingsDto};
+use vital_service_api::models::{LaunchSettings, SettingsDto};
 
 pub fn get_backend_settings() -> Result<SettingsDto, String> {
     let user_dirs = UserDirs::new().unwrap();

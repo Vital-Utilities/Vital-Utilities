@@ -2,7 +2,6 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-
 use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
@@ -10,8 +9,8 @@ use crate::commands::get_vital_service_ports;
 use crate::software::get_process_util;
 use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
-use nvml::NVML;
-use openapi::models::{SendUtilizationRequest, SystemUsage};
+use nvml::Nvml;
+use vital_service_api::models::{SendUtilizationRequest, SystemUsage};
 
 use rocket::routes;
 
@@ -42,7 +41,7 @@ async fn app() {
         error!("{}", "failed to get vital service port");
         panic!("{}", "failed to get vital service port");
     }
-    let nvml_result = NVML::init();
+    let nvml_result = Nvml::init();
     let nvml = match nvml_result {
         Ok(nvml) => Some(nvml),
         Err(e) => {

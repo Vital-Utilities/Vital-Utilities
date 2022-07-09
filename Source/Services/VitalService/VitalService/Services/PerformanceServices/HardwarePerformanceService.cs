@@ -430,7 +430,7 @@ namespace VitalService.Services.PerformanceServices
                     if (cpuDataFromRust is not null)
                     {
                         toReturn.CoreClocksMhz = cpuDataFromRust.CoreClocksMhz;
-                        toReturn.Total = (float)Math.Round(cpuDataFromRust.Total);
+                        toReturn.TotalCorePercentage = (float)Math.Round(cpuDataFromRust.TotalCorePercentage);
                         toReturn.CorePercentages = cpuDataFromRust.CorePercentages;
                     }
                     cpuUsageData = toReturn;

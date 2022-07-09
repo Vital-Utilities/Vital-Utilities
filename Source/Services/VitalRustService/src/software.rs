@@ -1,9 +1,9 @@
 use crate::nvidia;
 use chrono::{DateTime, Utc};
 use core::slice;
-use nvml::NVML;
+use nvml::Nvml;
 use once_cell::sync::OnceCell;
-use openapi::models::{ProcessData, ProcessDiskUsage, ProcessGpuUtil};
+use vital_service_api::models::{ProcessData, ProcessDiskUsage, ProcessGpuUtil};
 
 use std::{
     collections::{HashMap, HashSet},
@@ -15,7 +15,6 @@ use std::{
 };
 use sysinfo::{PidExt, ProcessExt, SystemExt};
 use windows::{
-    core::PWSTR,
     Win32::Foundation::*,
     Win32::{
         Storage::FileSystem::{GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueW},
@@ -28,7 +27,7 @@ use windows::{
 };
 pub fn get_process_util(
     sysinfo: &sysinfo::System,
-    nvml: &Option<NVML>,
+    nvml: &Option<Nvml>,
     time_stamp: DateTime<Utc>,
 ) -> Option<Vec<ProcessData>> {
     let mut list = Vec::new();
@@ -142,8 +141,8 @@ fn handle() -> Option<unsafe extern "system" fn(hwnd: HWND, lparam: LPARAM) -> B
 }
 
 unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
-    let mut text: [u16; 1024] = [0; 1024];
-    let length = GetWindowTextW(hwnd, PWSTR(text.as_mut_ptr()), text.len() as i32);
+    let mut text = [0; 1024];
+    let length = GetWindowTextW(hwnd, &mut text);
     let text = String::from_utf16(&text[..length as usize]).unwrap();
 
     let mut guard = WINDOW_TITLES
@@ -220,21 +219,23 @@ fn get_process_path(pid: u32) -> Option<String> {
     unsafe {
         let h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
 
-        if h_snap != INVALID_HANDLE_VALUE {
-            let mut mod_entry: MODULEENTRY32 = MODULEENTRY32 {
-                ..Default::default()
-            };
-            mod_entry.dwSize = size_of_val(&mod_entry) as u32;
-            if Module32First(h_snap, &mut mod_entry).as_bool() {
-                let char_vec = mod_entry.szExePath.iter().map(|f| f.0).collect::<Vec<u8>>();
-
-                path = match from_utf8(&char_vec) {
-                    Ok(s) => Some(String::from(s.to_string().trim_end_matches(char::from(0)))),
-                    Err(_) => None,
+        if let Ok(h_snap) = h_snap {
+            if h_snap != INVALID_HANDLE_VALUE {
+                let mut mod_entry: MODULEENTRY32 = MODULEENTRY32 {
+                    ..Default::default()
                 };
+                mod_entry.dwSize = size_of_val(&mod_entry) as u32;
+                if Module32First(h_snap, &mut mod_entry).as_bool() {
+                    let char_vec = mod_entry.szExePath.iter().map(|f| f.0).collect::<Vec<u8>>();
+
+                    path = match from_utf8(&char_vec) {
+                        Ok(s) => Some(String::from(s.to_string().trim_end_matches(char::from(0)))),
+                        Err(_) => None,
+                    };
+                }
             }
+            CloseHandle(h_snap);
         }
-        CloseHandle(h_snap);
     }
 
     return path;

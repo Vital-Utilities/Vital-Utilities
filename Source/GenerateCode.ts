@@ -19,7 +19,7 @@ if (!fse.existsSync(CodeGenPath))
   fse.mkdirsSync(CodeGenPath);
   
 execute(`npx openapi-generator-cli version`);
-execute(`npx @openapitools/openapi-generator-cli generate -i ./temp/Swagger/v1/VitalService.yaml -g rust -o ./CodeGen/v1/Rust/VitalServiceApiClient --additional-properties=packageVersion=${version},stringEnums=true`)
+execute(`npx @openapitools/openapi-generator-cli generate -i ./temp/Swagger/v1/VitalService.yaml -g rust -o ./CodeGen/v1/Rust/VitalServiceApiClient  --additional-properties=packageName="vital_service_api",packageVersion=${version},stringEnums=true`);
 execute(`npx @openapitools/openapi-generator-cli generate -i ./temp/Swagger/v1/VitalService.yaml -g typescript-fetch -o ./CodeGen/v1/TypeScript/VitalServiceApiClient -p npmName=VitalService --additional-properties=npmVersion=${version},stringEnums=true`)
 
 execute(`cd ./CodeGen/v1/TypeScript/VitalServiceApiClient && pnpm i`)

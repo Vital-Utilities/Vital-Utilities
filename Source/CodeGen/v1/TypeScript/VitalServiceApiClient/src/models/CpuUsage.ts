@@ -21,6 +21,24 @@ import { exists, mapValues } from '../runtime';
 export interface CpuUsage {
     /**
      * 
+     * @type {string}
+     * @memberof CpuUsage
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CpuUsage
+     */
+    brand?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CpuUsage
+     */
+    vendorId?: string;
+    /**
+     * 
      * @type {Array<number>}
      * @memberof CpuUsage
      */
@@ -30,7 +48,7 @@ export interface CpuUsage {
      * @type {number}
      * @memberof CpuUsage
      */
-    total: number;
+    totalCorePercentage: number;
     /**
      * 
      * @type {number}
@@ -56,8 +74,9 @@ export interface CpuUsage {
  */
 export function instanceOfCpuUsage(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "name" in value;
     isInstance = isInstance && "coreClocksMhz" in value;
-    isInstance = isInstance && "total" in value;
+    isInstance = isInstance && "totalCorePercentage" in value;
     isInstance = isInstance && "corePercentages" in value;
     isInstance = isInstance && "temperatureReadings" in value;
 
@@ -74,8 +93,11 @@ export function CpuUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
+        'name': json['name'],
+        'brand': !exists(json, 'brand') ? undefined : json['brand'],
+        'vendorId': !exists(json, 'vendorId') ? undefined : json['vendorId'],
         'coreClocksMhz': json['coreClocksMhz'],
-        'total': json['total'],
+        'totalCorePercentage': json['totalCorePercentage'],
         'powerDrawWattage': !exists(json, 'powerDrawWattage') ? undefined : json['powerDrawWattage'],
         'corePercentages': json['corePercentages'],
         'temperatureReadings': json['temperatureReadings'],
@@ -91,8 +113,11 @@ export function CpuUsageToJSON(value?: CpuUsage | null): any {
     }
     return {
         
+        'name': value.name,
+        'brand': value.brand,
+        'vendorId': value.vendorId,
         'coreClocksMhz': value.coreClocksMhz,
-        'total': value.total,
+        'totalCorePercentage': value.totalCorePercentage,
         'powerDrawWattage': value.powerDrawWattage,
         'corePercentages': value.corePercentages,
         'temperatureReadings': value.temperatureReadings,

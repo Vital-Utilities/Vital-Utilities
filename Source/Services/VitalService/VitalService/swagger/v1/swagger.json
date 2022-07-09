@@ -997,11 +997,33 @@
         "required": [
           "coreClocksMhz",
           "corePercentages",
+          "name",
           "temperatureReadings",
-          "total"
+          "totalCorePercentage"
         ],
         "type": "object",
         "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "brand": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "vendorId": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
           "coreClocksMhz": {
             "required": [
               "capacity",
@@ -1014,7 +1036,7 @@
               "format": "int32"
             }
           },
-          "total": {
+          "totalCorePercentage": {
             "type": "number",
             "format": "float"
           },

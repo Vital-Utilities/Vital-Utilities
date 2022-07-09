@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use log::error;
-use nvml::{struct_wrappers::device::ProcessUtilizationSample, NVML};
-use openapi::models::{GpuUsages, LoadData, PcieThroughPut};
+use nvml::{struct_wrappers::device::ProcessUtilizationSample, Nvml};
+use vital_service_api::models::{GpuUsages, LoadData, PcieThroughPut};
 
 pub fn get_gpu_util(device: &nvml::Device) -> GpuUsages {
     let utilization = device.utilization_rates().unwrap();
@@ -94,7 +94,7 @@ pub fn get_gpu_util(device: &nvml::Device) -> GpuUsages {
     };
 }
 
-pub fn get_process_gpu_util(nvml: &Option<NVML>) -> Option<Vec<ProcessUtilizationSample>> {
+pub fn get_process_gpu_util(nvml: &Option<Nvml>) -> Option<Vec<ProcessUtilizationSample>> {
     if nvml.is_none() {
         return None;
     }

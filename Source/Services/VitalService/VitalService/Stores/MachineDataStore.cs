@@ -126,7 +126,7 @@ namespace VitalService.Stores
 
         public float GetCpuUsagePercentage()
         {
-            return (float)Math.Round(HardwarePerformanceService.CurrentCpuUsage.Total, 1);
+            return (float)Math.Round(HardwarePerformanceService.CurrentCpuUsage.TotalCorePercentage, 1);
         }
 
         internal float? GetCpuClockSpeed()

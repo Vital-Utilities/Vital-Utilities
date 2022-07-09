@@ -1,12 +1,11 @@
 use std::collections::HashMap;
 
-use log::info;
-use openapi::models::{
+use sysinfo::{CpuExt, DiskExt, NetworkExt, SystemExt};
+use systemstat::Platform;
+use vital_service_api::models::{
     CpuUsage, DiskLoad, DiskType, DiskUsage, DriveType, IpInterfaceProperties, MemoryUsage,
     NetAdapterUsage, NetworkAdapterProperties, NetworkAdapterUsage,
 };
-use sysinfo::{DiskExt, NetworkExt, ProcessorExt, SystemExt};
-use systemstat::Platform;
 
 pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUsage> {
     let mut list = Vec::new();
@@ -57,7 +56,8 @@ pub async fn get_cpu_util(
 ) -> Box<CpuUsage> {
     let mut core_percentages = Vec::new();
     let mut core_clocks_mhz = Vec::new();
-    for processor in sysinfo.processors() {
+
+    for processor in sysinfo.cpus() {
         core_percentages.push(processor.cpu_usage());
         core_clocks_mhz.push(processor.frequency() as i32);
     }
@@ -69,9 +69,13 @@ pub async fn get_cpu_util(
         }
         Err(_) => {}
     }
+    let info = sysinfo.global_cpu_info();
     return Box::new(CpuUsage {
+        name: info.name().to_string(),
+        brand: Some(info.brand().to_string()),
+        vendor_id: Some(info.vendor_id().to_string()),
         core_clocks_mhz,
-        total: sysinfo.global_processor_info().cpu_usage() as f32,
+        total_core_percentage: info.cpu_usage() as f32,
         power_draw_wattage: None,
         core_percentages,
         temperature_readings: temperature_readings.clone(),

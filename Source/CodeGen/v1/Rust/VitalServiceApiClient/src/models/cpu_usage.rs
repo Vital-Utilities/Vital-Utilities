@@ -13,10 +13,16 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CpuUsage {
+    #[serde(rename = "name")]
+    pub name: String,
+    #[serde(rename = "brand", skip_serializing_if = "Option::is_none")]
+    pub brand: Option<String>,
+    #[serde(rename = "vendorId", skip_serializing_if = "Option::is_none")]
+    pub vendor_id: Option<String>,
     #[serde(rename = "coreClocksMhz")]
     pub core_clocks_mhz: Vec<i32>,
-    #[serde(rename = "total")]
-    pub total: f32,
+    #[serde(rename = "totalCorePercentage")]
+    pub total_core_percentage: f32,
     #[serde(rename = "powerDrawWattage", skip_serializing_if = "Option::is_none")]
     pub power_draw_wattage: Option<f32>,
     #[serde(rename = "corePercentages")]
@@ -26,10 +32,13 @@ pub struct CpuUsage {
 }
 
 impl CpuUsage {
-    pub fn new(core_clocks_mhz: Vec<i32>, total: f32, core_percentages: Vec<f32>, temperature_readings: ::std::collections::HashMap<String, f32>) -> CpuUsage {
+    pub fn new(name: String, core_clocks_mhz: Vec<i32>, total_core_percentage: f32, core_percentages: Vec<f32>, temperature_readings: ::std::collections::HashMap<String, f32>) -> CpuUsage {
         CpuUsage {
+            name,
+            brand: None,
+            vendor_id: None,
             core_clocks_mhz,
-            total,
+            total_core_percentage,
             power_draw_wattage: None,
             core_percentages,
             temperature_readings,

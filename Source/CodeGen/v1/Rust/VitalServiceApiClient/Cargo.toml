@@ -1,5 +1,5 @@
 [package]
-name = "openapi"
+name = "vital_service_api"
 version = "0.0.1"
 authors = ["OpenAPI Generator team and contributors"]
 edition = "2018"
