@@ -36,7 +36,7 @@ export interface CpuUsage {
      * @type {number}
      * @memberof CpuUsage
      */
-    powerDrawWattage: number | null;
+    powerDrawWattage?: number;
     /**
      * 
      * @type {Array<number>}
@@ -58,7 +58,6 @@ export function instanceOfCpuUsage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "coreClocksMhz" in value;
     isInstance = isInstance && "total" in value;
-    isInstance = isInstance && "powerDrawWattage" in value;
     isInstance = isInstance && "corePercentages" in value;
     isInstance = isInstance && "temperatureReadings" in value;
 
@@ -77,7 +76,7 @@ export function CpuUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
         
         'coreClocksMhz': json['coreClocksMhz'],
         'total': json['total'],
-        'powerDrawWattage': json['powerDrawWattage'],
+        'powerDrawWattage': !exists(json, 'powerDrawWattage') ? undefined : json['powerDrawWattage'],
         'corePercentages': json['corePercentages'],
         'temperatureReadings': json['temperatureReadings'],
     };

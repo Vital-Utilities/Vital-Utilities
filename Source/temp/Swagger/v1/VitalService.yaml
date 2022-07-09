@@ -178,16 +178,40 @@ paths:
           content:
             text/plain:
               schema:
+                required:
+                  - length
+                  - longLength
+                  - rank
+                  - syncRoot
+                  - isReadOnly
+                  - isFixedSize
+                  - isSynchronized
                 type: array
                 items:
                   $ref: '#/components/schemas/ProfileDto'
             application/json:
               schema:
+                required:
+                  - length
+                  - longLength
+                  - rank
+                  - syncRoot
+                  - isReadOnly
+                  - isFixedSize
+                  - isSynchronized
                 type: array
                 items:
                   $ref: '#/components/schemas/ProfileDto'
             text/json:
               schema:
+                required:
+                  - length
+                  - longLength
+                  - rank
+                  - syncRoot
+                  - isReadOnly
+                  - isFixedSize
+                  - isSynchronized
                 type: array
                 items:
                   $ref: '#/components/schemas/ProfileDto'
@@ -521,14 +545,31 @@ components:
       type: object
       properties:
         processName:
+          required:
+            - chars
+            - length
           type: string
         alias:
+          required:
+            - chars
+            - length
           type: string
         executionPath:
+          required:
+            - chars
+            - length
           type: string
         processPriority:
           $ref: '#/components/schemas/ProcessPriorityEnum'
         affinity:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             type: integer
@@ -558,6 +599,9 @@ components:
       type: object
       properties:
         name:
+          required:
+            - chars
+            - length
           type: string
         numberOfEnabledCore:
           type: integer
@@ -584,12 +628,15 @@ components:
       required:
         - coreClocksMhz
         - corePercentages
-        - powerDrawWattage
         - temperatureReadings
         - total
       type: object
       properties:
         coreClocksMhz:
+          required:
+            - capacity
+            - count
+            - item
           type: array
           items:
             type: integer
@@ -598,15 +645,28 @@ components:
           type: number
           format: float
         powerDrawWattage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         corePercentages:
+          required:
+            - capacity
+            - count
+            - item
           type: array
           items:
             type: number
             format: float
         temperatureReadings:
+          required:
+            - item
+            - comparer
+            - count
+            - isEmpty
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
@@ -614,47 +674,53 @@ components:
       additionalProperties: false
     CpuUsageMetricModel:
       required:
-        - coreClocksMhz
-        - coresUsagePercentage
         - id
-        - packageTemperature
-        - powerDrawWattage
-        - totalCoreUsagePercentage
-        - uniqueIdentifier
       type: object
+      allOf:
+        - $ref: '#/components/schemas/HardwareMetricModel'
       properties:
-        id:
-          type: integer
-          format: int32
-        uniqueIdentifier:
-          type: string
-          nullable: true
         totalCoreUsagePercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         packageTemperature:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         powerDrawWattage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         coreClocksMhz:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
+            - item
           type: object
           additionalProperties:
             type: number
             format: float
             nullable: true
-          nullable: true
         coresUsagePercentage:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
+            - item
           type: object
           additionalProperties:
             type: number
             format: float
             nullable: true
-          nullable: true
       additionalProperties: false
     CreateProfileRequest:
       required:
@@ -662,6 +728,9 @@ components:
       type: object
       properties:
         name:
+          required:
+            - chars
+            - length
           type: string
       additionalProperties: false
     DateRange:
@@ -671,56 +740,111 @@ components:
       type: object
       properties:
         earliest:
+          required:
+            - date
+            - day
+            - dayOfWeek
+            - dayOfYear
+            - hour
+            - kind
+            - millisecond
+            - minute
+            - month
+            - now
+            - second
+            - ticks
+            - timeOfDay
+            - today
+            - year
+            - utcNow
           type: string
           format: date-time
         latest:
+          required:
+            - date
+            - day
+            - dayOfWeek
+            - dayOfYear
+            - hour
+            - kind
+            - millisecond
+            - minute
+            - month
+            - now
+            - second
+            - ticks
+            - timeOfDay
+            - today
+            - year
+            - utcNow
           type: string
           format: date-time
       additionalProperties: false
     DiskHealth:
-      required:
-        - totalBytesRead
-        - totalBytesWritten
       type: object
       properties:
         totalBytesRead:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
         totalBytesWritten:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
       additionalProperties: false
     DiskLoad:
-      required:
-        - totalActivityPercentage
-        - totalFreeSpaceBytes
-        - usedSpaceBytes
-        - usedSpacePercentage
-        - writeActivityPercentage
       type: object
       properties:
         usedSpacePercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         usedSpaceBytes:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
         totalFreeSpaceBytes:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
         writeActivityPercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         totalActivityPercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
+      additionalProperties: false
+    DiskThroughput:
+      type: object
+      properties:
+        readRateBytesPerSecond:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        writeRateBytesPerSecond:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
       additionalProperties: false
     DiskType:
       enum:
@@ -730,123 +854,145 @@ components:
       type: string
     DiskUsage:
       required:
-        - diskHealth
         - diskType
         - driveType
-        - label
-        - letter
         - load
         - name
-        - serial
         - temperatures
-        - throughput
-        - uniqueIdentifier
       type: object
       properties:
         name:
+          required:
+            - chars
+            - length
           type: string
         serial:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         uniqueIdentifier:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         driveType:
           $ref: '#/components/schemas/DriveType'
         diskType:
           $ref: '#/components/schemas/DiskType'
         throughput:
-          $ref: '#/components/schemas/Throughput'
+          $ref: '#/components/schemas/DiskThroughput'
         load:
           $ref: '#/components/schemas/DiskLoad'
         temperatures:
-          type: object
-          additionalProperties:
-            type: number
-            format: float
-        diskHealth:
-          $ref: '#/components/schemas/DiskHealth'
-        label:
-          type: string
-        letter:
-          type: string
-          nullable: true
-      additionalProperties: false
-    DiskUsageMetricModel:
-      required:
-        - dataReadBytes
-        - dataWrittenBytes
-        - driveLetter
-        - driveType
-        - id
-        - name
-        - readRateBytesPerSecond
-        - serial
-        - temperatures
-        - totalActivityPercentage
-        - uniqueIdentifier
-        - usedSpaceBytes
-        - usedSpacePercentage
-        - writeActivityPercentage
-        - writeRateBytesPerSecond
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        uniqueIdentifier:
-          type: string
-          nullable: true
-        serial:
-          type: string
-          nullable: true
-        name:
-          type: string
-          nullable: true
-        driveLetter:
-          type: string
-          nullable: true
-        driveType:
-          $ref: '#/components/schemas/DriveType'
-        usedSpacePercentage:
-          type: number
-          format: float
-          nullable: true
-        usedSpaceBytes:
-          type: integer
-          format: int64
-          nullable: true
-        writeActivityPercentage:
-          type: number
-          format: float
-          nullable: true
-        totalActivityPercentage:
-          type: number
-          format: float
-          nullable: true
-        readRateBytesPerSecond:
-          type: number
-          format: double
-          nullable: true
-        writeRateBytesPerSecond:
-          type: number
-          format: double
-          nullable: true
-        dataReadBytes:
-          type: number
-          format: double
-          nullable: true
-        dataWrittenBytes:
-          type: number
-          format: double
-          nullable: true
-        temperatures:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
+            - item
           type: object
           additionalProperties:
             type: number
             format: float
             nullable: true
-          nullable: true
+        diskHealth:
+          $ref: '#/components/schemas/DiskHealth'
+        volumeLabel:
+          required:
+            - chars
+            - length
+          type: string
+        letter:
+          required:
+            - chars
+            - length
+          type: string
+      additionalProperties: false
+    DiskUsageMetricModel:
+      required:
+        - id
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/HardwareMetricModel'
+      properties:
+        serial:
+          required:
+            - chars
+            - length
+          type: string
+        name:
+          required:
+            - chars
+            - length
+          type: string
+        driveLetter:
+          required:
+            - chars
+            - length
+          type: string
+        driveType:
+          $ref: '#/components/schemas/DriveType'
+        usedSpacePercentage:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        usedSpaceBytes:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        writeActivityPercentage:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        totalActivityPercentage:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        readRateBytesPerSecond:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: double
+        writeRateBytesPerSecond:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: double
+        dataReadBytes:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: double
+        dataWrittenBytes:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: double
+        temperatures:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
+            - item
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
       additionalProperties: false
     DiskUsages:
       required:
@@ -854,6 +1000,12 @@ components:
       type: object
       properties:
         disks:
+          required:
+            - comparer
+            - count
+            - isEmpty
+            - keys
+            - values
           type: object
           additionalProperties:
             $ref: '#/components/schemas/DiskUsage'
@@ -875,28 +1027,31 @@ components:
       type: object
       properties:
         managedModels:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             $ref: '#/components/schemas/ManagedModelDto'
         processesToAdd:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             $ref: '#/components/schemas/ProcessToAddDto'
       additionalProperties: false
     GetMachineDynamicDataResponse:
-      required:
-        - cpuTemperature
-        - cpuUsageData
-        - diskUsages
-        - gpuUsageData
-        - networkUsageData
-        - processCpuThreadsUsage
-        - processCpuUsage
-        - processDiskBytesPerSecActivity
-        - processGpuUsage
-        - processRamUsageGb
-        - processThreadCount
-        - ramUsagesData
       type: object
       properties:
         cpuUsageData:
@@ -904,75 +1059,105 @@ components:
         ramUsagesData:
           $ref: '#/components/schemas/MemoryUsage'
         gpuUsageData:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/GpuUsages'
-          nullable: true
         diskUsages:
           $ref: '#/components/schemas/DiskUsages'
         networkUsageData:
           $ref: '#/components/schemas/NetworkAdapterUsages'
         processCpuUsage:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: float
-          nullable: true
         processCpuThreadsUsage:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: float
-          nullable: true
         processThreadCount:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: float
-          nullable: true
         processRamUsageGb:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: float
-          nullable: true
         processDiskBytesPerSecActivity:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: double
-          nullable: true
         cpuTemperature:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: float
-          nullable: true
         processGpuUsage:
+          required:
+            - item
+            - keys
+            - values
           type: object
           additionalProperties:
             type: number
             format: float
-          nullable: true
       additionalProperties: false
     GetMachineStaticDataResponse:
       required:
         - cpu
-        - directXVersion
         - gpu
         - ram
       type: object
       properties:
         directXVersion:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         cpu:
           $ref: '#/components/schemas/CpuData'
         ram:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/RamData'
         gpu:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/GpuData'
@@ -984,9 +1169,43 @@ components:
       type: object
       properties:
         earliest:
+          required:
+            - date
+            - day
+            - dayOfWeek
+            - dayOfYear
+            - hour
+            - kind
+            - millisecond
+            - minute
+            - month
+            - now
+            - second
+            - ticks
+            - timeOfDay
+            - today
+            - year
+            - utcNow
           type: string
           format: date-time
         latest:
+          required:
+            - date
+            - day
+            - dayOfWeek
+            - dayOfYear
+            - hour
+            - kind
+            - millisecond
+            - minute
+            - month
+            - now
+            - second
+            - ticks
+            - timeOfDay
+            - today
+            - year
+            - utcNow
           type: string
           format: date-time
       additionalProperties: false
@@ -996,6 +1215,14 @@ components:
       type: object
       properties:
         affinityModels:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             $ref: '#/components/schemas/ManagedModelDto'
@@ -1016,145 +1243,190 @@ components:
       type: object
       properties:
         processView:
+          required:
+            - keys
+            - values
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ParentChildModelDto'
       additionalProperties: false
     GpuData:
       required:
-        - memoryTotalBytes
         - name
       type: object
       properties:
         name:
+          required:
+            - chars
+            - length
           type: string
         memoryTotalBytes:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
       additionalProperties: false
     GpuUsageMetricModel:
       required:
-        - coreTemperature
-        - coreUsagePercentage
-        - fanPercentage
         - id
-        - powerDrawWattage
-        - uniqueIdentifier
-        - vramTotalBytes
-        - vramUsageBytes
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/HardwareMetricModel'
+      properties:
+        coreUsagePercentage:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        vramUsageBytes:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        vramTotalBytes:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        coreTemperature:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        powerDrawWattage:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        fanPercentage:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
+            - item
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+      additionalProperties: false
+    GpuUsages:
+      required:
+        - pCIe
+        - temperatureReadings
+      type: object
+      properties:
+        name:
+          required:
+            - chars
+            - length
+          type: string
+        temperatureReadings:
+          required:
+            - item
+            - comparer
+            - count
+            - isEmpty
+            - keys
+            - values
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+        totalMemoryBytes:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        memoryUsedBytes:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        memoryClockMhz:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        shaderClockMhz:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        coreClockMhz:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        fanPercentage:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
+            - item
+          type: object
+          additionalProperties:
+            type: number
+            format: float
+            nullable: true
+        powerDraw:
+          required:
+            - hasValue
+            - value
+          type: number
+          format: float
+        load:
+          $ref: '#/components/schemas/LoadData'
+        pcIe:
+          $ref: '#/components/schemas/PCIE_ThroughPut'
+      additionalProperties: false
+    HardwareMetricModel:
+      required:
+        - id
       type: object
       properties:
         id:
           type: integer
           format: int32
         uniqueIdentifier:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
-        coreUsagePercentage:
-          type: number
-          format: float
-          nullable: true
-        vramUsageBytes:
-          type: number
-          format: float
-          nullable: true
-        vramTotalBytes:
-          type: number
-          format: float
-          nullable: true
-        coreTemperature:
-          type: number
-          format: float
-          nullable: true
-        powerDrawWattage:
-          type: number
-          format: float
-          nullable: true
-        fanPercentage:
-          type: object
-          additionalProperties:
-            type: number
-            format: float
-            nullable: true
-          nullable: true
-      additionalProperties: false
-    GpuUsages:
-      required:
-        - coreClockMhz
-        - fanPercentage
-        - load
-        - memoryClockMhz
-        - memoryUsedBytes
-        - name
-        - pCIe
-        - powerDraw
-        - shaderClockMhz
-        - temperatureReadings
-        - totalMemoryBytes
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: true
-        temperatureReadings:
-          type: object
-          additionalProperties:
-            type: number
-            format: float
-        totalMemoryBytes:
-          type: number
-          format: float
-          nullable: true
-        memoryUsedBytes:
-          type: number
-          format: float
-          nullable: true
-        memoryClockMhz:
-          type: number
-          format: float
-          nullable: true
-        shaderClockMhz:
-          type: number
-          format: float
-          nullable: true
-        coreClockMhz:
-          type: number
-          format: float
-          nullable: true
-        fanPercentage:
-          type: object
-          additionalProperties:
-            type: number
-            format: float
-            nullable: true
-          nullable: true
-        powerDraw:
-          type: number
-          format: float
-          nullable: true
-        load:
-          $ref: '#/components/schemas/LoadData'
-        pcIe:
-          $ref: '#/components/schemas/PCIE_ThroughPut'
       additionalProperties: false
     IPInterfaceProperties:
       required:
-        - dnsSuffix
-        - iPv4Address
-        - iPv6Address
         - isDnsEnabled
       type: object
       properties:
         iPv4Address:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         iPv6Address:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         dnsSuffix:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         isDnsEnabled:
           type: boolean
       additionalProperties: false
@@ -1172,8 +1444,14 @@ components:
           type: integer
           format: int32
         endPoint:
+          required:
+            - chars
+            - length
           type: string
         token:
+          required:
+            - chars
+            - length
           type: string
       additionalProperties: false
     LaunchSettings:
@@ -1190,49 +1468,56 @@ components:
           format: int32
       additionalProperties: false
     LoadData:
-      required:
-        - busInterface
-        - core
-        - cuda
-        - frameBuffer
-        - memory
-        - memoryController
-        - threeD
-        - videoEngine
       type: object
       properties:
         core:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         frameBuffer:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         videoEngine:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         busInterface:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         memory:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         memoryController:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         cuda:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         threeD:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
       additionalProperties: false
     ManagedModelDto:
       required:
@@ -1248,12 +1533,26 @@ components:
           type: integer
           format: int32
         processName:
+          required:
+            - chars
+            - length
           type: string
         alias:
+          required:
+            - chars
+            - length
           type: string
         processPriority:
           $ref: '#/components/schemas/ProcessPriorityEnum'
         affinity:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             type: integer
@@ -1265,27 +1564,27 @@ components:
     MemoryUsage:
       required:
         - swapPercentage
-        - swapTotalKB
-        - swapUsedKB
+        - swapTotalBytes
+        - swapUsedBytes
         - totalVisibleMemoryBytes
         - usedMemoryBytes
       type: object
       properties:
         usedMemoryBytes:
-          type: number
-          format: double
+          type: integer
+          format: int64
         totalVisibleMemoryBytes:
-          type: number
-          format: double
+          type: integer
+          format: int64
         swapPercentage:
           type: number
           format: float
-        swapUsedKB:
-          type: number
-          format: float
-        swapTotalKB:
-          type: number
-          format: float
+        swapUsedBytes:
+          type: integer
+          format: int64
+        swapTotalBytes:
+          type: integer
+          format: int64
       additionalProperties: false
     MetricsSettings:
       required:
@@ -1301,7 +1600,6 @@ components:
         - recievedBytes
         - sendBps
         - sentBytes
-        - usagePercentage
       type: object
       properties:
         sendBps:
@@ -1317,41 +1615,51 @@ components:
           type: integer
           format: int64
         usagePercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
       additionalProperties: false
     NetworkAdapterProperties:
       required:
-        - connectionType
-        - description
         - iPInterfaceProperties
         - macAddress
         - name
-        - speedBps
       type: object
       properties:
         ipInterfaceProperties:
           $ref: '#/components/schemas/IPInterfaceProperties'
         name:
+          required:
+            - chars
+            - length
           type: string
         description:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         macAddress:
+          required:
+            - chars
+            - length
           type: string
         speedBps:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
         connectionType:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
       additionalProperties: false
     NetworkAdapterUsage:
       required:
         - properties
-        - usage
       type: object
       properties:
         usage:
@@ -1365,47 +1673,51 @@ components:
       type: object
       properties:
         adapters:
+          required:
+            - comparer
+            - count
+            - isEmpty
+            - keys
+            - values
           type: object
           additionalProperties:
             $ref: '#/components/schemas/NetworkAdapterUsage'
       additionalProperties: false
     NetworkUsageMetricModel:
       required:
-        - downloadSpeedBps
         - id
-        - uniqueIdentifier
-        - uploadSpeedBps
       type: object
+      allOf:
+        - $ref: '#/components/schemas/HardwareMetricModel'
       properties:
-        id:
-          type: integer
-          format: int32
-        uniqueIdentifier:
-          type: string
-          nullable: true
         uploadSpeedBps:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
         downloadSpeedBps:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
       additionalProperties: false
     PCIE_ThroughPut:
-      required:
-        - pCIe_RxBytesPerSecond
-        - pCIe_TxBytesPerSecond
       type: object
       properties:
         pcIe_RxBytesPerSecond:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
         pcIe_TxBytesPerSecond:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int64
-          nullable: true
       additionalProperties: false
     ParentChildModelDto:
       required:
@@ -1417,6 +1729,9 @@ components:
           $ref: '#/components/schemas/ProcessViewDto'
         children:
           uniqueItems: true
+          required:
+            - count
+            - comparer
           type: array
           items:
             $ref: '#/components/schemas/ProcessViewDto'
@@ -1424,16 +1739,10 @@ components:
     ProcessData:
       required:
         - cpuPercentage
-        - description
         - diskUsage
-        - executablePath
-        - gpuUtil
-        - mainWindowTitle
         - memoryKb
         - name
-        - parentPid
         - pid
-        - status
         - timeStamp
       type: object
       properties:
@@ -1441,21 +1750,49 @@ components:
           type: number
           format: float
         parentPid:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         executablePath:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         description:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         mainWindowTitle:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         name:
+          required:
+            - chars
+            - length
           type: string
         timeStamp:
+          required:
+            - date
+            - day
+            - dayOfWeek
+            - dayOfYear
+            - hour
+            - kind
+            - millisecond
+            - minute
+            - month
+            - now
+            - second
+            - ticks
+            - timeOfDay
+            - today
+            - year
+            - utcNow
           type: string
           format: date-time
         cpuPercentage:
@@ -1467,8 +1804,10 @@ components:
         diskUsage:
           $ref: '#/components/schemas/ProcessDiskUsage'
         status:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         gpuUtil:
           $ref: '#/components/schemas/ProcessGpuUtil'
       additionalProperties: false
@@ -1486,29 +1825,32 @@ components:
           format: float
       additionalProperties: false
     ProcessGpuUtil:
-      required:
-        - gpuCorePercentage
-        - gpuDecodingPercentage
-        - gpuEncodingPercentage
-        - gpuMemPercentage
       type: object
       properties:
         gpuCorePercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         gpuMemPercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         gpuEncodingPercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
         gpuDecodingPercentage:
+          required:
+            - hasValue
+            - value
           type: number
           format: float
-          nullable: true
       additionalProperties: false
     ProcessPriorityEnum:
       enum:
@@ -1524,7 +1866,6 @@ components:
       required:
         - affinity
         - canModify
-        - executionPath
         - mainWindowTitle
         - pid
         - processName
@@ -1535,15 +1876,31 @@ components:
           type: integer
           format: int32
         processName:
+          required:
+            - chars
+            - length
           type: string
         mainWindowTitle:
+          required:
+            - chars
+            - length
           type: string
         executionPath:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         canModify:
           type: boolean
         affinity:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             type: integer
@@ -1553,20 +1910,25 @@ components:
       additionalProperties: false
     ProcessViewDto:
       required:
-        - description
         - id
         - processName
-        - processTitle
       type: object
       properties:
         processName:
+          required:
+            - chars
+            - length
           type: string
         processTitle:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         description:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         id:
           type: integer
           format: int32
@@ -1578,15 +1940,25 @@ components:
         - id
         - managedModelsIds
         - name
-        - priority
       type: object
       properties:
         id:
           type: integer
           format: int32
         name:
+          required:
+            - chars
+            - length
           type: string
         managedModelsIds:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             type: integer
@@ -1596,73 +1968,79 @@ components:
         active:
           type: boolean
         priority:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int32
-          nullable: true
       additionalProperties: false
     RamData:
-      required:
-        - capacity
-        - configuredClockSpeedMhz
-        - name
-        - partNumber
-        - slotChannel
-        - slotNumber
-        - speedMhz
-        - type
       type: object
       properties:
         name:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         partNumber:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         type:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         speedMhz:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int32
-          nullable: true
         slotNumber:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int32
-          nullable: true
         slotChannel:
+          required:
+            - chars
+            - length
           type: string
-          nullable: true
         configuredClockSpeedMhz:
+          required:
+            - hasValue
+            - value
           type: integer
           format: int32
-          nullable: true
         capacity:
+          required:
+            - hasValue
+            - value
           type: number
           format: double
-          nullable: true
       additionalProperties: false
     RamUsageMetricModel:
       required:
         - id
-        - totalVisibleMemoryBytes
-        - uniqueIdentifier
-        - usedMemoryBytes
       type: object
+      allOf:
+        - $ref: '#/components/schemas/HardwareMetricModel'
       properties:
-        id:
-          type: integer
-          format: int32
-        uniqueIdentifier:
-          type: string
-          nullable: true
         usedMemoryBytes:
+          required:
+            - hasValue
+            - value
           type: number
           format: double
-          nullable: true
         totalVisibleMemoryBytes:
+          required:
+            - hasValue
+            - value
           type: number
           format: double
-          nullable: true
       additionalProperties: false
     SendUtilizationRequest:
       required:
@@ -1671,6 +2049,14 @@ components:
       type: object
       properties:
         processData:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             $ref: '#/components/schemas/ProcessData'
@@ -1678,11 +2064,17 @@ components:
           $ref: '#/components/schemas/SystemUsage'
       additionalProperties: false
     SettingsDto:
+      required:
+        - influxDb
+        - launch
+        - metrics
       type: object
       properties:
         runAtStarup:
+          required:
+            - hasValue
+            - value
           type: boolean
-          nullable: true
         launch:
           $ref: '#/components/schemas/LaunchSettings'
         metrics:
@@ -1703,28 +2095,26 @@ components:
         memUsage:
           $ref: '#/components/schemas/MemoryUsage'
         networkAdapterUsage:
+          required:
+            - length
+            - longLength
+            - rank
+            - syncRoot
+            - isReadOnly
+            - isFixedSize
+            - isSynchronized
           type: array
           items:
             $ref: '#/components/schemas/NetworkAdapterUsage'
         diskUsage:
+          required:
+            - comparer
+            - count
+            - keys
+            - values
           type: object
           additionalProperties:
             $ref: '#/components/schemas/DiskUsage'
-      additionalProperties: false
-    Throughput:
-      required:
-        - readRateBytesPerSecond
-        - writeRateBytesPerSecond
-      type: object
-      properties:
-        readRateBytesPerSecond:
-          type: integer
-          format: int64
-          nullable: true
-        writeRateBytesPerSecond:
-          type: integer
-          format: int64
-          nullable: true
       additionalProperties: false
     TimeSeriesMachineMetricsModel:
       required:
@@ -1741,23 +2131,55 @@ components:
           type: integer
           format: int32
         dateTimeOffset:
+          required:
+            - now
+            - utcNow
+            - dateTime
+            - utcDateTime
+            - localDateTime
+            - date
+            - day
+            - dayOfWeek
+            - dayOfYear
+            - hour
+            - millisecond
+            - minute
+            - month
+            - offset
+            - second
+            - ticks
+            - utcTicks
+            - timeOfDay
+            - year
           type: string
           format: date-time
         cpuUsageData:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/CpuUsageMetricModel'
         gpuUsageData:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/GpuUsageMetricModel'
         ramUsageData:
           $ref: '#/components/schemas/RamUsageMetricModel'
         networkUsageData:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/NetworkUsageMetricModel'
         diskUsageData:
+          required:
+            - capacity
+            - count
           type: array
           items:
             $ref: '#/components/schemas/DiskUsageMetricModel'

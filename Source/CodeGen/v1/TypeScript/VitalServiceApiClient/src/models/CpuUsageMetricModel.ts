@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { HardwareMetricModel } from './HardwareMetricModel';
+import {
+    HardwareMetricModelFromJSON,
+    HardwareMetricModelFromJSONTyped,
+    HardwareMetricModelToJSON,
+} from './HardwareMetricModel';
+
 /**
  * 
  * @export
@@ -24,43 +31,43 @@ export interface CpuUsageMetricModel {
      * @type {number}
      * @memberof CpuUsageMetricModel
      */
+    totalCoreUsagePercentage?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuUsageMetricModel
+     */
+    packageTemperature?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuUsageMetricModel
+     */
+    powerDrawWattage?: number;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof CpuUsageMetricModel
+     */
+    coreClocksMhz?: { [key: string]: number; };
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof CpuUsageMetricModel
+     */
+    coresUsagePercentage?: { [key: string]: number; };
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuUsageMetricModel
+     */
     id: number;
     /**
      * 
      * @type {string}
      * @memberof CpuUsageMetricModel
      */
-    uniqueIdentifier: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof CpuUsageMetricModel
-     */
-    totalCoreUsagePercentage: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof CpuUsageMetricModel
-     */
-    packageTemperature: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof CpuUsageMetricModel
-     */
-    powerDrawWattage: number | null;
-    /**
-     * 
-     * @type {{ [key: string]: number; }}
-     * @memberof CpuUsageMetricModel
-     */
-    coreClocksMhz: { [key: string]: number; } | null;
-    /**
-     * 
-     * @type {{ [key: string]: number; }}
-     * @memberof CpuUsageMetricModel
-     */
-    coresUsagePercentage: { [key: string]: number; } | null;
+    uniqueIdentifier?: string;
 }
 
 /**
@@ -69,12 +76,6 @@ export interface CpuUsageMetricModel {
 export function instanceOfCpuUsageMetricModel(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "uniqueIdentifier" in value;
-    isInstance = isInstance && "totalCoreUsagePercentage" in value;
-    isInstance = isInstance && "packageTemperature" in value;
-    isInstance = isInstance && "powerDrawWattage" in value;
-    isInstance = isInstance && "coreClocksMhz" in value;
-    isInstance = isInstance && "coresUsagePercentage" in value;
 
     return isInstance;
 }
@@ -89,13 +90,13 @@ export function CpuUsageMetricModelFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'totalCoreUsagePercentage': !exists(json, 'totalCoreUsagePercentage') ? undefined : json['totalCoreUsagePercentage'],
+        'packageTemperature': !exists(json, 'packageTemperature') ? undefined : json['packageTemperature'],
+        'powerDrawWattage': !exists(json, 'powerDrawWattage') ? undefined : json['powerDrawWattage'],
+        'coreClocksMhz': !exists(json, 'coreClocksMhz') ? undefined : json['coreClocksMhz'],
+        'coresUsagePercentage': !exists(json, 'coresUsagePercentage') ? undefined : json['coresUsagePercentage'],
         'id': json['id'],
-        'uniqueIdentifier': json['uniqueIdentifier'],
-        'totalCoreUsagePercentage': json['totalCoreUsagePercentage'],
-        'packageTemperature': json['packageTemperature'],
-        'powerDrawWattage': json['powerDrawWattage'],
-        'coreClocksMhz': json['coreClocksMhz'],
-        'coresUsagePercentage': json['coresUsagePercentage'],
+        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
     };
 }
 
@@ -108,13 +109,13 @@ export function CpuUsageMetricModelToJSON(value?: CpuUsageMetricModel | null): a
     }
     return {
         
-        'id': value.id,
-        'uniqueIdentifier': value.uniqueIdentifier,
         'totalCoreUsagePercentage': value.totalCoreUsagePercentage,
         'packageTemperature': value.packageTemperature,
         'powerDrawWattage': value.powerDrawWattage,
         'coreClocksMhz': value.coreClocksMhz,
         'coresUsagePercentage': value.coresUsagePercentage,
+        'id': value.id,
+        'uniqueIdentifier': value.uniqueIdentifier,
     };
 }
 

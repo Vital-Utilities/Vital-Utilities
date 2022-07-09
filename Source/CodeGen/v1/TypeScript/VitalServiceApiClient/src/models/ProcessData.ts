@@ -43,25 +43,25 @@ export interface ProcessData {
      * @type {number}
      * @memberof ProcessData
      */
-    parentPid: number | null;
+    parentPid?: number;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    executablePath: string | null;
+    executablePath?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    description: string | null;
+    description?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessData
      */
-    mainWindowTitle: string | null;
+    mainWindowTitle?: string;
     /**
      * 
      * @type {string}
@@ -97,13 +97,13 @@ export interface ProcessData {
      * @type {string}
      * @memberof ProcessData
      */
-    status: string | null;
+    status?: string;
     /**
      * 
      * @type {ProcessGpuUtil}
      * @memberof ProcessData
      */
-    gpuUtil: ProcessGpuUtil;
+    gpuUtil?: ProcessGpuUtil;
 }
 
 /**
@@ -112,17 +112,11 @@ export interface ProcessData {
 export function instanceOfProcessData(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "pid" in value;
-    isInstance = isInstance && "parentPid" in value;
-    isInstance = isInstance && "executablePath" in value;
-    isInstance = isInstance && "description" in value;
-    isInstance = isInstance && "mainWindowTitle" in value;
     isInstance = isInstance && "name" in value;
     isInstance = isInstance && "timeStamp" in value;
     isInstance = isInstance && "cpuPercentage" in value;
     isInstance = isInstance && "memoryKb" in value;
     isInstance = isInstance && "diskUsage" in value;
-    isInstance = isInstance && "status" in value;
-    isInstance = isInstance && "gpuUtil" in value;
 
     return isInstance;
 }
@@ -138,17 +132,17 @@ export function ProcessDataFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'pid': json['pid'],
-        'parentPid': json['parentPid'],
-        'executablePath': json['executablePath'],
-        'description': json['description'],
-        'mainWindowTitle': json['mainWindowTitle'],
+        'parentPid': !exists(json, 'parentPid') ? undefined : json['parentPid'],
+        'executablePath': !exists(json, 'executablePath') ? undefined : json['executablePath'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
+        'mainWindowTitle': !exists(json, 'mainWindowTitle') ? undefined : json['mainWindowTitle'],
         'name': json['name'],
         'timeStamp': (new Date(json['timeStamp'])),
         'cpuPercentage': json['cpuPercentage'],
         'memoryKb': json['memoryKb'],
         'diskUsage': ProcessDiskUsageFromJSON(json['diskUsage']),
-        'status': json['status'],
-        'gpuUtil': ProcessGpuUtilFromJSON(json['gpuUtil']),
+        'status': !exists(json, 'status') ? undefined : json['status'],
+        'gpuUtil': !exists(json, 'gpuUtil') ? undefined : ProcessGpuUtilFromJSON(json['gpuUtil']),
     };
 }
 

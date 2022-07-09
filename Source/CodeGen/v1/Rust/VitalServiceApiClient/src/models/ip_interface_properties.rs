@@ -13,22 +13,22 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct IpInterfaceProperties {
-    #[serde(rename = "iPv4Address")]
+    #[serde(rename = "iPv4Address", skip_serializing_if = "Option::is_none")]
     pub i_pv4_address: Option<String>,
-    #[serde(rename = "iPv6Address")]
+    #[serde(rename = "iPv6Address", skip_serializing_if = "Option::is_none")]
     pub i_pv6_address: Option<String>,
-    #[serde(rename = "dnsSuffix")]
+    #[serde(rename = "dnsSuffix", skip_serializing_if = "Option::is_none")]
     pub dns_suffix: Option<String>,
     #[serde(rename = "isDnsEnabled")]
     pub is_dns_enabled: bool,
 }
 
 impl IpInterfaceProperties {
-    pub fn new(i_pv4_address: Option<String>, i_pv6_address: Option<String>, dns_suffix: Option<String>, is_dns_enabled: bool) -> IpInterfaceProperties {
+    pub fn new(is_dns_enabled: bool) -> IpInterfaceProperties {
         IpInterfaceProperties {
-            i_pv4_address,
-            i_pv6_address,
-            dns_suffix,
+            i_pv4_address: None,
+            i_pv6_address: None,
+            dns_suffix: None,
             is_dns_enabled,
         }
     }

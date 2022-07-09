@@ -15,21 +15,21 @@
 pub struct SettingsDto {
     #[serde(rename = "runAtStarup", skip_serializing_if = "Option::is_none")]
     pub run_at_starup: Option<bool>,
-    #[serde(rename = "launch", skip_serializing_if = "Option::is_none")]
-    pub launch: Option<Box<crate::models::LaunchSettings>>,
-    #[serde(rename = "metrics", skip_serializing_if = "Option::is_none")]
-    pub metrics: Option<Box<crate::models::MetricsSettings>>,
-    #[serde(rename = "influxDb", skip_serializing_if = "Option::is_none")]
-    pub influx_db: Option<Box<crate::models::InfluxDbSettings>>,
+    #[serde(rename = "launch")]
+    pub launch: Box<crate::models::LaunchSettings>,
+    #[serde(rename = "metrics")]
+    pub metrics: Box<crate::models::MetricsSettings>,
+    #[serde(rename = "influxDb")]
+    pub influx_db: Box<crate::models::InfluxDbSettings>,
 }
 
 impl SettingsDto {
-    pub fn new() -> SettingsDto {
+    pub fn new(launch: crate::models::LaunchSettings, metrics: crate::models::MetricsSettings, influx_db: crate::models::InfluxDbSettings) -> SettingsDto {
         SettingsDto {
             run_at_starup: None,
-            launch: None,
-            metrics: None,
-            influx_db: None,
+            launch: Box::new(launch),
+            metrics: Box::new(metrics),
+            influx_db: Box::new(influx_db),
         }
     }
 }

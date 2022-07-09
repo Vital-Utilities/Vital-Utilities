@@ -43,7 +43,7 @@ export interface GetMachineStaticDataResponse {
      * @type {string}
      * @memberof GetMachineStaticDataResponse
      */
-    directXVersion: string | null;
+    directXVersion?: string;
     /**
      * 
      * @type {CpuData}
@@ -69,7 +69,6 @@ export interface GetMachineStaticDataResponse {
  */
 export function instanceOfGetMachineStaticDataResponse(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "directXVersion" in value;
     isInstance = isInstance && "cpu" in value;
     isInstance = isInstance && "ram" in value;
     isInstance = isInstance && "gpu" in value;
@@ -87,7 +86,7 @@ export function GetMachineStaticDataResponseFromJSONTyped(json: any, ignoreDiscr
     }
     return {
         
-        'directXVersion': json['directXVersion'],
+        'directXVersion': !exists(json, 'directXVersion') ? undefined : json['directXVersion'],
         'cpu': CpuDataFromJSON(json['cpu']),
         'ram': ((json['ram'] as Array<any>).map(RamDataFromJSON)),
         'gpu': ((json['gpu'] as Array<any>).map(GpuDataFromJSON)),

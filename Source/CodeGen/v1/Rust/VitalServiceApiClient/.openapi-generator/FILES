@@ -12,6 +12,7 @@ docs/CreateProfileRequest.md
 docs/DateRange.md
 docs/DiskHealth.md
 docs/DiskLoad.md
+docs/DiskThroughput.md
 docs/DiskType.md
 docs/DiskUsage.md
 docs/DiskUsageMetricModel.md
@@ -27,6 +28,7 @@ docs/GetRunningProcessesResponse.md
 docs/GpuData.md
 docs/GpuUsageMetricModel.md
 docs/GpuUsages.md
+docs/HardwareMetricModel.md
 docs/HelloApi.md
 docs/InfluxDbSettings.md
 docs/IngestApi.md
@@ -59,7 +61,6 @@ docs/SettingsApi.md
 docs/SettingsDto.md
 docs/SystemApi.md
 docs/SystemUsage.md
-docs/Throughput.md
 docs/TimeSeriesMachineMetricsModel.md
 docs/TimeSeriesMachineMetricsResponse.md
 docs/UpdateManagedRequest.md
@@ -83,6 +84,7 @@ src/models/create_profile_request.rs
 src/models/date_range.rs
 src/models/disk_health.rs
 src/models/disk_load.rs
+src/models/disk_throughput.rs
 src/models/disk_type.rs
 src/models/disk_usage.rs
 src/models/disk_usage_metric_model.rs
@@ -98,6 +100,7 @@ src/models/get_running_processes_response.rs
 src/models/gpu_data.rs
 src/models/gpu_usage_metric_model.rs
 src/models/gpu_usages.rs
+src/models/hardware_metric_model.rs
 src/models/influx_db_settings.rs
 src/models/ip_interface_properties.rs
 src/models/launch_settings.rs
@@ -125,7 +128,6 @@ src/models/ram_usage_metric_model.rs
 src/models/send_utilization_request.rs
 src/models/settings_dto.rs
 src/models/system_usage.rs
-src/models/throughput.rs
 src/models/time_series_machine_metrics_model.rs
 src/models/time_series_machine_metrics_response.rs
 src/models/update_managed_request.rs

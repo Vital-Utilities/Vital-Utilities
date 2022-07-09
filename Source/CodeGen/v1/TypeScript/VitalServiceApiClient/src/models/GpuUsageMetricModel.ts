@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { HardwareMetricModel } from './HardwareMetricModel';
+import {
+    HardwareMetricModelFromJSON,
+    HardwareMetricModelFromJSONTyped,
+    HardwareMetricModelToJSON,
+} from './HardwareMetricModel';
+
 /**
  * 
  * @export
@@ -24,49 +31,49 @@ export interface GpuUsageMetricModel {
      * @type {number}
      * @memberof GpuUsageMetricModel
      */
+    coreUsagePercentage?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsageMetricModel
+     */
+    vramUsageBytes?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsageMetricModel
+     */
+    vramTotalBytes?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsageMetricModel
+     */
+    coreTemperature?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsageMetricModel
+     */
+    powerDrawWattage?: number;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof GpuUsageMetricModel
+     */
+    fanPercentage?: { [key: string]: number; };
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsageMetricModel
+     */
     id: number;
     /**
      * 
      * @type {string}
      * @memberof GpuUsageMetricModel
      */
-    uniqueIdentifier: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsageMetricModel
-     */
-    coreUsagePercentage: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsageMetricModel
-     */
-    vramUsageBytes: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsageMetricModel
-     */
-    vramTotalBytes: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsageMetricModel
-     */
-    coreTemperature: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsageMetricModel
-     */
-    powerDrawWattage: number | null;
-    /**
-     * 
-     * @type {{ [key: string]: number; }}
-     * @memberof GpuUsageMetricModel
-     */
-    fanPercentage: { [key: string]: number; } | null;
+    uniqueIdentifier?: string;
 }
 
 /**
@@ -75,13 +82,6 @@ export interface GpuUsageMetricModel {
 export function instanceOfGpuUsageMetricModel(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "uniqueIdentifier" in value;
-    isInstance = isInstance && "coreUsagePercentage" in value;
-    isInstance = isInstance && "vramUsageBytes" in value;
-    isInstance = isInstance && "vramTotalBytes" in value;
-    isInstance = isInstance && "coreTemperature" in value;
-    isInstance = isInstance && "powerDrawWattage" in value;
-    isInstance = isInstance && "fanPercentage" in value;
 
     return isInstance;
 }
@@ -96,14 +96,14 @@ export function GpuUsageMetricModelFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'coreUsagePercentage': !exists(json, 'coreUsagePercentage') ? undefined : json['coreUsagePercentage'],
+        'vramUsageBytes': !exists(json, 'vramUsageBytes') ? undefined : json['vramUsageBytes'],
+        'vramTotalBytes': !exists(json, 'vramTotalBytes') ? undefined : json['vramTotalBytes'],
+        'coreTemperature': !exists(json, 'coreTemperature') ? undefined : json['coreTemperature'],
+        'powerDrawWattage': !exists(json, 'powerDrawWattage') ? undefined : json['powerDrawWattage'],
+        'fanPercentage': !exists(json, 'fanPercentage') ? undefined : json['fanPercentage'],
         'id': json['id'],
-        'uniqueIdentifier': json['uniqueIdentifier'],
-        'coreUsagePercentage': json['coreUsagePercentage'],
-        'vramUsageBytes': json['vramUsageBytes'],
-        'vramTotalBytes': json['vramTotalBytes'],
-        'coreTemperature': json['coreTemperature'],
-        'powerDrawWattage': json['powerDrawWattage'],
-        'fanPercentage': json['fanPercentage'],
+        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
     };
 }
 
@@ -116,14 +116,14 @@ export function GpuUsageMetricModelToJSON(value?: GpuUsageMetricModel | null): a
     }
     return {
         
-        'id': value.id,
-        'uniqueIdentifier': value.uniqueIdentifier,
         'coreUsagePercentage': value.coreUsagePercentage,
         'vramUsageBytes': value.vramUsageBytes,
         'vramTotalBytes': value.vramTotalBytes,
         'coreTemperature': value.coreTemperature,
         'powerDrawWattage': value.powerDrawWattage,
         'fanPercentage': value.fanPercentage,
+        'id': value.id,
+        'uniqueIdentifier': value.uniqueIdentifier,
     };
 }
 

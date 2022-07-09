@@ -43,7 +43,7 @@ export interface NetworkAdapterProperties {
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    description: string | null;
+    description?: string;
     /**
      * 
      * @type {string}
@@ -55,13 +55,13 @@ export interface NetworkAdapterProperties {
      * @type {number}
      * @memberof NetworkAdapterProperties
      */
-    speedBps: number | null;
+    speedBps?: number;
     /**
      * 
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    connectionType: string | null;
+    connectionType?: string;
 }
 
 /**
@@ -70,10 +70,7 @@ export interface NetworkAdapterProperties {
 export function instanceOfNetworkAdapterProperties(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "description" in value;
     isInstance = isInstance && "macAddress" in value;
-    isInstance = isInstance && "speedBps" in value;
-    isInstance = isInstance && "connectionType" in value;
 
     return isInstance;
 }
@@ -90,10 +87,10 @@ export function NetworkAdapterPropertiesFromJSONTyped(json: any, ignoreDiscrimin
         
         'ipInterfaceProperties': !exists(json, 'ipInterfaceProperties') ? undefined : IPInterfacePropertiesFromJSON(json['ipInterfaceProperties']),
         'name': json['name'],
-        'description': json['description'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'macAddress': json['macAddress'],
-        'speedBps': json['speedBps'],
-        'connectionType': json['connectionType'],
+        'speedBps': !exists(json, 'speedBps') ? undefined : json['speedBps'],
+        'connectionType': !exists(json, 'connectionType') ? undefined : json['connectionType'],
     };
 }
 

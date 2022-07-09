@@ -30,13 +30,13 @@ export interface ProcessViewDto {
      * @type {string}
      * @memberof ProcessViewDto
      */
-    processTitle: string | null;
+    processTitle?: string;
     /**
      * 
      * @type {string}
      * @memberof ProcessViewDto
      */
-    description: string | null;
+    description?: string;
     /**
      * 
      * @type {number}
@@ -51,8 +51,6 @@ export interface ProcessViewDto {
 export function instanceOfProcessViewDto(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "processName" in value;
-    isInstance = isInstance && "processTitle" in value;
-    isInstance = isInstance && "description" in value;
     isInstance = isInstance && "id" in value;
 
     return isInstance;
@@ -69,8 +67,8 @@ export function ProcessViewDtoFromJSONTyped(json: any, ignoreDiscriminator: bool
     return {
         
         'processName': json['processName'],
-        'processTitle': json['processTitle'],
-        'description': json['description'],
+        'processTitle': !exists(json, 'processTitle') ? undefined : json['processTitle'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'id': json['id'],
     };
 }

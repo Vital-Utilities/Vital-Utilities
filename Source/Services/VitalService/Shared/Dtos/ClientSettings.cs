@@ -8,7 +8,7 @@ namespace VitalService.Dtos
 {
     public class ClientSettings
     {
-        [SwaggerRequired]
+        
         public bool AlwaysOnTop { get; set; }
     }
 }

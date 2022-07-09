@@ -42,13 +42,13 @@ export interface MemoryUsage {
      * @type {number}
      * @memberof MemoryUsage
      */
-    swapUsedKB: number;
+    swapUsedBytes: number;
     /**
      * 
      * @type {number}
      * @memberof MemoryUsage
      */
-    swapTotalKB: number;
+    swapTotalBytes: number;
 }
 
 /**
@@ -59,8 +59,8 @@ export function instanceOfMemoryUsage(value: object): boolean {
     isInstance = isInstance && "usedMemoryBytes" in value;
     isInstance = isInstance && "totalVisibleMemoryBytes" in value;
     isInstance = isInstance && "swapPercentage" in value;
-    isInstance = isInstance && "swapUsedKB" in value;
-    isInstance = isInstance && "swapTotalKB" in value;
+    isInstance = isInstance && "swapUsedBytes" in value;
+    isInstance = isInstance && "swapTotalBytes" in value;
 
     return isInstance;
 }
@@ -78,8 +78,8 @@ export function MemoryUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'usedMemoryBytes': json['usedMemoryBytes'],
         'totalVisibleMemoryBytes': json['totalVisibleMemoryBytes'],
         'swapPercentage': json['swapPercentage'],
-        'swapUsedKB': json['swapUsedKB'],
-        'swapTotalKB': json['swapTotalKB'],
+        'swapUsedBytes': json['swapUsedBytes'],
+        'swapTotalBytes': json['swapTotalBytes'],
     };
 }
 
@@ -95,8 +95,8 @@ export function MemoryUsageToJSON(value?: MemoryUsage | null): any {
         'usedMemoryBytes': value.usedMemoryBytes,
         'totalVisibleMemoryBytes': value.totalVisibleMemoryBytes,
         'swapPercentage': value.swapPercentage,
-        'swapUsedKB': value.swapUsedKB,
-        'swapTotalKB': value.swapTotalKB,
+        'swapUsedBytes': value.swapUsedBytes,
+        'swapTotalBytes': value.swapTotalBytes,
     };
 }
 

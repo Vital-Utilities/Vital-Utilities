@@ -23,19 +23,19 @@ pub struct ProfileDto {
     pub enabled: bool,
     #[serde(rename = "active")]
     pub active: bool,
-    #[serde(rename = "priority")]
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
     pub priority: Option<i32>,
 }
 
 impl ProfileDto {
-    pub fn new(id: i32, name: String, managed_models_ids: Vec<i32>, enabled: bool, active: bool, priority: Option<i32>) -> ProfileDto {
+    pub fn new(id: i32, name: String, managed_models_ids: Vec<i32>, enabled: bool, active: bool) -> ProfileDto {
         ProfileDto {
             id,
             name,
             managed_models_ids,
             enabled,
             active,
-            priority,
+            priority: None,
         }
     }
 }

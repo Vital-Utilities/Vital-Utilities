@@ -2,9 +2,9 @@
 {
     public class RamUsageMetricModel : HardwareMetricModel
     {
-        [SwaggerRequired]
+        
         public double? UsedMemoryBytes { get; set; }
-        [SwaggerRequired]
+        
         public double? TotalVisibleMemoryBytes { get; set; }
         public RamUsageMetricModel() : base()
         {

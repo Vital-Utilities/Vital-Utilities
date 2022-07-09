@@ -5,33 +5,33 @@ namespace VitalService.Dtos.Data.Metrics
 {
     public class DiskUsageMetricModel : HardwareMetricModel
     {
-        [SwaggerRequired]
+        
         public string? Serial { get; set; }
-        [SwaggerRequired]
+        
         public string? Name { get; set; }
-        [SwaggerRequired]
+        
         public string? DriveLetter { get; set; }
-        [SwaggerRequired]
+        
         public DriveType? DriveType { get; set; }
-        [SwaggerRequired]
+        
         public float? UsedSpacePercentage { get; set; }
-        [SwaggerRequired]
+        
         public long? UsedSpaceBytes { get; set; }
-        [SwaggerRequired]
+        
         public float? WriteActivityPercentage { get; set; }
-        [SwaggerRequired]
+        
         public float? TotalActivityPercentage { get; set; }
 
-        [SwaggerRequired]
+        
         public double? ReadRateBytesPerSecond { get; set; }
-        [SwaggerRequired]
+        
         public double? WriteRateBytesPerSecond { get; set; }
-        [SwaggerRequired]
+        
 
         public double? DataReadBytes { get; set; }
-        [SwaggerRequired]
+        
         public double? DataWrittenBytes { get; set; }
-        [SwaggerRequired]
+        
         public Dictionary<string, float>? Temperatures { get; set; }
 
         public DiskUsageMetricModel()

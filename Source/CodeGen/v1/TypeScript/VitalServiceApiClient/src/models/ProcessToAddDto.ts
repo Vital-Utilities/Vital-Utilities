@@ -49,7 +49,7 @@ export interface ProcessToAddDto {
      * @type {string}
      * @memberof ProcessToAddDto
      */
-    executionPath: string | null;
+    executionPath?: string;
     /**
      * 
      * @type {boolean}
@@ -78,7 +78,6 @@ export function instanceOfProcessToAddDto(value: object): boolean {
     isInstance = isInstance && "pid" in value;
     isInstance = isInstance && "processName" in value;
     isInstance = isInstance && "mainWindowTitle" in value;
-    isInstance = isInstance && "executionPath" in value;
     isInstance = isInstance && "canModify" in value;
     isInstance = isInstance && "affinity" in value;
     isInstance = isInstance && "processPriority" in value;
@@ -99,7 +98,7 @@ export function ProcessToAddDtoFromJSONTyped(json: any, ignoreDiscriminator: boo
         'pid': json['pid'],
         'processName': json['processName'],
         'mainWindowTitle': json['mainWindowTitle'],
-        'executionPath': json['executionPath'],
+        'executionPath': !exists(json, 'executionPath') ? undefined : json['executionPath'],
         'canModify': json['canModify'],
         'affinity': json['affinity'],
         'processPriority': ProcessPriorityEnumFromJSON(json['processPriority']),

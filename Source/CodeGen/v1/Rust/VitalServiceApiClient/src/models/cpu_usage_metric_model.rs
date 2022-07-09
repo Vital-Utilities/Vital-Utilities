@@ -13,32 +13,32 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct CpuUsageMetricModel {
+    #[serde(rename = "totalCoreUsagePercentage", skip_serializing_if = "Option::is_none")]
+    pub total_core_usage_percentage: Option<f32>,
+    #[serde(rename = "packageTemperature", skip_serializing_if = "Option::is_none")]
+    pub package_temperature: Option<f32>,
+    #[serde(rename = "powerDrawWattage", skip_serializing_if = "Option::is_none")]
+    pub power_draw_wattage: Option<f32>,
+    #[serde(rename = "coreClocksMhz", skip_serializing_if = "Option::is_none")]
+    pub core_clocks_mhz: Option<::std::collections::HashMap<String, f32>>,
+    #[serde(rename = "coresUsagePercentage", skip_serializing_if = "Option::is_none")]
+    pub cores_usage_percentage: Option<::std::collections::HashMap<String, f32>>,
     #[serde(rename = "id")]
     pub id: i32,
-    #[serde(rename = "uniqueIdentifier")]
+    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
     pub unique_identifier: Option<String>,
-    #[serde(rename = "totalCoreUsagePercentage")]
-    pub total_core_usage_percentage: Option<f32>,
-    #[serde(rename = "packageTemperature")]
-    pub package_temperature: Option<f32>,
-    #[serde(rename = "powerDrawWattage")]
-    pub power_draw_wattage: Option<f32>,
-    #[serde(rename = "coreClocksMhz")]
-    pub core_clocks_mhz: Option<::std::collections::HashMap<String, f32>>,
-    #[serde(rename = "coresUsagePercentage")]
-    pub cores_usage_percentage: Option<::std::collections::HashMap<String, f32>>,
 }
 
 impl CpuUsageMetricModel {
-    pub fn new(id: i32, unique_identifier: Option<String>, total_core_usage_percentage: Option<f32>, package_temperature: Option<f32>, power_draw_wattage: Option<f32>, core_clocks_mhz: Option<::std::collections::HashMap<String, f32>>, cores_usage_percentage: Option<::std::collections::HashMap<String, f32>>) -> CpuUsageMetricModel {
+    pub fn new(id: i32) -> CpuUsageMetricModel {
         CpuUsageMetricModel {
+            total_core_usage_percentage: None,
+            package_temperature: None,
+            power_draw_wattage: None,
+            core_clocks_mhz: None,
+            cores_usage_percentage: None,
             id,
-            unique_identifier,
-            total_core_usage_percentage,
-            package_temperature,
-            power_draw_wattage,
-            core_clocks_mhz,
-            cores_usage_percentage,
+            unique_identifier: None,
         }
     }
 }

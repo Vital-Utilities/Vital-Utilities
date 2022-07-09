@@ -15,42 +15,42 @@
 pub struct DiskUsage {
     #[serde(rename = "name")]
     pub name: String,
-    #[serde(rename = "serial")]
+    #[serde(rename = "serial", skip_serializing_if = "Option::is_none")]
     pub serial: Option<String>,
-    #[serde(rename = "uniqueIdentifier")]
+    #[serde(rename = "uniqueIdentifier", skip_serializing_if = "Option::is_none")]
     pub unique_identifier: Option<String>,
     #[serde(rename = "driveType")]
     pub drive_type: crate::models::DriveType,
     #[serde(rename = "diskType")]
     pub disk_type: crate::models::DiskType,
-    #[serde(rename = "throughput")]
-    pub throughput: Box<crate::models::Throughput>,
+    #[serde(rename = "throughput", skip_serializing_if = "Option::is_none")]
+    pub throughput: Option<Box<crate::models::DiskThroughput>>,
     #[serde(rename = "load")]
     pub load: Box<crate::models::DiskLoad>,
     #[serde(rename = "temperatures")]
     pub temperatures: ::std::collections::HashMap<String, f32>,
-    #[serde(rename = "diskHealth")]
-    pub disk_health: Box<crate::models::DiskHealth>,
-    #[serde(rename = "label")]
-    pub label: String,
-    #[serde(rename = "letter")]
+    #[serde(rename = "diskHealth", skip_serializing_if = "Option::is_none")]
+    pub disk_health: Option<Box<crate::models::DiskHealth>>,
+    #[serde(rename = "volumeLabel", skip_serializing_if = "Option::is_none")]
+    pub volume_label: Option<String>,
+    #[serde(rename = "letter", skip_serializing_if = "Option::is_none")]
     pub letter: Option<String>,
 }
 
 impl DiskUsage {
-    pub fn new(name: String, serial: Option<String>, unique_identifier: Option<String>, drive_type: crate::models::DriveType, disk_type: crate::models::DiskType, throughput: crate::models::Throughput, load: crate::models::DiskLoad, temperatures: ::std::collections::HashMap<String, f32>, disk_health: crate::models::DiskHealth, label: String, letter: Option<String>) -> DiskUsage {
+    pub fn new(name: String, drive_type: crate::models::DriveType, disk_type: crate::models::DiskType, load: crate::models::DiskLoad, temperatures: ::std::collections::HashMap<String, f32>) -> DiskUsage {
         DiskUsage {
             name,
-            serial,
-            unique_identifier,
+            serial: None,
+            unique_identifier: None,
             drive_type,
             disk_type,
-            throughput: Box::new(throughput),
+            throughput: None,
             load: Box::new(load),
             temperatures,
-            disk_health: Box::new(disk_health),
-            label,
-            letter,
+            disk_health: None,
+            volume_label: None,
+            letter: None,
         }
     }
 }

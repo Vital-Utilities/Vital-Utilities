@@ -24,13 +24,13 @@ export interface PCIEThroughPut {
      * @type {number}
      * @memberof PCIEThroughPut
      */
-    pcIeRxBytesPerSecond?: number | null;
+    pcIeRxBytesPerSecond?: number;
     /**
      * 
      * @type {number}
      * @memberof PCIEThroughPut
      */
-    pcIeTxBytesPerSecond?: number | null;
+    pcIeTxBytesPerSecond?: number;
 }
 
 /**

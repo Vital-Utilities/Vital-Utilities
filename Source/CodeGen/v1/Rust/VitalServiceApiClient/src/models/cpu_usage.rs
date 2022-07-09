@@ -17,7 +17,7 @@ pub struct CpuUsage {
     pub core_clocks_mhz: Vec<i32>,
     #[serde(rename = "total")]
     pub total: f32,
-    #[serde(rename = "powerDrawWattage")]
+    #[serde(rename = "powerDrawWattage", skip_serializing_if = "Option::is_none")]
     pub power_draw_wattage: Option<f32>,
     #[serde(rename = "corePercentages")]
     pub core_percentages: Vec<f32>,
@@ -26,11 +26,11 @@ pub struct CpuUsage {
 }
 
 impl CpuUsage {
-    pub fn new(core_clocks_mhz: Vec<i32>, total: f32, power_draw_wattage: Option<f32>, core_percentages: Vec<f32>, temperature_readings: ::std::collections::HashMap<String, f32>) -> CpuUsage {
+    pub fn new(core_clocks_mhz: Vec<i32>, total: f32, core_percentages: Vec<f32>, temperature_readings: ::std::collections::HashMap<String, f32>) -> CpuUsage {
         CpuUsage {
             core_clocks_mhz,
             total,
-            power_draw_wattage,
+            power_draw_wattage: None,
             core_percentages,
             temperature_readings,
         }

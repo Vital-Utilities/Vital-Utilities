@@ -15,20 +15,20 @@
 pub struct ProcessViewDto {
     #[serde(rename = "processName")]
     pub process_name: String,
-    #[serde(rename = "processTitle")]
+    #[serde(rename = "processTitle", skip_serializing_if = "Option::is_none")]
     pub process_title: Option<String>,
-    #[serde(rename = "description")]
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(rename = "id")]
     pub id: i32,
 }
 
 impl ProcessViewDto {
-    pub fn new(process_name: String, process_title: Option<String>, description: Option<String>, id: i32) -> ProcessViewDto {
+    pub fn new(process_name: String, id: i32) -> ProcessViewDto {
         ProcessViewDto {
             process_name,
-            process_title,
-            description,
+            process_title: None,
+            description: None,
             id,
         }
     }

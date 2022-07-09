@@ -24,13 +24,13 @@ export interface DiskHealth {
      * @type {number}
      * @memberof DiskHealth
      */
-    totalBytesRead: number | null;
+    totalBytesRead?: number;
     /**
      * 
      * @type {number}
      * @memberof DiskHealth
      */
-    totalBytesWritten: number | null;
+    totalBytesWritten?: number;
 }
 
 /**
@@ -38,8 +38,6 @@ export interface DiskHealth {
  */
 export function instanceOfDiskHealth(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "totalBytesRead" in value;
-    isInstance = isInstance && "totalBytesWritten" in value;
 
     return isInstance;
 }
@@ -54,8 +52,8 @@ export function DiskHealthFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'totalBytesRead': json['totalBytesRead'],
-        'totalBytesWritten': json['totalBytesWritten'],
+        'totalBytesRead': !exists(json, 'totalBytesRead') ? undefined : json['totalBytesRead'],
+        'totalBytesWritten': !exists(json, 'totalBytesWritten') ? undefined : json['totalBytesWritten'],
     };
 }
 

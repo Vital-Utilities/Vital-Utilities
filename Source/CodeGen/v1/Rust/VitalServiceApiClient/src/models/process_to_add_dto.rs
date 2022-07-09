@@ -19,7 +19,7 @@ pub struct ProcessToAddDto {
     pub process_name: String,
     #[serde(rename = "mainWindowTitle")]
     pub main_window_title: String,
-    #[serde(rename = "executionPath")]
+    #[serde(rename = "executionPath", skip_serializing_if = "Option::is_none")]
     pub execution_path: Option<String>,
     #[serde(rename = "canModify")]
     pub can_modify: bool,
@@ -30,12 +30,12 @@ pub struct ProcessToAddDto {
 }
 
 impl ProcessToAddDto {
-    pub fn new(pid: i32, process_name: String, main_window_title: String, execution_path: Option<String>, can_modify: bool, affinity: Vec<i32>, process_priority: crate::models::ProcessPriorityEnum) -> ProcessToAddDto {
+    pub fn new(pid: i32, process_name: String, main_window_title: String, can_modify: bool, affinity: Vec<i32>, process_priority: crate::models::ProcessPriorityEnum) -> ProcessToAddDto {
         ProcessToAddDto {
             pid,
             process_name,
             main_window_title,
-            execution_path,
+            execution_path: None,
             can_modify,
             affinity,
             process_priority,

@@ -12,18 +12,18 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct Throughput {
-    #[serde(rename = "readRateBytesPerSecond")]
+pub struct DiskThroughput {
+    #[serde(rename = "readRateBytesPerSecond", skip_serializing_if = "Option::is_none")]
     pub read_rate_bytes_per_second: Option<i64>,
-    #[serde(rename = "writeRateBytesPerSecond")]
+    #[serde(rename = "writeRateBytesPerSecond", skip_serializing_if = "Option::is_none")]
     pub write_rate_bytes_per_second: Option<i64>,
 }
 
-impl Throughput {
-    pub fn new(read_rate_bytes_per_second: Option<i64>, write_rate_bytes_per_second: Option<i64>) -> Throughput {
-        Throughput {
-            read_rate_bytes_per_second,
-            write_rate_bytes_per_second,
+impl DiskThroughput {
+    pub fn new() -> DiskThroughput {
+        DiskThroughput {
+            read_rate_bytes_per_second: None,
+            write_rate_bytes_per_second: None,
         }
     }
 }

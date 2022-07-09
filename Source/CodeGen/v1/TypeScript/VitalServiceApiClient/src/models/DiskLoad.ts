@@ -24,31 +24,31 @@ export interface DiskLoad {
      * @type {number}
      * @memberof DiskLoad
      */
-    usedSpacePercentage: number | null;
+    usedSpacePercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof DiskLoad
      */
-    usedSpaceBytes: number | null;
+    usedSpaceBytes?: number;
     /**
      * 
      * @type {number}
      * @memberof DiskLoad
      */
-    totalFreeSpaceBytes: number | null;
+    totalFreeSpaceBytes?: number;
     /**
      * 
      * @type {number}
      * @memberof DiskLoad
      */
-    writeActivityPercentage: number | null;
+    writeActivityPercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof DiskLoad
      */
-    totalActivityPercentage: number | null;
+    totalActivityPercentage?: number;
 }
 
 /**
@@ -56,11 +56,6 @@ export interface DiskLoad {
  */
 export function instanceOfDiskLoad(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "usedSpacePercentage" in value;
-    isInstance = isInstance && "usedSpaceBytes" in value;
-    isInstance = isInstance && "totalFreeSpaceBytes" in value;
-    isInstance = isInstance && "writeActivityPercentage" in value;
-    isInstance = isInstance && "totalActivityPercentage" in value;
 
     return isInstance;
 }
@@ -75,11 +70,11 @@ export function DiskLoadFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'usedSpacePercentage': json['usedSpacePercentage'],
-        'usedSpaceBytes': json['usedSpaceBytes'],
-        'totalFreeSpaceBytes': json['totalFreeSpaceBytes'],
-        'writeActivityPercentage': json['writeActivityPercentage'],
-        'totalActivityPercentage': json['totalActivityPercentage'],
+        'usedSpacePercentage': !exists(json, 'usedSpacePercentage') ? undefined : json['usedSpacePercentage'],
+        'usedSpaceBytes': !exists(json, 'usedSpaceBytes') ? undefined : json['usedSpaceBytes'],
+        'totalFreeSpaceBytes': !exists(json, 'totalFreeSpaceBytes') ? undefined : json['totalFreeSpaceBytes'],
+        'writeActivityPercentage': !exists(json, 'writeActivityPercentage') ? undefined : json['writeActivityPercentage'],
+        'totalActivityPercentage': !exists(json, 'totalActivityPercentage') ? undefined : json['totalActivityPercentage'],
     };
 }
 

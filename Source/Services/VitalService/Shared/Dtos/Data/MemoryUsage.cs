@@ -2,15 +2,15 @@
 {
     public class MemoryUsage
     {
-        [SwaggerRequired]
-        public double UsedMemoryBytes { get; set; }
-        [SwaggerRequired]
-        public double TotalVisibleMemoryBytes { get; set; }
-        [SwaggerRequired]
+        
+        public long UsedMemoryBytes { get; set; }
+        
+        public long TotalVisibleMemoryBytes { get; set; }
+        
         public float SwapPercentage { get; set; }
-        [SwaggerRequired]
-        public float SwapUsedKB { get; set; }
-        [SwaggerRequired]
-        public float SwapTotalKB { get; set; }
+        
+        public long SwapUsedBytes { get; set; }
+        
+        public long SwapTotalBytes { get; set; }
     }
 }

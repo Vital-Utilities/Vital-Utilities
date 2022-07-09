@@ -16,50 +16,48 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Throughput
+ * @interface DiskThroughput
  */
-export interface Throughput {
+export interface DiskThroughput {
     /**
      * 
      * @type {number}
-     * @memberof Throughput
+     * @memberof DiskThroughput
      */
-    readRateBytesPerSecond: number | null;
+    readRateBytesPerSecond?: number;
     /**
      * 
      * @type {number}
-     * @memberof Throughput
+     * @memberof DiskThroughput
      */
-    writeRateBytesPerSecond: number | null;
+    writeRateBytesPerSecond?: number;
 }
 
 /**
- * Check if a given object implements the Throughput interface.
+ * Check if a given object implements the DiskThroughput interface.
  */
-export function instanceOfThroughput(value: object): boolean {
+export function instanceOfDiskThroughput(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "readRateBytesPerSecond" in value;
-    isInstance = isInstance && "writeRateBytesPerSecond" in value;
 
     return isInstance;
 }
 
-export function ThroughputFromJSON(json: any): Throughput {
-    return ThroughputFromJSONTyped(json, false);
+export function DiskThroughputFromJSON(json: any): DiskThroughput {
+    return DiskThroughputFromJSONTyped(json, false);
 }
 
-export function ThroughputFromJSONTyped(json: any, ignoreDiscriminator: boolean): Throughput {
+export function DiskThroughputFromJSONTyped(json: any, ignoreDiscriminator: boolean): DiskThroughput {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'readRateBytesPerSecond': json['readRateBytesPerSecond'],
-        'writeRateBytesPerSecond': json['writeRateBytesPerSecond'],
+        'readRateBytesPerSecond': !exists(json, 'readRateBytesPerSecond') ? undefined : json['readRateBytesPerSecond'],
+        'writeRateBytesPerSecond': !exists(json, 'writeRateBytesPerSecond') ? undefined : json['writeRateBytesPerSecond'],
     };
 }
 
-export function ThroughputToJSON(value?: Throughput | null): any {
+export function DiskThroughputToJSON(value?: DiskThroughput | null): any {
     if (value === undefined) {
         return undefined;
     }

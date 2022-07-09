@@ -17,25 +17,25 @@ pub struct NetworkAdapterProperties {
     pub ip_interface_properties: Option<Box<crate::models::IpInterfaceProperties>>,
     #[serde(rename = "name")]
     pub name: String,
-    #[serde(rename = "description")]
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(rename = "macAddress")]
     pub mac_address: String,
-    #[serde(rename = "speedBps")]
+    #[serde(rename = "speedBps", skip_serializing_if = "Option::is_none")]
     pub speed_bps: Option<i64>,
-    #[serde(rename = "connectionType")]
+    #[serde(rename = "connectionType", skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
 }
 
 impl NetworkAdapterProperties {
-    pub fn new(name: String, description: Option<String>, mac_address: String, speed_bps: Option<i64>, connection_type: Option<String>) -> NetworkAdapterProperties {
+    pub fn new(name: String, mac_address: String) -> NetworkAdapterProperties {
         NetworkAdapterProperties {
             ip_interface_properties: None,
             name,
-            description,
+            description: None,
             mac_address,
-            speed_bps,
-            connection_type,
+            speed_bps: None,
+            connection_type: None,
         }
     }
 }

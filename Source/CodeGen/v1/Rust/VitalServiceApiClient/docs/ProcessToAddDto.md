@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **pid** | **i32** |  | 
 **process_name** | **String** |  | 
 **main_window_title** | **String** |  | 
-**execution_path** | Option<**String**> |  | 
+**execution_path** | Option<**String**> |  | [optional]
 **can_modify** | **bool** |  | 
 **affinity** | **Vec<i32>** |  | 
 **process_priority** | [**crate::models::ProcessPriorityEnum**](ProcessPriorityEnum.md) |  | 

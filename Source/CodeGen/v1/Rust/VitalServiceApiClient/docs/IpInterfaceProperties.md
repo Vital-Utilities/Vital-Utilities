@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**i_pv4_address** | Option<**String**> |  | 
-**i_pv6_address** | Option<**String**> |  | 
-**dns_suffix** | Option<**String**> |  | 
+**i_pv4_address** | Option<**String**> |  | [optional]
+**i_pv6_address** | Option<**String**> |  | [optional]
+**dns_suffix** | Option<**String**> |  | [optional]
 **is_dns_enabled** | **bool** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

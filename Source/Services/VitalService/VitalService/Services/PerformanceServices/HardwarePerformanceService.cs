@@ -475,7 +475,7 @@ namespace VitalService.Services.PerformanceServices
                             disk.Load.UsedSpaceBytes = diskFromInfo.TotalSize - diskFromInfo.TotalFreeSpace;
                             disk.Load.TotalFreeSpaceBytes = diskFromInfo.TotalFreeSpace;
                             disk.DriveType = diskFromInfo.DriveType;
-                            disk.Label = diskFromInfo.VolumeLabel;
+                            disk.VolumeLabel = diskFromInfo.VolumeLabel;
                             disk.Letter = letter.EndsWith("\\") ? letter[..^1] : letter;
                             disk.UniqueIdentifier = disk.Letter;
                         }

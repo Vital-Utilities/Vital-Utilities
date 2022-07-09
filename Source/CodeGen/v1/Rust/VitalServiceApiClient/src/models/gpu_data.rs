@@ -15,15 +15,15 @@
 pub struct GpuData {
     #[serde(rename = "name")]
     pub name: String,
-    #[serde(rename = "memoryTotalBytes")]
+    #[serde(rename = "memoryTotalBytes", skip_serializing_if = "Option::is_none")]
     pub memory_total_bytes: Option<f32>,
 }
 
 impl GpuData {
-    pub fn new(name: String, memory_total_bytes: Option<f32>) -> GpuData {
+    pub fn new(name: String) -> GpuData {
         GpuData {
             name,
-            memory_total_bytes,
+            memory_total_bytes: None,
         }
     }
 }

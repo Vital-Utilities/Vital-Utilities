@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { HardwareMetricModel } from './HardwareMetricModel';
+import {
+    HardwareMetricModelFromJSON,
+    HardwareMetricModelFromJSONTyped,
+    HardwareMetricModelToJSON,
+} from './HardwareMetricModel';
+
 /**
  * 
  * @export
@@ -24,25 +31,25 @@ export interface NetworkUsageMetricModel {
      * @type {number}
      * @memberof NetworkUsageMetricModel
      */
+    uploadSpeedBps?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NetworkUsageMetricModel
+     */
+    downloadSpeedBps?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof NetworkUsageMetricModel
+     */
     id: number;
     /**
      * 
      * @type {string}
      * @memberof NetworkUsageMetricModel
      */
-    uniqueIdentifier: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof NetworkUsageMetricModel
-     */
-    uploadSpeedBps: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof NetworkUsageMetricModel
-     */
-    downloadSpeedBps: number | null;
+    uniqueIdentifier?: string;
 }
 
 /**
@@ -51,9 +58,6 @@ export interface NetworkUsageMetricModel {
 export function instanceOfNetworkUsageMetricModel(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "uniqueIdentifier" in value;
-    isInstance = isInstance && "uploadSpeedBps" in value;
-    isInstance = isInstance && "downloadSpeedBps" in value;
 
     return isInstance;
 }
@@ -68,10 +72,10 @@ export function NetworkUsageMetricModelFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
+        'uploadSpeedBps': !exists(json, 'uploadSpeedBps') ? undefined : json['uploadSpeedBps'],
+        'downloadSpeedBps': !exists(json, 'downloadSpeedBps') ? undefined : json['downloadSpeedBps'],
         'id': json['id'],
-        'uniqueIdentifier': json['uniqueIdentifier'],
-        'uploadSpeedBps': json['uploadSpeedBps'],
-        'downloadSpeedBps': json['downloadSpeedBps'],
+        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
     };
 }
 
@@ -84,10 +88,10 @@ export function NetworkUsageMetricModelToJSON(value?: NetworkUsageMetricModel | 
     }
     return {
         
-        'id': value.id,
-        'uniqueIdentifier': value.uniqueIdentifier,
         'uploadSpeedBps': value.uploadSpeedBps,
         'downloadSpeedBps': value.downloadSpeedBps,
+        'id': value.id,
+        'uniqueIdentifier': value.uniqueIdentifier,
     };
 }
 

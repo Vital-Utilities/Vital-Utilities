@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { HardwareMetricModel } from './HardwareMetricModel';
+import {
+    HardwareMetricModelFromJSON,
+    HardwareMetricModelFromJSONTyped,
+    HardwareMetricModelToJSON,
+} from './HardwareMetricModel';
+
 /**
  * 
  * @export
@@ -24,25 +31,25 @@ export interface RamUsageMetricModel {
      * @type {number}
      * @memberof RamUsageMetricModel
      */
+    usedMemoryBytes?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RamUsageMetricModel
+     */
+    totalVisibleMemoryBytes?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof RamUsageMetricModel
+     */
     id: number;
     /**
      * 
      * @type {string}
      * @memberof RamUsageMetricModel
      */
-    uniqueIdentifier: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof RamUsageMetricModel
-     */
-    usedMemoryBytes: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof RamUsageMetricModel
-     */
-    totalVisibleMemoryBytes: number | null;
+    uniqueIdentifier?: string;
 }
 
 /**
@@ -51,9 +58,6 @@ export interface RamUsageMetricModel {
 export function instanceOfRamUsageMetricModel(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "uniqueIdentifier" in value;
-    isInstance = isInstance && "usedMemoryBytes" in value;
-    isInstance = isInstance && "totalVisibleMemoryBytes" in value;
 
     return isInstance;
 }
@@ -68,10 +72,10 @@ export function RamUsageMetricModelFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'usedMemoryBytes': !exists(json, 'usedMemoryBytes') ? undefined : json['usedMemoryBytes'],
+        'totalVisibleMemoryBytes': !exists(json, 'totalVisibleMemoryBytes') ? undefined : json['totalVisibleMemoryBytes'],
         'id': json['id'],
-        'uniqueIdentifier': json['uniqueIdentifier'],
-        'usedMemoryBytes': json['usedMemoryBytes'],
-        'totalVisibleMemoryBytes': json['totalVisibleMemoryBytes'],
+        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
     };
 }
 
@@ -84,10 +88,10 @@ export function RamUsageMetricModelToJSON(value?: RamUsageMetricModel | null): a
     }
     return {
         
-        'id': value.id,
-        'uniqueIdentifier': value.uniqueIdentifier,
         'usedMemoryBytes': value.usedMemoryBytes,
         'totalVisibleMemoryBytes': value.totalVisibleMemoryBytes,
+        'id': value.id,
+        'uniqueIdentifier': value.uniqueIdentifier,
     };
 }
 

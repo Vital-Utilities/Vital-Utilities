@@ -15,13 +15,13 @@
 pub struct ProcessData {
     #[serde(rename = "pid")]
     pub pid: f32,
-    #[serde(rename = "parentPid")]
+    #[serde(rename = "parentPid", skip_serializing_if = "Option::is_none")]
     pub parent_pid: Option<f32>,
-    #[serde(rename = "executablePath")]
+    #[serde(rename = "executablePath", skip_serializing_if = "Option::is_none")]
     pub executable_path: Option<String>,
-    #[serde(rename = "description")]
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename = "mainWindowTitle")]
+    #[serde(rename = "mainWindowTitle", skip_serializing_if = "Option::is_none")]
     pub main_window_title: Option<String>,
     #[serde(rename = "name")]
     pub name: String,
@@ -33,27 +33,27 @@ pub struct ProcessData {
     pub memory_kb: f32,
     #[serde(rename = "diskUsage")]
     pub disk_usage: Box<crate::models::ProcessDiskUsage>,
-    #[serde(rename = "status")]
+    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[serde(rename = "gpuUtil")]
-    pub gpu_util: Box<crate::models::ProcessGpuUtil>,
+    #[serde(rename = "gpuUtil", skip_serializing_if = "Option::is_none")]
+    pub gpu_util: Option<Box<crate::models::ProcessGpuUtil>>,
 }
 
 impl ProcessData {
-    pub fn new(pid: f32, parent_pid: Option<f32>, executable_path: Option<String>, description: Option<String>, main_window_title: Option<String>, name: String, time_stamp: String, cpu_percentage: f32, memory_kb: f32, disk_usage: crate::models::ProcessDiskUsage, status: Option<String>, gpu_util: crate::models::ProcessGpuUtil) -> ProcessData {
+    pub fn new(pid: f32, name: String, time_stamp: String, cpu_percentage: f32, memory_kb: f32, disk_usage: crate::models::ProcessDiskUsage) -> ProcessData {
         ProcessData {
             pid,
-            parent_pid,
-            executable_path,
-            description,
-            main_window_title,
+            parent_pid: None,
+            executable_path: None,
+            description: None,
+            main_window_title: None,
             name,
             time_stamp,
             cpu_percentage,
             memory_kb,
             disk_usage: Box::new(disk_usage),
-            status,
-            gpu_util: Box::new(gpu_util),
+            status: None,
+            gpu_util: None,
         }
     }
 }

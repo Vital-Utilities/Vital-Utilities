@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**direct_x_version** | Option<**String**> |  | 
+**direct_x_version** | Option<**String**> |  | [optional]
 **cpu** | [**crate::models::CpuData**](CpuData.md) |  | 
 **ram** | [**Vec<crate::models::RamData>**](RamData.md) |  | 
 **gpu** | [**Vec<crate::models::GpuData>**](GpuData.md) |  | 

@@ -20,6 +20,7 @@ src/models/CreateProfileRequest.ts
 src/models/DateRange.ts
 src/models/DiskHealth.ts
 src/models/DiskLoad.ts
+src/models/DiskThroughput.ts
 src/models/DiskType.ts
 src/models/DiskUsage.ts
 src/models/DiskUsageMetricModel.ts
@@ -35,6 +36,7 @@ src/models/GetRunningProcessesResponse.ts
 src/models/GpuData.ts
 src/models/GpuUsageMetricModel.ts
 src/models/GpuUsages.ts
+src/models/HardwareMetricModel.ts
 src/models/IPInterfaceProperties.ts
 src/models/InfluxDbSettings.ts
 src/models/LaunchSettings.ts
@@ -61,7 +63,6 @@ src/models/RamUsageMetricModel.ts
 src/models/SendUtilizationRequest.ts
 src/models/SettingsDto.ts
 src/models/SystemUsage.ts
-src/models/Throughput.ts
 src/models/TimeSeriesMachineMetricsModel.ts
 src/models/TimeSeriesMachineMetricsResponse.ts
 src/models/UpdateManagedRequest.ts

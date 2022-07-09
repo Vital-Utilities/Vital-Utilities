@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 use log::info;
 use openapi::models::{
-    CpuUsage, DiskLoad, DiskType, DiskUsage, IpInterfaceProperties, NetAdapterUsage,
-    NetworkAdapterProperties, NetworkAdapterUsage,
+    CpuUsage, DiskLoad, DiskType, DiskUsage, DriveType, IpInterfaceProperties, MemoryUsage,
+    NetAdapterUsage, NetworkAdapterProperties, NetworkAdapterUsage,
 };
 use sysinfo::{DiskExt, NetworkExt, ProcessorExt, SystemExt};
 use systemstat::Platform;
@@ -104,11 +104,11 @@ pub async fn get_disk_util(sysinfo: &sysinfo::System) -> HashMap<String, DiskUsa
                 }),
                 disk_health: None,
                 serial: None,
-                temperatures: None,
+                temperatures: HashMap::new(),
                 throughput: None,
-                unique_identifier: todo!(),
-                drive_type: todo!(),
-                label: todo!(),
+                unique_identifier: None,
+                drive_type: DriveType::Unknown,
+                volume_label: None,
             },
         );
     }
@@ -116,15 +116,12 @@ pub async fn get_disk_util(sysinfo: &sysinfo::System) -> HashMap<String, DiskUsa
     return list;
 }
 
-pub async fn get_mem_util(
-    sysinfo: &sysinfo::System,
-) -> generated_vital_rust_service_api_def::MemUsage {
-    return generated_vital_rust_service_api_def::MemUsage {
-        mem_percentage: sysinfo.used_memory() as f64 / sysinfo.total_memory() as f64 * 100 as f64,
-        mem_total_kb: sysinfo.total_memory() as f64,
-        mem_used_kb: sysinfo.used_memory() as f64,
-        swap_percentage: sysinfo.used_swap() as f64 / sysinfo.total_swap() as f64 * 100 as f64,
-        swap_total_kb: sysinfo.total_swap() as f64,
-        swap_used_kb: sysinfo.used_swap() as f64,
+pub async fn get_mem_util(sysinfo: &sysinfo::System) -> MemoryUsage {
+    return MemoryUsage {
+        total_visible_memory_bytes: (sysinfo.total_memory() * 1000) as i64,
+        used_memory_bytes: (sysinfo.used_memory() * 1000) as i64,
+        swap_percentage: (sysinfo.used_swap() as f32 / sysinfo.total_swap() as f32) * 100.0,
+        swap_total_bytes: sysinfo.total_swap() as i64,
+        swap_used_bytes: sysinfo.used_swap() as i64,
     };
 }

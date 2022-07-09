@@ -75,15 +75,17 @@ namespace VitalService
             });
             services.AddSwaggerGen(options =>
             {
+
+                options.SchemaFilter<SwaggerRequiredSchemaFilter>();
                 options.SupportNonNullableReferenceTypes();
-                options.SchemaFilter<AddSwaggerRequiredSchemaFilter>();
+               // options.UseAllOfToExtendReferenceSchemas(); // Allows $ref enums to be nullable
+                options.UseAllOfForInheritance();  // Allows $ref objects to be nullable
             });
 
             services.AddResponseCompression();
             services.AddControllers().AddJsonOptions(opts =>
             {
                 opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-
             });
 
             services.AddCors(options =>

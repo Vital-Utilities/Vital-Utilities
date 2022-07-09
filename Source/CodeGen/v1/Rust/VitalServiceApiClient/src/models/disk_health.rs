@@ -13,17 +13,17 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct DiskHealth {
-    #[serde(rename = "totalBytesRead")]
+    #[serde(rename = "totalBytesRead", skip_serializing_if = "Option::is_none")]
     pub total_bytes_read: Option<i64>,
-    #[serde(rename = "totalBytesWritten")]
+    #[serde(rename = "totalBytesWritten", skip_serializing_if = "Option::is_none")]
     pub total_bytes_written: Option<i64>,
 }
 
 impl DiskHealth {
-    pub fn new(total_bytes_read: Option<i64>, total_bytes_written: Option<i64>) -> DiskHealth {
+    pub fn new() -> DiskHealth {
         DiskHealth {
-            total_bytes_read,
-            total_bytes_written,
+            total_bytes_read: None,
+            total_bytes_written: None,
         }
     }
 }

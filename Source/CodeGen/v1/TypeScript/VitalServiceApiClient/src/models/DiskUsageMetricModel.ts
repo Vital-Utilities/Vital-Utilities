@@ -19,6 +19,12 @@ import {
     DriveTypeFromJSONTyped,
     DriveTypeToJSON,
 } from './DriveType';
+import type { HardwareMetricModel } from './HardwareMetricModel';
+import {
+    HardwareMetricModelFromJSON,
+    HardwareMetricModelFromJSONTyped,
+    HardwareMetricModelToJSON,
+} from './HardwareMetricModel';
 
 /**
  * 
@@ -26,6 +32,84 @@ import {
  * @interface DiskUsageMetricModel
  */
 export interface DiskUsageMetricModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof DiskUsageMetricModel
+     */
+    serial?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DiskUsageMetricModel
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof DiskUsageMetricModel
+     */
+    driveLetter?: string;
+    /**
+     * 
+     * @type {DriveType}
+     * @memberof DiskUsageMetricModel
+     */
+    driveType?: DriveType;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    usedSpacePercentage?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    usedSpaceBytes?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    writeActivityPercentage?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    totalActivityPercentage?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    readRateBytesPerSecond?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    writeRateBytesPerSecond?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    dataReadBytes?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    dataWrittenBytes?: number;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof DiskUsageMetricModel
+     */
+    temperatures?: { [key: string]: number; };
     /**
      * 
      * @type {number}
@@ -37,85 +121,7 @@ export interface DiskUsageMetricModel {
      * @type {string}
      * @memberof DiskUsageMetricModel
      */
-    uniqueIdentifier: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof DiskUsageMetricModel
-     */
-    serial: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof DiskUsageMetricModel
-     */
-    name: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof DiskUsageMetricModel
-     */
-    driveLetter: string | null;
-    /**
-     * 
-     * @type {DriveType}
-     * @memberof DiskUsageMetricModel
-     */
-    driveType: DriveType;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    usedSpacePercentage: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    usedSpaceBytes: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    writeActivityPercentage: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    totalActivityPercentage: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    readRateBytesPerSecond: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    writeRateBytesPerSecond: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    dataReadBytes: number | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof DiskUsageMetricModel
-     */
-    dataWrittenBytes: number | null;
-    /**
-     * 
-     * @type {{ [key: string]: number; }}
-     * @memberof DiskUsageMetricModel
-     */
-    temperatures: { [key: string]: number; } | null;
+    uniqueIdentifier?: string;
 }
 
 /**
@@ -124,20 +130,6 @@ export interface DiskUsageMetricModel {
 export function instanceOfDiskUsageMetricModel(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "id" in value;
-    isInstance = isInstance && "uniqueIdentifier" in value;
-    isInstance = isInstance && "serial" in value;
-    isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "driveLetter" in value;
-    isInstance = isInstance && "driveType" in value;
-    isInstance = isInstance && "usedSpacePercentage" in value;
-    isInstance = isInstance && "usedSpaceBytes" in value;
-    isInstance = isInstance && "writeActivityPercentage" in value;
-    isInstance = isInstance && "totalActivityPercentage" in value;
-    isInstance = isInstance && "readRateBytesPerSecond" in value;
-    isInstance = isInstance && "writeRateBytesPerSecond" in value;
-    isInstance = isInstance && "dataReadBytes" in value;
-    isInstance = isInstance && "dataWrittenBytes" in value;
-    isInstance = isInstance && "temperatures" in value;
 
     return isInstance;
 }
@@ -152,21 +144,21 @@ export function DiskUsageMetricModelFromJSONTyped(json: any, ignoreDiscriminator
     }
     return {
         
+        'serial': !exists(json, 'serial') ? undefined : json['serial'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'driveLetter': !exists(json, 'driveLetter') ? undefined : json['driveLetter'],
+        'driveType': !exists(json, 'driveType') ? undefined : DriveTypeFromJSON(json['driveType']),
+        'usedSpacePercentage': !exists(json, 'usedSpacePercentage') ? undefined : json['usedSpacePercentage'],
+        'usedSpaceBytes': !exists(json, 'usedSpaceBytes') ? undefined : json['usedSpaceBytes'],
+        'writeActivityPercentage': !exists(json, 'writeActivityPercentage') ? undefined : json['writeActivityPercentage'],
+        'totalActivityPercentage': !exists(json, 'totalActivityPercentage') ? undefined : json['totalActivityPercentage'],
+        'readRateBytesPerSecond': !exists(json, 'readRateBytesPerSecond') ? undefined : json['readRateBytesPerSecond'],
+        'writeRateBytesPerSecond': !exists(json, 'writeRateBytesPerSecond') ? undefined : json['writeRateBytesPerSecond'],
+        'dataReadBytes': !exists(json, 'dataReadBytes') ? undefined : json['dataReadBytes'],
+        'dataWrittenBytes': !exists(json, 'dataWrittenBytes') ? undefined : json['dataWrittenBytes'],
+        'temperatures': !exists(json, 'temperatures') ? undefined : json['temperatures'],
         'id': json['id'],
-        'uniqueIdentifier': json['uniqueIdentifier'],
-        'serial': json['serial'],
-        'name': json['name'],
-        'driveLetter': json['driveLetter'],
-        'driveType': DriveTypeFromJSON(json['driveType']),
-        'usedSpacePercentage': json['usedSpacePercentage'],
-        'usedSpaceBytes': json['usedSpaceBytes'],
-        'writeActivityPercentage': json['writeActivityPercentage'],
-        'totalActivityPercentage': json['totalActivityPercentage'],
-        'readRateBytesPerSecond': json['readRateBytesPerSecond'],
-        'writeRateBytesPerSecond': json['writeRateBytesPerSecond'],
-        'dataReadBytes': json['dataReadBytes'],
-        'dataWrittenBytes': json['dataWrittenBytes'],
-        'temperatures': json['temperatures'],
+        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
     };
 }
 
@@ -179,8 +171,6 @@ export function DiskUsageMetricModelToJSON(value?: DiskUsageMetricModel | null):
     }
     return {
         
-        'id': value.id,
-        'uniqueIdentifier': value.uniqueIdentifier,
         'serial': value.serial,
         'name': value.name,
         'driveLetter': value.driveLetter,
@@ -194,6 +184,8 @@ export function DiskUsageMetricModelToJSON(value?: DiskUsageMetricModel | null):
         'dataReadBytes': value.dataReadBytes,
         'dataWrittenBytes': value.dataWrittenBytes,
         'temperatures': value.temperatures,
+        'id': value.id,
+        'uniqueIdentifier': value.uniqueIdentifier,
     };
 }
 

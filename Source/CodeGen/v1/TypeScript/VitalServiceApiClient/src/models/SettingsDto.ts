@@ -43,25 +43,25 @@ export interface SettingsDto {
      * @type {boolean}
      * @memberof SettingsDto
      */
-    runAtStarup?: boolean | null;
+    runAtStarup?: boolean;
     /**
      * 
      * @type {LaunchSettings}
      * @memberof SettingsDto
      */
-    launch?: LaunchSettings;
+    launch: LaunchSettings;
     /**
      * 
      * @type {MetricsSettings}
      * @memberof SettingsDto
      */
-    metrics?: MetricsSettings;
+    metrics: MetricsSettings;
     /**
      * 
      * @type {InfluxDbSettings}
      * @memberof SettingsDto
      */
-    influxDb?: InfluxDbSettings;
+    influxDb: InfluxDbSettings;
 }
 
 /**
@@ -69,6 +69,9 @@ export interface SettingsDto {
  */
 export function instanceOfSettingsDto(value: object): boolean {
     let isInstance = true;
+    isInstance = isInstance && "launch" in value;
+    isInstance = isInstance && "metrics" in value;
+    isInstance = isInstance && "influxDb" in value;
 
     return isInstance;
 }
@@ -84,9 +87,9 @@ export function SettingsDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean
     return {
         
         'runAtStarup': !exists(json, 'runAtStarup') ? undefined : json['runAtStarup'],
-        'launch': !exists(json, 'launch') ? undefined : LaunchSettingsFromJSON(json['launch']),
-        'metrics': !exists(json, 'metrics') ? undefined : MetricsSettingsFromJSON(json['metrics']),
-        'influxDb': !exists(json, 'influxDb') ? undefined : InfluxDbSettingsFromJSON(json['influxDb']),
+        'launch': LaunchSettingsFromJSON(json['launch']),
+        'metrics': MetricsSettingsFromJSON(json['metrics']),
+        'influxDb': InfluxDbSettingsFromJSON(json['influxDb']),
     };
 }
 

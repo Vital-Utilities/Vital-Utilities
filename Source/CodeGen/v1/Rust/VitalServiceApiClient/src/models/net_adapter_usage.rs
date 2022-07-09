@@ -21,18 +21,18 @@ pub struct NetAdapterUsage {
     pub sent_bytes: i64,
     #[serde(rename = "recievedBytes")]
     pub recieved_bytes: i64,
-    #[serde(rename = "usagePercentage")]
+    #[serde(rename = "usagePercentage", skip_serializing_if = "Option::is_none")]
     pub usage_percentage: Option<f32>,
 }
 
 impl NetAdapterUsage {
-    pub fn new(send_bps: i64, recieve_bps: i64, sent_bytes: i64, recieved_bytes: i64, usage_percentage: Option<f32>) -> NetAdapterUsage {
+    pub fn new(send_bps: i64, recieve_bps: i64, sent_bytes: i64, recieved_bytes: i64) -> NetAdapterUsage {
         NetAdapterUsage {
             send_bps,
             recieve_bps,
             sent_bytes,
             recieved_bytes,
-            usage_percentage,
+            usage_percentage: None,
         }
     }
 }

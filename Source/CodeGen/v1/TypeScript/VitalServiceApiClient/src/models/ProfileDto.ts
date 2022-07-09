@@ -54,7 +54,7 @@ export interface ProfileDto {
      * @type {number}
      * @memberof ProfileDto
      */
-    priority: number | null;
+    priority?: number;
 }
 
 /**
@@ -67,7 +67,6 @@ export function instanceOfProfileDto(value: object): boolean {
     isInstance = isInstance && "managedModelsIds" in value;
     isInstance = isInstance && "enabled" in value;
     isInstance = isInstance && "active" in value;
-    isInstance = isInstance && "priority" in value;
 
     return isInstance;
 }
@@ -87,7 +86,7 @@ export function ProfileDtoFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'managedModelsIds': json['managedModelsIds'],
         'enabled': json['enabled'],
         'active': json['active'],
-        'priority': json['priority'],
+        'priority': !exists(json, 'priority') ? undefined : json['priority'],
     };
 }
 

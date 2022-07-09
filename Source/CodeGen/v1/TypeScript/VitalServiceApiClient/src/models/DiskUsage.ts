@@ -25,6 +25,12 @@ import {
     DiskLoadFromJSONTyped,
     DiskLoadToJSON,
 } from './DiskLoad';
+import type { DiskThroughput } from './DiskThroughput';
+import {
+    DiskThroughputFromJSON,
+    DiskThroughputFromJSONTyped,
+    DiskThroughputToJSON,
+} from './DiskThroughput';
 import type { DiskType } from './DiskType';
 import {
     DiskTypeFromJSON,
@@ -37,12 +43,6 @@ import {
     DriveTypeFromJSONTyped,
     DriveTypeToJSON,
 } from './DriveType';
-import type { Throughput } from './Throughput';
-import {
-    ThroughputFromJSON,
-    ThroughputFromJSONTyped,
-    ThroughputToJSON,
-} from './Throughput';
 
 /**
  * 
@@ -61,13 +61,13 @@ export interface DiskUsage {
      * @type {string}
      * @memberof DiskUsage
      */
-    serial: string | null;
+    serial?: string;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    uniqueIdentifier: string | null;
+    uniqueIdentifier?: string;
     /**
      * 
      * @type {DriveType}
@@ -82,10 +82,10 @@ export interface DiskUsage {
     diskType: DiskType;
     /**
      * 
-     * @type {Throughput}
+     * @type {DiskThroughput}
      * @memberof DiskUsage
      */
-    throughput: Throughput;
+    throughput?: DiskThroughput;
     /**
      * 
      * @type {DiskLoad}
@@ -103,19 +103,19 @@ export interface DiskUsage {
      * @type {DiskHealth}
      * @memberof DiskUsage
      */
-    diskHealth: DiskHealth;
+    diskHealth?: DiskHealth;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    label: string;
+    volumeLabel?: string;
     /**
      * 
      * @type {string}
      * @memberof DiskUsage
      */
-    letter: string | null;
+    letter?: string;
 }
 
 /**
@@ -124,16 +124,10 @@ export interface DiskUsage {
 export function instanceOfDiskUsage(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "name" in value;
-    isInstance = isInstance && "serial" in value;
-    isInstance = isInstance && "uniqueIdentifier" in value;
     isInstance = isInstance && "driveType" in value;
     isInstance = isInstance && "diskType" in value;
-    isInstance = isInstance && "throughput" in value;
     isInstance = isInstance && "load" in value;
     isInstance = isInstance && "temperatures" in value;
-    isInstance = isInstance && "diskHealth" in value;
-    isInstance = isInstance && "label" in value;
-    isInstance = isInstance && "letter" in value;
 
     return isInstance;
 }
@@ -149,16 +143,16 @@ export function DiskUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     return {
         
         'name': json['name'],
-        'serial': json['serial'],
-        'uniqueIdentifier': json['uniqueIdentifier'],
+        'serial': !exists(json, 'serial') ? undefined : json['serial'],
+        'uniqueIdentifier': !exists(json, 'uniqueIdentifier') ? undefined : json['uniqueIdentifier'],
         'driveType': DriveTypeFromJSON(json['driveType']),
         'diskType': DiskTypeFromJSON(json['diskType']),
-        'throughput': ThroughputFromJSON(json['throughput']),
+        'throughput': !exists(json, 'throughput') ? undefined : DiskThroughputFromJSON(json['throughput']),
         'load': DiskLoadFromJSON(json['load']),
         'temperatures': json['temperatures'],
-        'diskHealth': DiskHealthFromJSON(json['diskHealth']),
-        'label': json['label'],
-        'letter': json['letter'],
+        'diskHealth': !exists(json, 'diskHealth') ? undefined : DiskHealthFromJSON(json['diskHealth']),
+        'volumeLabel': !exists(json, 'volumeLabel') ? undefined : json['volumeLabel'],
+        'letter': !exists(json, 'letter') ? undefined : json['letter'],
     };
 }
 
@@ -176,11 +170,11 @@ export function DiskUsageToJSON(value?: DiskUsage | null): any {
         'uniqueIdentifier': value.uniqueIdentifier,
         'driveType': DriveTypeToJSON(value.driveType),
         'diskType': DiskTypeToJSON(value.diskType),
-        'throughput': ThroughputToJSON(value.throughput),
+        'throughput': DiskThroughputToJSON(value.throughput),
         'load': DiskLoadToJSON(value.load),
         'temperatures': value.temperatures,
         'diskHealth': DiskHealthToJSON(value.diskHealth),
-        'label': value.label,
+        'volumeLabel': value.volumeLabel,
         'letter': value.letter,
     };
 }

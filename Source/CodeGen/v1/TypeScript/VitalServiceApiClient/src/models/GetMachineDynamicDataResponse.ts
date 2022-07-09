@@ -55,73 +55,73 @@ export interface GetMachineDynamicDataResponse {
      * @type {CpuUsage}
      * @memberof GetMachineDynamicDataResponse
      */
-    cpuUsageData: CpuUsage;
+    cpuUsageData?: CpuUsage;
     /**
      * 
      * @type {MemoryUsage}
      * @memberof GetMachineDynamicDataResponse
      */
-    ramUsagesData: MemoryUsage;
+    ramUsagesData?: MemoryUsage;
     /**
      * 
      * @type {Array<GpuUsages>}
      * @memberof GetMachineDynamicDataResponse
      */
-    gpuUsageData: Array<GpuUsages> | null;
+    gpuUsageData?: Array<GpuUsages>;
     /**
      * 
      * @type {DiskUsages}
      * @memberof GetMachineDynamicDataResponse
      */
-    diskUsages: DiskUsages;
+    diskUsages?: DiskUsages;
     /**
      * 
      * @type {NetworkAdapterUsages}
      * @memberof GetMachineDynamicDataResponse
      */
-    networkUsageData: NetworkAdapterUsages;
+    networkUsageData?: NetworkAdapterUsages;
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    processCpuUsage: { [key: string]: number; } | null;
+    processCpuUsage?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    processCpuThreadsUsage: { [key: string]: number; } | null;
+    processCpuThreadsUsage?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    processThreadCount: { [key: string]: number; } | null;
+    processThreadCount?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    processRamUsageGb: { [key: string]: number; } | null;
+    processRamUsageGb?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    processDiskBytesPerSecActivity: { [key: string]: number; } | null;
+    processDiskBytesPerSecActivity?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    cpuTemperature: { [key: string]: number; } | null;
+    cpuTemperature?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    processGpuUsage: { [key: string]: number; } | null;
+    processGpuUsage?: { [key: string]: number; };
 }
 
 /**
@@ -129,18 +129,6 @@ export interface GetMachineDynamicDataResponse {
  */
 export function instanceOfGetMachineDynamicDataResponse(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "cpuUsageData" in value;
-    isInstance = isInstance && "ramUsagesData" in value;
-    isInstance = isInstance && "gpuUsageData" in value;
-    isInstance = isInstance && "diskUsages" in value;
-    isInstance = isInstance && "networkUsageData" in value;
-    isInstance = isInstance && "processCpuUsage" in value;
-    isInstance = isInstance && "processCpuThreadsUsage" in value;
-    isInstance = isInstance && "processThreadCount" in value;
-    isInstance = isInstance && "processRamUsageGb" in value;
-    isInstance = isInstance && "processDiskBytesPerSecActivity" in value;
-    isInstance = isInstance && "cpuTemperature" in value;
-    isInstance = isInstance && "processGpuUsage" in value;
 
     return isInstance;
 }
@@ -155,18 +143,18 @@ export function GetMachineDynamicDataResponseFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'cpuUsageData': CpuUsageFromJSON(json['cpuUsageData']),
-        'ramUsagesData': MemoryUsageFromJSON(json['ramUsagesData']),
-        'gpuUsageData': (json['gpuUsageData'] === null ? null : (json['gpuUsageData'] as Array<any>).map(GpuUsagesFromJSON)),
-        'diskUsages': DiskUsagesFromJSON(json['diskUsages']),
-        'networkUsageData': NetworkAdapterUsagesFromJSON(json['networkUsageData']),
-        'processCpuUsage': json['processCpuUsage'],
-        'processCpuThreadsUsage': json['processCpuThreadsUsage'],
-        'processThreadCount': json['processThreadCount'],
-        'processRamUsageGb': json['processRamUsageGb'],
-        'processDiskBytesPerSecActivity': json['processDiskBytesPerSecActivity'],
-        'cpuTemperature': json['cpuTemperature'],
-        'processGpuUsage': json['processGpuUsage'],
+        'cpuUsageData': !exists(json, 'cpuUsageData') ? undefined : CpuUsageFromJSON(json['cpuUsageData']),
+        'ramUsagesData': !exists(json, 'ramUsagesData') ? undefined : MemoryUsageFromJSON(json['ramUsagesData']),
+        'gpuUsageData': !exists(json, 'gpuUsageData') ? undefined : ((json['gpuUsageData'] as Array<any>).map(GpuUsagesFromJSON)),
+        'diskUsages': !exists(json, 'diskUsages') ? undefined : DiskUsagesFromJSON(json['diskUsages']),
+        'networkUsageData': !exists(json, 'networkUsageData') ? undefined : NetworkAdapterUsagesFromJSON(json['networkUsageData']),
+        'processCpuUsage': !exists(json, 'processCpuUsage') ? undefined : json['processCpuUsage'],
+        'processCpuThreadsUsage': !exists(json, 'processCpuThreadsUsage') ? undefined : json['processCpuThreadsUsage'],
+        'processThreadCount': !exists(json, 'processThreadCount') ? undefined : json['processThreadCount'],
+        'processRamUsageGb': !exists(json, 'processRamUsageGb') ? undefined : json['processRamUsageGb'],
+        'processDiskBytesPerSecActivity': !exists(json, 'processDiskBytesPerSecActivity') ? undefined : json['processDiskBytesPerSecActivity'],
+        'cpuTemperature': !exists(json, 'cpuTemperature') ? undefined : json['cpuTemperature'],
+        'processGpuUsage': !exists(json, 'processGpuUsage') ? undefined : json['processGpuUsage'],
     };
 }
 
@@ -181,7 +169,7 @@ export function GetMachineDynamicDataResponseToJSON(value?: GetMachineDynamicDat
         
         'cpuUsageData': CpuUsageToJSON(value.cpuUsageData),
         'ramUsagesData': MemoryUsageToJSON(value.ramUsagesData),
-        'gpuUsageData': (value.gpuUsageData === null ? null : (value.gpuUsageData as Array<any>).map(GpuUsagesToJSON)),
+        'gpuUsageData': value.gpuUsageData === undefined ? undefined : ((value.gpuUsageData as Array<any>).map(GpuUsagesToJSON)),
         'diskUsages': DiskUsagesToJSON(value.diskUsages),
         'networkUsageData': NetworkAdapterUsagesToJSON(value.networkUsageData),
         'processCpuUsage': value.processCpuUsage,

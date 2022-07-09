@@ -48,7 +48,7 @@ export interface NetAdapterUsage {
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    usagePercentage: number | null;
+    usagePercentage?: number;
 }
 
 /**
@@ -60,7 +60,6 @@ export function instanceOfNetAdapterUsage(value: object): boolean {
     isInstance = isInstance && "recieveBps" in value;
     isInstance = isInstance && "sentBytes" in value;
     isInstance = isInstance && "recievedBytes" in value;
-    isInstance = isInstance && "usagePercentage" in value;
 
     return isInstance;
 }
@@ -79,7 +78,7 @@ export function NetAdapterUsageFromJSONTyped(json: any, ignoreDiscriminator: boo
         'recieveBps': json['recieveBps'],
         'sentBytes': json['sentBytes'],
         'recievedBytes': json['recievedBytes'],
-        'usagePercentage': json['usagePercentage'],
+        'usagePercentage': !exists(json, 'usagePercentage') ? undefined : json['usagePercentage'],
     };
 }
 

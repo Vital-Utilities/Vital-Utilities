@@ -6,37 +6,37 @@ namespace VitalService.Dtos.Coms
 {
     public class GetMachineDynamicDataResponse
     {
-        [SwaggerRequired]
+        
         public CpuUsage? CpuUsageData { get; set; }
-        [SwaggerRequired]
+        
         public MemoryUsage? RamUsagesData { get; set; }
-        [SwaggerRequired]
+        
         public List<GpuUsages>? GpuUsageData { get; set; }
-        [SwaggerRequired]
+        
         public DiskUsages? DiskUsages { get; set; }
-        [SwaggerRequired]
+        
         public NetworkAdapterUsages? NetworkUsageData { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<int, float>? ProcessCpuUsage { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<int, float>? ProcessCpuThreadsUsage { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<int, float>? ProcessThreadCount { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<int, float>? ProcessRamUsageGb { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<int, double>? ProcessDiskBytesPerSecActivity { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<string, float>? CpuTemperature { get; set; }
-        [SwaggerRequired]
+        
         public IDictionary<int, float>? ProcessGpuUsage { get; set; }
     }
 
     public class GetMachineTimeSeriesRequest
     {
-        [SwaggerRequired]
+        
         public DateTime Earliest { get; set; }
-        [SwaggerRequired]
+        
         public DateTime Latest { get; set; }
     }
 }

@@ -1,15 +1,11 @@
-# ProfileDto
+# DiskThroughput
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **i32** |  | 
-**name** | **String** |  | 
-**managed_models_ids** | **Vec<i32>** |  | 
-**enabled** | **bool** |  | 
-**active** | **bool** |  | 
-**priority** | Option<**i32**> |  | [optional]
+**read_rate_bytes_per_second** | Option<**i64**> |  | [optional]
+**write_rate_bytes_per_second** | Option<**i64**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

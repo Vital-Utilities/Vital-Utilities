@@ -37,7 +37,7 @@ export interface NetworkAdapterUsage {
      * @type {NetAdapterUsage}
      * @memberof NetworkAdapterUsage
      */
-    usage: NetAdapterUsage;
+    usage?: NetAdapterUsage;
     /**
      * 
      * @type {NetworkAdapterProperties}
@@ -51,7 +51,6 @@ export interface NetworkAdapterUsage {
  */
 export function instanceOfNetworkAdapterUsage(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "usage" in value;
     isInstance = isInstance && "properties" in value;
 
     return isInstance;
@@ -67,7 +66,7 @@ export function NetworkAdapterUsageFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'usage': NetAdapterUsageFromJSON(json['usage']),
+        'usage': !exists(json, 'usage') ? undefined : NetAdapterUsageFromJSON(json['usage']),
         'properties': NetworkAdapterPropertiesFromJSON(json['properties']),
     };
 }

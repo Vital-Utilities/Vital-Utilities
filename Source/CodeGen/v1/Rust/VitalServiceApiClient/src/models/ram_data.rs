@@ -13,35 +13,35 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct RamData {
-    #[serde(rename = "name")]
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[serde(rename = "partNumber")]
+    #[serde(rename = "partNumber", skip_serializing_if = "Option::is_none")]
     pub part_number: Option<String>,
-    #[serde(rename = "type")]
+    #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub _type: Option<String>,
-    #[serde(rename = "speedMhz")]
+    #[serde(rename = "speedMhz", skip_serializing_if = "Option::is_none")]
     pub speed_mhz: Option<i32>,
-    #[serde(rename = "slotNumber")]
+    #[serde(rename = "slotNumber", skip_serializing_if = "Option::is_none")]
     pub slot_number: Option<i32>,
-    #[serde(rename = "slotChannel")]
+    #[serde(rename = "slotChannel", skip_serializing_if = "Option::is_none")]
     pub slot_channel: Option<String>,
-    #[serde(rename = "configuredClockSpeedMhz")]
+    #[serde(rename = "configuredClockSpeedMhz", skip_serializing_if = "Option::is_none")]
     pub configured_clock_speed_mhz: Option<i32>,
-    #[serde(rename = "capacity")]
+    #[serde(rename = "capacity", skip_serializing_if = "Option::is_none")]
     pub capacity: Option<f64>,
 }
 
 impl RamData {
-    pub fn new(name: Option<String>, part_number: Option<String>, _type: Option<String>, speed_mhz: Option<i32>, slot_number: Option<i32>, slot_channel: Option<String>, configured_clock_speed_mhz: Option<i32>, capacity: Option<f64>) -> RamData {
+    pub fn new() -> RamData {
         RamData {
-            name,
-            part_number,
-            _type,
-            speed_mhz,
-            slot_number,
-            slot_channel,
-            configured_clock_speed_mhz,
-            capacity,
+            name: None,
+            part_number: None,
+            _type: None,
+            speed_mhz: None,
+            slot_number: None,
+            slot_channel: None,
+            configured_clock_speed_mhz: None,
+            capacity: None,
         }
     }
 }
