@@ -13,25 +13,25 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct NetAdapterUsage {
-    #[serde(rename = "uploadSpeedBps")]
-    pub upload_speed_bps: i64,
-    #[serde(rename = "downloadSpeedBps")]
-    pub download_speed_bps: i64,
-    #[serde(rename = "uploadedBps")]
-    pub uploaded_bps: i64,
-    #[serde(rename = "downloadedBps")]
-    pub downloaded_bps: i64,
+    #[serde(rename = "sendBps")]
+    pub send_bps: i64,
+    #[serde(rename = "recieveBps")]
+    pub recieve_bps: i64,
+    #[serde(rename = "sentBytes")]
+    pub sent_bytes: i64,
+    #[serde(rename = "recievedBytes")]
+    pub recieved_bytes: i64,
     #[serde(rename = "usagePercentage")]
-    pub usage_percentage: i64,
+    pub usage_percentage: Option<f32>,
 }
 
 impl NetAdapterUsage {
-    pub fn new(upload_speed_bps: i64, download_speed_bps: i64, uploaded_bps: i64, downloaded_bps: i64, usage_percentage: i64) -> NetAdapterUsage {
+    pub fn new(send_bps: i64, recieve_bps: i64, sent_bytes: i64, recieved_bytes: i64, usage_percentage: Option<f32>) -> NetAdapterUsage {
         NetAdapterUsage {
-            upload_speed_bps,
-            download_speed_bps,
-            uploaded_bps,
-            downloaded_bps,
+            send_bps,
+            recieve_bps,
+            sent_bytes,
+            recieved_bytes,
             usage_percentage,
         }
     }

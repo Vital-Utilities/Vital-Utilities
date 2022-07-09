@@ -29,16 +29,16 @@ pub struct DiskUsage {
     pub load: Box<crate::models::DiskLoad>,
     #[serde(rename = "temperatures")]
     pub temperatures: ::std::collections::HashMap<String, f32>,
-    #[serde(rename = "data")]
-    pub data: Box<crate::models::DiskHealth>,
+    #[serde(rename = "diskHealth")]
+    pub disk_health: Box<crate::models::DiskHealth>,
     #[serde(rename = "label")]
     pub label: String,
     #[serde(rename = "letter")]
-    pub letter: String,
+    pub letter: Option<String>,
 }
 
 impl DiskUsage {
-    pub fn new(name: String, serial: Option<String>, unique_identifier: Option<String>, drive_type: crate::models::DriveType, disk_type: crate::models::DiskType, throughput: crate::models::Throughput, load: crate::models::DiskLoad, temperatures: ::std::collections::HashMap<String, f32>, data: crate::models::DiskHealth, label: String, letter: String) -> DiskUsage {
+    pub fn new(name: String, serial: Option<String>, unique_identifier: Option<String>, drive_type: crate::models::DriveType, disk_type: crate::models::DiskType, throughput: crate::models::Throughput, load: crate::models::DiskLoad, temperatures: ::std::collections::HashMap<String, f32>, disk_health: crate::models::DiskHealth, label: String, letter: Option<String>) -> DiskUsage {
         DiskUsage {
             name,
             serial,
@@ -48,7 +48,7 @@ impl DiskUsage {
             throughput: Box::new(throughput),
             load: Box::new(load),
             temperatures,
-            data: Box::new(data),
+            disk_health: Box::new(disk_health),
             label,
             letter,
         }

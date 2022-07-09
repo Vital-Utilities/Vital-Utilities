@@ -122,14 +122,14 @@ namespace VitalService.Services
                      HardwarePerformanceService.CurrentNetworkUsage.Adapters.Select(e =>
                      new NetworkUsageMetricModel(
                         e.Value.Properties.MacAddress,
-                        e.Value.Usage.UploadSpeedBps,
-                        e.Value.Usage.DownloadSpeedBps)).ToList(),
+                        e.Value.Usage.SendBps,
+                        e.Value.Usage.RecieveBps)).ToList(),
                       HardwarePerformanceService.CurrentDiskUsages.Disks.Select(e =>
                           new DiskUsageMetricModel(e.Value.Name,
                             e.Value.Letter,
                             e.Value.Letter,
-                            e.Value.Data?.TotalBytesWritten,
-                            e.Value.Data?.TotalBytesRead,
+                            e.Value.DiskHealth?.TotalBytesWritten,
+                            e.Value.DiskHealth?.TotalBytesRead,
                             e.Value.Throughput?.WriteRateBytesPerSecond,
                             e.Value.Throughput?.ReadRateBytesPerSecond,
                             e.Value.Load?.TotalActivityPercentage,

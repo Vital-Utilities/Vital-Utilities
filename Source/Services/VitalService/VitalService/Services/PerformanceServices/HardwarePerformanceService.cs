@@ -216,16 +216,16 @@ namespace VitalService.Services.PerformanceServices
                                     switch (sensor.Name)
                                     {
                                         case "Data Uploaded":
-                                            adapterObj.Usage.UploadedBps = (ulong)sensor.Value;
+                                            adapterObj.Usage.SentBytes = (long)sensor.Value;
                                             break;
                                         case "Data Downloaded":
-                                            adapterObj.Usage.DownloadedBps = (ulong)sensor.Value;
+                                            adapterObj.Usage.RecievedBytes = (long)sensor.Value;
                                             break;
                                         case "Upload Speed":
-                                            adapterObj.Usage.UploadSpeedBps = (long)sensor.Value;
+                                            adapterObj.Usage.SendBps = (long)sensor.Value;
                                             break;
                                         case "Download Speed":
-                                            adapterObj.Usage.DownloadSpeedBps = (long)sensor.Value;
+                                            adapterObj.Usage.RecieveBps = (long)sensor.Value;
                                             break;
                                         case "Network Utilization":
                                             adapterObj.Usage.UsagePercentage = (long)sensor.Value;
@@ -494,10 +494,10 @@ namespace VitalService.Services.PerformanceServices
                                 switch (sensor.SensorType)
                                 {
                                     case SensorType.Data when sensor.Name == "Data Read":
-                                        disk.Data.TotalBytesRead = (ulong)(sensor.Value * 1e+9);
+                                        disk.DiskHealth.TotalBytesRead = (ulong)(sensor.Value * 1e+9);
                                         break;
                                     case SensorType.Data when sensor.Name is "Data Written" or "Total Bytes Written":
-                                        disk.Data.TotalBytesWritten = (ulong)(sensor.Value * 1e+9);
+                                        disk.DiskHealth.TotalBytesWritten = (ulong)(sensor.Value * 1e+9);
                                         break;
 
                                     case SensorType.Throughput when sensor.Name == "Read Rate":

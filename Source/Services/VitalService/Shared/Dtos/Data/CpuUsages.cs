@@ -6,7 +6,7 @@ namespace VitalService.Dtos.Coms
     public class CpuUsage
     {
         [SwaggerRequired]
-        public List<float> CoreClocksMhz { get; set; } = new();
+        public List<int> CoreClocksMhz { get; set; } = new();
         [SwaggerRequired]
         public float Total { get; set; }
         [SwaggerRequired]

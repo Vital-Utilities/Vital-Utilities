@@ -10,7 +10,7 @@ namespace VitalService.Dtos.Coms
     public class NetworkAdapterUsage
     {
         [SwaggerRequired]
-        public NetAdapterUsage Usage { get; set; } = new();
+        public NetAdapterUsage? Usage { get; set; } = new();
         [SwaggerRequired]
         public NetworkAdapterProperties Properties { get; set; } = new();
     }
@@ -25,9 +25,9 @@ namespace VitalService.Dtos.Coms
         [SwaggerRequired]
         public string MacAddress { get; set; }
         [SwaggerRequired]
-        public long SpeedBps { get; set; }
+        public long? SpeedBps { get; set; }
         [SwaggerRequired]
-        public string ConnectionType { get; set; }
+        public string? ConnectionType { get; set; }
 
     }
     public class IPInterfaceProperties
@@ -44,14 +44,14 @@ namespace VitalService.Dtos.Coms
     public class NetAdapterUsage
     {
         [SwaggerRequired]
-        public long UploadSpeedBps { get; set; }
+        public long SendBps { get; set; }
         [SwaggerRequired]
-        public long DownloadSpeedBps { get; set; }
+        public long RecieveBps { get; set; }
         [SwaggerRequired]
-        public ulong UploadedBps { get; set; }
+        public long SentBytes { get; set; }
         [SwaggerRequired]
-        public ulong DownloadedBps { get; set; }
+        public long RecievedBytes { get; set; }
         [SwaggerRequired]
-        public long UsagePercentage { get; set; }
+        public float? UsagePercentage { get; set; }
     }
 }

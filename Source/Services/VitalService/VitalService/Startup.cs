@@ -76,6 +76,7 @@ namespace VitalService
             services.AddSwaggerGen(options =>
             {
                 options.SupportNonNullableReferenceTypes();
+                options.UseAllOfForInheritance();
                 options.SchemaFilter<AddSwaggerRequiredSchemaFilter>();
             });
 

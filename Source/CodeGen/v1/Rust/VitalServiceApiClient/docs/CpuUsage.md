@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**core_clocks_mhz** | **Vec<f32>** |  | 
+**core_clocks_mhz** | **Vec<i32>** |  | 
 **total** | **f32** |  | 
 **power_draw_wattage** | Option<**f32**> |  | 
 **core_percentages** | **Vec<f32>** |  | 

@@ -24,31 +24,31 @@ export interface NetAdapterUsage {
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    uploadSpeedBps: number;
+    sendBps: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    downloadSpeedBps: number;
+    recieveBps: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    uploadedBps: number;
+    sentBytes: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    downloadedBps: number;
+    recievedBytes: number;
     /**
      * 
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    usagePercentage: number;
+    usagePercentage: number | null;
 }
 
 /**
@@ -56,10 +56,10 @@ export interface NetAdapterUsage {
  */
 export function instanceOfNetAdapterUsage(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "uploadSpeedBps" in value;
-    isInstance = isInstance && "downloadSpeedBps" in value;
-    isInstance = isInstance && "uploadedBps" in value;
-    isInstance = isInstance && "downloadedBps" in value;
+    isInstance = isInstance && "sendBps" in value;
+    isInstance = isInstance && "recieveBps" in value;
+    isInstance = isInstance && "sentBytes" in value;
+    isInstance = isInstance && "recievedBytes" in value;
     isInstance = isInstance && "usagePercentage" in value;
 
     return isInstance;
@@ -75,10 +75,10 @@ export function NetAdapterUsageFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'uploadSpeedBps': json['uploadSpeedBps'],
-        'downloadSpeedBps': json['downloadSpeedBps'],
-        'uploadedBps': json['uploadedBps'],
-        'downloadedBps': json['downloadedBps'],
+        'sendBps': json['sendBps'],
+        'recieveBps': json['recieveBps'],
+        'sentBytes': json['sentBytes'],
+        'recievedBytes': json['recievedBytes'],
         'usagePercentage': json['usagePercentage'],
     };
 }
@@ -92,10 +92,10 @@ export function NetAdapterUsageToJSON(value?: NetAdapterUsage | null): any {
     }
     return {
         
-        'uploadSpeedBps': value.uploadSpeedBps,
-        'downloadSpeedBps': value.downloadSpeedBps,
-        'uploadedBps': value.uploadedBps,
-        'downloadedBps': value.downloadedBps,
+        'sendBps': value.sendBps,
+        'recieveBps': value.recieveBps,
+        'sentBytes': value.sentBytes,
+        'recievedBytes': value.recievedBytes,
         'usagePercentage': value.usagePercentage,
     };
 }

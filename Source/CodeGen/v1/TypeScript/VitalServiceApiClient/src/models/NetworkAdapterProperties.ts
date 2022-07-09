@@ -55,13 +55,13 @@ export interface NetworkAdapterProperties {
      * @type {number}
      * @memberof NetworkAdapterProperties
      */
-    speedBps: number;
+    speedBps: number | null;
     /**
      * 
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    connectionType: string;
+    connectionType: string | null;
 }
 
 /**

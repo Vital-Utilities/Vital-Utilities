@@ -34,6 +34,18 @@ import {
     UpdateProfileRequestToJSON,
 } from '../models';
 
+export interface ApiProfileAddProcessConfigPutRequest {
+    addProccessRequest?: AddProccessRequest;
+}
+
+export interface ApiProfileCreatePutRequest {
+    createProfileRequest?: CreateProfileRequest;
+}
+
+export interface ApiProfileDeleteProcessConfigIdDeleteRequest {
+    id: number;
+}
+
 export interface ApiProfileIdDeleteRequest {
     id: number;
 }
@@ -42,23 +54,11 @@ export interface ApiProfileIdGetRequest {
     id: number;
 }
 
-export interface ApiProfilePostRequest {
-    createProfileRequest?: CreateProfileRequest;
-}
-
-export interface ApiProfileProcessIdDeleteRequest {
-    id: number;
-}
-
-export interface ApiProfileProcessPostRequest {
-    addProccessRequest?: AddProccessRequest;
-}
-
-export interface ApiProfileProcessPutRequest {
+export interface ApiProfileUpdateProcessConfigPutRequest {
     updateManagedRequest?: UpdateManagedRequest;
 }
 
-export interface ApiProfilePutRequest {
+export interface ApiProfileUpdatePutRequest {
     updateProfileRequest?: UpdateProfileRequest;
 }
 
@@ -69,13 +69,93 @@ export class ProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProfileGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProfileDto>>> {
+    async apiProfileAddProcessConfigPutRaw(requestParameters: ApiProfileAddProcessConfigPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/Profile/AddProcessConfig`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AddProccessRequestToJSON(requestParameters.addProccessRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async apiProfileAddProcessConfigPut(requestParameters: ApiProfileAddProcessConfigPutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiProfileAddProcessConfigPutRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async apiProfileCreatePutRaw(requestParameters: ApiProfileCreatePutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProfileDto>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/api/Profile/Create`,
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateProfileRequestToJSON(requestParameters.createProfileRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileDtoFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async apiProfileCreatePut(requestParameters: ApiProfileCreatePutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileDto> {
+        const response = await this.apiProfileCreatePutRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async apiProfileDeleteProcessConfigIdDeleteRaw(requestParameters: ApiProfileDeleteProcessConfigIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.id === null || requestParameters.id === undefined) {
+            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiProfileDeleteProcessConfigIdDelete.');
+        }
+
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/api/Profile`,
+            path: `/api/Profile/DeleteProcessConfig/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async apiProfileDeleteProcessConfigIdDelete(requestParameters: ApiProfileDeleteProcessConfigIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiProfileDeleteProcessConfigIdDeleteRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     */
+    async apiProfileGetAllGetRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ProfileDto>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/api/Profile/GetAll`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -86,8 +166,8 @@ export class ProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProfileGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProfileDto>> {
-        const response = await this.apiProfileGetRaw(initOverrides);
+    async apiProfileGetAllGet(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ProfileDto>> {
+        const response = await this.apiProfileGetAllGetRaw(initOverrides);
         return await response.value();
     }
 
@@ -148,7 +228,7 @@ export class ProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProfilePostRaw(requestParameters: ApiProfilePostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ProfileDto>> {
+    async apiProfileUpdateProcessConfigPutRaw(requestParameters: ApiProfileUpdateProcessConfigPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -156,87 +236,7 @@ export class ProfileApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/Profile`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: CreateProfileRequestToJSON(requestParameters.createProfileRequest),
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ProfileDtoFromJSON(jsonValue));
-    }
-
-    /**
-     */
-    async apiProfilePost(requestParameters: ApiProfilePostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ProfileDto> {
-        const response = await this.apiProfilePostRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     */
-    async apiProfileProcessIdDeleteRaw(requestParameters: ApiProfileProcessIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.id === null || requestParameters.id === undefined) {
-            throw new runtime.RequiredError('id','Required parameter requestParameters.id was null or undefined when calling apiProfileProcessIdDelete.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/api/Profile/process/{id}`.replace(`{${"id"}}`, encodeURIComponent(String(requestParameters.id))),
-            method: 'DELETE',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiProfileProcessIdDelete(requestParameters: ApiProfileProcessIdDeleteRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiProfileProcessIdDeleteRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     */
-    async apiProfileProcessPostRaw(requestParameters: ApiProfileProcessPostRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/Profile/process`,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: AddProccessRequestToJSON(requestParameters.addProccessRequest),
-        }, initOverrides);
-
-        return new runtime.VoidApiResponse(response);
-    }
-
-    /**
-     */
-    async apiProfileProcessPost(requestParameters: ApiProfileProcessPostRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiProfileProcessPostRaw(requestParameters, initOverrides);
-    }
-
-    /**
-     */
-    async apiProfileProcessPutRaw(requestParameters: ApiProfileProcessPutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-        const response = await this.request({
-            path: `/api/Profile/process`,
+            path: `/api/Profile/UpdateProcessConfig`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -248,13 +248,13 @@ export class ProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProfileProcessPut(requestParameters: ApiProfileProcessPutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiProfileProcessPutRaw(requestParameters, initOverrides);
+    async apiProfileUpdateProcessConfigPut(requestParameters: ApiProfileUpdateProcessConfigPutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiProfileUpdateProcessConfigPutRaw(requestParameters, initOverrides);
     }
 
     /**
      */
-    async apiProfilePutRaw(requestParameters: ApiProfilePutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async apiProfileUpdatePutRaw(requestParameters: ApiProfileUpdatePutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -262,7 +262,7 @@ export class ProfileApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/api/Profile`,
+            path: `/api/Profile/Update`,
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
@@ -274,8 +274,8 @@ export class ProfileApi extends runtime.BaseAPI {
 
     /**
      */
-    async apiProfilePut(requestParameters: ApiProfilePutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.apiProfilePutRaw(requestParameters, initOverrides);
+    async apiProfileUpdatePut(requestParameters: ApiProfileUpdatePutRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.apiProfileUpdatePutRaw(requestParameters, initOverrides);
     }
 
 }

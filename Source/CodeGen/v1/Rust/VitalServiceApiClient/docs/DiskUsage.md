@@ -12,9 +12,9 @@ Name | Type | Description | Notes
 **throughput** | [**crate::models::Throughput**](Throughput.md) |  | 
 **load** | [**crate::models::DiskLoad**](DiskLoad.md) |  | 
 **temperatures** | **::std::collections::HashMap<String, f32>** |  | 
-**data** | [**crate::models::DiskHealth**](DiskHealth.md) |  | 
+**disk_health** | [**crate::models::DiskHealth**](DiskHealth.md) |  | 
 **label** | **String** |  | 
-**letter** | **String** |  | 
+**letter** | Option<**String**> |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -1,4 +1,3 @@
-use serde::{Deserialize, Serialize}; 
 use serde::{Deserialize, Serialize};
 
 // Example code that deserializes and serializes the model.

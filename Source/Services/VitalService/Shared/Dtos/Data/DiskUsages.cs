@@ -31,11 +31,11 @@ namespace VitalService.Dtos.Data
         [SwaggerRequired]
         public Dictionary<string, float> Temperatures { get; set; } = new();
         [SwaggerRequired]
-        public DiskHealth? Data { get; set; } = new DiskHealth();
+        public DiskHealth DiskHealth { get; set; } = new DiskHealth();
         [SwaggerRequired]
         public string Label { get; set; }
         [SwaggerRequired]
-        public string Letter { get; set; }
+        public string? Letter { get; set; }
     }
     public class DiskLoad
     {

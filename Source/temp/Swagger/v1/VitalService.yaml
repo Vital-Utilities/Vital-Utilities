@@ -168,7 +168,7 @@ paths:
               schema:
                 type: integer
                 format: int32
-  /api/Profile:
+  /api/Profile/GetAll:
     get:
       tags:
         - Profile
@@ -191,50 +191,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProfileDto'
-    post:
-      tags:
-        - Profile
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateProfileRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/CreateProfileRequest'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/CreateProfileRequest'
-      responses:
-        '200':
-          description: Success
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProfileDto'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProfileDto'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProfileDto'
-    put:
-      tags:
-        - Profile
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProfileRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UpdateProfileRequest'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UpdateProfileRequest'
-      responses:
-        '200':
-          description: Success
   '/api/Profile/{id}':
     get:
       tags:
@@ -302,8 +258,36 @@ paths:
               schema:
                 type: integer
                 format: int32
-  /api/Profile/process:
-    post:
+  /api/Profile/Create:
+    put:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateProfileRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProfileDto'
+  /api/Profile/AddProcessConfig:
+    put:
       tags:
         - Profile
       requestBody:
@@ -335,6 +319,7 @@ paths:
               schema:
                 type: integer
                 format: int32
+  /api/Profile/UpdateProcessConfig:
     put:
       tags:
         - Profile
@@ -367,7 +352,7 @@ paths:
               schema:
                 type: integer
                 format: int32
-  '/api/Profile/process/{id}':
+  '/api/Profile/DeleteProcessConfig/{id}':
     delete:
       tags:
         - Profile
@@ -396,6 +381,24 @@ paths:
               schema:
                 type: integer
                 format: int32
+  /api/Profile/Update:
+    put:
+      tags:
+        - Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Success
   /api/Settings:
     get:
       tags:
@@ -589,8 +592,8 @@ components:
         coreClocksMhz:
           type: array
           items:
-            type: number
-            format: float
+            type: integer
+            format: int32
         total:
           type: number
           format: float
@@ -727,7 +730,7 @@ components:
       type: string
     DiskUsage:
       required:
-        - data
+        - diskHealth
         - diskType
         - driveType
         - label
@@ -761,12 +764,13 @@ components:
           additionalProperties:
             type: number
             format: float
-        data:
+        diskHealth:
           $ref: '#/components/schemas/DiskHealth'
         label:
           type: string
         letter:
           type: string
+          nullable: true
       additionalProperties: false
     DiskUsageMetricModel:
       required:
@@ -1293,28 +1297,29 @@ components:
       additionalProperties: false
     NetAdapterUsage:
       required:
-        - downloadedBps
-        - downloadSpeedBps
-        - uploadedBps
-        - uploadSpeedBps
+        - recieveBps
+        - recievedBytes
+        - sendBps
+        - sentBytes
         - usagePercentage
       type: object
       properties:
-        uploadSpeedBps:
+        sendBps:
           type: integer
           format: int64
-        downloadSpeedBps:
+        recieveBps:
           type: integer
           format: int64
-        uploadedBps:
+        sentBytes:
           type: integer
           format: int64
-        downloadedBps:
+        recievedBytes:
           type: integer
           format: int64
         usagePercentage:
-          type: integer
-          format: int64
+          type: number
+          format: float
+          nullable: true
       additionalProperties: false
     NetworkAdapterProperties:
       required:
@@ -1338,8 +1343,10 @@ components:
         speedBps:
           type: integer
           format: int64
+          nullable: true
         connectionType:
           type: string
+          nullable: true
       additionalProperties: false
     NetworkAdapterUsage:
       required:

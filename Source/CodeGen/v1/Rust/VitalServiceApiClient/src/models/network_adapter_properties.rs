@@ -22,13 +22,13 @@ pub struct NetworkAdapterProperties {
     #[serde(rename = "macAddress")]
     pub mac_address: String,
     #[serde(rename = "speedBps")]
-    pub speed_bps: i64,
+    pub speed_bps: Option<i64>,
     #[serde(rename = "connectionType")]
-    pub connection_type: String,
+    pub connection_type: Option<String>,
 }
 
 impl NetworkAdapterProperties {
-    pub fn new(name: String, description: Option<String>, mac_address: String, speed_bps: i64, connection_type: String) -> NetworkAdapterProperties {
+    pub fn new(name: String, description: Option<String>, mac_address: String, speed_bps: Option<i64>, connection_type: Option<String>) -> NetworkAdapterProperties {
         NetworkAdapterProperties {
             ip_interface_properties: None,
             name,

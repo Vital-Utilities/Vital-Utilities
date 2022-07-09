@@ -103,7 +103,7 @@ export interface DiskUsage {
      * @type {DiskHealth}
      * @memberof DiskUsage
      */
-    data: DiskHealth;
+    diskHealth: DiskHealth;
     /**
      * 
      * @type {string}
@@ -115,7 +115,7 @@ export interface DiskUsage {
      * @type {string}
      * @memberof DiskUsage
      */
-    letter: string;
+    letter: string | null;
 }
 
 /**
@@ -131,7 +131,7 @@ export function instanceOfDiskUsage(value: object): boolean {
     isInstance = isInstance && "throughput" in value;
     isInstance = isInstance && "load" in value;
     isInstance = isInstance && "temperatures" in value;
-    isInstance = isInstance && "data" in value;
+    isInstance = isInstance && "diskHealth" in value;
     isInstance = isInstance && "label" in value;
     isInstance = isInstance && "letter" in value;
 
@@ -156,7 +156,7 @@ export function DiskUsageFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'throughput': ThroughputFromJSON(json['throughput']),
         'load': DiskLoadFromJSON(json['load']),
         'temperatures': json['temperatures'],
-        'data': DiskHealthFromJSON(json['data']),
+        'diskHealth': DiskHealthFromJSON(json['diskHealth']),
         'label': json['label'],
         'letter': json['letter'],
     };
@@ -179,7 +179,7 @@ export function DiskUsageToJSON(value?: DiskUsage | null): any {
         'throughput': ThroughputToJSON(value.throughput),
         'load': DiskLoadToJSON(value.load),
         'temperatures': value.temperatures,
-        'data': DiskHealthToJSON(value.data),
+        'diskHealth': DiskHealthToJSON(value.diskHealth),
         'label': value.label,
         'letter': value.letter,
     };
