@@ -14,7 +14,7 @@ pub fn get_gpu_util(device: &nvml::Device) -> GpuUsages {
             Ok(speed) => {
                 fans.insert(format!("Fan {}", i), speed as f32);
             }
-            Err(e) => {
+            Err(_) => {
                 break;
             }
         }
