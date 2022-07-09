@@ -1344,32 +1344,32 @@ components:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int64
         memoryUsedBytes:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int64
         memoryClockMhz:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int32
         shaderClockMhz:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int32
         coreClockMhz:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int32
         fanPercentage:
           required:
             - comparer
@@ -1382,12 +1382,12 @@ components:
             type: number
             format: float
             nullable: true
-        powerDraw:
+        powerDrawWatt:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int32
         load:
           $ref: '#/components/schemas/LoadData'
         pcIe:
@@ -1408,8 +1408,6 @@ components:
           type: string
       additionalProperties: false
     IPInterfaceProperties:
-      required:
-        - isDnsEnabled
       type: object
       properties:
         iPv4Address:
@@ -1428,6 +1426,9 @@ components:
             - length
           type: string
         isDnsEnabled:
+          required:
+            - hasValue
+            - value
           type: boolean
       additionalProperties: false
     InfluxDbSettings:
@@ -1470,49 +1471,49 @@ components:
     LoadData:
       type: object
       properties:
-        core:
+        corePercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        frameBuffer:
+        frameBufferPercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        videoEngine:
+        videoEnginePercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        busInterface:
+        busInterfacePercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        memory:
+        memoryUsedPercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        memoryController:
+        memoryControllerPercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        cuda:
+        cudaPercentage:
           required:
             - hasValue
             - value
           type: number
           format: float
-        threeD:
+        threeDPercentage:
           required:
             - hasValue
             - value
@@ -1747,14 +1748,14 @@ components:
       type: object
       properties:
         pid:
-          type: number
-          format: float
+          type: integer
+          format: int32
         parentPid:
           required:
             - hasValue
             - value
-          type: number
-          format: float
+          type: integer
+          format: int32
         executablePath:
           required:
             - chars
@@ -1799,8 +1800,8 @@ components:
           type: number
           format: float
         memoryKb:
-          type: number
-          format: float
+          type: integer
+          format: int64
         diskUsage:
           $ref: '#/components/schemas/ProcessDiskUsage'
         status:
@@ -1818,11 +1819,11 @@ components:
       type: object
       properties:
         readBytesPerSecond:
-          type: number
-          format: float
+          type: integer
+          format: int64
         writeBytesPerSecond:
-          type: number
-          format: float
+          type: integer
+          format: int64
       additionalProperties: false
     ProcessGpuUtil:
       type: object

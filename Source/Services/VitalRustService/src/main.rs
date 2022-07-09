@@ -2,7 +2,7 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-use std::collections::HashSet;
+
 use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
@@ -12,9 +12,9 @@ use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
 use nvml::NVML;
 use openapi::models::{SendUtilizationRequest, SystemUsage};
-use rocket::data::{Limits, ToByteUnit};
-use rocket::serde::{Deserialize, Serialize};
-use rocket::{get, launch, response, routes};
+
+use rocket::routes;
+
 use sysinfo::SystemExt;
 use systemstat::Platform;
 use tokio::join;
@@ -77,9 +77,9 @@ async fn app() {
                     process_data,
                     system_usage: Box::new(SystemUsage {
                         cpu_usage: cpu_util,
-                        mem_usage: mem_util,
+                        mem_usage: Box::new(mem_util),
                         network_adapter_usage: adapter_util,
-                        disk_usage, //gpu_usage: gpu_usage,
+                        disk_usage: *disk_usage, //gpu_usage: gpu_usage,
                     }),
                 },
                 format!(

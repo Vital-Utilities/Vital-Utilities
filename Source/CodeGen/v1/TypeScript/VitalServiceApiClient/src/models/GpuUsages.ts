@@ -85,7 +85,7 @@ export interface GpuUsages {
      * @type {number}
      * @memberof GpuUsages
      */
-    powerDraw?: number;
+    powerDrawWatt?: number;
     /**
      * 
      * @type {LoadData}
@@ -128,7 +128,7 @@ export function GpuUsagesFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'shaderClockMhz': !exists(json, 'shaderClockMhz') ? undefined : json['shaderClockMhz'],
         'coreClockMhz': !exists(json, 'coreClockMhz') ? undefined : json['coreClockMhz'],
         'fanPercentage': !exists(json, 'fanPercentage') ? undefined : json['fanPercentage'],
-        'powerDraw': !exists(json, 'powerDraw') ? undefined : json['powerDraw'],
+        'powerDrawWatt': !exists(json, 'powerDrawWatt') ? undefined : json['powerDrawWatt'],
         'load': !exists(json, 'load') ? undefined : LoadDataFromJSON(json['load']),
         'pcIe': !exists(json, 'pcIe') ? undefined : PCIEThroughPutFromJSON(json['pcIe']),
     };
@@ -151,7 +151,7 @@ export function GpuUsagesToJSON(value?: GpuUsages | null): any {
         'shaderClockMhz': value.shaderClockMhz,
         'coreClockMhz': value.coreClockMhz,
         'fanPercentage': value.fanPercentage,
-        'powerDraw': value.powerDraw,
+        'powerDrawWatt': value.powerDrawWatt,
         'load': LoadDataToJSON(value.load),
         'pcIe': PCIEThroughPutToJSON(value.pcIe),
     };

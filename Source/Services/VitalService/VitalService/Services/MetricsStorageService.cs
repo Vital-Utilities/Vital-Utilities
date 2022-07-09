@@ -149,10 +149,10 @@ namespace VitalService.Services
                     if (i < HardwarePerformanceService.CurrentGpuUsage.Count)
                         models.Add(new GpuUsageMetricModel(
                                         $"{i}",
-                                        HardwarePerformanceService.CurrentGpuUsage[i].Load.Core,
+                                        HardwarePerformanceService.CurrentGpuUsage[i].Load.CorePercentage,
                                         HardwarePerformanceService.CurrentGpuUsage[i].MemoryUsedBytes,
                                         HardwarePerformanceService.CurrentGpuUsage[i].TemperatureReadings.GetValueOrDefault("GPU Core"),
-                                        HardwarePerformanceService.CurrentGpuUsage[i].PowerDraw,
+                                        HardwarePerformanceService.CurrentGpuUsage[i].PowerDrawWatt,
                                         HardwarePerformanceService.CurrentGpuUsage[i].FanPercentage,
                                         HardwarePerformanceService.CurrentGpuUsage[i].TotalMemoryBytes));
                 }

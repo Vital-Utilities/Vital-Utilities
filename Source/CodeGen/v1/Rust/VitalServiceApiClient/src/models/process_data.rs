@@ -14,9 +14,9 @@
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProcessData {
     #[serde(rename = "pid")]
-    pub pid: f32,
+    pub pid: i32,
     #[serde(rename = "parentPid", skip_serializing_if = "Option::is_none")]
-    pub parent_pid: Option<f32>,
+    pub parent_pid: Option<i32>,
     #[serde(rename = "executablePath", skip_serializing_if = "Option::is_none")]
     pub executable_path: Option<String>,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
@@ -30,7 +30,7 @@ pub struct ProcessData {
     #[serde(rename = "cpuPercentage")]
     pub cpu_percentage: f32,
     #[serde(rename = "memoryKb")]
-    pub memory_kb: f32,
+    pub memory_kb: i64,
     #[serde(rename = "diskUsage")]
     pub disk_usage: Box<crate::models::ProcessDiskUsage>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
@@ -40,7 +40,7 @@ pub struct ProcessData {
 }
 
 impl ProcessData {
-    pub fn new(pid: f32, name: String, time_stamp: String, cpu_percentage: f32, memory_kb: f32, disk_usage: crate::models::ProcessDiskUsage) -> ProcessData {
+    pub fn new(pid: i32, name: String, time_stamp: String, cpu_percentage: f32, memory_kb: i64, disk_usage: crate::models::ProcessDiskUsage) -> ProcessData {
         ProcessData {
             pid,
             parent_pid: None,

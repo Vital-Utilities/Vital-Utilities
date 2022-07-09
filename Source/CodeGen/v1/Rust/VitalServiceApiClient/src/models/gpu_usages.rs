@@ -18,19 +18,19 @@ pub struct GpuUsages {
     #[serde(rename = "temperatureReadings")]
     pub temperature_readings: ::std::collections::HashMap<String, f32>,
     #[serde(rename = "totalMemoryBytes", skip_serializing_if = "Option::is_none")]
-    pub total_memory_bytes: Option<f32>,
+    pub total_memory_bytes: Option<i64>,
     #[serde(rename = "memoryUsedBytes", skip_serializing_if = "Option::is_none")]
-    pub memory_used_bytes: Option<f32>,
+    pub memory_used_bytes: Option<i64>,
     #[serde(rename = "memoryClockMhz", skip_serializing_if = "Option::is_none")]
-    pub memory_clock_mhz: Option<f32>,
+    pub memory_clock_mhz: Option<i32>,
     #[serde(rename = "shaderClockMhz", skip_serializing_if = "Option::is_none")]
-    pub shader_clock_mhz: Option<f32>,
+    pub shader_clock_mhz: Option<i32>,
     #[serde(rename = "coreClockMhz", skip_serializing_if = "Option::is_none")]
-    pub core_clock_mhz: Option<f32>,
+    pub core_clock_mhz: Option<i32>,
     #[serde(rename = "fanPercentage", skip_serializing_if = "Option::is_none")]
     pub fan_percentage: Option<::std::collections::HashMap<String, f32>>,
-    #[serde(rename = "powerDraw", skip_serializing_if = "Option::is_none")]
-    pub power_draw: Option<f32>,
+    #[serde(rename = "powerDrawWatt", skip_serializing_if = "Option::is_none")]
+    pub power_draw_watt: Option<i32>,
     #[serde(rename = "load", skip_serializing_if = "Option::is_none")]
     pub load: Option<Box<crate::models::LoadData>>,
     #[serde(rename = "pcIe", skip_serializing_if = "Option::is_none")]
@@ -48,7 +48,7 @@ impl GpuUsages {
             shader_clock_mhz: None,
             core_clock_mhz: None,
             fan_percentage: None,
-            power_draw: None,
+            power_draw_watt: None,
             load: None,
             pc_ie: None,
         }

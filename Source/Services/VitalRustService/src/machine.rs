@@ -29,21 +29,21 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
                 ip_interface_properties: Some(Box::new(IpInterfaceProperties {
                     i_pv4_address: Some(int.ipv4.into_iter().map(|x| x.addr.to_string()).collect()),
                     i_pv6_address: Some(int.ipv6.into_iter().map(|x| x.addr.to_string()).collect()),
-                    is_dns_enabled: int.gateway.is_some(),
+                    is_dns_enabled: None,
                     dns_suffix: None,
                 })),
                 speed_bps: None,
                 connection_type: None,
             }),
             usage: match stats {
-                Some(stats) => Box::new(NetAdapterUsage {
+                Some(stats) => Some(Box::new(NetAdapterUsage {
                     send_bps: stats.1.transmitted() as i64,
                     recieve_bps: stats.1.received() as i64,
                     recieved_bytes: stats.1.total_received() as i64,
                     sent_bytes: stats.1.total_transmitted() as i64,
                     usage_percentage: None,
-                }),
-                None => Box::new(NetAdapterUsage::default()),
+                })),
+                None => None,
             },
         });
     }
@@ -51,7 +51,10 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
     return list;
 }
 
-pub async fn get_cpu_util(sysinfo: &sysinfo::System, sysstat: &systemstat::System) -> CpuUsage {
+pub async fn get_cpu_util(
+    sysinfo: &sysinfo::System,
+    sysstat: &systemstat::System,
+) -> Box<CpuUsage> {
     let mut core_percentages = Vec::new();
     let mut core_clocks_mhz = Vec::new();
     for processor in sysinfo.processors() {
@@ -66,17 +69,17 @@ pub async fn get_cpu_util(sysinfo: &sysinfo::System, sysstat: &systemstat::Syste
         }
         Err(_) => {}
     }
-    return CpuUsage {
+    return Box::new(CpuUsage {
         core_clocks_mhz,
         total: sysinfo.global_processor_info().cpu_usage() as f32,
         power_draw_wattage: None,
         core_percentages,
         temperature_readings: temperature_readings.clone(),
-    };
+    });
 }
 
-pub async fn get_disk_util(sysinfo: &sysinfo::System) -> HashMap<String, DiskUsage> {
-    let mut list = HashMap::new();
+pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, DiskUsage>> {
+    let mut list = Box::new(HashMap::new());
     let disks = sysinfo.disks();
 
     for disk in disks {

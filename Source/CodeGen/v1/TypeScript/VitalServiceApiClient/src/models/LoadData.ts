@@ -24,49 +24,49 @@ export interface LoadData {
      * @type {number}
      * @memberof LoadData
      */
-    core?: number;
+    corePercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    frameBuffer?: number;
+    frameBufferPercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    videoEngine?: number;
+    videoEnginePercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    busInterface?: number;
+    busInterfacePercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    memory?: number;
+    memoryUsedPercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    memoryController?: number;
+    memoryControllerPercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    cuda?: number;
+    cudaPercentage?: number;
     /**
      * 
      * @type {number}
      * @memberof LoadData
      */
-    threeD?: number;
+    threeDPercentage?: number;
 }
 
 /**
@@ -88,14 +88,14 @@ export function LoadDataFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'core': !exists(json, 'core') ? undefined : json['core'],
-        'frameBuffer': !exists(json, 'frameBuffer') ? undefined : json['frameBuffer'],
-        'videoEngine': !exists(json, 'videoEngine') ? undefined : json['videoEngine'],
-        'busInterface': !exists(json, 'busInterface') ? undefined : json['busInterface'],
-        'memory': !exists(json, 'memory') ? undefined : json['memory'],
-        'memoryController': !exists(json, 'memoryController') ? undefined : json['memoryController'],
-        'cuda': !exists(json, 'cuda') ? undefined : json['cuda'],
-        'threeD': !exists(json, 'threeD') ? undefined : json['threeD'],
+        'corePercentage': !exists(json, 'corePercentage') ? undefined : json['corePercentage'],
+        'frameBufferPercentage': !exists(json, 'frameBufferPercentage') ? undefined : json['frameBufferPercentage'],
+        'videoEnginePercentage': !exists(json, 'videoEnginePercentage') ? undefined : json['videoEnginePercentage'],
+        'busInterfacePercentage': !exists(json, 'busInterfacePercentage') ? undefined : json['busInterfacePercentage'],
+        'memoryUsedPercentage': !exists(json, 'memoryUsedPercentage') ? undefined : json['memoryUsedPercentage'],
+        'memoryControllerPercentage': !exists(json, 'memoryControllerPercentage') ? undefined : json['memoryControllerPercentage'],
+        'cudaPercentage': !exists(json, 'cudaPercentage') ? undefined : json['cudaPercentage'],
+        'threeDPercentage': !exists(json, 'threeDPercentage') ? undefined : json['threeDPercentage'],
     };
 }
 
@@ -108,14 +108,14 @@ export function LoadDataToJSON(value?: LoadData | null): any {
     }
     return {
         
-        'core': value.core,
-        'frameBuffer': value.frameBuffer,
-        'videoEngine': value.videoEngine,
-        'busInterface': value.busInterface,
-        'memory': value.memory,
-        'memoryController': value.memoryController,
-        'cuda': value.cuda,
-        'threeD': value.threeD,
+        'corePercentage': value.corePercentage,
+        'frameBufferPercentage': value.frameBufferPercentage,
+        'videoEnginePercentage': value.videoEnginePercentage,
+        'busInterfacePercentage': value.busInterfacePercentage,
+        'memoryUsedPercentage': value.memoryUsedPercentage,
+        'memoryControllerPercentage': value.memoryControllerPercentage,
+        'cudaPercentage': value.cudaPercentage,
+        'threeDPercentage': value.threeDPercentage,
     };
 }
 

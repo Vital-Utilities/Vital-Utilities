@@ -5,9 +5,9 @@ namespace VitalRustServiceClasses
     public class ProcessData
     {
         
-        public float Pid { get; set; }
+        public int Pid { get; set; }
         
-        public float? ParentPid { get; set; }
+        public int? ParentPid { get; set; }
         
         public string? ExecutablePath { get; set; }
         
@@ -21,7 +21,7 @@ namespace VitalRustServiceClasses
         
         public float CpuPercentage { get; set; }
         
-        public float MemoryKb { get; set; }
+        public long MemoryKb { get; set; }
         
         public ProcessDiskUsage DiskUsage { get; set; }
         
@@ -33,9 +33,9 @@ namespace VitalRustServiceClasses
     public class ProcessDiskUsage
     {
         
-        public float ReadBytesPerSecond { get; set; }
+        public long ReadBytesPerSecond { get; set; }
         
-        public float WriteBytesPerSecond { get; set; }
+        public long WriteBytesPerSecond { get; set; }
     }
 
     public class ProcessGpuUtil

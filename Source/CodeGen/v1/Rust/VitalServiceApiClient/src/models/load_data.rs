@@ -13,35 +13,35 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct LoadData {
-    #[serde(rename = "core", skip_serializing_if = "Option::is_none")]
-    pub core: Option<f32>,
-    #[serde(rename = "frameBuffer", skip_serializing_if = "Option::is_none")]
-    pub frame_buffer: Option<f32>,
-    #[serde(rename = "videoEngine", skip_serializing_if = "Option::is_none")]
-    pub video_engine: Option<f32>,
-    #[serde(rename = "busInterface", skip_serializing_if = "Option::is_none")]
-    pub bus_interface: Option<f32>,
-    #[serde(rename = "memory", skip_serializing_if = "Option::is_none")]
-    pub memory: Option<f32>,
-    #[serde(rename = "memoryController", skip_serializing_if = "Option::is_none")]
-    pub memory_controller: Option<f32>,
-    #[serde(rename = "cuda", skip_serializing_if = "Option::is_none")]
-    pub cuda: Option<f32>,
-    #[serde(rename = "threeD", skip_serializing_if = "Option::is_none")]
-    pub three_d: Option<f32>,
+    #[serde(rename = "corePercentage", skip_serializing_if = "Option::is_none")]
+    pub core_percentage: Option<f32>,
+    #[serde(rename = "frameBufferPercentage", skip_serializing_if = "Option::is_none")]
+    pub frame_buffer_percentage: Option<f32>,
+    #[serde(rename = "videoEnginePercentage", skip_serializing_if = "Option::is_none")]
+    pub video_engine_percentage: Option<f32>,
+    #[serde(rename = "busInterfacePercentage", skip_serializing_if = "Option::is_none")]
+    pub bus_interface_percentage: Option<f32>,
+    #[serde(rename = "memoryUsedPercentage", skip_serializing_if = "Option::is_none")]
+    pub memory_used_percentage: Option<f32>,
+    #[serde(rename = "memoryControllerPercentage", skip_serializing_if = "Option::is_none")]
+    pub memory_controller_percentage: Option<f32>,
+    #[serde(rename = "cudaPercentage", skip_serializing_if = "Option::is_none")]
+    pub cuda_percentage: Option<f32>,
+    #[serde(rename = "threeDPercentage", skip_serializing_if = "Option::is_none")]
+    pub three_d_percentage: Option<f32>,
 }
 
 impl LoadData {
     pub fn new() -> LoadData {
         LoadData {
-            core: None,
-            frame_buffer: None,
-            video_engine: None,
-            bus_interface: None,
-            memory: None,
-            memory_controller: None,
-            cuda: None,
-            three_d: None,
+            core_percentage: None,
+            frame_buffer_percentage: None,
+            video_engine_percentage: None,
+            bus_interface_percentage: None,
+            memory_used_percentage: None,
+            memory_controller_percentage: None,
+            cuda_percentage: None,
+            three_d_percentage: None,
         }
     }
 }

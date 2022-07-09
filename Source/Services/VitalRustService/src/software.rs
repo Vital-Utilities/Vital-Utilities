@@ -1,11 +1,9 @@
-use crate::{
-    generated_vital_rust_service_api_def::{self, ProcessGpuUtil},
-    nvidia,
-};
+use crate::nvidia;
 use chrono::{DateTime, Utc};
 use core::slice;
 use nvml::NVML;
 use once_cell::sync::OnceCell;
+use openapi::models::{ProcessData, ProcessDiskUsage, ProcessGpuUtil};
 
 use std::{
     collections::{HashMap, HashSet},
@@ -32,7 +30,7 @@ pub fn get_process_util(
     sysinfo: &sysinfo::System,
     nvml: &Option<NVML>,
     time_stamp: DateTime<Utc>,
-) -> Option<Vec<generated_vital_rust_service_api_def::ProcessData>> {
+) -> Option<Vec<ProcessData>> {
     let mut list = Vec::new();
     let processes = sysinfo.processes();
 
@@ -63,40 +61,40 @@ pub fn get_process_util(
                                                         };
                                                     }; */
         // windows::get_process_ideal_processors(pid); //takes a lot of time
-        list.push(generated_vital_rust_service_api_def::ProcessData {
-            name: process.name().to_string(),
-            pid: pid as f64,
+        list.push(ProcessData {
+            pid: pid as i32,
+            parent_pid: match process.parent() {
+                Some(pid) => Some(pid.as_u32() as i32),
+                None => None,
+            },
+            executable_path: path,
+            description,
             main_window_title: match main_window_titles.get(&pid) {
                 Some(title) => Some(title.to_string()),
                 None => None,
             },
-            description: description,
-            executable_path: path,
-            parent_pid: match process.parent() {
-                Some(pid) => Some(pid.as_u32() as f64),
-                None => None,
-            },
-            cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f64,
-            memory_kb: process.memory() as f64,
-            disk_usage: generated_vital_rust_service_api_def::ProcessDiskUsage {
-                read_bytes_per_second: disk_bytes.read_bytes as f64,
-                write_bytes_per_second: disk_bytes.written_bytes as f64,
-            },
+            name: process.name().to_string(),
+            time_stamp: time_stamp.to_rfc3339(),
+            cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f32,
+            memory_kb: process.memory() as i64,
+            disk_usage: Box::new(ProcessDiskUsage {
+                read_bytes_per_second: disk_bytes.read_bytes as i64,
+                write_bytes_per_second: disk_bytes.written_bytes as i64,
+            }),
             status: Some(process.status().to_string()),
+
             gpu_util: match process_gpu_utilization_samples
                 .iter()
                 .find(|sample| sample.pid == pid)
             {
-                Some(util) => Some(ProcessGpuUtil {
-                    gpu_core_percentage: Some(util.sm_util as f64),
-                    gpu_decoding_percentage: Some(util.dec_util as f64),
-                    gpu_encoding_percentage: Some(util.enc_util as f64),
-                    gpu_mem_percentage: Some(util.mem_util as f64),
-                }),
+                Some(util) => Some(Box::new(ProcessGpuUtil {
+                    gpu_core_percentage: Some(util.sm_util as f32),
+                    gpu_decoding_percentage: Some(util.dec_util as f32),
+                    gpu_encoding_percentage: Some(util.enc_util as f32),
+                    gpu_mem_percentage: Some(util.mem_util as f32),
+                })),
                 None => None,
             },
-
-            time_stamp: time_stamp.to_rfc3339(),
         });
     }
     return Some(list);

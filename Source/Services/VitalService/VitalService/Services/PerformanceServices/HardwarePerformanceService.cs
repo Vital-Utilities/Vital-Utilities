@@ -290,22 +290,22 @@ namespace VitalService.Services.PerformanceServices
                                         switch (sensor.Name)
                                         {
                                             case "GPU Core":
-                                                gpu.Load.Core = value;
+                                                gpu.Load.CorePercentage = value;
                                                 break;
                                             case "GPU Frame Buffer":
-                                                gpu.Load.FrameBuffer = value;
+                                                gpu.Load.FrameBufferPercentage = value;
                                                 break;
                                             case "GPU Video Engine":
-                                                gpu.Load.VideoEngine = value;
+                                                gpu.Load.VideoEnginePercentage = value;
                                                 break;
                                             case "GPU Bus":
-                                                gpu.Load.BusInterface = value;
+                                                gpu.Load.BusInterfacePercentage = value;
                                                 break;
                                             case "GPU Memory":
-                                                gpu.Load.Memory = value;
+                                                gpu.Load.MemoryUsedPercentage = value;
                                                 break;
                                             case "GPU Memory Controller":
-                                                gpu.Load.MemoryController = value;
+                                                gpu.Load.MemoryControllerPercentage = value;
                                                 break;
                                             //case "D3D Cuda":
                                             //    gpu.Load.Cuda = value;
@@ -324,13 +324,13 @@ namespace VitalService.Services.PerformanceServices
                                         switch (sensor.Name)
                                         {
                                             case "GPU Core":
-                                                gpu.CoreClockMhz = value;
+                                                gpu.CoreClockMhz = (int)value;
                                                 break;
                                             case "GPU Memory":
-                                                gpu.MemoryClockMhz = value;
+                                                gpu.MemoryClockMhz = (int)value;
                                                 break;
                                             case "GPU Shader":
-                                                gpu.ShaderClockMhz = value;
+                                                gpu.ShaderClockMhz = (int)value;
                                                 break;
                                             default:
                                                 break;
@@ -351,10 +351,10 @@ namespace VitalService.Services.PerformanceServices
                                         switch (sensor.Name)
                                         {
                                             case "GPU Memory Used":
-                                                gpu.MemoryUsedBytes = value;
+                                                gpu.MemoryUsedBytes = (long)value;
                                                 break;
                                             case "GPU Memory Total":
-                                                gpu.TotalMemoryBytes = value;
+                                                gpu.TotalMemoryBytes = (long)value;
                                                 break;
                                         }
                                         break;
@@ -362,13 +362,13 @@ namespace VitalService.Services.PerformanceServices
                                 case SensorType.Power:
                                     {
 
-                                        gpu.PowerDraw = (float)Math.Round((float)sensor.Value, 2);
+                                        gpu.PowerDrawWatt = (int)sensor.Value;
                                         break;
                                     }
 
                                 case SensorType.Throughput:
                                     {
-                                        var value = (ulong)sensor.Value;
+                                        var value = (long)sensor.Value;
                                         switch (sensor.Name)
                                         {
                                             case "GPU PCIe Rx":

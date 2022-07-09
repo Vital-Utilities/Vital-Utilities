@@ -42,7 +42,7 @@ export interface IPInterfaceProperties {
      * @type {boolean}
      * @memberof IPInterfaceProperties
      */
-    isDnsEnabled: boolean;
+    isDnsEnabled?: boolean;
 }
 
 /**
@@ -50,7 +50,6 @@ export interface IPInterfaceProperties {
  */
 export function instanceOfIPInterfaceProperties(value: object): boolean {
     let isInstance = true;
-    isInstance = isInstance && "isDnsEnabled" in value;
 
     return isInstance;
 }
@@ -68,7 +67,7 @@ export function IPInterfacePropertiesFromJSONTyped(json: any, ignoreDiscriminato
         'iPv4Address': !exists(json, 'iPv4Address') ? undefined : json['iPv4Address'],
         'iPv6Address': !exists(json, 'iPv6Address') ? undefined : json['iPv6Address'],
         'dnsSuffix': !exists(json, 'dnsSuffix') ? undefined : json['dnsSuffix'],
-        'isDnsEnabled': json['isDnsEnabled'],
+        'isDnsEnabled': !exists(json, 'isDnsEnabled') ? undefined : json['isDnsEnabled'],
     };
 }
 

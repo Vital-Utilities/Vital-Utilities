@@ -39,7 +39,7 @@ namespace VitalService.Dtos.Coms
         
         public string? DnsSuffix { get; set; }
         
-        public bool IsDnsEnabled { get; set; }
+        public bool? IsDnsEnabled { get; set; }
     }
     public class NetAdapterUsage
     {

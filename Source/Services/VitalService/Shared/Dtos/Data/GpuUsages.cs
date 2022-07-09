@@ -10,19 +10,19 @@ namespace VitalService.Dtos.Coms
         
         public ConcurrentDictionary<string, float> TemperatureReadings { get; set; } = new();
         
-        public float? TotalMemoryBytes { get; set; }
+        public long? TotalMemoryBytes { get; set; }
         
-        public float? MemoryUsedBytes { get; set; }
+        public long? MemoryUsedBytes { get; set; }
         
-        public float? MemoryClockMhz { get; set; }
+        public int? MemoryClockMhz { get; set; }
         
-        public float? ShaderClockMhz { get; set; }
+        public int? ShaderClockMhz { get; set; }
         
-        public float? CoreClockMhz { get; set; }
+        public int? CoreClockMhz { get; set; }
         
         public Dictionary<string, float>? FanPercentage { get; set; } = new();
         
-        public float? PowerDraw { get; set; }
+        public int? PowerDrawWatt { get; set; }
         
         public LoadData? Load { get; set; } = new();
         
@@ -33,28 +33,28 @@ namespace VitalService.Dtos.Coms
     public class PCIE_ThroughPut
     {
         
-        public ulong? PCIe_RxBytesPerSecond { get; set; }
+        public long? PCIe_RxBytesPerSecond { get; set; }
         
-        public ulong? PCIe_TxBytesPerSecond { get; set; }
+        public long? PCIe_TxBytesPerSecond { get; set; }
     }
 
     public class LoadData
     {
         
-        public float? Core { get; set; }
+        public float? CorePercentage { get; set; }
         
-        public float? FrameBuffer { get; set; }
+        public float? FrameBufferPercentage { get; set; }
         
-        public float? VideoEngine { get; set; }
+        public float? VideoEnginePercentage { get; set; }
         
-        public float? BusInterface { get; set; }
+        public float? BusInterfacePercentage { get; set; }
         
-        public float? Memory { get; set; }
+        public float? MemoryUsedPercentage { get; set; }
         
-        public float? MemoryController { get; set; }
+        public float? MemoryControllerPercentage { get; set; }
         
-        public float? Cuda { get; set; }
+        public float? CudaPercentage { get; set; }
         
-        public float? ThreeD { get; set; }
+        public float? ThreeDPercentage { get; set; }
     }
 }

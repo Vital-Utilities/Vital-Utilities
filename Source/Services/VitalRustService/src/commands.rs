@@ -1,6 +1,6 @@
-use crate::generated_client_api_dto_def::{LaunchSettings, SettingsDto};
 use directories::UserDirs;
 use log::{debug, error, info};
+use openapi::models::{LaunchSettings, SettingsDto};
 
 pub fn get_backend_settings() -> Result<SettingsDto, String> {
     let user_dirs = UserDirs::new().unwrap();
@@ -37,7 +37,7 @@ pub fn get_vital_service_ports() -> Result<LaunchSettings, String> {
     let settings_file = get_backend_settings();
     match settings_file {
         Ok(settings) => {
-            return Ok(settings.launch);
+            return Ok(*settings.launch);
         }
         Err(e) => {
             error!("{}", e);
