@@ -1,0 +1,22 @@
+@import "../../custom.scss";
+
+@mixin square {
+    height: 5px;
+    width: 5px;
+}
+
+.affinityRenderer {
+
+    display: grid;
+    gap: 2px;
+
+    .activeAffinity {
+        @include square();
+        background-color: $blue-1;
+    }
+
+    .inactiveAffinity {
+        @include square();
+        background-color: $background-0;
+    }
+}

@@ -12,9 +12,9 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "build.ts", "generateRustTypings.ts"]
+  "include": ["src", "build.ts"]
 }

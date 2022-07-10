@@ -1,0 +1,21 @@
+@import "./../custom.scss";
+
+.view-header {
+    @include header;
+    padding: 20px;
+    padding-bottom: 10px;
+    // top: 0;
+    // position: sticky;
+
+    .stat-row {
+        justify-content: left;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+
+        .item {
+            width: fit-content;
+            padding-left: 20px;
+        }
+    }
+}
