@@ -28,4 +28,4 @@ jobs:
     - run: pnpm i -g @types/node
     - run: pnpm i --frozen-lockfile
     - run: pnpm test
-    - run: pnpm run build --if-present
+    - run: pnpm run build
