@@ -76,7 +76,8 @@
         "vite": "^2.9.14",
         "vite-plugin-eslint": "^1.6.1",
         "vite-plugin-progress": "^0.0.3",
-        "vite-plugin-tauri": "^2.1.0"
+        "vite-plugin-tauri": "^2.1.0",
+        "vite-preset-react": "^2.3.0"
     },
     "eslintConfig": {
         "extends": [

@@ -61,6 +61,7 @@ specifiers:
   vite-plugin-eslint: ^1.6.1
   vite-plugin-progress: ^0.0.3
   vite-plugin-tauri: ^2.1.0
+  vite-preset-react: ^2.3.0
   web-vitals: ^2.1.4
 
 dependencies:
@@ -127,6 +128,7 @@ devDependencies:
   vite-plugin-eslint: 1.6.1_eslint@8.19.0+vite@2.9.14
   vite-plugin-progress: 0.0.3_vite@2.9.14
   vite-plugin-tauri: 2.1.0_en46clcd3lwwvjvcpnzybev7ui
+  vite-preset-react: 2.3.0_vite@2.9.14
 
 packages:
 
@@ -7199,6 +7201,17 @@ packages:
       fast-glob: 3.2.11
       kolorist: 1.5.1
       vite: 2.9.14_sass@1.53.0
+    dev: true
+
+  /vite-preset-react/2.3.0_vite@2.9.14:
+    resolution: {integrity: sha512-so8NjBurFEkG1okeB1kuZALhUs5LBRPDqlcf+7Fw/E2Pkz7O3fL7aQKHY0xU0i4wBIW72Yox/d0M0MREzcfuhQ==}
+    peerDependencies:
+      vite: 2.x
+    dependencies:
+      '@vitejs/plugin-react': 1.3.2
+      vite: 2.9.14_sass@1.53.0
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /vite/2.9.14_sass@1.53.0:
