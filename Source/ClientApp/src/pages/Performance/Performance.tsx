@@ -1,4 +1,5 @@
 import { CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "@vital/vitalservice";
 import { useLocalStorageState } from "ahooks";
 import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
 import React, { useEffect } from "react";
@@ -13,7 +14,6 @@ import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components
 import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
 import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../Dtos/UiModel";
 import { VitalState } from "../../Redux/States";
 import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
@@ -118,21 +118,21 @@ export const PerformancePage: React.FunctionComponent = props => {
     function getRamUsageData(e: TimeSeriesMachineMetricsModel): ramMetricsModel {
         const d = e.ramUsageData;
         const freeMemory = d.totalVisibleMemoryBytes && d.usedMemoryBytes && d.totalVisibleMemoryBytes - d.usedMemoryBytes;
-        return { ...d, dateTimeOffset: e.dateTimeOffset, usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes, freePhysicalMemory: freeMemory };
+        return { ...d, dateTimeOffset: new Date(e.dateTimeOffset), usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes ?? undefined, freePhysicalMemory: freeMemory ?? undefined };
     }
     useEffect(() => {
         if (timeSeriesMetrics?.metrics && timeSeriesMetrics.requestRange) {
             const f = timeSeriesMetrics?.metrics.map(e => {
                 return {
                     cpuMetrics: e.cpuUsageData.map(d => {
-                        return { ...d, dateTimeOffset: e.dateTimeOffset };
+                        return { ...d, dateTimeOffset: new Date(e.dateTimeOffset) };
                     }) as CpuMetricsModel[],
                     gpuMetrics: e.gpuUsageData.map(d => {
-                        return { ...d, dateTimeOffset: e.dateTimeOffset, vRamUsagePercentage: (((d.vramUsageBytes ?? 0) / (d.vramTotalBytes ?? 0)) * 100).toFixed(1) };
+                        return { ...d, dateTimeOffset: new Date(e.dateTimeOffset), vRamUsagePercentage: (((d.vramUsageBytes ?? 0) / (d.vramTotalBytes ?? 0)) * 100).toFixed(1) };
                     }) as gpuMetricsModel[],
                     ramMetrics: getRamUsageData(e),
                     networkMetrics: e.networkUsageData.map(d => {
-                        return { dateTimeOffset: e.dateTimeOffset, macAddress: d.uniqueIdentifier, uploadSpeedBps: d.uploadSpeedBps !== undefined ? -MBpsToMbps(d.uploadSpeedBps) : null, downloadSpeedBps: d.downloadSpeedBps !== undefined ? MBpsToMbps(d.downloadSpeedBps) : null };
+                        return { dateTimeOffset: new Date(e.dateTimeOffset), macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -MBpsToMbps(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && MBpsToMbps(d.downloadSpeedBps)) ?? null };
                     }) as networkMetricsModel[],
                     diskMetrics: e.diskUsageData.map(d => {
                         return { ...d, dateTimeOffset: e.dateTimeOffset };
@@ -282,7 +282,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         }}
                                         stat={
                                             <>
-                                                <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage.downloadSpeedBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage.uploadSpeedBps ?? 0)}
+                                                <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
                                             </>
                                         }
                                         type="network"
@@ -430,22 +430,22 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                                     );
                                                                 })}
 
-                                                            <div>Power Draw: {gpuUsageData && `${gpuUsageData[index]?.powerDraw?.toFixed(0)}w`}</div>
+                                                            <div>Power Draw: {gpuUsageData && `${gpuUsageData[index]?.powerDrawWatt?.toFixed(0)}w`}</div>
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid" }}>Load</h4>
                                                         <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 30 }}>
                                                             <div>
-                                                                <div>Core: {`${gpuUsageData?.[index]?.load?.core?.toFixed(0)}%`}</div>
-                                                                <div>Bus: {`${gpuUsageData?.[index]?.load?.busInterface?.toFixed(0)}%`}</div>
-                                                                <div>Video Engine: {`${gpuUsageData?.[index]?.load?.videoEngine?.toFixed(0)}%`}</div>
-                                                                {gpuUsageData?.[index]?.load?.frameBuffer && <div>Frame Buffer: {`${gpuUsageData?.[index]?.load.frameBuffer?.toFixed(1)}%`}</div>}
-                                                                <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryController?.toFixed(0)}%`}</div>
+                                                                <div>Core: {`${gpuUsageData?.[index]?.load?.corePercentage?.toFixed(0)}%`}</div>
+                                                                <div>Bus: {`${gpuUsageData?.[index]?.load?.busInterfacePercentage?.toFixed(0)}%`}</div>
+                                                                <div>Video Engine: {`${gpuUsageData?.[index]?.load?.videoEnginePercentage?.toFixed(0)}%`}</div>
+                                                                {gpuUsageData?.[index]?.load?.frameBufferPercentage && <div>Frame Buffer: {`${gpuUsageData?.[index]?.load?.frameBufferPercentage?.toFixed(1)}%`}</div>}
+                                                                <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryControllerPercentage?.toFixed(0)}%`}</div>
                                                             </div>
                                                             <div>
-                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe_Throughput?.pcIe_Rx_BytesPerSecond)}`}</div>
-                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe_Throughput?.pcIe_Tx_BytesPerSecond)}`}</div>
+                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIe_RxBytesPerSecond)}`}</div>
+                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIe_TxBytesPerSecond)}`}</div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -530,9 +530,9 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                         <div>
                                                             <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Network</h4>
                                                             <div>
-                                                                {value.properties.ipInterfaceProperties.dnsSuffix && <div>DNS Name: {value.properties.ipInterfaceProperties.dnsSuffix}</div>}
-                                                                {value.properties.ipInterfaceProperties.iPv4Address && <div>IPv4 Address: {value.properties.ipInterfaceProperties.iPv4Address}</div>}
-                                                                {value.properties.ipInterfaceProperties.iPv6Address && <div>IPv6 Address: {value.properties.ipInterfaceProperties.iPv6Address}</div>}
+                                                                {value.properties?.ipInterfaceProperties?.dnsSuffix && <div>DNS Name: {value.properties.ipInterfaceProperties.dnsSuffix}</div>}
+                                                                {value.properties?.ipInterfaceProperties?.iPv4Address && <div>IPv4 Address: {value.properties.ipInterfaceProperties.iPv4Address}</div>}
+                                                                {value.properties?.ipInterfaceProperties?.iPv6Address && <div>IPv6 Address: {value.properties.ipInterfaceProperties.iPv6Address}</div>}
                                                             </div>
                                                             <div>
                                                                 <div>MAC Address: {value.properties.macAddress}</div>
@@ -578,14 +578,14 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                     </div>
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Throughput</h4>
-                                                        <div>Read rate: {getReadableBytesPerSecondString(value.throughput.readRateBytesPerSecond)}</div>
-                                                        <div>Write rate: {getReadableBytesPerSecondString(value.throughput.writeRateBytesPerSecond)}</div>
+                                                        <div>Read rate: {getReadableBytesPerSecondString(value.throughput?.readRateBytesPerSecond)}</div>
+                                                        <div>Write rate: {getReadableBytesPerSecondString(value.throughput?.writeRateBytesPerSecond)}</div>
                                                     </div>
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Health</h4>
                                                         <div>
-                                                            <div>Data written: {getReadableBytesString(value.data.dataWrittenBytes)}</div>
-                                                            <div>Data read: {getReadableBytesString(value.data.dataReadBytes)}</div>
+                                                            <div>Data written: {getReadableBytesString(value.diskHealth?.totalBytesRead)}</div>
+                                                            <div>Data read: {getReadableBytesString(value.diskHealth?.totalBytesWritten)}</div>
                                                         </div>
                                                     </div>
                                                     <div>

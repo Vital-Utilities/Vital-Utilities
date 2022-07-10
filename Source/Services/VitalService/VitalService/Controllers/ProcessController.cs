@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -32,6 +33,8 @@ namespace VitalService.Controllers
             ProfileStore = profileStore;
             Logger = logger;
         }
+
+        [ProducesResponseType(typeof(GetAllResponse), StatusCodes.Status200OK)]
         [HttpGet]
         public async Task<ActionResult<GetAllResponse>> GetAsync()
         {
@@ -41,7 +44,8 @@ namespace VitalService.Controllers
                 AffinityModels = managedApps.Select(e => e.ToDto())?.ToArray() ?? Array.Empty<ManagedModelDto>()
             });
         }
-        // GET: api/<Affinity>
+
+        [ProducesResponseType(typeof(GetManagedResponse),StatusCodes.Status200OK)]
         [Route("Managed")]
         [HttpGet]
         public async Task<ActionResult<GetManagedResponse>> GetManagedAsync()
@@ -54,6 +58,8 @@ namespace VitalService.Controllers
                 AffinityModels = managedApps.Select(e => e.ToDto())?.ToArray() ?? Array.Empty<ManagedModelDto>()
             });
         }
+
+        [ProducesResponseType(typeof(GetRunningProcessesResponse), StatusCodes.Status200OK)]
         [Route("RunningProcesses")]
         [HttpGet()]
         public ActionResult<GetRunningProcessesResponse> GetRunningProcesses()
@@ -64,6 +70,7 @@ namespace VitalService.Controllers
             return Ok(response);
         }
 
+        [ProducesResponseType(typeof(GetProcessesToAddResponse), StatusCodes.Status200OK)]
         [Route("ProcessesToAdd")]
         [HttpGet()]
         public ActionResult<GetProcessesToAddResponse> GetProcesses()
@@ -149,7 +156,7 @@ namespace VitalService.Controllers
         }
 
 
-
+        [ProducesResponseType( StatusCodes.Status200OK)]
         [HttpPost("kill/{id}")]
         public ActionResult KillProcessTree(int id)
         {
@@ -158,6 +165,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpPost("openpath/{id}")]
         public ActionResult OpenProcessLocation(int id)
         {
@@ -165,7 +174,7 @@ namespace VitalService.Controllers
 
             if (process is null)
             {
-                return NotFound();
+                return NotFound(id);
             }
             else
             {
@@ -186,6 +195,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpPost("openproperties/{id}")]
         public ActionResult OpenProcessProperties(int id)
         {
@@ -193,7 +204,7 @@ namespace VitalService.Controllers
 
             if (process is null)
             {
-                return NotFound();
+                return NotFound(id);
             }
             else
             {

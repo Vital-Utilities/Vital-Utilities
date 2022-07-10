@@ -15,7 +15,7 @@ export const NetworkAdapterMetricChart: React.FunctionComponent<{ macAddress: st
     const { ref, inView } = useInView();
 
     const [ordered, setOrdered] = React.useState<networkMetricsModel[]>([]);
-    const [networkActivityFormat, setNetworkActivityFormat] = useLocalStorageState("networkActivityFormat", { defaultValue: NetworkActivityFormat.BitsPerSecond });
+    const [networkActivityFormat] = useLocalStorageState("networkActivityFormat", { defaultValue: NetworkActivityFormat.BitsPerSecond });
     React.useEffect(() => {
         if (!props.metrics || !inView) return;
         const f = props.metrics.map(e => e.networkMetrics?.filter(e => e.macAddress === props.macAddress)[0]);

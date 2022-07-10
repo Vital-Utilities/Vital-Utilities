@@ -8,15 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="Reinforced.Typings.settings.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="Reinforced.Typings.settings.xml" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Reinforced.Typings" Version="1.6.1" />
+	  <ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
 </Project>

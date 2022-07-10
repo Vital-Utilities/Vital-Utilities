@@ -1,8 +1,8 @@
+import { ManagedModelDto, UpdateManagedRequest } from "@vital/vitalservice";
 import { Input, Button, Form, message } from "antd";
-import axios from "axios";
 import React from "react";
-import { ManagedModelDto, UpdateManagedRequest } from "../../Dtos/ClientApiDto";
 import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
+import { profileApi } from "../../Redux/actions/api";
 import { ProcessPriority } from "./ProcessPriority";
 
 interface UpdateProcessViewProps {
@@ -16,10 +16,10 @@ export const UpdateProcessView: React.FunctionComponent<UpdateProcessViewProps> 
 
     async function SendRequest() {
         const request: UpdateManagedRequest = { managedModelDto: model };
-        axios
-            .put<UpdateManagedRequest>("api/profile/process", request)
+        profileApi
+            .apiProfileUpdateProcessConfigPut(request)
             .then(result => {
-                if (result.status === 200) onSubmit();
+                onSubmit();
             })
             .catch(e => message.error(e));
     }

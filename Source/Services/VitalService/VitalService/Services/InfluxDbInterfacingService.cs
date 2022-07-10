@@ -63,7 +63,7 @@ namespace VitalService.Services
         }
         private IEnumerable<PointData> GetGpuData()
         {
-            var usage = MachineDataStore.GetGpuUsage()[0]?.Load?.Core;
+            var usage = MachineDataStore.GetGpuUsage()[0]?.Load?.CorePercentage;
             if (usage == null)
                 return Array.Empty<PointData>();
 

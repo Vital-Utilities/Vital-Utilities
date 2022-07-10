@@ -1,0 +1,3162 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "VitalService",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/Hello": {
+      "get": {
+        "tags": [
+          "Hello"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Ingest/Utilization": {
+      "post": {
+        "tags": [
+          "Ingest"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendUtilizationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendUtilizationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendUtilizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Process": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Process/Managed": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetManagedResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetManagedResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetManagedResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Process/RunningProcesses": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRunningProcessesResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRunningProcessesResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetRunningProcessesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Process/ProcessesToAdd": {
+      "get": {
+        "tags": [
+          "Process"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProcessesToAddResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProcessesToAddResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProcessesToAddResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Process/kill/{id}": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Process/openpath/{id}": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Process/openproperties/{id}": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/GetAll": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "required": [
+                    "length",
+                    "longLength",
+                    "rank",
+                    "syncRoot",
+                    "isReadOnly",
+                    "isFixedSize",
+                    "isSynchronized"
+                  ],
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProfileDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "length",
+                    "longLength",
+                    "rank",
+                    "syncRoot",
+                    "isReadOnly",
+                    "isFixedSize",
+                    "isSynchronized"
+                  ],
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProfileDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "required": [
+                    "length",
+                    "longLength",
+                    "rank",
+                    "syncRoot",
+                    "isReadOnly",
+                    "isFixedSize",
+                    "isSynchronized"
+                  ],
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProfileDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/{id}": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Profile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/Create": {
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/AddProcessConfig": {
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddProccessRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddProccessRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddProccessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/UpdateProcessConfig": {
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateManagedRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateManagedRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateManagedRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/DeleteProcessConfig/{id}": {
+      "delete": {
+        "tags": [
+          "Profile"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Profile/Update": {
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Settings": {
+      "get": {
+        "tags": [
+          "Settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Settings/SetRunAtStartup": {
+      "put": {
+        "tags": [
+          "Settings"
+        ],
+        "parameters": [
+          {
+            "name": "runAtStartup",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Settings/DontUse": {
+      "get": {
+        "tags": [
+          "Settings"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSettings"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSettings"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientSettings"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/System/static": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMachineStaticDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMachineStaticDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMachineStaticDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/System/dynamic": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMachineDynamicDataResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMachineDynamicDataResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMachineDynamicDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/System/timeseries": {
+      "post": {
+        "tags": [
+          "System"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMachineTimeSeriesRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMachineTimeSeriesRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMachineTimeSeriesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesMachineMetricsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesMachineMetricsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeSeriesMachineMetricsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddProccessRequest": {
+        "required": [
+          "affinity",
+          "alias",
+          "executionPath",
+          "processName",
+          "processPriority",
+          "profileId"
+        ],
+        "type": "object",
+        "properties": {
+          "processName": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "alias": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "executionPath": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "processPriority": {
+            "$ref": "#/components/schemas/ProcessPriorityEnum"
+          },
+          "affinity": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "profileId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClientSettings": {
+        "required": [
+          "alwaysOnTop"
+        ],
+        "type": "object",
+        "properties": {
+          "alwaysOnTop": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CpuData": {
+        "required": [
+          "l1CacheSize",
+          "l2CacheSize",
+          "l3CacheSize",
+          "name",
+          "numberOfCores",
+          "numberOfEnabledCore",
+          "threadCount",
+          "virtualizationFirmwareEnabled"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "numberOfEnabledCore": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "numberOfCores": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "threadCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "virtualizationFirmwareEnabled": {
+            "type": "boolean"
+          },
+          "l1CacheSize": {
+            "type": "number",
+            "format": "float"
+          },
+          "l2CacheSize": {
+            "type": "number",
+            "format": "float"
+          },
+          "l3CacheSize": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CpuUsage": {
+        "required": [
+          "coreClocksMhz",
+          "corePercentages",
+          "name",
+          "temperatureReadings",
+          "totalCorePercentage"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "brand": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "vendorId": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "coreClocksMhz": {
+            "required": [
+              "capacity",
+              "count",
+              "item"
+            ],
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "totalCorePercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "powerDrawWattage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "corePercentages": {
+            "required": [
+              "capacity",
+              "count",
+              "item"
+            ],
+            "type": "array",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "temperatureReadings": {
+            "required": [
+              "item",
+              "comparer",
+              "count",
+              "isEmpty",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CpuUsageMetricModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HardwareMetricModel"
+          }
+        ],
+        "properties": {
+          "totalCoreUsagePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "packageTemperature": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "powerDrawWattage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "coreClocksMhz": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          },
+          "coresUsagePercentage": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateProfileRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DateRange": {
+        "required": [
+          "earliest",
+          "latest"
+        ],
+        "type": "object",
+        "properties": {
+          "earliest": {
+            "required": [
+              "date",
+              "day",
+              "dayOfWeek",
+              "dayOfYear",
+              "hour",
+              "kind",
+              "millisecond",
+              "minute",
+              "month",
+              "now",
+              "second",
+              "ticks",
+              "timeOfDay",
+              "today",
+              "year",
+              "utcNow"
+            ],
+            "type": "string",
+            "format": "date-time"
+          },
+          "latest": {
+            "required": [
+              "date",
+              "day",
+              "dayOfWeek",
+              "dayOfYear",
+              "hour",
+              "kind",
+              "millisecond",
+              "minute",
+              "month",
+              "now",
+              "second",
+              "ticks",
+              "timeOfDay",
+              "today",
+              "year",
+              "utcNow"
+            ],
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiskHealth": {
+        "type": "object",
+        "properties": {
+          "totalBytesRead": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalBytesWritten": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiskLoad": {
+        "type": "object",
+        "properties": {
+          "usedSpacePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "usedSpaceBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalFreeSpaceBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "writeActivityPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "totalActivityPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiskThroughput": {
+        "type": "object",
+        "properties": {
+          "readRateBytesPerSecond": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "writeRateBytesPerSecond": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiskType": {
+        "enum": [
+          "Unknown",
+          "HDD",
+          "SSD"
+        ],
+        "type": "string"
+      },
+      "DiskUsage": {
+        "required": [
+          "diskType",
+          "driveType",
+          "load",
+          "name",
+          "temperatures"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "serial": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "uniqueIdentifier": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "driveType": {
+            "$ref": "#/components/schemas/DriveType"
+          },
+          "diskType": {
+            "$ref": "#/components/schemas/DiskType"
+          },
+          "throughput": {
+            "$ref": "#/components/schemas/DiskThroughput"
+          },
+          "load": {
+            "$ref": "#/components/schemas/DiskLoad"
+          },
+          "temperatures": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          },
+          "diskHealth": {
+            "$ref": "#/components/schemas/DiskHealth"
+          },
+          "volumeLabel": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "letter": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiskUsageMetricModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HardwareMetricModel"
+          }
+        ],
+        "properties": {
+          "serial": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "driveLetter": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "driveType": {
+            "$ref": "#/components/schemas/DriveType"
+          },
+          "usedSpacePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "usedSpaceBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "writeActivityPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "totalActivityPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "readRateBytesPerSecond": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          },
+          "writeRateBytesPerSecond": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          },
+          "dataReadBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          },
+          "dataWrittenBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          },
+          "temperatures": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "DiskUsages": {
+        "required": [
+          "disks"
+        ],
+        "type": "object",
+        "properties": {
+          "disks": {
+            "required": [
+              "comparer",
+              "count",
+              "isEmpty",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DiskUsage"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "DriveType": {
+        "enum": [
+          "Unknown",
+          "NoRootDirectory",
+          "Removable",
+          "Fixed",
+          "Network",
+          "CDRom",
+          "Ram"
+        ],
+        "type": "string"
+      },
+      "GetAllResponse": {
+        "required": [
+          "managedModels",
+          "processesToAdd"
+        ],
+        "type": "object",
+        "properties": {
+          "managedModels": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedModelDto"
+            }
+          },
+          "processesToAdd": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcessToAddDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMachineDynamicDataResponse": {
+        "type": "object",
+        "properties": {
+          "cpuUsageData": {
+            "$ref": "#/components/schemas/CpuUsage"
+          },
+          "ramUsagesData": {
+            "$ref": "#/components/schemas/MemoryUsage"
+          },
+          "gpuUsageData": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GpuUsages"
+            }
+          },
+          "diskUsages": {
+            "$ref": "#/components/schemas/DiskUsages"
+          },
+          "networkUsageData": {
+            "$ref": "#/components/schemas/NetworkAdapterUsages"
+          },
+          "processCpuUsage": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "processCpuThreadsUsage": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "processThreadCount": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "processRamUsageGb": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "processDiskBytesPerSecActivity": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "cpuTemperature": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "processGpuUsage": {
+            "required": [
+              "item",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMachineStaticDataResponse": {
+        "required": [
+          "cpu",
+          "gpu",
+          "ram"
+        ],
+        "type": "object",
+        "properties": {
+          "directXVersion": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "cpu": {
+            "$ref": "#/components/schemas/CpuData"
+          },
+          "ram": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RamData"
+            }
+          },
+          "gpu": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GpuData"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetMachineTimeSeriesRequest": {
+        "required": [
+          "earliest",
+          "latest"
+        ],
+        "type": "object",
+        "properties": {
+          "earliest": {
+            "required": [
+              "date",
+              "day",
+              "dayOfWeek",
+              "dayOfYear",
+              "hour",
+              "kind",
+              "millisecond",
+              "minute",
+              "month",
+              "now",
+              "second",
+              "ticks",
+              "timeOfDay",
+              "today",
+              "year",
+              "utcNow"
+            ],
+            "type": "string",
+            "format": "date-time"
+          },
+          "latest": {
+            "required": [
+              "date",
+              "day",
+              "dayOfWeek",
+              "dayOfYear",
+              "hour",
+              "kind",
+              "millisecond",
+              "minute",
+              "month",
+              "now",
+              "second",
+              "ticks",
+              "timeOfDay",
+              "today",
+              "year",
+              "utcNow"
+            ],
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetManagedResponse": {
+        "required": [
+          "affinityModels"
+        ],
+        "type": "object",
+        "properties": {
+          "affinityModels": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ManagedModelDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetProcessesToAddResponse": {
+        "required": [
+          "processes"
+        ],
+        "type": "object",
+        "properties": {
+          "processes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcessToAddDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetRunningProcessesResponse": {
+        "required": [
+          "processView"
+        ],
+        "type": "object",
+        "properties": {
+          "processView": {
+            "required": [
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ParentChildModelDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GpuData": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "memoryTotalBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GpuUsageMetricModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HardwareMetricModel"
+          }
+        ],
+        "properties": {
+          "coreUsagePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "vramUsageBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "vramTotalBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "coreTemperature": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "powerDrawWattage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "fanPercentage": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "GpuUsages": {
+        "required": [
+          "pCIe",
+          "temperatureReadings"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "temperatureReadings": {
+            "required": [
+              "item",
+              "comparer",
+              "count",
+              "isEmpty",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "totalMemoryBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "memoryUsedBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "memoryClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "shaderClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "coreClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "fanPercentage": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          },
+          "powerDrawWatt": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "load": {
+            "$ref": "#/components/schemas/LoadData"
+          },
+          "pcIe": {
+            "$ref": "#/components/schemas/PCIE_ThroughPut"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HardwareMetricModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "uniqueIdentifier": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IPInterfaceProperties": {
+        "type": "object",
+        "properties": {
+          "iPv4Address": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "iPv6Address": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "dnsSuffix": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "isDnsEnabled": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InfluxDbSettings": {
+        "required": [
+          "enabled",
+          "endPoint",
+          "reportIntervalSeconds",
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "reportIntervalSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endPoint": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "token": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LaunchSettings": {
+        "required": [
+          "vitalServiceHttpPort",
+          "vitalServiceHttpsPort"
+        ],
+        "type": "object",
+        "properties": {
+          "vitalServiceHttpsPort": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "vitalServiceHttpPort": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoadData": {
+        "type": "object",
+        "properties": {
+          "corePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "frameBufferPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "videoEnginePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "busInterfacePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "memoryUsedPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "memoryControllerPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "cudaPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "threeDPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ManagedModelDto": {
+        "required": [
+          "affinity",
+          "alias",
+          "id",
+          "parentProfileId",
+          "processName",
+          "processPriority"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "processName": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "alias": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "processPriority": {
+            "$ref": "#/components/schemas/ProcessPriorityEnum"
+          },
+          "affinity": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "parentProfileId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MemoryUsage": {
+        "required": [
+          "swapPercentage",
+          "swapTotalBytes",
+          "swapUsedBytes",
+          "totalVisibleMemoryBytes",
+          "usedMemoryBytes"
+        ],
+        "type": "object",
+        "properties": {
+          "usedMemoryBytes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalVisibleMemoryBytes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "swapPercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "swapUsedBytes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "swapTotalBytes": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MetricsSettings": {
+        "required": [
+          "persistMetrics"
+        ],
+        "type": "object",
+        "properties": {
+          "persistMetrics": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NetAdapterUsage": {
+        "required": [
+          "recieveBps",
+          "recievedBytes",
+          "sendBps",
+          "sentBytes"
+        ],
+        "type": "object",
+        "properties": {
+          "sendBps": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recieveBps": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sentBytes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "recievedBytes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "usagePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NetworkAdapterProperties": {
+        "required": [
+          "iPInterfaceProperties",
+          "macAddress",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "ipInterfaceProperties": {
+            "$ref": "#/components/schemas/IPInterfaceProperties"
+          },
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "description": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "macAddress": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "speedBps": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "connectionType": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NetworkAdapterUsage": {
+        "required": [
+          "properties"
+        ],
+        "type": "object",
+        "properties": {
+          "usage": {
+            "$ref": "#/components/schemas/NetAdapterUsage"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/NetworkAdapterProperties"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NetworkAdapterUsages": {
+        "required": [
+          "adapters"
+        ],
+        "type": "object",
+        "properties": {
+          "adapters": {
+            "required": [
+              "comparer",
+              "count",
+              "isEmpty",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/NetworkAdapterUsage"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "NetworkUsageMetricModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HardwareMetricModel"
+          }
+        ],
+        "properties": {
+          "uploadSpeedBps": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "downloadSpeedBps": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PCIE_ThroughPut": {
+        "type": "object",
+        "properties": {
+          "pcIe_RxBytesPerSecond": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "pcIe_TxBytesPerSecond": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ParentChildModelDto": {
+        "required": [
+          "children",
+          "parent"
+        ],
+        "type": "object",
+        "properties": {
+          "parent": {
+            "$ref": "#/components/schemas/ProcessViewDto"
+          },
+          "children": {
+            "uniqueItems": true,
+            "required": [
+              "count",
+              "comparer"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcessViewDto"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessData": {
+        "required": [
+          "cpuPercentage",
+          "diskUsage",
+          "memoryKb",
+          "name",
+          "pid",
+          "timeStamp"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentPid": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "executablePath": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "description": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "mainWindowTitle": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "timeStamp": {
+            "required": [
+              "date",
+              "day",
+              "dayOfWeek",
+              "dayOfYear",
+              "hour",
+              "kind",
+              "millisecond",
+              "minute",
+              "month",
+              "now",
+              "second",
+              "ticks",
+              "timeOfDay",
+              "today",
+              "year",
+              "utcNow"
+            ],
+            "type": "string",
+            "format": "date-time"
+          },
+          "cpuPercentage": {
+            "type": "number",
+            "format": "float"
+          },
+          "memoryKb": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "diskUsage": {
+            "$ref": "#/components/schemas/ProcessDiskUsage"
+          },
+          "status": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "gpuUtil": {
+            "$ref": "#/components/schemas/ProcessGpuUtil"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessDiskUsage": {
+        "required": [
+          "readBytesPerSecond",
+          "writeBytesPerSecond"
+        ],
+        "type": "object",
+        "properties": {
+          "readBytesPerSecond": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "writeBytesPerSecond": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessGpuUtil": {
+        "type": "object",
+        "properties": {
+          "gpuCorePercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "gpuMemPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "gpuEncodingPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          },
+          "gpuDecodingPercentage": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessPriorityEnum": {
+        "enum": [
+          "DontOverride",
+          "Idle",
+          "BelowNormal",
+          "Normal",
+          "AboveNormal",
+          "High",
+          "RealTime"
+        ],
+        "type": "string"
+      },
+      "ProcessToAddDto": {
+        "required": [
+          "affinity",
+          "canModify",
+          "mainWindowTitle",
+          "pid",
+          "processName",
+          "processPriority"
+        ],
+        "type": "object",
+        "properties": {
+          "pid": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "processName": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "mainWindowTitle": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "executionPath": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "canModify": {
+            "type": "boolean"
+          },
+          "affinity": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "processPriority": {
+            "$ref": "#/components/schemas/ProcessPriorityEnum"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProcessViewDto": {
+        "required": [
+          "id",
+          "processName"
+        ],
+        "type": "object",
+        "properties": {
+          "processName": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "processTitle": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "description": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProfileDto": {
+        "required": [
+          "active",
+          "enabled",
+          "id",
+          "managedModelsIds",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "managedModelsIds": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "priority": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RamData": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "partNumber": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "speedMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "slotNumber": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "slotChannel": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "configuredClockSpeedMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "capacity": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "RamUsageMetricModel": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/HardwareMetricModel"
+          }
+        ],
+        "properties": {
+          "usedMemoryBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          },
+          "totalVisibleMemoryBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SendUtilizationRequest": {
+        "required": [
+          "processData",
+          "systemUsage"
+        ],
+        "type": "object",
+        "properties": {
+          "processData": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProcessData"
+            }
+          },
+          "systemUsage": {
+            "$ref": "#/components/schemas/SystemUsage"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SettingsDto": {
+        "required": [
+          "influxDb",
+          "launch",
+          "metrics"
+        ],
+        "type": "object",
+        "properties": {
+          "runAtStarup": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "boolean"
+          },
+          "launch": {
+            "$ref": "#/components/schemas/LaunchSettings"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/MetricsSettings"
+          },
+          "influxDb": {
+            "$ref": "#/components/schemas/InfluxDbSettings"
+          }
+        },
+        "additionalProperties": false
+      },
+      "SystemUsage": {
+        "required": [
+          "cpuUsage",
+          "diskUsage",
+          "memUsage",
+          "networkAdapterUsage"
+        ],
+        "type": "object",
+        "properties": {
+          "cpuUsage": {
+            "$ref": "#/components/schemas/CpuUsage"
+          },
+          "memUsage": {
+            "$ref": "#/components/schemas/MemoryUsage"
+          },
+          "networkAdapterUsage": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkAdapterUsage"
+            }
+          },
+          "diskUsage": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DiskUsage"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesMachineMetricsModel": {
+        "required": [
+          "cpuUsageData",
+          "dateTimeOffset",
+          "diskUsageData",
+          "gpuUsageData",
+          "id",
+          "networkUsageData",
+          "ramUsageData"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dateTimeOffset": {
+            "required": [
+              "now",
+              "utcNow",
+              "dateTime",
+              "utcDateTime",
+              "localDateTime",
+              "date",
+              "day",
+              "dayOfWeek",
+              "dayOfYear",
+              "hour",
+              "millisecond",
+              "minute",
+              "month",
+              "offset",
+              "second",
+              "ticks",
+              "utcTicks",
+              "timeOfDay",
+              "year"
+            ],
+            "type": "string",
+            "format": "date-time"
+          },
+          "cpuUsageData": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CpuUsageMetricModel"
+            }
+          },
+          "gpuUsageData": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GpuUsageMetricModel"
+            }
+          },
+          "ramUsageData": {
+            "$ref": "#/components/schemas/RamUsageMetricModel"
+          },
+          "networkUsageData": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NetworkUsageMetricModel"
+            }
+          },
+          "diskUsageData": {
+            "required": [
+              "capacity",
+              "count"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiskUsageMetricModel"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSeriesMachineMetricsResponse": {
+        "required": [
+          "metrics",
+          "requestRange"
+        ],
+        "type": "object",
+        "properties": {
+          "requestRange": {
+            "$ref": "#/components/schemas/DateRange"
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSeriesMachineMetricsModel"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateManagedRequest": {
+        "required": [
+          "managedModelDto"
+        ],
+        "type": "object",
+        "properties": {
+          "managedModelDto": {
+            "$ref": "#/components/schemas/ManagedModelDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateProfileRequest": {
+        "required": [
+          "profile"
+        ],
+        "type": "object",
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/ProfileDto"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

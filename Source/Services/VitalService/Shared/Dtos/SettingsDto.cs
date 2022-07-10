@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace VitalService.Dtos
 {
@@ -16,7 +17,10 @@ namespace VitalService.Dtos
     {
         public class LaunchSettings
         {
+            [Required]
             public int VitalServiceHttpsPort { get; set; } = 50031;
+
+            [Required]
             public int VitalServiceHttpPort { get; set; } = 50030;
         }
         //public class LoggingSettings
@@ -34,14 +38,19 @@ namespace VitalService.Dtos
 
         public class MetricsSettings
         {
+            [Required]
             public bool PersistMetrics { get; set; } = true;
         }
 
         public class InfluxDbSettings
         {
+            [Required]
             public bool Enabled { get; set; } = false;
+            [Required]
             public int ReportIntervalSeconds { get; set; } = 5;
+            [Required]
             public string EndPoint { get; set; } = "http://localhost:8086";
+            [Required]
             public string Token { get; set; } = "";
         }
     }

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Layout, Form, Radio, Button, Input } from "antd";
-import { SettingsDto } from "../Dtos/ClientApiDto";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { VitalState } from "../Redux/States";
 import { fetchSettingsAction } from "../Redux/actions/settingsAction";
 import { useRustClientSettings } from "../Utilities/TauriCommands";
+import { SettingsDto } from "@vital/vitalservice";
+import { settingsApi } from "../Redux/actions/api";
 
 const { Content } = Layout;
 
@@ -28,8 +28,8 @@ export const Settings: React.FunctionComponent = () => {
     if (!backendSettings) return <>settings is undefined</>;
     function SetRunAtStartup(runAtStartup: boolean) {
         if (!backendSettings) return;
-        axios
-            .put(`api/settings/SetRunAtStartup?runAtStartup=${runAtStartup ? true : false}`, {})
+        settingsApi
+            .apiSettingsSetRunAtStartupPut(runAtStartup ? true : false)
             .then(() => {
                 dispatch(fetchSettingsAction());
             })
@@ -38,7 +38,7 @@ export const Settings: React.FunctionComponent = () => {
 
     function getPage() {
         switch (view) {
-            case "Client":
+            case viewOptions.Client:
                 return (
                     <div>
                         <h2>App Settings</h2>

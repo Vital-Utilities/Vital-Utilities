@@ -20,6 +20,7 @@ namespace VitalService.Controllers
             HardwarePerformanceService = hardwarePerformanceService;
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("Utilization")]
         [HttpPost]
         public IActionResult Utilization([FromBody] SendUtilizationRequest data)

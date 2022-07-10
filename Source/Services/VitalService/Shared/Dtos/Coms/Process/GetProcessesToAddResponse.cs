@@ -5,6 +5,7 @@ namespace VitalService.Dtos
 {
     public struct GetProcessesToAddResponse
     {
+        
         public IEnumerable<ProcessToAddDto> Processes { get; set; }
     }
 }

@@ -7,40 +7,67 @@ namespace VitalService.Dtos.Data
 {
     public class DiskUsages
     {
-        public ConcurrentDictionary<string, Usage> Disks { get; set; } = new();
-        public class Usage
-        {
-            public string Name { get; set; }
-            public string? Serial { get; set; }
-            public string? UniqueIdentifier { get; set; }
-            public DriveType? DriveType { get; set; }
-            public Throughput Throughput { get; set; } = new();
-            public Load Load { get; set; } = new Load();
-            public Dictionary<string, float> Temperatures { get; set; } = new();
-            public Data Data { get; set; } = new Data();
-            public string Label { get; set; }
-            public string Letter { get; set; }
-        }
-        public class Load
-        {
-            public float? UsedSpacePercentage { get; set; }
-            public long? UsedSpaceBytes { get; set; }
-            public long? TotalFreeSpaceBytes { get; set; }
-            public float? WriteActivityPercentage { get; set; }
-            public float? TotalActivityPercentage { get; set; }
-        }
+        
+        public ConcurrentDictionary<string, DiskUsage> Disks { get; set; } = new();
 
-        public class Throughput
-        {
-            public long? ReadRateBytesPerSecond { get; set; }
-            public long? WriteRateBytesPerSecond { get; set; }
-        }
 
-        public class Data
-        {
-            public ulong? DataReadBytes { get; set; }
-            public ulong? DataWrittenBytes { get; set; }
-        }
+    }
+    public class DiskUsage
+    {
+        
+        public string Name { get; set; }
+        
+        public string? Serial { get; set; }
+        
+        public string? UniqueIdentifier { get; set; }
+        
+        public DriveType DriveType { get; set; }
+        
+        public DiskType DiskType { get; set; }
+        public DiskThroughput? Throughput { get; set; } = new();
+        
+        public DiskLoad Load { get; set; } = new DiskLoad();
+        
+        public Dictionary<string, float> Temperatures { get; set; } = new();
+        
+        public DiskHealth? DiskHealth { get; set; } = new DiskHealth();
+        
+        public string? VolumeLabel { get; set; }
+        
+        public string? Letter { get; set; }
+    }
+    public class DiskLoad
+    {
+        
+        public float? UsedSpacePercentage { get; set; }
+        
+        public long? UsedSpaceBytes { get; set; }
+        
+        public long? TotalFreeSpaceBytes { get; set; }
+        
+        public float? WriteActivityPercentage { get; set; }
+        
+        public float? TotalActivityPercentage { get; set; }
+    }
+    public enum DiskType
+    {
+        Unknown,
+        HDD,
+        SSD
+    }
+    public class DiskThroughput
+    {
+        
+        public long? ReadRateBytesPerSecond { get; set; }
+        
+        public long? WriteRateBytesPerSecond { get; set; }
+    }
 
+    public class DiskHealth
+    {
+        
+        public ulong? TotalBytesRead { get; set; }
+        
+        public ulong? TotalBytesWritten { get; set; }
     }
 }

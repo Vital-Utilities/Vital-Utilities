@@ -1,6 +1,6 @@
+import { ProcessPriorityEnum } from "@vital/vitalservice";
 import { Form, Select } from "antd";
 import React from "react";
-import { ProcessPriorityEnum } from "../../Dtos/ClientApiDto";
 
 interface ProcessPriorityProps {
     value?: ProcessPriorityEnum;

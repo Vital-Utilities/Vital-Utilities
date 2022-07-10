@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,12 +24,16 @@ namespace VitalService.Controllers
             ProcessStore = affinityStore;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ProfileDto[]>> Get()
+        [ProducesResponseType(typeof(ProfileDto[]), StatusCodes.Status200OK)]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<ProfileDto[]>> GetAll()
         {
             var result = await ProfileStore.GetAllAsync();
             return Ok(result.Select(e => e.ToDto()));
         }
+
+        [ProducesResponseType(typeof(ProfileDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileDto>> GetAsync(int id)
         {
@@ -38,16 +43,18 @@ namespace VitalService.Controllers
             return Ok(result.ToDto());
         }
 
-        [HttpPost]
+        [ProducesResponseType(typeof(ProfileDto), StatusCodes.Status200OK)]
+        [HttpPut("[action]")]
         public async Task<ActionResult> Create([FromBody] CreateProfileRequest request)
         {
             var model = await ProfileStore.Create(new ProfileModel(request.Name));
-            return Ok(model);
+            return Ok(model.ToDto());
         }
 
-        [Route("process")]
-        [HttpPost]
-        public async Task<ActionResult> AddProcess([FromBody] AddProccessRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
+        [HttpPut("[action]")]
+        public async Task<ActionResult> AddProcessConfig([FromBody] AddProccessRequest request)
         {
             var model = new ManagedModel(request.ProcessName, request.ExecutionPath, request.Alias, Utilities.Affinity.IntArrayToBinaryString(request.Affinity), request.ProcessPriority, request.ProfileId);
             var profile = await ProfileStore.GetAsync(request.ProfileId);
@@ -61,9 +68,10 @@ namespace VitalService.Controllers
             return Ok();
         }
 
-        [Route("process")]
-        [HttpPut]
-        public async Task<ActionResult> UpdateProcess([FromBody] UpdateManagedRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
+        [HttpPut("[action]")]
+        public async Task<ActionResult> UpdateProcessConfig([FromBody] UpdateManagedRequest request)
         {
             var profile = await ProfileStore.GetAsync(request.ManagedModelDto.ParentProfileId);
             if (profile is null)
@@ -82,8 +90,10 @@ namespace VitalService.Controllers
             return Ok();
         }
 
-        [HttpDelete("process/{id}")]
-        public async Task<ActionResult> DeleteProcess(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
+        [HttpDelete("[action]/{id}")]
+        public async Task<ActionResult> DeleteProcessConfig(int id)
         {
             var model = await ProcessStore.GetAsync(id);
             if (model is null)
@@ -94,7 +104,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPut("[action]")]
         public async Task<ActionResult> Update([FromBody] UpdateProfileRequest request)
         {
             var model = await request.Profile.ToModelAsync(ProcessStore);
@@ -103,6 +114,8 @@ namespace VitalService.Controllers
             return Ok();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(int), StatusCodes.Status404NotFound)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

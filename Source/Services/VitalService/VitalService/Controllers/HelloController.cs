@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace VitalService.Controllers
 {
@@ -6,6 +7,7 @@ namespace VitalService.Controllers
     [ApiController]
     public class HelloController : Controller
     {
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         public IActionResult Hello()
         {

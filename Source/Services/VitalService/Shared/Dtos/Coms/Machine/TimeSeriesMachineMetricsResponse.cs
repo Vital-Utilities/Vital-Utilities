@@ -6,13 +6,17 @@ namespace VitalService.Dtos.Coms
 {
     public class TimeSeriesMachineMetricsResponse
     {
+        
         public DateRange RequestRange { get; set; }
+        
         public IEnumerable<TimeSeriesMachineMetricsModel> Metrics { get; set; }
 
     }
     public class DateRange
     {
+        
         public DateTime Earliest { get; set; }
+        
         public DateTime Latest { get; set; }
 
         public DateRange()
