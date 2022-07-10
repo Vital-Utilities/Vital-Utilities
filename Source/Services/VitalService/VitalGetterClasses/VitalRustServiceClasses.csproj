@@ -19,7 +19,4 @@
 		<PackageReference Include="Reinforced.Typings" Version="1.6.1" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy &quot;$(ProjectDir)CodeGenerated/VitalRustServiceClasses.ts&quot; &quot;$(ProjectDir)..\..\..\GeneratedCodeArtifact\&quot; /F /R /Y /I&#xD;&#xA;&#xD;&#xA;cd &quot;$(ProjectDir)..\..\..\Services\VitalRustService&quot; &amp;&amp; npm run generateRustTypings" />
-	</Target>
 </Project>
