@@ -18,7 +18,7 @@ interface GetSettingsAction {
 function sendGetSettingsRequest() {
     return settingsApi
         .apiSettingsGet()
-        .then(response => response)
+        .then(response => response.data)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
@@ -29,7 +29,7 @@ export function fetchSettingsAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetSettingsRequest()
-            .then(result => dispatch(recieveSettings(result.data)))
+            .then(result => dispatch(recieveSettings(result)))
             .catch(e => console.error(e));
     };
 }

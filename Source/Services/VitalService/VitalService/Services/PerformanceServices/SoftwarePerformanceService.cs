@@ -1,6 +1,7 @@
 ﻿using JM.LinqFaster;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -96,19 +97,27 @@ namespace VitalService.Services.PerformanceServices
             Utilities.Debug.LogExecutionTime(null, () =>
             {
                 var returnValue = new ConcurrentDictionary<int, ProcessData>();
-
+                
                 foreach (var (pid, data) in processPerformanceData)
                 {
-                    var processData = new ProcessData
+                    try
                     {
-                        ProcessId = (int)data.Pid,
-                        MainWindowTitle = data.MainWindowTitle,
-                        Description = data.ExecutablePath is not null ? FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription : null,
-                        Name = data.Name,
-                        ExecutablePath = data.ExecutablePath,
-                        ParentProcessId = (int?)data.ParentPid,
-                    };
-                    returnValue.TryAdd(pid, processData);
+                        var processData = new ProcessData
+                        {
+                            ProcessId = (int)data.Pid,
+                            MainWindowTitle = data.MainWindowTitle,
+                            Description = data.ExecutablePath is not null ? FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription : null,
+                            Name = data.Name,
+                            ExecutablePath = data.ExecutablePath,
+                            ParentProcessId = (int?)data.ParentPid,
+                        };
+                        returnValue.TryAdd(pid, processData);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Logger.Error(e.Message);
+                    }
+                    
                 }
                 runningProcesses = returnValue;
             });

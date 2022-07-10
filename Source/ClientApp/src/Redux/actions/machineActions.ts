@@ -75,7 +75,7 @@ export function fetchMachineStaticDataAction(): AnyAction {
     };
 }
 
-export function fetchMachineDynamicDataAction() {
+export function fetchMachineDynamicDataAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetMachineDynamicRequest()
@@ -83,7 +83,7 @@ export function fetchMachineDynamicDataAction() {
             .catch(e => console.error(e));
     };
 }
-export function recieveMachineDynamicDataAction(entities: GetMachineDynamicDataResponse) {
+export function recieveMachineDynamicDataAction(entities: GetMachineDynamicDataResponse): AnyAction  {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveMachineDynamicData(entities));

@@ -52,7 +52,7 @@ export async function fetchProfiles() {
         });
 }
 
-export function recieveDeleteProfileAction(id: number) {
+export function recieveDeleteProfileAction(id: number): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveDeleteProfile(id));
@@ -68,14 +68,14 @@ export function fetchProfilesAction(): AnyAction {
     };
 }
 
-export function recieveProfileAddedAction(entity: ProfileDto) {
+export function recieveProfileAddedAction(entity: ProfileDto): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveNewProfile(entity));
     };
 }
 
-export function recieveProfileUpdatedAction(entity: ProfileDto) {
+export function recieveProfileUpdatedAction(entity: ProfileDto): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveUpdateProfile(entity));

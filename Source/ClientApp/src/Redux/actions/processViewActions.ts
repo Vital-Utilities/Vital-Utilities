@@ -53,7 +53,7 @@ function fetchProcessView() {
         .catch(e => Promise.reject(e));
 }
 
-export function recieveDeleteProcessViewAction(entityId: number) {
+export function recieveDeleteProcessViewAction(entityId: number): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveDeleteProcessView(entityId));

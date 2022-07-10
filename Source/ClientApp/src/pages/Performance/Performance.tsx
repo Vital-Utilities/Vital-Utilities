@@ -3,7 +3,7 @@ import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeries
 import { useLocalStorageState } from "ahooks";
 import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { CpuMetricsModel, CpuChartTimeSeries } from "../../components/Charts/CpuChartTimeSeries";
 import { CpuThreadsChartTimeSeries } from "../../components/Charts/CpuThreadsChartTimeSeries";
 import { diskMetricsModel, DiskMetricChart } from "../../components/Charts/DiskMetricChart";
@@ -49,8 +49,6 @@ export const relativeTimeOptions: { [key: string]: number } = {
 } as const;
 
 export const PerformancePage: React.FunctionComponent = props => {
-    const dispatch = useDispatch();
-
     const [cpuMetricView, setCpuMetricView] = React.useState<cpuMetricViewOptions>(cpuMetricViewOptions.General);
     const [view, setView] = React.useState<viewOptions>(viewOptions.Classic);
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
