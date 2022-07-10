@@ -1,8 +1,8 @@
 /* eslint-disable security/detect-object-injection */
+import { TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
 import { Progress, Badge } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
-import { TimeSeriesMachineMetricsResponse } from "../Dtos/ClientApiDto";
 import { VitalState } from "../Redux/States";
 
 interface props {
@@ -10,10 +10,10 @@ interface props {
 }
 export const ProcessorThreadPerfBadge: React.FunctionComponent<props> = ({ processName }) => {
     const [name] = React.useState(processName);
-    const processCpuThreadPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuThreadsUsage);
-    const processCpuPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuUsage);
+    const processCpuThreadPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuThreadsUsage ?? undefined);
+    const processCpuPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuUsage ?? undefined);
 
-    const processRamPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processRamUsageGb);
+    const processRamPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processRamUsageGb ?? undefined);
     const totalRamBytes = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.ramUsagesData?.totalVisibleMemoryBytes);
     function getStroke(value: number) {
         if (value > 90) {
@@ -52,7 +52,7 @@ export function getProcessCPUPercentColor(percent: number) {
 }
 
 export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
-    const coresPercentage = useSelector<VitalState, number[] | undefined>(state => state.machineState.dynamic?.cpuUsageData?.cores);
+    const coresPercentage = useSelector<VitalState, number[] | undefined>(state => state.machineState.dynamic?.cpuUsageData?.corePercentages);
 
     const Square: React.FunctionComponent<{ value: number }> = ({ value }) => {
         return <div style={{ height: 8, width: 8, backgroundColor: getPercentColor(value) }} />;
@@ -73,7 +73,7 @@ export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
 
 export const CpuPerfBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData[0]?.totalCoreUsagePercentage;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData[0]?.totalCoreUsagePercentage ?? undefined;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
             CPU
@@ -92,7 +92,7 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
 };
 export const GpuPerfBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.gpuUsageData[0]?.coreUsagePercentage;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.gpuUsageData[0]?.coreUsagePercentage ?? undefined;
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
@@ -113,7 +113,7 @@ export const GpuPerfBadge: React.FunctionComponent = () => {
 export const RamUsageBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
     const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.ramUsageData;
-    const usages = data?.usedMemoryBytes && data?.totalVisibleMemoryBytes && (data?.usedMemoryBytes / data?.totalVisibleMemoryBytes) * 100;
+    const usages = (data?.usedMemoryBytes && data?.totalVisibleMemoryBytes && (data?.usedMemoryBytes / data?.totalVisibleMemoryBytes) * 100) ?? undefined;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
             Mem
@@ -133,7 +133,7 @@ export const RamUsageBadge: React.FunctionComponent = () => {
 
 export const ThreadCountBadge: React.FunctionComponent<props> = ({ processName }) => {
     const [name] = React.useState(processName);
-    const processThreadCount = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processThreadCount);
+    const processThreadCount = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processThreadCount ?? undefined);
 
     return <Badge style={{ backgroundColor: "gray", pointerEvents: "none" }} count={`Threads in use: ${processThreadCount && processThreadCount[name]}`} />;
 };

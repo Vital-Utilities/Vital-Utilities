@@ -1,10 +1,10 @@
+import { GetMachineDynamicDataResponse } from "@vital/vitalservice";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { networkMetricsModel } from "../../../components/Charts/NetworkAdapterMetricChart";
 import { ChartData, customUnitFlags, formatXAxis, CustomTooltip, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
 import { getReadableBitsPerSecondString, getReadableBytesPerSecondString, getReadableBytesString } from "../../../components/FormatUtils";
-import { GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { NetworkActivityFormat } from "../../../Dtos/UiModel";
 import { VitalState } from "../../../Redux/States";
 
@@ -46,7 +46,7 @@ export const ClassicNetworkAdapterView: React.FunctionComponent<{ macAddress: st
 
     return (
         <ClassicLayout
-            header={{ title: `${thisAdapter?.properties?.connectionType} (${thisAdapter?.properties?.name})`, deviceName: thisAdapter?.properties?.description }}
+            header={{ title: `${thisAdapter?.properties?.connectionType} (${thisAdapter?.properties?.name})`, deviceName: thisAdapter?.properties?.description ?? undefined }}
             graph={getGraphView()}
             showRange
             bottomItems={

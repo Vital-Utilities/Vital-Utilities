@@ -1,8 +1,8 @@
 import { useRequest } from "ahooks";
-import axios from "axios";
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { helloApi } from "../Redux/actions/api";
 import { updateHttpConnectedAction } from "../Redux/actions/appActions";
 import { AppState, VitalState } from "../Redux/States";
 
@@ -13,7 +13,7 @@ export const ServiceLiveMonitor: React.FunctionComponent = () => {
     useRequest(sendHello, { pollingInterval: 1000 });
 
     function sendHello() {
-        return axios.get("/api/hello", { timeout: 700 }).then(
+        return helloApi.apiHelloGet().then(
             res => processResult(res.status),
             err => processResult(err.response?.status)
         );

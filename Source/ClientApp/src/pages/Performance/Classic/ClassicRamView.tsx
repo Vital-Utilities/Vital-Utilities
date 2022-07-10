@@ -1,10 +1,10 @@
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "@vital/vitalservice";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { ramMetricsModel } from "../../../components/Charts/RamMetricChart";
 import { ChartData, formatXAxis, CustomTooltip, customUnitFlags, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
 import { getReadableBytesString } from "../../../components/FormatUtils";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicRamView: React.FunctionComponent<ChartData> = props => {

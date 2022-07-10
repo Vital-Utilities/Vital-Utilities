@@ -1,7 +1,7 @@
+import { TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { TimeSeriesMachineMetricsResponse } from "../../Dtos/ClientApiDto";
 import { ChartData, CustomTooltip, formatXAxis } from "./Shared";
 
 export type TimeSeriesProps = { timeSeries: TimeSeriesMachineMetricsResponse };

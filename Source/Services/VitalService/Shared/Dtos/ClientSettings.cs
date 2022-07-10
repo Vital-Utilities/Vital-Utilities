@@ -8,6 +8,7 @@ namespace VitalService.Dtos
 {
     public class ClientSettings
     {
+        
         public bool AlwaysOnTop { get; set; }
     }
 }

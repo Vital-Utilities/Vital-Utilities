@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace VitalService.Controllers
 {
@@ -19,7 +20,7 @@ namespace VitalService.Controllers
             SettingsStore = settingsStore;
         }
 
-
+        [ProducesResponseType(typeof(SettingsDto), StatusCodes.Status200OK)]
         [HttpGet]
         public SettingsDto Get()
         {
@@ -28,7 +29,7 @@ namespace VitalService.Controllers
                 RunAtStarup = SettingsStore.Settings.RunAtStarup,
             };
         }
-
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("SetRunAtStartup")]
         public void SetRunAtStartup([FromQuery] bool runAtStartup)
         {
@@ -66,6 +67,17 @@ $rootFolder.DeleteFolder('',$null)";
             process.Start();
         }
 
+        /// <summary>
+        /// Hacky way of generating unused C# classes but used in other services.
+        /// </summary>
+        [Obsolete]
+        [ProducesResponseType(typeof(ClientSettings), StatusCodes.Status200OK)]
+        [HttpGet("DontUse")]
+        public void DontUse()
+        {
 
+        }
     }
+
+
 }

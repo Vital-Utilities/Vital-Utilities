@@ -36,7 +36,7 @@ export const ClassicDiskView: React.FunctionComponent<{ driveLetter: string } & 
     }
     return (
         <ClassicLayout
-            header={{ title: `Disk (${current?.driveLetter})`, deviceName: current?.name }}
+            header={{ title: `Disk (${current?.driveLetter})`, deviceName: current?.name ?? undefined }}
             graph={getGraphView()}
             showRange
             bottomItems={

@@ -32,7 +32,7 @@ namespace VitalService.Stores
             return HardwarePerformanceService.MachineStaticData;
         }
 
-        public RamUsages GetRamUsage()
+        public MemoryUsage GetRamUsage()
         {
             return HardwarePerformanceService.CurrentRamUsage;
         }
@@ -41,7 +41,7 @@ namespace VitalService.Stores
         {
             return HardwarePerformanceService.CurrentGpuUsage;
         }
-        public NetworkAdapters GetNetworkUsage()
+        public NetworkAdapterUsages GetNetworkUsage()
         {
             return HardwarePerformanceService.CurrentNetworkUsage;
         }
@@ -90,7 +90,7 @@ namespace VitalService.Stores
             return metrics;
         }
 
-        public CpuUsages GetCpuUsage()
+        public CpuUsage GetCpuUsage()
         {
             return HardwarePerformanceService.CurrentCpuUsage;
         }
@@ -126,7 +126,7 @@ namespace VitalService.Stores
 
         public float GetCpuUsagePercentage()
         {
-            return (float)Math.Round(HardwarePerformanceService.CurrentCpuUsage.Total, 1);
+            return (float)Math.Round(HardwarePerformanceService.CurrentCpuUsage.TotalCorePercentage, 1);
         }
 
         internal float? GetCpuClockSpeed()

@@ -108,10 +108,10 @@ namespace VitalService.Services
                     {
                         new CpuUsageMetricModel(
                             HardwarePerformanceService.MachineStaticData.Cpu.Name,
-                            HardwarePerformanceService.CurrentCpuUsage.Total,
+                            HardwarePerformanceService.CurrentCpuUsage.TotalCorePercentage,
                             HardwarePerformanceService.CurrentCpuUsage.TemperatureReadings.GetValueOrDefault("CPU Package"),
                             HardwarePerformanceService.CurrentCpuUsage.PowerDrawWattage,
-                            HardwarePerformanceService.CurrentCpuUsage.Cores.Select((e,i) => new KeyValuePair<int, float>(i, e)).ToDictionary(k=> k.Key, v=> v.Value),
+                            HardwarePerformanceService.CurrentCpuUsage.CorePercentages.Select((e,i) => new KeyValuePair<int, float>(i, e)).ToDictionary(k=> k.Key, v=> v.Value),
                             HardwarePerformanceService.CurrentCpuUsage.CoreClocksMhz.Select((e,i) => new KeyValuePair<int, float>(i, e)).ToDictionary(k=> k.Key, v=> v.Value))
                     },
                     GetGpuMetricModels(),
@@ -122,21 +122,21 @@ namespace VitalService.Services
                      HardwarePerformanceService.CurrentNetworkUsage.Adapters.Select(e =>
                      new NetworkUsageMetricModel(
                         e.Value.Properties.MacAddress,
-                        e.Value.Usage.UploadSpeedBps,
-                        e.Value.Usage.DownloadSpeedBps)).ToList(),
+                        e.Value.Usage.SendBps,
+                        e.Value.Usage.RecieveBps)).ToList(),
                       HardwarePerformanceService.CurrentDiskUsages.Disks.Select(e =>
                           new DiskUsageMetricModel(e.Value.Name,
                             e.Value.Letter,
                             e.Value.Letter,
-                            e.Value.Data.DataWrittenBytes,
-                            e.Value.Data.DataReadBytes,
-                            e.Value.Throughput.WriteRateBytesPerSecond,
-                            e.Value.Throughput.ReadRateBytesPerSecond,
-                            e.Value.Load.TotalActivityPercentage,
-                            e.Value.Load.WriteActivityPercentage,
-                            e.Value.Load.UsedSpacePercentage,
+                            e.Value.DiskHealth?.TotalBytesWritten,
+                            e.Value.DiskHealth?.TotalBytesRead,
+                            e.Value.Throughput?.WriteRateBytesPerSecond,
+                            e.Value.Throughput?.ReadRateBytesPerSecond,
+                            e.Value.Load?.TotalActivityPercentage,
+                            e.Value.Load?.WriteActivityPercentage,
+                            e.Value.Load?.UsedSpacePercentage,
                             e.Value.Temperatures.ToDictionary(k => k.Key, v => v.Value),
-                            e.Value.Load.UsedSpaceBytes,
+                            e.Value.Load?.UsedSpaceBytes,
                             e.Value.Serial,
                             e.Value.DriveType
                         )).ToList());
@@ -149,10 +149,10 @@ namespace VitalService.Services
                     if (i < HardwarePerformanceService.CurrentGpuUsage.Count)
                         models.Add(new GpuUsageMetricModel(
                                         $"{i}",
-                                        HardwarePerformanceService.CurrentGpuUsage[i].Load.Core,
+                                        HardwarePerformanceService.CurrentGpuUsage[i].Load.CorePercentage,
                                         HardwarePerformanceService.CurrentGpuUsage[i].MemoryUsedBytes,
                                         HardwarePerformanceService.CurrentGpuUsage[i].TemperatureReadings.GetValueOrDefault("GPU Core"),
-                                        HardwarePerformanceService.CurrentGpuUsage[i].PowerDraw,
+                                        HardwarePerformanceService.CurrentGpuUsage[i].PowerDrawWatt,
                                         HardwarePerformanceService.CurrentGpuUsage[i].FanPercentage,
                                         HardwarePerformanceService.CurrentGpuUsage[i].TotalMemoryBytes));
                 }

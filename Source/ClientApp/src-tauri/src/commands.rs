@@ -1,12 +1,10 @@
 use std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex};
 
-use crate::{
-    backend_types::{self, ClientSettings, LaunchSettings, SettingsDto},
-    APP_HANDLE,
-};
+use crate::APP_HANDLE;
 use log::{debug, error, info};
 use sysinfo::{Pid, ProcessExt, System, SystemExt};
 use tauri::{api::path::document_dir, AppHandle, Manager};
+use vital_service_api::models::{ClientSettings, LaunchSettings, SettingsDto};
 
 #[tauri::command]
 pub fn get_client_settings() -> Result<ClientSettings, String> {
@@ -23,7 +21,7 @@ pub fn get_client_settings() -> Result<ClientSettings, String> {
     let settings_file = std::fs::read_to_string(file_path);
     if settings_file.is_err() {
         error!("Failed to read ClientSettings file, Creating new ClientSettings File");
-        let settings = backend_types::ClientSettings {
+        let settings = ClientSettings {
             always_on_top: true,
         };
         let content = serde_json::to_string(&settings);
@@ -43,7 +41,7 @@ pub fn get_client_settings() -> Result<ClientSettings, String> {
         }
     }
 
-    let settings = serde_json::from_str::<backend_types::ClientSettings>(&settings_file.unwrap());
+    let settings = serde_json::from_str::<ClientSettings>(&settings_file.unwrap());
     match settings {
         Ok(settings) => {
             debug!("Successfully read client settings");
@@ -95,7 +93,7 @@ pub fn update_client_settings(client_settings: ClientSettings) -> Result<String,
     }
 }
 
-pub fn get_backend_settings() -> Result<backend_types::SettingsDto, String> {
+pub fn get_backend_settings() -> Result<SettingsDto, String> {
     let document_dir = document_dir();
     if document_dir.is_none() {
         let msg = "failed to get document dir".to_string();
@@ -113,7 +111,7 @@ pub fn get_backend_settings() -> Result<backend_types::SettingsDto, String> {
         return Err(msg);
     }
 
-    let settings = serde_json::from_str::<backend_types::SettingsDto>(&settings_file.unwrap());
+    let settings = serde_json::from_str::<SettingsDto>(&settings_file.unwrap());
     match settings {
         Ok(settings) => {
             return Ok(settings);
@@ -152,7 +150,7 @@ pub fn get_vital_service_ports() -> Result<LaunchSettings, String> {
     let settings_file = get_backend_settings();
     match settings_file {
         Ok(settings) => {
-            return Ok(settings.launch);
+            return Ok(*settings.launch);
         }
         Err(e) => {
             error!("{}", e);
@@ -180,7 +178,7 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
                     let settings = serde_json::from_str::<SettingsDto>(&settings_str);
                     match settings {
                         Ok(mut settings) => {
-                            settings.launch.vital_service_http_port = port_number;
+                            settings.launch.vital_service_http_port = port_number as i32;
 
                             let result = std::fs::write(
                                 &file_path,

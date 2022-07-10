@@ -7,10 +7,10 @@ import { fetchProfilesAction, recieveDeleteProfileAction } from "../../Redux/act
 import { VitalState, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
-import { ProfileDto } from "../../Dtos/ClientApiDto";
-import axios from "axios";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
+import { ProfileDto } from "@vital/vitalservice";
+import { profileApi } from "../../Redux/actions/api";
 
 enum SortByEnum {
     Name = "Name"
@@ -73,8 +73,8 @@ export const Profiles: React.FunctionComponent = () => {
                         <Popconfirm
                             title="Are you sure you want to delete this profile?"
                             onConfirm={() => {
-                                axios
-                                    .delete(`api/profile/${e.id}`)
+                                profileApi
+                                    .apiProfileIdDelete(e.id)
                                     .then(response => {
                                         if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
                                     })

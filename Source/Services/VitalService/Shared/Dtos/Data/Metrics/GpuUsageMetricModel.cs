@@ -4,11 +4,17 @@ namespace VitalService.Dtos.Data.Metrics
 {
     public class GpuUsageMetricModel : HardwareMetricModel
     {
+        
         public float? CoreUsagePercentage { get; set; }
+        
         public float? VramUsageBytes { get; set; }
+        
         public float? VramTotalBytes { get; set; }
+        
         public float? CoreTemperature { get; set; }
+        
         public float? PowerDrawWattage { get; set; }
+        
         public Dictionary<string, float>? FanPercentage { get; set; }
 
         public GpuUsageMetricModel() : base(null)

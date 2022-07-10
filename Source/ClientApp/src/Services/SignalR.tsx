@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { HubConnectionBuilder, HubConnectionState, HubConnection } from "@microsoft/signalr"; // version 1.0.4
+import { GetMachineDynamicDataResponse, ManagedModelDto } from "@vital/vitalservice";
 import { message, notification } from "antd";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GetMachineDynamicDataResponse, ManagedModelDto } from "../Dtos/ClientApiDto";
 import { updateSignalRConnectedAction } from "../Redux/actions/appActions";
 import { recieveMachineDynamicDataAction } from "../Redux/actions/machineActions";
 import { recieveDeleteManagedProcessAction, recieveManagedProcessAddedAction, recieveManagedProcessUpdatedAction } from "../Redux/actions/managedModelActions";

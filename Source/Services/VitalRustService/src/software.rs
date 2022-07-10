@@ -1,11 +1,9 @@
-use crate::{
-    generated_vital_rust_service_api_def::{self, ProcessGpuUtil},
-    nvidia,
-};
+use crate::nvidia;
 use chrono::{DateTime, Utc};
 use core::slice;
-use nvml::NVML;
+use nvml::Nvml;
 use once_cell::sync::OnceCell;
+use vital_service_api::models::{ProcessData, ProcessDiskUsage, ProcessGpuUtil};
 
 use std::{
     collections::{HashMap, HashSet},
@@ -17,7 +15,6 @@ use std::{
 };
 use sysinfo::{PidExt, ProcessExt, SystemExt};
 use windows::{
-    core::PWSTR,
     Win32::Foundation::*,
     Win32::{
         Storage::FileSystem::{GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueW},
@@ -30,9 +27,9 @@ use windows::{
 };
 pub fn get_process_util(
     sysinfo: &sysinfo::System,
-    nvml: &Option<NVML>,
+    nvml: &Option<Nvml>,
     time_stamp: DateTime<Utc>,
-) -> Option<Vec<generated_vital_rust_service_api_def::ProcessData>> {
+) -> Option<Vec<ProcessData>> {
     let mut list = Vec::new();
     let processes = sysinfo.processes();
 
@@ -63,40 +60,40 @@ pub fn get_process_util(
                                                         };
                                                     }; */
         // windows::get_process_ideal_processors(pid); //takes a lot of time
-        list.push(generated_vital_rust_service_api_def::ProcessData {
-            name: process.name().to_string(),
-            pid: pid as f64,
+        list.push(ProcessData {
+            pid: pid as i32,
+            parent_pid: match process.parent() {
+                Some(pid) => Some(pid.as_u32() as i32),
+                None => None,
+            },
+            executable_path: path,
+            description,
             main_window_title: match main_window_titles.get(&pid) {
                 Some(title) => Some(title.to_string()),
                 None => None,
             },
-            description: description,
-            executable_path: path,
-            parent_pid: match process.parent() {
-                Some(pid) => Some(pid.as_u32() as f64),
-                None => None,
-            },
-            cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f64,
-            memory_kb: process.memory() as f64,
-            disk_usage: generated_vital_rust_service_api_def::ProcessDiskUsage {
-                read_bytes_per_second: disk_bytes.read_bytes as f64,
-                write_bytes_per_second: disk_bytes.written_bytes as f64,
-            },
+            name: process.name().to_string(),
+            time_stamp: time_stamp.to_rfc3339(),
+            cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f32,
+            memory_kb: process.memory() as i64,
+            disk_usage: Box::new(ProcessDiskUsage {
+                read_bytes_per_second: disk_bytes.read_bytes as i64,
+                write_bytes_per_second: disk_bytes.written_bytes as i64,
+            }),
             status: Some(process.status().to_string()),
+
             gpu_util: match process_gpu_utilization_samples
                 .iter()
                 .find(|sample| sample.pid == pid)
             {
-                Some(util) => Some(ProcessGpuUtil {
-                    gpu_core_percentage: Some(util.sm_util as f64),
-                    gpu_decoding_percentage: Some(util.dec_util as f64),
-                    gpu_encoding_percentage: Some(util.enc_util as f64),
-                    gpu_mem_percentage: Some(util.mem_util as f64),
-                }),
+                Some(util) => Some(Box::new(ProcessGpuUtil {
+                    gpu_core_percentage: Some(util.sm_util as f32),
+                    gpu_decoding_percentage: Some(util.dec_util as f32),
+                    gpu_encoding_percentage: Some(util.enc_util as f32),
+                    gpu_mem_percentage: Some(util.mem_util as f32),
+                })),
                 None => None,
             },
-
-            time_stamp: time_stamp.to_rfc3339(),
         });
     }
     return Some(list);
@@ -144,8 +141,8 @@ fn handle() -> Option<unsafe extern "system" fn(hwnd: HWND, lparam: LPARAM) -> B
 }
 
 unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
-    let mut text: [u16; 1024] = [0; 1024];
-    let length = GetWindowTextW(hwnd, PWSTR(text.as_mut_ptr()), text.len() as i32);
+    let mut text = [0; 1024];
+    let length = GetWindowTextW(hwnd, &mut text);
     let text = String::from_utf16(&text[..length as usize]).unwrap();
 
     let mut guard = WINDOW_TITLES
@@ -222,21 +219,23 @@ fn get_process_path(pid: u32) -> Option<String> {
     unsafe {
         let h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
 
-        if h_snap != INVALID_HANDLE_VALUE {
-            let mut mod_entry: MODULEENTRY32 = MODULEENTRY32 {
-                ..Default::default()
-            };
-            mod_entry.dwSize = size_of_val(&mod_entry) as u32;
-            if Module32First(h_snap, &mut mod_entry).as_bool() {
-                let char_vec = mod_entry.szExePath.iter().map(|f| f.0).collect::<Vec<u8>>();
-
-                path = match from_utf8(&char_vec) {
-                    Ok(s) => Some(String::from(s.to_string().trim_end_matches(char::from(0)))),
-                    Err(_) => None,
+        if let Ok(h_snap) = h_snap {
+            if h_snap != INVALID_HANDLE_VALUE {
+                let mut mod_entry: MODULEENTRY32 = MODULEENTRY32 {
+                    ..Default::default()
                 };
+                mod_entry.dwSize = size_of_val(&mod_entry) as u32;
+                if Module32First(h_snap, &mut mod_entry).as_bool() {
+                    let char_vec = mod_entry.szExePath.iter().map(|f| f.0).collect::<Vec<u8>>();
+
+                    path = match from_utf8(&char_vec) {
+                        Ok(s) => Some(String::from(s.to_string().trim_end_matches(char::from(0)))),
+                        Err(_) => None,
+                    };
+                }
             }
+            CloseHandle(h_snap);
         }
-        CloseHandle(h_snap);
     }
 
     return path;

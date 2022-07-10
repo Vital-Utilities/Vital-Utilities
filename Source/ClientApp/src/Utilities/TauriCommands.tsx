@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api";
+import { ClientSettings } from "@vital/vitalservice";
 import { useRequest } from "ahooks";
 import { notification } from "antd";
-import { ClientSettings } from "../Dtos/ClientApiDto";
 
 export function openUrl(url: string) {
     invoke<string>("open_url", { url: url })

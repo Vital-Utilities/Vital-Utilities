@@ -3,12 +3,20 @@ using System.Collections.Generic;
 
 namespace VitalService.Dtos.Coms
 {
-    public class CpuUsages
+    public class CpuUsage
     {
-        public List<float> CoreClocksMhz { get; set; } = new();
-        public float Total { get; set; }
+        public string Name { get; set; }
+        public string? Brand { get; set; }
+        public string? VendorId { get; set; }
+        public List<int> CoreClocksMhz { get; set; } = new();
+        
+        public float TotalCorePercentage { get; set; }
+        
         public float? PowerDrawWattage { get; set; }
-        public List<float> Cores { get; set; } = new();
+        
+        public List<float> CorePercentages { get; set; } = new();
+
+        
         public ConcurrentDictionary<string, float> TemperatureReadings { get; set; } = new();
 
     }

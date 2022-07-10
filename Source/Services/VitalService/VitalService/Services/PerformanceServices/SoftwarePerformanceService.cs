@@ -81,9 +81,9 @@ namespace VitalService.Services.PerformanceServices
                 return new PerfObj
                 {
                     InstanceName = v.Value.Name,
-                    IDProcess = (int)v.Value.Pid,
+                    IDProcess = v.Value.Pid,
                     PercentProcessorTime = (float)Math.Round(v.Value.CpuPercentage, 2),
-                    WorkingSetGB = (float)Math.Round(v.Value.MemoryKb / 1024 / 1024, 3),
+                    WorkingSetGB = (float)Math.Round((float)v.Value.MemoryKb / 1024 / 1024, 3),
                     WriteBytesPerSec = v.Value.DiskUsage.WriteBytesPerSecond,
                     ReadBytesPerSec = v.Value.DiskUsage.ReadBytesPerSecond,
                     GpuPercentage = v.Value.GpuUtil?.GpuCorePercentage ?? 0

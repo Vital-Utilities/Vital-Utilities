@@ -6,11 +6,11 @@ import { ChartData, CustomTooltip, customUnitFlags, formatXAxis } from "./Shared
 export type ramMetricsModel = {
     dateTimeOffset: Date;
     usedBytes: number | null;
-    usedPercentage: number | null | undefined;
+    usedPercentage: number | null;
     freePhysicalMemory?: number;
     totalVisibleMemoryBytes?: number;
     id: number;
-    uniqueIdentifier?: string;
+    uniqueIdentifier?: string | undefined | null;
 };
 
 function bytesToGb(bytes: number) {

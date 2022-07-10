@@ -1,8 +1,8 @@
+import { CreateProfileRequest } from "@vital/vitalservice";
 import { Input, Button, Form, notification } from "antd";
-import axios from "axios";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { CreateProfileRequest, ProfileDto } from "../../Dtos/ClientApiDto";
+import { profileApi } from "../../Redux/actions/api";
 import { recieveProfileAddedAction } from "../../Redux/actions/profileActions";
 
 interface CreateProfileInterface {
@@ -17,17 +17,11 @@ export const CreateProfile: React.FunctionComponent<CreateProfileInterface> = ({
     async function Post() {
         if (sending) return;
         setSending(true);
-        await axios
-            .post<ProfileDto>("api/profile", createProfileRequest, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
+        await profileApi
+            .apiProfileCreatePut(createProfileRequest)
             .then(result => {
-                if (result.status === 200) {
-                    dispatch(recieveProfileAddedAction(result.data));
-                    onSubmit();
-                }
+                dispatch(recieveProfileAddedAction(result.data));
+                onSubmit();
             })
             .catch(error => {
                 console.error(error);

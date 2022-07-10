@@ -1,3 +1,4 @@
+import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "@vital/vitalservice";
 import { useSize } from "ahooks";
 import _, { values } from "lodash";
 import React, { CSSProperties, useRef } from "react";
@@ -5,7 +6,6 @@ import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CpuMetricsModel } from "../../../components/Charts/CpuChartTimeSeries";
 import { ChartData, ClassicLayout, CustomTooltip, formatXAxis, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
-import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse } from "../../../Dtos/ClientApiDto";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {
@@ -47,7 +47,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                 const cellHeight = graphWindowSize?.height ? graphWindowSize?.height / 4 - 7 * 4 : 0;
                 return (
                     <div ref={graphWindowRef} style={{ display: "grid", width: "100%", gridTemplateColumns: `repeat(${threads / 4}, minmax(50px, 1fr))`, gap: 5, overflow: "hidden" }}>
-                        {dynamicState?.cpuUsageData?.cores?.map((e, i) => {
+                        {dynamicState?.cpuUsageData?.corePercentages?.map((e, i) => {
                             return (
                                 graphWindowSize && (
                                     <div key={i} style={{ border: "1px solid gray" }}>

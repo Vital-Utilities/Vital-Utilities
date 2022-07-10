@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { ProfileDto } from "../../Dtos/ClientApiDto";
+import { ProfileDto } from "@vital/vitalservice";
+import { profileApi } from "./api";
 
 export type ProfileActionTypes = FetchAllProfilesAction | AddProfileAction | UpdateProfileAction | DeleteProfileAction;
 // Profile
@@ -44,9 +44,9 @@ function recieveDeleteProfile(message: number) {
 }
 
 export async function fetchProfiles() {
-    return axios
-        .get<ProfileDto[]>("api/profile")
-        .then(response => response.data)
+    return profileApi
+        .apiProfileGetAllGet()
+        .then(response => response)
         .catch(e => {
             return Promise.reject(e);
         });
@@ -63,7 +63,7 @@ export function fetchProfilesAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         fetchProfiles()
-            .then(result => dispatch(recieveAllProfiles(result)))
+            .then(result => dispatch(recieveAllProfiles(result.data)))
             .catch(e => console.error(e));
     };
 }
