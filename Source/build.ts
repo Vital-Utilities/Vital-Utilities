@@ -51,15 +51,14 @@ function buildSoftware() {
     setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
-    execute(`npm i -g quicktype`);
     
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
-    execute(`cd ${vitalRustServiceDir} && npm ci && cargo build --release`);
+    execute(`cd ${vitalRustServiceDir} && pnpm --frozen-lockfile && cargo build --release`);
 
     //@ts-ignore
     fs.copyFileSync(`${vitalRustServiceDir}/target/release/VitalRustService.exe`, `${vitalRustServiceBin}/VitalRustService.exe`);
 
-    execute(`cd ${vitalClientDir} && npm ci && npm run generateRustTypings && npm run build`);
+    execute(`cd ${vitalClientDir} && pnpm --frozen-lockfile && pnpm run build`);
 }
 
 function beforePackage() {
