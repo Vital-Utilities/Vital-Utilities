@@ -14,7 +14,8 @@ export function getReadableBytesString(a: number | undefined | null, b = 2) {
     return parseFloat((a / Math.pow(1024, d)).toFixed(c)) + " " + ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"][d];
 }
 
-export function getReadableBitsPerSecondString(number: number) {
+export function getReadableBitsPerSecondString(number: number | undefined | null) {
+    if (number === undefined || number === null || number === 0) return "0 Kb/s";
     let i = -1;
     const byteUnits = [" Kb/s", " Mb/s", " Gb/s", " Tb/s", "Pb/s", "Eb/s", "Zb/s", "Yb/s"];
     do {

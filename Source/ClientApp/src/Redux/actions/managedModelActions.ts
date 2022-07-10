@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AnyAction } from "@reduxjs/toolkit";
 import { ManagedModelDto } from "@vital/vitalservice";
-import { processApi } from "./api";
+import api from "./api";
 
 export type ManagedActionTypes = FetchAllManagedAction | AddManagedAction | UpdateManagedAction | DeleteManagedAction;
 
@@ -47,7 +47,7 @@ function recieveDeleteManaged(id: number) {
 }
 
 async function sendFetchManagedProcessesRequest() {
-    return processApi
+    return api.processApi
         .apiProcessManagedGet()
         .then(response => response)
         .catch(e => {

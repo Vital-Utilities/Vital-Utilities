@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { SettingsDto } from "@vital/vitalservice";
-import { settingsApi } from "./api";
+import api from "./api";
 
 export type SettingsActionTypes = GetSettingsAction;
 
@@ -16,7 +16,7 @@ interface GetSettingsAction {
 }
 
 function sendGetSettingsRequest() {
-    return settingsApi
+    return api.settingsApi
         .apiSettingsGet()
         .then(response => response)
         .catch(e => {

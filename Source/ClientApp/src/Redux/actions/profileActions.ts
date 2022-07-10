@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { ProfileDto } from "@vital/vitalservice";
-import { profileApi } from "./api";
+import api from "./api";
 
 export type ProfileActionTypes = FetchAllProfilesAction | AddProfileAction | UpdateProfileAction | DeleteProfileAction;
 // Profile
@@ -44,8 +44,8 @@ function recieveDeleteProfile(message: number) {
 }
 
 export async function fetchProfiles() {
-    return profileApi
-        .apiProfileGet()
+    return api.profileApi
+        .apiProfileGetAllGet()
         .then(response => response)
         .catch(e => {
             return Promise.reject(e);

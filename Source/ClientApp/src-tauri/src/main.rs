@@ -2,17 +2,16 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-mod backend_types;
 mod commands;
 
-use commands::{get_client_settings, set_always_on_top};
+use commands::get_client_settings;
 use log::{debug, error, info, trace, warn};
 use once_cell::sync::OnceCell;
 use sentry::IntoDsn;
 use std::io;
 use std::sync::Mutex;
 
-use tauri::{App, AppHandle, Manager, Window};
+use tauri::{AppHandle, Manager};
 use tauri::{
     CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
     SystemTraySubmenu,

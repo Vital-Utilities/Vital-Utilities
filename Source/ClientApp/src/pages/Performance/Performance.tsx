@@ -282,7 +282,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         }}
                                         stat={
                                             <>
-                                                <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage.downloadSpeedBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage.uploadSpeedBps ?? 0)}
+                                                <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
                                             </>
                                         }
                                         type="network"
@@ -430,18 +430,18 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                                     );
                                                                 })}
 
-                                                            <div>Power Draw: {gpuUsageData && `${gpuUsageData[index]?.powerDraw?.toFixed(0)}w`}</div>
+                                                            <div>Power Draw: {gpuUsageData && `${gpuUsageData[index]?.powerDrawWatt?.toFixed(0)}w`}</div>
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid" }}>Load</h4>
                                                         <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 30 }}>
                                                             <div>
-                                                                <div>Core: {`${gpuUsageData?.[index]?.load?.core?.toFixed(0)}%`}</div>
-                                                                <div>Bus: {`${gpuUsageData?.[index]?.load?.busInterface?.toFixed(0)}%`}</div>
-                                                                <div>Video Engine: {`${gpuUsageData?.[index]?.load?.videoEngine?.toFixed(0)}%`}</div>
-                                                                {gpuUsageData?.[index]?.load?.frameBuffer && <div>Frame Buffer: {`${gpuUsageData?.[index]?.load.frameBuffer?.toFixed(1)}%`}</div>}
-                                                                <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryController?.toFixed(0)}%`}</div>
+                                                                <div>Core: {`${gpuUsageData?.[index]?.load?.corePercentage?.toFixed(0)}%`}</div>
+                                                                <div>Bus: {`${gpuUsageData?.[index]?.load?.busInterfacePercentage?.toFixed(0)}%`}</div>
+                                                                <div>Video Engine: {`${gpuUsageData?.[index]?.load?.videoEnginePercentage?.toFixed(0)}%`}</div>
+                                                                {gpuUsageData?.[index]?.load?.frameBufferPercentage && <div>Frame Buffer: {`${gpuUsageData?.[index]?.load?.frameBufferPercentage?.toFixed(1)}%`}</div>}
+                                                                <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryControllerPercentage?.toFixed(0)}%`}</div>
                                                             </div>
                                                             <div>
                                                                 <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeRxBytesPerSecond)}`}</div>
@@ -578,14 +578,14 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                     </div>
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Throughput</h4>
-                                                        <div>Read rate: {getReadableBytesPerSecondString(value.throughput.readRateBytesPerSecond)}</div>
-                                                        <div>Write rate: {getReadableBytesPerSecondString(value.throughput.writeRateBytesPerSecond)}</div>
+                                                        <div>Read rate: {getReadableBytesPerSecondString(value.throughput?.readRateBytesPerSecond)}</div>
+                                                        <div>Write rate: {getReadableBytesPerSecondString(value.throughput?.writeRateBytesPerSecond)}</div>
                                                     </div>
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid", fontWeight: "bold" }}>Health</h4>
                                                         <div>
-                                                            <div>Data written: {getReadableBytesString(value.data.totalBytesRead)}</div>
-                                                            <div>Data read: {getReadableBytesString(value.data.totalBytesWritten)}</div>
+                                                            <div>Data written: {getReadableBytesString(value.diskHealth?.totalBytesRead)}</div>
+                                                            <div>Data read: {getReadableBytesString(value.diskHealth?.totalBytesWritten)}</div>
                                                         </div>
                                                     </div>
                                                     <div>

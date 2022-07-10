@@ -1,6 +1,6 @@
+import api from "./api";
 import { AnyAction } from "@reduxjs/toolkit";
 import { ApiSystemTimeseriesPostRequest, GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
-import { systemApi } from "./api";
 export type MachineActionTypes = UpdateMachineDynamicDataAction | UpdateMachineStaticDataAction | UpdateMachineTimeSeriesDataAction;
 
 const UPDATE_MACHINE_DYNAMIC_DATA = "UPDATE_MACHINE_DYNAMIC_DATA";
@@ -31,7 +31,7 @@ function recieveMachineStaticData(message: GetMachineStaticDataResponse) {
     return { type: UPDATE_MACHINE_STATIC_DATA, message: message };
 }
 async function sendGetMachineStaticRequest() {
-    return systemApi
+    return api.systemApi
         .apiSystemStaticGet()
         .then(response => response)
         .catch(e => {
@@ -40,7 +40,7 @@ async function sendGetMachineStaticRequest() {
         });
 }
 function sendGetMachineDynamicRequest() {
-    return systemApi
+    return api.systemApi
         .apiSystemDynamicGet()
         .then(response => response)
         .catch(e => {
@@ -50,7 +50,7 @@ function sendGetMachineDynamicRequest() {
 }
 
 function sendGetMachineTimeSeriesRequest(message: ApiSystemTimeseriesPostRequest) {
-    return systemApi
+    return api.systemApi
         .apiSystemTimeseriesPost(message)
         .then(response => response)
         .catch(e => {
