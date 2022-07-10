@@ -1,20 +1,14 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "target": "ES5",
+    "module": "CommonJS",
+    "noImplicitAny": true,
     "outDir": "dist",
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "rootDir": ".",
+    "lib": ["es6", "dom"],
+    "typeRoots": ["node_modules/@types"],
+    "isolatedModules": true
   },
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

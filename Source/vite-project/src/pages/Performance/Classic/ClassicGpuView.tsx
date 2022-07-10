@@ -66,8 +66,8 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
                                 .map((key, index) => {
                                     return <ItemOne key={index} color="lightgray" title={`${key.replace("GPU ", "")}`} value={`${Math.ceil(thisGpuDynamic?.temperatureReadings[key] ?? 0)}°C`} />;
                                 })}
-                        {thisGpuDynamic?.pcIe?.pcIeRxBytesPerSecond && <ItemOne color="lightgray" title="PCIE Recieve" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIeRxBytesPerSecond, 0)} />}
-                        {thisGpuDynamic?.pcIe?.pcIeTxBytesPerSecond && <ItemOne color="lightgray" title="PCIE Transmit" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIeTxBytesPerSecond, 0)} />}
+                        {thisGpuDynamic?.pcIe?.pcIe_RxBytesPerSecond && <ItemOne color="lightgray" title="PCIE Recieve" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIe_RxBytesPerSecond, 0)} />}
+                        {thisGpuDynamic?.pcIe?.pcIe_TxBytesPerSecond && <ItemOne color="lightgray" title="PCIE Transmit" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIe_TxBytesPerSecond, 0)} />}
                         {thisGpuDynamic?.memoryClockMhz && <ItemOne color="lightgray" title="Memory Clock" value={`${Math.ceil(thisGpuDynamic?.memoryClockMhz)}mhz`} />}
                         {thisGpuDynamic?.shaderClockMhz && <ItemOne color="lightgray" title="Shader Clock" value={`${Math.ceil(thisGpuDynamic?.shaderClockMhz)}mhz`} />}
 

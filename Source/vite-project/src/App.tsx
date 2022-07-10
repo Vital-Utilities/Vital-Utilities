@@ -21,7 +21,7 @@ import { updateAppReadyAction } from "./Redux/actions/appActions";
 import { PerformancePage, relativeTimeOptions, relativeTypeStringOptions } from "./pages/Performance/Performance";
 import moment from "moment";
 import * as vitalservice from "@vital/vitalservice";
-export let config = new vitalservice.Configuration();
+export const config = new vitalservice.Configuration();
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App: React.FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -45,7 +45,7 @@ const App: React.FunctionComponent = () => {
     );
 
     useEffect(() => {
-        config = new vitalservice.Configuration({ basePath: `http://localhost:${appState.vitalServicePort}` });
+        config.basePath = `http://localhost:${appState.vitalServicePort}`;
     }, [appState.vitalServicePort]);
 
     async function getData() {
@@ -55,8 +55,8 @@ const App: React.FunctionComponent = () => {
         dispatch(fetchMachineStaticDataAction());
         dispatch(
             fetchMachineTimeSeriesDataAction({
-                latest: moment().add(1, "minutes").utc().toDate(),
-                earliest: moment().add(relativeTimeOptions[relativeTimeOption], "minutes").utc().toDate()
+                latest: moment().add(1, "minutes").utc().toDate().toISOString(),
+                earliest: moment().add(relativeTimeOptions[relativeTimeOption], "minutes").utc().toDate().toISOString()
             })
         );
         dispatch(fetchMachineDynamicDataAction());

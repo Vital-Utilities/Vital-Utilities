@@ -51,8 +51,8 @@ function sendGetMachineDynamicRequest() {
 
 function sendGetMachineTimeSeriesRequest(message: GetMachineTimeSeriesRequest) {
     return systemApi
-        .apiSystemTimeseriesPost({ getMachineTimeSeriesRequest: message })
-        .then(response => response)
+        .apiSystemTimeseriesPost(message)
+        .then(response => response.data)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
@@ -70,7 +70,7 @@ export function fetchMachineStaticDataAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetMachineStaticRequest()
-            .then(result => dispatch(recieveMachineStaticData(result)))
+            .then(result => dispatch(recieveMachineStaticData(result.data)))
             .catch(e => console.error(e));
     };
 }
@@ -79,11 +79,11 @@ export function fetchMachineDynamicDataAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetMachineDynamicRequest()
-            .then(result => dispatch(recieveMachineDynamicData(result)))
+            .then(result => dispatch(recieveMachineDynamicData(result.data)))
             .catch(e => console.error(e));
     };
 }
-export function recieveMachineDynamicDataAction(entities: GetMachineDynamicDataResponse): AnyAction {
+export function recieveMachineDynamicDataAction(entities: GetMachineDynamicDataResponse): AnyAction  {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveMachineDynamicData(entities));

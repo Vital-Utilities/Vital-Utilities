@@ -61,7 +61,7 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
         processApi
             .apiProcessProcessesToAddGet()
             .then(response => {
-                setUnManagedProcesses(response.processes);
+                setUnManagedProcesses(response.data.processes);
             })
             .finally(() => setIsFetching(false));
     }

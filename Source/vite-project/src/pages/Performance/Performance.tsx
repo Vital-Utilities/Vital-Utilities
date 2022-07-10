@@ -442,8 +442,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                                 <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryControllerPercentage?.toFixed(0)}%`}</div>
                                                             </div>
                                                             <div>
-                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeRxBytesPerSecond)}`}</div>
-                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeTxBytesPerSecond)}`}</div>
+                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIe_RxBytesPerSecond)}`}</div>
+                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIe_TxBytesPerSecond)}`}</div>
                                                             </div>
                                                         </div>
                                                     </div>

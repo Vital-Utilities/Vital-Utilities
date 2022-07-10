@@ -150,7 +150,7 @@ export const Processes: React.FunctionComponent = () => {
 
     function killProcess(id: number) {
         processApi
-            .apiProcessKillIdPost({ id })
+            .apiProcessKillIdPost(id)
             .then(() => dispatch(recieveDeleteProcessViewAction(id)))
             .catch(result => {
                 console.error(result);
@@ -397,14 +397,14 @@ export const Processes: React.FunctionComponent = () => {
 };
 
 function openProcessPath(id: number) {
-    processApi.apiProcessOpenpathIdPost({ id }).catch(result => {
+    processApi.apiProcessOpenpathIdPost(id).catch(result => {
         console.error(result);
         notification.error({ message: result, duration: 2000 });
     });
 }
 
 function openProcessProperties(id: number) {
-    processApi.apiProcessOpenpropertiesIdPost({ id }).catch(result => {
+    processApi.apiProcessOpenpropertiesIdPost(id).catch(result => {
         console.error(result);
         notification.error({ message: result, duration: 2000 });
     });

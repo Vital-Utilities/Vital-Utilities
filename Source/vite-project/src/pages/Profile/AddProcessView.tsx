@@ -34,8 +34,8 @@ export const AddProcessView: React.FunctionComponent<AddProcessViewProps> = prop
     }
 
     async function SendRequest() {
-        profileApi.apiProfileAddProcessConfigPut({ addProccessRequest: addProcessRequest }).then(result => {
-            props.onSuccess();
+        profileApi.apiProfileAddProcessConfigPut(addProcessRequest).then(result => {
+            if (result.status === 200) props.onSuccess();
         });
     }
 
