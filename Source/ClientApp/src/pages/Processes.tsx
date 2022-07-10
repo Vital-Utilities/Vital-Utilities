@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Dropdown, Input, Menu, notification } from "antd";
 import { useEffect } from "react";
 import "./home.scss";
-import axios from "axios";
 import _ from "lodash";
 import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { ProcessViewState, ProfileState, VitalState } from "../Redux/States";
@@ -14,6 +13,7 @@ import { getReadableBytesPerSecondString, getReadableBytesString } from "../comp
 import { openUrl } from "../Utilities/TauriCommands";
 import { Table } from "../components/Table";
 import { ParentChildModelDto, GetMachineDynamicDataResponse, ProcessViewDto } from "@vital/vitalservice";
+import { processApi } from "../Redux/actions/api";
 
 enum SortByEnum {
     "Description" = "Description",
@@ -149,8 +149,8 @@ export const Processes: React.FunctionComponent = () => {
     );
 
     function killProcess(id: number) {
-        axios
-            .post(`api/process/kill/${id}`)
+        processApi
+            .apiProcessKillIdPost(id)
             .then(() => dispatch(recieveDeleteProcessViewAction(id)))
             .catch(result => {
                 console.error(result);
@@ -397,21 +397,14 @@ export const Processes: React.FunctionComponent = () => {
 };
 
 function openProcessPath(id: number) {
-    axios.post(`api/process/openpath/${id}`).catch(result => {
+    processApi.apiProcessOpenpathIdPost(id).catch(result => {
         console.error(result);
         notification.error({ message: result, duration: 2000 });
     });
 }
 
 function openProcessProperties(id: number) {
-    axios.post(`api/process/openproperties/${id}`).catch(result => {
-        console.error(result);
-        notification.error({ message: result, duration: 2000 });
-    });
-}
-
-function openSearchProcess(processName: string) {
-    axios.post(`api/process/whatis?processName=${processName}`).catch(result => {
+    processApi.apiProcessOpenpropertiesIdPost(id).catch(result => {
         console.error(result);
         notification.error({ message: result, duration: 2000 });
     });

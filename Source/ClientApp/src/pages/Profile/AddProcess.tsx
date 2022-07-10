@@ -6,9 +6,9 @@ import _ from "lodash";
 import { AddProcessView } from "./AddProcessView";
 import { useSelector } from "react-redux";
 import { VitalState, MachineState } from "../../Redux/States";
-import axios from "axios";
 import { Table } from "../../components/Table";
-import { ProfileDto, ManagedModelDto, ProcessToAddDto, GetProcessesToAddResponse } from "@vital/vitalservice";
+import { ProfileDto, ManagedModelDto, ProcessToAddDto } from "@vital/vitalservice";
+import { processApi } from "../../Redux/actions/api";
 
 enum Pages {
     Select,
@@ -58,8 +58,8 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
 
     function getUnmanagedProcesses() {
         setIsFetching(true);
-        axios
-            .get<GetProcessesToAddResponse>("api/process/ProcessesToAdd", { timeout: 20000 })
+        processApi
+            .apiProcessProcessesToAddGet()
             .then(response => {
                 setUnManagedProcesses(response.data.processes);
             })
@@ -129,7 +129,7 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
     function addView() {
         return (
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            <AddProcessView name={selectedProcess!.processName} executionPath={""} profileId={props.profile.id} onBack={() => setCurrentPage(Pages.Select)} onSubmit={props.onSubmit}></AddProcessView>
+            <AddProcessView name={selectedProcess!.processName} executionPath={""} profileId={props.profile.id} onBack={() => setCurrentPage(Pages.Select)} onSuccess={props.onSubmit}></AddProcessView>
         );
     }
 

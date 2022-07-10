@@ -1,18 +1,18 @@
 import { Form, Input, Button } from "antd";
-import axios from "axios";
 import React from "react";
 import { useSelector } from "react-redux";
 import { VitalState } from "../../Redux/States";
 import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
 import { ProcessPriority } from "./ProcessPriority";
 import { AddProccessRequest, ProcessPriorityEnum } from "@vital/vitalservice";
+import { profileApi } from "../../Redux/actions/api";
 
 interface AddProcessViewProps {
     name: string;
     executionPath: string;
     assignedAffinity?: number[];
     profileId: number;
-    onSubmit: () => void;
+    onSuccess: () => void;
     onBack: () => void;
 }
 
@@ -34,15 +34,9 @@ export const AddProcessView: React.FunctionComponent<AddProcessViewProps> = prop
     }
 
     async function SendRequest() {
-        await axios
-            .post("api/profile/process", addProcessRequest, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(result => {
-                if (result.status === 200) props.onSubmit();
-            });
+        profileApi.apiProfileAddProcessConfigPut(addProcessRequest).then(result => {
+            if (result.status === 200) props.onSuccess();
+        });
     }
 
     return (

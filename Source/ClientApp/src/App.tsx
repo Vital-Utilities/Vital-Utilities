@@ -16,7 +16,6 @@ import { useInterval } from "ahooks";
 import { InfoPage } from "./pages/Info";
 import { fetchMachineDynamicDataAction, fetchMachineStaticDataAction, fetchMachineTimeSeriesDataAction } from "./Redux/actions/machineActions";
 import { useEffect } from "react";
-import axios from "axios";
 import { fetchManagedProcessesAction } from "./Redux/actions/managedModelActions";
 import { updateAppReadyAction } from "./Redux/actions/appActions";
 import { PerformancePage, relativeTimeOptions, relativeTypeStringOptions } from "./pages/Performance/Performance";
@@ -47,10 +46,6 @@ const App: React.FunctionComponent = () => {
 
     useEffect(() => {
         config.basePath = `http://localhost:${appState.vitalServicePort}`;
-        axios.defaults.baseURL = `http://localhost:${appState.vitalServicePort}`;
-        axios.defaults.timeout = 10000;
-        axios.defaults.responseType = "json";
-        axios.defaults.headers = { "Access-Control-Allow-Origin": "*" };
     }, [appState.vitalServicePort]);
 
     async function getData() {

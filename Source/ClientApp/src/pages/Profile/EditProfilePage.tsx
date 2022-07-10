@@ -13,10 +13,10 @@ import { ProfileFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { AddProcess } from "./AddProcess";
 import { VitalState, ManagedState, MachineState } from "../../Redux/States";
-import axios from "axios";
 import { recieveDeleteManagedProcessAction as recieveDeleteManagedProcessAction } from "../../Redux/actions/managedModelActions";
 import { Table } from "../../components/Table";
 import { ProfileDto, ManagedModelDto, ProcessPriorityEnum, UpdateProfileRequest } from "@vital/vitalservice";
+import { profileApi } from "../../Redux/actions/api";
 
 export const EditProfilePage: React.FunctionComponent = () => {
     // @ts-ignore
@@ -53,7 +53,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
     }, []);
 
     async function GetProfile() {
-        axios.get<ProfileDto>(`api/profile/${profileId}`).then(response => {
+        profileApi.apiProfileIdGet(profileId).then(response => {
             setProfile(response.data);
         });
     }
@@ -81,8 +81,8 @@ export const EditProfilePage: React.FunctionComponent = () => {
                                 <Popconfirm
                                     title="Are you sure you want to delete this configuration?"
                                     onConfirm={() => {
-                                        axios
-                                            .delete(`api/profile/process/${e.id}`)
+                                        profileApi
+                                            .apiProfileDeleteProcessConfigIdDelete(e.id)
                                             .then(result => {
                                                 if (result.status === 200) {
                                                     dispatch(recieveDeleteManagedProcessAction(e.id));
@@ -137,8 +137,8 @@ export const EditProfilePage: React.FunctionComponent = () => {
                                 <Button
                                     onClick={() => {
                                         const data: UpdateProfileRequest = { profile: { ...profile, name: profileNameInput! } };
-                                        axios
-                                            .put(`api/profile/${profileId}`, data)
+                                        profileApi
+                                            .apiProfileUpdatePut(data)
                                             .then(() => {
                                                 GetProfile();
                                             })
@@ -189,8 +189,8 @@ export const EditProfilePage: React.FunctionComponent = () => {
                     <Checkbox
                         checked={profile.enabled}
                         onChange={() => {
-                            axios
-                                .put("api/profile", { profile: { ...profile, enabled: !profile.enabled } } as UpdateProfileRequest, {
+                            profileApi
+                                .apiProfileUpdatePut({ profile: { ...profile, enabled: !profile.enabled } } as UpdateProfileRequest, {
                                     headers: {
                                         "Content-Type": "application/json"
                                     }
