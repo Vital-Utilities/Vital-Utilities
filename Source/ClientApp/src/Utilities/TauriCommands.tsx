@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api";
 import { ClientSettings } from "@vital/vitalservice";
 import { useRequest } from "ahooks";
-import { message, notification } from "antd";
+import { notification } from "antd";
 
 export function openUrl(url: string) {
     invoke<string>("open_url", { url: url })
@@ -29,7 +29,6 @@ export function useRustClientSettings() {
         return invoke<ClientSettings>("update_client_settings", { clientSettings: clientSettings })
             .then(() => {
                 mutate(clientSettings);
-                message.info({ message: "Client Settings Updated" });
                 return Promise.resolve();
             })
             .catch((error: string) => {

@@ -38,7 +38,7 @@ export const Settings: React.FunctionComponent = () => {
 
     function getPage() {
         switch (view) {
-            case "Client":
+            case viewOptions.Client:
                 return (
                     <div>
                         <h2>App Settings</h2>
