@@ -3,10 +3,6 @@
     "version": "0.0.1",
     "private": true,
     "copyright": "Copyright © 2022 Snazzie, Aaron Cooper. All rights reserved.",
-    "engines": {
-        "npm": ">=8.0.0",
-        "node": ">=17.4.0"
-    },
     "scripts": {
         "start": "react-scripts start",
         "build": "cross-env CI=false react-scripts build",
