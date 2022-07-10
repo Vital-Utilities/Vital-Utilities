@@ -1,6 +1,6 @@
-import api from "./api";
 import { AnyAction } from "@reduxjs/toolkit";
-import { ApiSystemTimeseriesPostRequest, GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
+import { GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
+import { systemApi } from "./api";
 export type MachineActionTypes = UpdateMachineDynamicDataAction | UpdateMachineStaticDataAction | UpdateMachineTimeSeriesDataAction;
 
 const UPDATE_MACHINE_DYNAMIC_DATA = "UPDATE_MACHINE_DYNAMIC_DATA";
@@ -31,7 +31,7 @@ function recieveMachineStaticData(message: GetMachineStaticDataResponse) {
     return { type: UPDATE_MACHINE_STATIC_DATA, message: message };
 }
 async function sendGetMachineStaticRequest() {
-    return api.systemApi
+    return systemApi
         .apiSystemStaticGet()
         .then(response => response)
         .catch(e => {
@@ -40,7 +40,7 @@ async function sendGetMachineStaticRequest() {
         });
 }
 function sendGetMachineDynamicRequest() {
-    return api.systemApi
+    return systemApi
         .apiSystemDynamicGet()
         .then(response => response)
         .catch(e => {
@@ -49,10 +49,10 @@ function sendGetMachineDynamicRequest() {
         });
 }
 
-function sendGetMachineTimeSeriesRequest(message: ApiSystemTimeseriesPostRequest) {
-    return api.systemApi
+function sendGetMachineTimeSeriesRequest(message: GetMachineTimeSeriesRequest) {
+    return systemApi
         .apiSystemTimeseriesPost(message)
-        .then(response => response)
+        .then(response => response.data)
         .catch(e => {
             console.error(e);
             return Promise.reject(e);
@@ -61,7 +61,7 @@ function sendGetMachineTimeSeriesRequest(message: ApiSystemTimeseriesPostRequest
 export function fetchMachineTimeSeriesDataAction(message: GetMachineTimeSeriesRequest): AnyAction {
     //@ts-ignore
     return function (dispatch) {
-        return sendGetMachineTimeSeriesRequest({ getMachineTimeSeriesRequest: message })
+        return sendGetMachineTimeSeriesRequest(message)
             .then(result => dispatch(recieveMachineTimeSeriesData(result)))
             .catch(e => console.error(e));
     };
@@ -70,7 +70,7 @@ export function fetchMachineStaticDataAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetMachineStaticRequest()
-            .then(result => dispatch(recieveMachineStaticData(result)))
+            .then(result => dispatch(recieveMachineStaticData(result.data)))
             .catch(e => console.error(e));
     };
 }
@@ -79,7 +79,7 @@ export function fetchMachineDynamicDataAction() {
     //@ts-ignore
     return function (dispatch) {
         return sendGetMachineDynamicRequest()
-            .then(result => dispatch(recieveMachineDynamicData(result)))
+            .then(result => dispatch(recieveMachineDynamicData(result.data)))
             .catch(e => console.error(e));
     };
 }

@@ -2,18 +2,30 @@
   "name": "VitalService",
   "version": "0.0.1",
   "description": "OpenAPI client for VitalService",
-  "author": "OpenAPI-Generator",
+  "author": "OpenAPI-Generator Contributors",
   "repository": {
     "type": "git",
     "url": "https://github.com/GIT_USER_ID/GIT_REPO_ID.git"
   },
+  "keywords": [
+    "axios",
+    "typescript",
+    "openapi-client",
+    "openapi-generator",
+    "VitalService"
+  ],
+  "license": "Unlicense",
   "main": "./dist/index.js",
   "typings": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --outDir dist/",
     "prepare": "npm run build"
   },
+  "dependencies": {
+    "axios": "^0.26.1"
+  },
   "devDependencies": {
+    "@types/node": "^12.11.5",
     "typescript": "^4.0"
   }
 }

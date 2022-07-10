@@ -5,7 +5,7 @@ import { VitalState } from "../Redux/States";
 import { fetchSettingsAction } from "../Redux/actions/settingsAction";
 import { useRustClientSettings } from "../Utilities/TauriCommands";
 import { SettingsDto } from "@vital/vitalservice";
-import api from "../Redux/actions/api";
+import { settingsApi } from "../Redux/actions/api";
 
 const { Content } = Layout;
 
@@ -28,8 +28,8 @@ export const Settings: React.FunctionComponent = () => {
     if (!backendSettings) return <>settings is undefined</>;
     function SetRunAtStartup(runAtStartup: boolean) {
         if (!backendSettings) return;
-        api.settingsApi
-            .apiSettingsSetRunAtStartupPut({ runAtStartup: runAtStartup ? true : false })
+        settingsApi
+            .apiSettingsSetRunAtStartupPut(runAtStartup ? true : false)
             .then(() => {
                 dispatch(fetchSettingsAction());
             })

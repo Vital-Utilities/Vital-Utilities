@@ -2,7 +2,7 @@ import { CreateProfileRequest } from "@vital/vitalservice";
 import { Input, Button, Form, notification } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
-import api from "../../Redux/actions/api";
+import { profileApi } from "../../Redux/actions/api";
 import { recieveProfileAddedAction } from "../../Redux/actions/profileActions";
 
 interface CreateProfileInterface {
@@ -17,10 +17,10 @@ export const CreateProfile: React.FunctionComponent<CreateProfileInterface> = ({
     async function Post() {
         if (sending) return;
         setSending(true);
-        await api.profileApi
-            .apiProfileCreatePut({ createProfileRequest })
+        await profileApi
+            .apiProfileCreatePut(createProfileRequest)
             .then(result => {
-                dispatch(recieveProfileAddedAction(result));
+                dispatch(recieveProfileAddedAction(result.data));
                 onSubmit();
             })
             .catch(error => {

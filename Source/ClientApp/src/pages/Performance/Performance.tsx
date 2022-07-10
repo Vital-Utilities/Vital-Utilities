@@ -118,21 +118,21 @@ export const PerformancePage: React.FunctionComponent = props => {
     function getRamUsageData(e: TimeSeriesMachineMetricsModel): ramMetricsModel {
         const d = e.ramUsageData;
         const freeMemory = d.totalVisibleMemoryBytes && d.usedMemoryBytes && d.totalVisibleMemoryBytes - d.usedMemoryBytes;
-        return { ...d, dateTimeOffset: e.dateTimeOffset, usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes ?? undefined, freePhysicalMemory: freeMemory ?? undefined };
+        return { ...d, dateTimeOffset: new Date(e.dateTimeOffset), usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes ?? undefined, freePhysicalMemory: freeMemory ?? undefined };
     }
     useEffect(() => {
         if (timeSeriesMetrics?.metrics && timeSeriesMetrics.requestRange) {
             const f = timeSeriesMetrics?.metrics.map(e => {
                 return {
                     cpuMetrics: e.cpuUsageData.map(d => {
-                        return { ...d, dateTimeOffset: e.dateTimeOffset };
+                        return { ...d, dateTimeOffset: new Date(e.dateTimeOffset) };
                     }) as CpuMetricsModel[],
                     gpuMetrics: e.gpuUsageData.map(d => {
-                        return { ...d, dateTimeOffset: e.dateTimeOffset, vRamUsagePercentage: (((d.vramUsageBytes ?? 0) / (d.vramTotalBytes ?? 0)) * 100).toFixed(1) };
+                        return { ...d, dateTimeOffset: new Date(e.dateTimeOffset), vRamUsagePercentage: (((d.vramUsageBytes ?? 0) / (d.vramTotalBytes ?? 0)) * 100).toFixed(1) };
                     }) as gpuMetricsModel[],
                     ramMetrics: getRamUsageData(e),
                     networkMetrics: e.networkUsageData.map(d => {
-                        return { dateTimeOffset: e.dateTimeOffset, macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -MBpsToMbps(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && MBpsToMbps(d.downloadSpeedBps)) ?? null };
+                        return { dateTimeOffset: new Date(e.dateTimeOffset), macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -MBpsToMbps(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && MBpsToMbps(d.downloadSpeedBps)) ?? null };
                     }) as networkMetricsModel[],
                     diskMetrics: e.diskUsageData.map(d => {
                         return { ...d, dateTimeOffset: e.dateTimeOffset };
@@ -444,8 +444,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                                 <div>Memory Controller: {`${gpuUsageData?.[index]?.load?.memoryControllerPercentage?.toFixed(0)}%`}</div>
                                                             </div>
                                                             <div>
-                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeRxBytesPerSecond)}`}</div>
-                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIeTxBytesPerSecond)}`}</div>
+                                                                <div>PCIe Rx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIe_RxBytesPerSecond)}`}</div>
+                                                                <div>PCIe Tx: {`${gpuUsageData && getReadableBytesPerSecondString(gpuUsageData?.[index]?.pcIe?.pcIe_TxBytesPerSecond)}`}</div>
                                                             </div>
                                                         </div>
                                                     </div>
