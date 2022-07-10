@@ -1,8 +1,0 @@
-{
-  "editor.formatOnSave": true,
-  "editor.detectIndentation": false,
-  "eslint.format.enable": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  }
-}
