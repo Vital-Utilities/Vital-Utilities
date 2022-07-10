@@ -7,7 +7,9 @@
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "vite-tauri": "vite-tauri"
+    "vite-tauri": "vite-tauri",
+    "tauri": "tauri",
+    "tauri:dev": "cd .. && pnpm run GenerateCode && cd ./vite-project && set RUST_DEBUG=1 && vite-tauri dev"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
