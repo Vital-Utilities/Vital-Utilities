@@ -4,7 +4,7 @@ import { execute } from "./Scripts/Execute";
 import { exec } from "child_process";
 
 const tempFolder = path.join(__dirname, "/temp");
-const version = fse.readFileSync("./version.txt", "utf8");
+const version = fse.readFileSync("./Version.txt", "utf8");
 if (fse.existsSync(tempFolder)) fse.removeSync(tempFolder);
 fse.mkdirSync(tempFolder);
 collectSwaggerFoldersIntoTemp([
