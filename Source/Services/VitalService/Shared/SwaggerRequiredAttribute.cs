@@ -1,6 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +11,7 @@ using System.Threading.Tasks;
 namespace VitalService
 {
 
-    public class SwaggerRequiredSchemaFilter : Swashbuckle.AspNetCore.SwaggerGen.ISchemaFilter
+    public class SwaggerRequiredSchemaFilter : ISchemaFilter
     {
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
