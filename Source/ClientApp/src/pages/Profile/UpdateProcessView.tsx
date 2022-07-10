@@ -19,7 +19,7 @@ export const UpdateProcessView: React.FunctionComponent<UpdateProcessViewProps> 
         profileApi
             .apiProfileUpdateProcessConfigPut(request)
             .then(result => {
-                onSubmit();
+                if (result.status === 200) onSubmit();
             })
             .catch(e => message.error(e));
     }
