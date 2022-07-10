@@ -104,12 +104,12 @@ namespace VitalService.Services.PerformanceServices
                     {
                         var processData = new ProcessData
                         {
-                            ProcessId = (int)data.Pid,
+                            ProcessId = data.Pid,
                             MainWindowTitle = data.MainWindowTitle,
-                            Description = data.ExecutablePath is not null ? FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription : null,
+                            Description = data.ExecutablePath ?? FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription,
                             Name = data.Name,
                             ExecutablePath = data.ExecutablePath,
-                            ParentProcessId = (int?)data.ParentPid,
+                            ParentProcessId = data.ParentPid,
                         };
                         returnValue.TryAdd(pid, processData);
                     }
