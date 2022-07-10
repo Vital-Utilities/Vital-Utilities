@@ -83,7 +83,7 @@ export function fetchMachineDynamicDataAction(): AnyAction {
             .catch(e => console.error(e));
     };
 }
-export function recieveMachineDynamicDataAction(entities: GetMachineDynamicDataResponse): AnyAction  {
+export function recieveMachineDynamicDataAction(entities: GetMachineDynamicDataResponse): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveMachineDynamicData(entities));

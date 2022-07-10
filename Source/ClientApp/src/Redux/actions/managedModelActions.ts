@@ -61,7 +61,7 @@ async function fetchManagedProcesses() {
     return result.affinityModels;
 }
 
-export function recieveDeleteManagedProcessAction(entityId: number):AnyAction {
+export function recieveDeleteManagedProcessAction(entityId: number): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveDeleteManaged(entityId));
@@ -78,14 +78,14 @@ export function fetchManagedProcessesAction(): AnyAction {
     };
 }
 
-export function recieveManagedProcessAddedAction(entities: ManagedModelDto):AnyAction {
+export function recieveManagedProcessAddedAction(entities: ManagedModelDto): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveNewManaged(entities));
     };
 }
 
-export function recieveManagedProcessUpdatedAction(entities: ManagedModelDto):AnyAction {
+export function recieveManagedProcessUpdatedAction(entities: ManagedModelDto): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         dispatch(recieveUpdateManaged(entities));

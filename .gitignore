@@ -5,3 +5,4 @@ app.db
 *.db-wal
 *.db
 target
+Source/ClientApp/stats.html

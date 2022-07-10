@@ -69,6 +69,8 @@
         "jest": "^28.1.2",
         "prettier": "^2.7.1",
         "redux-devtools-extension": "^2.13.9",
+        "rollup-plugin-progress": "^1.1.2",
+        "rollup-plugin-visualizer": "^5.6.0",
         "sass": "^1.53.0",
         "ts-jest": "^28.0.5",
         "ts-node": "^10.8.2",
