@@ -29,7 +29,7 @@ export const Settings: React.FunctionComponent = () => {
     function SetRunAtStartup(runAtStartup: boolean) {
         if (!backendSettings) return;
         settingsApi
-            .apiSettingsSetRunAtStartupPut(runAtStartup ? true : false)
+            .apiSettingsSetRunAtStartupPut({ runAtStartup: runAtStartup ? true : false })
             .then(() => {
                 dispatch(fetchSettingsAction());
             })

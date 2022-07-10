@@ -74,9 +74,9 @@ export const Profiles: React.FunctionComponent = () => {
                             title="Are you sure you want to delete this profile?"
                             onConfirm={() => {
                                 profileApi
-                                    .apiProfileIdDelete(e.id)
+                                    .apiProfileIdDelete({ id: e.id })
                                     .then(response => {
-                                        if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
+                                        dispatch(recieveDeleteProfileAction(e.id));
                                     })
                                     .catch(result => console.error(result));
                             }}

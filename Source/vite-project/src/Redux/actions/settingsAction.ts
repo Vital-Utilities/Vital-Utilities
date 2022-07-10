@@ -29,7 +29,7 @@ export function fetchSettingsAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         return sendGetSettingsRequest()
-            .then(result => dispatch(recieveSettings(result.data)))
+            .then(result => dispatch(recieveSettings(result)))
             .catch(e => console.error(e));
     };
 }

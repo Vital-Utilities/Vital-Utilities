@@ -17,9 +17,9 @@ export const UpdateProcessView: React.FunctionComponent<UpdateProcessViewProps> 
     async function SendRequest() {
         const request: UpdateManagedRequest = { managedModelDto: model };
         profileApi
-            .apiProfileUpdateProcessConfigPut(request)
+            .apiProfileUpdateProcessConfigPut({ updateManagedRequest: request })
             .then(result => {
-                if (result.status === 200) onSubmit();
+                onSubmit();
             })
             .catch(e => message.error(e));
     }

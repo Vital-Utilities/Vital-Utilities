@@ -14,7 +14,7 @@ export const ServiceLiveMonitor: React.FunctionComponent = () => {
 
     function sendHello() {
         return helloApi.apiHelloGet().then(
-            res => processResult(res.status),
+            res => processResult(200),
             err => processResult(err.response?.status)
         );
     }

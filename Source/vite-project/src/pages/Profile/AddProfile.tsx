@@ -18,9 +18,9 @@ export const CreateProfile: React.FunctionComponent<CreateProfileInterface> = ({
         if (sending) return;
         setSending(true);
         await profileApi
-            .apiProfileCreatePut(createProfileRequest)
+            .apiProfileCreatePut({ createProfileRequest })
             .then(result => {
-                dispatch(recieveProfileAddedAction(result.data));
+                dispatch(recieveProfileAddedAction(result));
                 onSubmit();
             })
             .catch(error => {

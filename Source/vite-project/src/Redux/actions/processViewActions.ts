@@ -49,7 +49,7 @@ function recieveDeleteProcessView(id: number) {
 function fetchProcessView() {
     return processApi
         .apiProcessRunningProcessesGet()
-        .then(response => response.data)
+        .then(response => response)
         .catch(e => Promise.reject(e));
 }
 

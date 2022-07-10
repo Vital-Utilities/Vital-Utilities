@@ -1,4 +1,4 @@
-import { ProcessPriorityEnum } from "@vital/vitalservice";
+import { ProcessPriorityEnum } from "@vital/vitalservice/dist/models/ProcessPriorityEnum";
 import { Form, Select } from "antd";
 import React from "react";
 

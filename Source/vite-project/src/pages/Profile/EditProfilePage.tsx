@@ -53,7 +53,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
 
     async function GetProfile() {
         profileApi.apiProfileIdGet(profileId).then(response => {
-            setProfile(response.data);
+            setProfile(response);
         });
     }
     function updateProcessModel(managedModel: ManagedModelDto) {
@@ -81,11 +81,9 @@ export const EditProfilePage: React.FunctionComponent = () => {
                                     title="Are you sure you want to delete this configuration?"
                                     onConfirm={() => {
                                         profileApi
-                                            .apiProfileDeleteProcessConfigIdDelete(e.id)
+                                            .apiProfileDeleteProcessConfigIdDelete({ id: e.id })
                                             .then(result => {
-                                                if (result.status === 200) {
-                                                    dispatch(recieveDeleteManagedProcessAction(e.id));
-                                                }
+                                                dispatch(recieveDeleteManagedProcessAction(e.id));
                                             })
                                             .catch(result => {
                                                 notification.error({ duration: null, message: result });
@@ -137,7 +135,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
                                     onClick={() => {
                                         const data: UpdateProfileRequest = { profile: { ...profile, name: profileNameInput! } };
                                         profileApi
-                                            .apiProfileUpdatePut(data)
+                                            .apiProfileUpdatePut({ updateProfileRequest: data })
                                             .then(() => {
                                                 GetProfile();
                                             })
@@ -189,11 +187,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
                         checked={profile.enabled}
                         onChange={() => {
                             profileApi
-                                .apiProfileUpdatePut({ profile: { ...profile, enabled: !profile.enabled } } as UpdateProfileRequest, {
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    }
-                                })
+                                .apiProfileUpdatePut({ updateProfileRequest: { profile: { ...profile, enabled: !profile.enabled } } })
                                 .then(() => GetProfile())
                                 .catch(error => console.error(error));
                         }}

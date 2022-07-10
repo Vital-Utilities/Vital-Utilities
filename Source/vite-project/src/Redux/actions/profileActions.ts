@@ -63,7 +63,7 @@ export function fetchProfilesAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         fetchProfiles()
-            .then(result => dispatch(recieveAllProfiles(result.data)))
+            .then(result => dispatch(recieveAllProfiles(result)))
             .catch(e => console.error(e));
     };
 }
