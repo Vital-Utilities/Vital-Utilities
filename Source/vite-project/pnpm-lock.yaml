@@ -15,7 +15,7 @@ specifiers:
   '@types/react-router-dom': ^5.3.0
   '@typescript-eslint/eslint-plugin': ^5.10.2
   '@typescript-eslint/parser': ^5.10.2
-  '@vital/vitalservice': ../CodeGen/v1/TypeScript/VitalServiceApiClient
+  '@vital/vitalservice': file:../CodeGen/v1/TypeScript/VitalServiceApiClient
   '@vitejs/plugin-react': ^1.3.0
   ahooks: ^3.5.2
   antd: ^4.21.5
@@ -62,7 +62,7 @@ dependencies:
   '@sentry/react': 7.6.0_react@17.0.2
   '@sentry/tracing': 7.6.0
   '@tauri-apps/api': 1.0.2
-  '@vital/vitalservice': link:../CodeGen/v1/TypeScript/VitalServiceApiClient
+  '@vital/vitalservice': file:../CodeGen/v1/TypeScript/VitalServiceApiClient
   ahooks: 3.5.2_react@17.0.2
   antd: 4.21.5_sfoxds7t5ydpegc3knd667wn6m
   eslint: 8.19.0
@@ -2450,6 +2450,14 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /axios/0.26.1:
+    resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
+    dependencies:
+      follow-redirects: 1.15.1
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   /axobject-query/2.2.0:
     resolution: {integrity: sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==}
     dev: true
@@ -3691,6 +3699,16 @@ packages:
 
   /flatted/3.2.6:
     resolution: {integrity: sha512-0sQoMh9s0BYsm+12Huy/rkKxVu4R1+r96YX5cG44rHV0pQ6iC3Q+mkoMFaGWObMFYQxCVT+ssG1ksneA2MI9KQ==}
+
+  /follow-redirects/1.15.1:
+    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
 
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
@@ -5697,3 +5715,13 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
     dev: true
+
+  file:../CodeGen/v1/TypeScript/VitalServiceApiClient:
+    resolution: {directory: ../CodeGen/v1/TypeScript/VitalServiceApiClient, type: directory}
+    name: VitalService
+    version: 0.0.1
+    dependencies:
+      axios: 0.26.1
+    transitivePeerDependencies:
+      - debug
+    dev: false

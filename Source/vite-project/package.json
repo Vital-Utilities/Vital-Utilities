@@ -16,7 +16,7 @@
     "@sentry/react": "^7.6.0",
     "@sentry/tracing": "^7.6.0",
     "@tauri-apps/api": "1.0.2",
-    "@vital/vitalservice": "../CodeGen/v1/TypeScript/VitalServiceApiClient",
+    "@vital/vitalservice": "file:../CodeGen/v1/TypeScript/VitalServiceApiClient",
     "ahooks": "^3.5.2",
     "antd": "^4.21.5",
     "eslint": "^8.19.0",
