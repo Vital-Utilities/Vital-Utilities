@@ -12,15 +12,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v2
+    - uses: actions/checkout@v3       
+    - name: Cache pnpm modules
+      uses: actions/cache@v3
       with:
-        node-version: '17.4.0'
-        cache: 'npm'
-        cache-dependency-path: '**/package-lock.json'
-    - run: npm i -g ts-node
-    - run: npm i -g @types/node
-    - run: npm ci
-    - run: npm test
-    - run: npm run build --if-present
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 6.0.2
+        run_install: false
+    - run: pnpm i -g ts-node
+    - run: pnpm i -g @types/node
+    - run: pnpm --frozen-lockfile
+    - run: pnpm test
+    - run: pnpm run build --if-present
