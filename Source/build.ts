@@ -81,7 +81,7 @@ function replaceInCodeSecretPlaceholders() {
     }
 
     if (secret.sentryReact) {
-        const filePath = `${vitalClientDir}/src/index.tsx`;
+        const filePath = `${vitalClientDir}/src/main.tsx`;
         const file = fs.readFileSync(filePath, "utf-8") as string;
         const replaced = file.replace(/REPLACE_WITH_SENTRYIO_REACT_DSN/g, secret.sentryReact);
         fs.writeFileSync(filePath, replaced);
