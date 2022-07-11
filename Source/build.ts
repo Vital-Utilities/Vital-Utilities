@@ -14,7 +14,7 @@ const vitalRustServiceDir = "Services/VitalRustService";
 const vitalTauriDir = "ClientApp/src-tauri";
 const vitalClientDir = "ClientApp";
 
-const buildFolder = "./bin";
+const buildFolder = "./ClientApp/src-tauri/bin";
 const vitalServiceBin = `${buildFolder}/VitalService`;
 const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
