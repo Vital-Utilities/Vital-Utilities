@@ -525,7 +525,7 @@ namespace VitalService.Services.PerformanceServices
                                     disk.Load.UsedSpacePercentage = sensor.Value;
                                     break;
                                 case SensorType.Load when sensor.Name == "Write Activity":
-                                    disk.Load.WriteActivityPercentage = sensor.Value;
+                                    disk.Load.WriteActivityPercentage = MathF.Round((float)sensor.Value, 2);
                                     break;
                                 case SensorType.Load when sensor.Name == "Total Activity":
                                     disk.Load.TotalActivityPercentage = MathF.Round((float)sensor.Value, 2);
