@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CpuMetricsModel } from "../../../components/Charts/CpuChartTimeSeries";
 import { ChartData, ClassicLayout, formatXAxis, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
+import { OverlayContent } from "../../../components/OverlayContent";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {
@@ -51,15 +52,26 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                             return (
                                 graphWindowSize && (
                                     <div key={i} style={{ border: "1px solid gray" }}>
-                                        <span style={{ padding: 5 }}>{i}</span>
-                                        <ResponsiveContainer width="100%" height={cellHeight}>
-                                            <AreaChart data={ordered}>
-                                                <XAxis dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} hide />
-                                                <YAxis domain={[0, 100]} hide />
-                                                <Tooltip content={<ClassicTooltip />} />
-                                                <Area unit="%" type="monotone" dataKey={`coresUsagePercentage.${i}`} name={`Core${i}`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />;
-                                            </AreaChart>
-                                        </ResponsiveContainer>
+                                        <OverlayContent
+                                            show
+                                            content={
+                                                <>
+                                                    <span style={{ padding: 5 }}>{i}</span>
+                                                    <ResponsiveContainer width="100%" height={cellHeight}>
+                                                        <AreaChart data={ordered}>
+                                                            <XAxis dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} hide />
+                                                            <YAxis domain={[0, 100]} hide />
+                                                            <Tooltip content={<ClassicTooltip />} />
+                                                            <Area unit="%" type="monotone" dataKey={`coresUsagePercentage.${i}`} name={`Core${i}`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />;
+                                                        </AreaChart>
+                                                    </ResponsiveContainer>
+                                                </>
+                                            }
+                                        >
+                                            <div style={{ display: "flex", height: "100%", width: "100%", justifyContent: "center", alignItems: "center" }}>
+                                                <div style={{ fontWeight: "bold", fontSize: "2vw", color: "#ccc" }}>{e}%</div>
+                                            </div>
+                                        </OverlayContent>
                                     </div>
                                 )
                             );

@@ -307,8 +307,11 @@ tr.ant-table-expanded-row:hover>td {
     right: 0;
     height: 100%;
     width: 100%;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+
+    &.blur {
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
 }
 
 .overlayFilter {
@@ -316,6 +319,8 @@ tr.ant-table-expanded-row:hover>td {
 }
 
 .overlay-container {
+    height: 100%;
+    width: 100%;
     position: relative;
 }
 
