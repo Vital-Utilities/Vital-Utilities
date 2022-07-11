@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { gpuMetricsModel } from "../../../components/Charts/GpuMetricChart";
-import { ChartData, formatXAxis, CustomTooltip, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
+import { ChartData, formatXAxis, ClassicLayout, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../../../components/FormatUtils";
 import { VitalState } from "../../../Redux/States";
 
@@ -33,7 +33,8 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
                         <XAxis hide dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} />
                         <YAxis hide yAxisId="left" />
                         <YAxis hide yAxisId="right" stroke="yellow" orientation="right" tickFormatter={e => e + "w"} />
-                        <Tooltip content={<CustomTooltip />} />
+                        // eslint-disable-next-line no-undef
+                        <Tooltip content={<ClassicTooltip />} />
                         <Area yAxisId="left" unit="%" type="monotone" dataKey="coreUsagePercentage" name={`Core Load ${current?.coreUsagePercentage}%`} fillOpacity={0.1} activeDot={{ r: 4 }} isAnimationActive={false} />
                         <Area yAxisId="left" unit="°C" type="monotone" dataKey="coreTemperature" name={`Temperature ${current?.coreTemperature}°C`} stroke="white" activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
                         <Area yAxisId="left" unit="%" type="monotone" dataKey="vRamUsagePercentage" name={`Memory ${current?.vRamUsagePercentage}%`} stroke="orange" activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
@@ -57,7 +58,7 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
                     <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 15 }}>
                         {current?.coreUsagePercentage !== undefined && <ItemOne color="#3182bd" title="Core Utilization" value={`${current.coreUsagePercentage}%`} />}
                         {current?.vRamUsagePercentage !== undefined && <ItemOne color="orange" title="Memory" value={`${current.vRamUsagePercentage}%`} />}
-                        {current?.powerDrawWattage !== undefined && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage.toFixed(2)}w`} />}
+                        {current?.powerDrawWattage !== undefined && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />}
                         {current?.coreTemperature !== undefined && <ItemOne color="white" title="GPU Core" value={`${current?.coreTemperature}°C`} />}
 
                         {thisGpuDynamic?.temperatureReadings &&

@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { networkMetricsModel } from "../../../components/Charts/NetworkAdapterMetricChart";
-import { ChartData, customUnitFlags, formatXAxis, CustomTooltip, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
+import { ChartData, customUnitFlags, formatXAxis, ClassicLayout, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { getReadableBitsPerSecondString, getReadableBytesPerSecondString, getReadableBytesString } from "../../../components/FormatUtils";
 import { NetworkActivityFormat } from "../../../Dtos/UiModel";
 import { VitalState } from "../../../Redux/States";
@@ -35,7 +35,7 @@ export const ClassicNetworkAdapterView: React.FunctionComponent<{ macAddress: st
                     <AreaChart data={ordered}>
                         <XAxis dataKey="dateTimeOffset" hide tickFormatter={e => formatXAxis(e)} />
                         <YAxis hide tickFormatter={e => (props.networkActivityFormat === NetworkActivityFormat.BitsPerSecond ? getReadableBitsPerSecondString(e) : getReadableBytesString(e))} />
-                        <Tooltip content={<CustomTooltip />} />
+                        <Tooltip content={<ClassicTooltip />} />
                         <Area unit={unitType} dataKey="downloadSpeedBps" name={`Recieve ${downloadText}`} stroke="orange" fill="orange" fillOpacity={0.1} isAnimationActive={false} />
                         <Area unit={unitType} dataKey="uploadSpeedBps" name={`Send ${uploadText}`} stroke="yellow" fill="yellow" fillOpacity={0.1} isAnimationActive={false} />
                     </AreaChart>

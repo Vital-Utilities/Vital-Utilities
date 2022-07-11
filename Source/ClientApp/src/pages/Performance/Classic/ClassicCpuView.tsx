@@ -5,7 +5,7 @@ import React, { CSSProperties, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CpuMetricsModel } from "../../../components/Charts/CpuChartTimeSeries";
-import { ChartData, ClassicLayout, CustomTooltip, formatXAxis, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
+import { ChartData, ClassicLayout, formatXAxis, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {
@@ -34,7 +34,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                 <YAxis yAxisId="left" hide />
                                 <YAxis yAxisId="right" stroke="yellow" hide orientation="right" tickFormatter={e => e + "w"} />
                                 <YAxis yAxisId="speed" stroke="white" hide orientation="right" tickFormatter={e => e + "ghz"} />
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={<ClassicTooltip />} />
                                 <Legend />
                                 <Area yAxisId="left" unit="%" type="monotone" dataKey="totalCoreUsagePercentage" name={`Utilisation ${current?.totalCoreUsagePercentage}%`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />
                                 <Area yAxisId="right" unit="w" type="monotone" dataKey="powerDrawWattage" name={`Power ${current?.powerDrawWattage}w`} stroke="yellow" color="yellow" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
@@ -56,7 +56,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                             <AreaChart data={ordered}>
                                                 <XAxis dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} hide />
                                                 <YAxis domain={[0, 100]} hide />
-                                                <Tooltip content={<CustomTooltip />} />
+                                                <Tooltip content={<ClassicTooltip />} />
                                                 <Area unit="%" type="monotone" dataKey={`coresUsagePercentage.${i}`} name={`Core${i}`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />;
                                             </AreaChart>
                                         </ResponsiveContainer>

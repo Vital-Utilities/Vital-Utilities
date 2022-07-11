@@ -1,7 +1,7 @@
 import React from "react";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { diskMetricsModel } from "../../../components/Charts/DiskMetricChart";
-import { ChartData, formatXAxis, CustomTooltip, customUnitFlags, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
+import { ChartData, formatXAxis, customUnitFlags, ClassicLayout, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { getReadableBytesString, getReadableBytesPerSecondString } from "../../../components/FormatUtils";
 
 export const ClassicDiskView: React.FunctionComponent<{ driveLetter: string } & ChartData> = props => {
@@ -24,7 +24,7 @@ export const ClassicDiskView: React.FunctionComponent<{ driveLetter: string } & 
                         <YAxis yAxisId="left" domain={[0, 100]} hide />
                         <YAxis yAxisId="right" orientation="left" hide tickFormatter={e => getReadableBytesString(e)} />
                         <YAxis yAxisId="temp" stroke="white" hide domain={[0, 100]} orientation="right" tickFormatter={e => e + "°C"} />
-                        <Tooltip content={<CustomTooltip />} />
+                        <Tooltip content={<ClassicTooltip />} />
                         <Area yAxisId="left" unit="%" type="monotone" dataKey="totalActivityPercentage" name={"Utilization"} activeDot={{ r: 4 }} fillOpacity={0.1} isAnimationActive={false} />
                         <Area yAxisId="right" unit={customUnitFlags["#Bps"]} type="monotone" dataKey="readRateBytesPerSecond" name={`Read ${getReadableBytesPerSecondString(current?.readRateBytesPerSecond)}`} activeDot={{ r: 4 }} stroke="orange" fill="orange" fillOpacity={0.1} isAnimationActive={false} />
                         <Area yAxisId="right" unit={customUnitFlags["#Bps"]} type="monotone" dataKey="writeRateBytesPerSecond" name={`Write ${getReadableBytesPerSecondString(current?.writeRateBytesPerSecond)}`} activeDot={{ r: 4 }} stroke="yellow" fill="yellow" isAnimationActive={false} fillOpacity={0.1} />

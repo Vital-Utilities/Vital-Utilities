@@ -50,6 +50,34 @@ export const CustomTooltip: React.FunctionComponent<TooltipProps<any, any>> = pr
         </>
     );
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const ClassicTooltip: React.FunctionComponent<TooltipProps<any, any>> = props => {
+    function dynamicUnit(value: unknown | undefined, unit: ReactNode): string | undefined {
+        if (value === undefined) return "";
+        switch (unit?.toString() as customUnitFlags) {
+            case "#Bps":
+                return getReadableBytesPerSecondString(value as number);
+            case "#bps":
+                return getReadableBitsPerSecondString(Math.abs(value as number));
+            case "#Bytes":
+                return getReadableBytesString(Math.abs(value as number));
+            default:
+                return `${value}${unit ?? ""}`;
+        }
+    }
+    return (
+        <>
+            {props && props.payload && props.payload.length && (
+                <div className="recharts-default-tooltip" style={{ padding: 5, opacity: 0.95, border: "1px solid white" }}>
+                    <div>{props.label && new Date(props.label).toLocaleTimeString()}</div>
+                    {props.payload.map((e, i) => {
+                        return <div key={i}>{`${e.name?.toString().split(" ")[0]} : ${dynamicUnit(e.value, e.unit)}`}</div>;
+                    })}
+                </div>
+            )}
+        </>
+    );
+};
 
 export const ClassicLayout: React.FunctionComponent<{ header: { title: string; deviceName?: string }; graph: React.ReactNode; showRange?: boolean; bottomItems: React.ReactNode }> = props => {
     return (

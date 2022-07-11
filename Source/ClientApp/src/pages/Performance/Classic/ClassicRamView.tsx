@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Tooltip } from "recharts";
 import { ramMetricsModel } from "../../../components/Charts/RamMetricChart";
-import { ChartData, formatXAxis, CustomTooltip, customUnitFlags, ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
+import { ChartData, formatXAxis, customUnitFlags, ClassicLayout, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { getReadableBytesString } from "../../../components/FormatUtils";
 import { VitalState } from "../../../Redux/States";
 
@@ -27,7 +27,7 @@ export const ClassicRamView: React.FunctionComponent<ChartData> = props => {
                     <AreaChart data={ordered}>
                         <XAxis hide dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} />
                         <YAxis hide yAxisId="left" domain={[0, current?.totalVisibleMemoryBytes ?? 0]} tickFormatter={e => getReadableBytesString(e)} />
-                        <Tooltip content={<CustomTooltip />} />
+                        <Tooltip content={<ClassicTooltip />} />
                         <Area yAxisId="left" type={"monotone"} unit={customUnitFlags["#Bytes"]} dataKey="usedBytes" name={"Used"} fillOpacity={0.1} activeDot={{ r: 4 }} isAnimationActive={false} />
                     </AreaChart>
                 </ResponsiveContainer>
