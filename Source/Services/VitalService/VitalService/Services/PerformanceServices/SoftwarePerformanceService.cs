@@ -83,8 +83,8 @@ namespace VitalService.Services.PerformanceServices
                 {
                     InstanceName = v.Value.Name,
                     IDProcess = v.Value.Pid,
-                    PercentProcessorTime = (float)Math.Round(v.Value.CpuPercentage, 2),
-                    WorkingSetGB = (float)Math.Round((float)v.Value.MemoryKb / 1024 / 1024, 3),
+                    PercentProcessorTime = MathF.Round(v.Value.CpuPercentage, 2),
+                    WorkingSetGB = MathF.Round((float)v.Value.MemoryKb / 1024 / 1024, 3),
                     WriteBytesPerSec = v.Value.DiskUsage.WriteBytesPerSecond,
                     ReadBytesPerSec = v.Value.DiskUsage.ReadBytesPerSecond,
                     GpuPercentage = v.Value.GpuUtil?.GpuCorePercentage ?? 0
@@ -104,12 +104,12 @@ namespace VitalService.Services.PerformanceServices
                     {
                         var processData = new ProcessData
                         {
-                            ProcessId = (int)data.Pid,
+                            ProcessId = data.Pid,
                             MainWindowTitle = data.MainWindowTitle,
                             Description = data.ExecutablePath is not null ? FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription : null,
                             Name = data.Name,
                             ExecutablePath = data.ExecutablePath,
-                            ParentProcessId = (int?)data.ParentPid,
+                            ParentProcessId = data.ParentPid,
                         };
                         returnValue.TryAdd(pid, processData);
                     }
