@@ -16,6 +16,7 @@ import { recieveDeleteManagedProcessAction as recieveDeleteManagedProcessAction 
 import { Table } from "../../components/Table";
 import { ProfileDto, ManagedModelDto, ProcessPriorityEnum, UpdateProfileRequest } from "@vital/vitalservice";
 import { profileApi } from "../../Redux/actions/api";
+import { OverlayContentOnHover } from "../../components/OverlayContent";
 
 export const EditProfilePage: React.FunctionComponent = () => {
     // @ts-ignore
@@ -73,7 +74,8 @@ export const EditProfilePage: React.FunctionComponent = () => {
                     )}
                 </td>
                 <td>
-                    <OverlayContent
+                    <OverlayContentOnHover
+                        blur
                         content={
                             <div className="button-row center">
                                 <Button onClick={() => updateProcessModel(e)}>Edit Affinity</Button>
@@ -110,7 +112,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
                         >
                             <AffinityRenderer affinity={e.affinity} />
                         </div>
-                    </OverlayContent>
+                    </OverlayContentOnHover>
                 </td>
                 <td />
             </tr>
@@ -217,29 +219,4 @@ export const EditProfilePage: React.FunctionComponent = () => {
                 </Table>
             </>
         );
-};
-
-const OverlayContent: React.FunctionComponent<{ show?: boolean; content: React.ReactNode }> = props => {
-    const [show, setShow] = React.useState<boolean>(props.show ?? false);
-
-    function OverlayBehaviour(): React.CSSProperties | undefined {
-        if (show) return { opacity: "1" };
-        else return { opacity: "0" };
-    }
-
-    return (
-        <div className="overlay-container">
-            {props.children}
-
-            {props.show === undefined ? (
-                <div className="overlayFilter overlay" style={OverlayBehaviour()} onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
-                    {props.content}
-                </div>
-            ) : (
-                <div className="overlayFilter overlay" style={OverlayBehaviour()}>
-                    {props.content}
-                </div>
-            )}
-        </div>
-    );
 };
