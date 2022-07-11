@@ -11,7 +11,7 @@
         "vite-tauri": "vite-tauri",
         "tauri:dev": "pnpm run GenerateCode && set RUST_DEBUG=1 && vite-tauri dev",
         "tauri:build": "pnpm run GenerateCode && vite-tauri build",
-        "GenerateCode": "cd .. && pnpm i --frozen-lockfile && pnpm run GenerateCode && cd ./ClientApp pnpm i --force",
+        "GenerateCode": "cd .. && pnpm i --frozen-lockfile && pnpm run GenerateCode && cd ./ClientApp && pnpm i --force",
         "clean": "npx rimraf node_modules"
     },
     "dependencies": {
