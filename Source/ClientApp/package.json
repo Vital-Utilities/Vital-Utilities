@@ -5,13 +5,13 @@
     "copyright": "Copyright © 2022 Snazzie, Aaron Cooper. All rights reserved.",
     "scripts": {
         "start": "vite",
-        "build": "pnpm run GenerateCode && pnpm i --force && tsc && vite build",
+        "build": "pnpm run GenerateCode && tsc && vite build",
         "preview": "vite preview",
         "test": "jest",
         "vite-tauri": "vite-tauri",
         "tauri:dev": "pnpm run GenerateCode && set RUST_DEBUG=1 && vite-tauri dev",
         "tauri:build": "pnpm run GenerateCode && vite-tauri build",
-        "GenerateCode": "cd .. && pnpm i --frozen-lockfile && pnpm run GenerateCode",
+        "GenerateCode": "cd .. && pnpm i --frozen-lockfile && pnpm run GenerateCode && pnpm i --force && cd ./ClientApp",
         "clean": "npx rimraf node_modules"
     },
     "dependencies": {
