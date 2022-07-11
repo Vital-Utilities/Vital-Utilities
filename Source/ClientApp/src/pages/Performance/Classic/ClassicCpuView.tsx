@@ -69,7 +69,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                             }
                                         >
                                             <div style={{ display: "flex", height: "100%", width: "100%", justifyContent: "center", alignItems: "center" }}>
-                                                <div style={{ fontWeight: "bold", fontSize: "2vw", color: "#ccc" }}>{e}%</div>
+                                                <div style={{ fontWeight: "bold", fontSize: "3.5vh", color: "#ccc" }}>{e}%</div>
                                             </div>
                                         </OverlayContent>
                                     </div>
