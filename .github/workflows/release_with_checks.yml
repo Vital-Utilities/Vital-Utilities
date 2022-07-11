@@ -81,12 +81,12 @@ jobs:
     - name: install ts-node
       run: |
         cd "./Source"
-        npm i -g ts-node
-        npm i -D @types/node
+        pnpm i -g ts-node
+        pnpm i -D @types/node
     - name: Build release
       run: |
         cd "./Source"
-        npm run build:release
+        pnpm run build:release
     - name: Release
       uses: softprops/action-gh-release@v1
       with: 
