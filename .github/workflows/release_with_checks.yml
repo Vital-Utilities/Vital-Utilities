@@ -67,11 +67,17 @@ jobs:
         git config --local user.name "GitHub Action"
         git add ./Source/Version.txt
         git commit -m "Update Version" -a
-    - uses: actions/setup-node@v2
+    - name: Cache pnpm modules
+      uses: actions/cache@v3
       with:
-        node-version: '17.4.0'
-        cache: 'npm'
-        cache-dependency-path: '**/package-lock.json'
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 7.5.0
+        run_install: false
     - name: install ts-node
       run: |
         cd "./Source"
