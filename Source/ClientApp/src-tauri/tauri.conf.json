@@ -4,9 +4,9 @@
         "version": "0.1.2"
     },
     "build": {
-        "distDir": "../build",
+        "distDir": "../dist",
         "devPath": "http://localhost:3000",
-        "beforeDevCommand": "npm run start",
+        "beforeDevCommand": "pnpm start",
         "beforeBuildCommand": "",
         "withGlobalTauri": true
     },

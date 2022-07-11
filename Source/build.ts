@@ -14,7 +14,7 @@ const vitalRustServiceDir = "Services/VitalRustService";
 const vitalTauriDir = "ClientApp/src-tauri";
 const vitalClientDir = "ClientApp";
 
-const buildFolder = "bin";
+const buildFolder = "./bin";
 const vitalServiceBin = `${buildFolder}/VitalService`;
 const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
@@ -51,14 +51,13 @@ function buildSoftware() {
     setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
-    
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
-    execute(`cd ${vitalRustServiceDir} && pnpm --frozen-lockfile && cargo build --release`);
+    execute(`cd ${vitalRustServiceDir} && cargo build --release`);
 
     //@ts-ignore
     fs.copyFileSync(`${vitalRustServiceDir}/target/release/VitalRustService.exe`, `${vitalRustServiceBin}/VitalRustService.exe`);
 
-    execute(`cd ${vitalClientDir} && pnpm --frozen-lockfile && pnpm run build`);
+    execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
 }
 
 function beforePackage() {
