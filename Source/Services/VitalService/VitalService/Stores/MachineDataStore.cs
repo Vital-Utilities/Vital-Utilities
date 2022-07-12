@@ -37,7 +37,7 @@ namespace VitalService.Stores
             return HardwarePerformanceService.CurrentRamUsage;
         }
 
-        public List<GpuUsages> GetGpuUsage()
+        public List<GpuUsage> GetGpuUsage()
         {
             return HardwarePerformanceService.CurrentGpuUsage;
         }

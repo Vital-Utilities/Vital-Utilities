@@ -18,7 +18,7 @@ pub struct GetMachineDynamicDataResponse {
     #[serde(rename = "ramUsagesData", skip_serializing_if = "Option::is_none")]
     pub ram_usages_data: Option<Box<crate::models::MemoryUsage>>,
     #[serde(rename = "gpuUsageData", skip_serializing_if = "Option::is_none")]
-    pub gpu_usage_data: Option<Vec<crate::models::GpuUsages>>,
+    pub gpu_usage_data: Option<Vec<crate::models::GpuUsage>>,
     #[serde(rename = "diskUsages", skip_serializing_if = "Option::is_none")]
     pub disk_usages: Option<Box<crate::models::DiskUsages>>,
     #[serde(rename = "networkUsageData", skip_serializing_if = "Option::is_none")]

@@ -12,7 +12,7 @@
 
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
-pub struct GpuUsages {
+pub struct GpuUsage {
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "temperatureReadings")]
@@ -21,12 +21,8 @@ pub struct GpuUsages {
     pub total_memory_bytes: Option<i64>,
     #[serde(rename = "memoryUsedBytes", skip_serializing_if = "Option::is_none")]
     pub memory_used_bytes: Option<i64>,
-    #[serde(rename = "memoryClockMhz", skip_serializing_if = "Option::is_none")]
-    pub memory_clock_mhz: Option<i32>,
-    #[serde(rename = "shaderClockMhz", skip_serializing_if = "Option::is_none")]
-    pub shader_clock_mhz: Option<i32>,
-    #[serde(rename = "coreClockMhz", skip_serializing_if = "Option::is_none")]
-    pub core_clock_mhz: Option<i32>,
+    #[serde(rename = "clockSpeeds", skip_serializing_if = "Option::is_none")]
+    pub clock_speeds: Option<Box<crate::models::GpuClockSpeeds>>,
     #[serde(rename = "fanPercentage", skip_serializing_if = "Option::is_none")]
     pub fan_percentage: Option<::std::collections::HashMap<String, f32>>,
     #[serde(rename = "powerDrawWatt", skip_serializing_if = "Option::is_none")]
@@ -37,16 +33,14 @@ pub struct GpuUsages {
     pub pc_ie: Option<Box<crate::models::PcieThroughPut>>,
 }
 
-impl GpuUsages {
-    pub fn new(temperature_readings: ::std::collections::HashMap<String, f32>) -> GpuUsages {
-        GpuUsages {
+impl GpuUsage {
+    pub fn new(temperature_readings: ::std::collections::HashMap<String, f32>) -> GpuUsage {
+        GpuUsage {
             name: None,
             temperature_readings,
             total_memory_bytes: None,
             memory_used_bytes: None,
-            memory_clock_mhz: None,
-            shader_clock_mhz: None,
-            core_clock_mhz: None,
+            clock_speeds: None,
             fan_percentage: None,
             power_draw_watt: None,
             load: None,

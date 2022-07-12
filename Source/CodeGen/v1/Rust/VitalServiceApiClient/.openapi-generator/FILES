@@ -25,9 +25,10 @@ docs/GetMachineTimeSeriesRequest.md
 docs/GetManagedResponse.md
 docs/GetProcessesToAddResponse.md
 docs/GetRunningProcessesResponse.md
+docs/GpuClockSpeeds.md
 docs/GpuData.md
+docs/GpuUsage.md
 docs/GpuUsageMetricModel.md
-docs/GpuUsages.md
 docs/HardwareMetricModel.md
 docs/HelloApi.md
 docs/InfluxDbSettings.md
@@ -97,9 +98,10 @@ src/models/get_machine_time_series_request.rs
 src/models/get_managed_response.rs
 src/models/get_processes_to_add_response.rs
 src/models/get_running_processes_response.rs
+src/models/gpu_clock_speeds.rs
 src/models/gpu_data.rs
+src/models/gpu_usage.rs
 src/models/gpu_usage_metric_model.rs
-src/models/gpu_usages.rs
 src/models/hardware_metric_model.rs
 src/models/influx_db_settings.rs
 src/models/ip_interface_properties.rs

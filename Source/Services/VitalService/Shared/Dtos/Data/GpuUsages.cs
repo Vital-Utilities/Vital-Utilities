@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VitalService.Dtos.Coms
 {
-    public class GpuUsages
+    public class GpuUsage
     {
         
         public string? Name { get; set; }
@@ -14,22 +14,31 @@ namespace VitalService.Dtos.Coms
         
         public long? MemoryUsedBytes { get; set; }
         
-        public int? MemoryClockMhz { get; set; }
-        
-        public int? ShaderClockMhz { get; set; }
-        
-        public int? CoreClockMhz { get; set; }
-        
+        public GpuClockSpeeds? ClockSpeeds { get; set; }
+
         public Dictionary<string, float>? FanPercentage { get; set; } = new();
         
         public int? PowerDrawWatt { get; set; }
         
         public LoadData? Load { get; set; } = new();
         
-        public PCIE_ThroughPut PCIe { get; set; } = new();
+        public PCIE_ThroughPut? PCIe { get; set; } = new();
 
-        
     }
+
+    public class GpuClockSpeeds
+    {
+        public int? MemoryClockMhz { get; set; }
+
+        /// <summary>
+        /// SM (Streaming Multiprocessor) clock domain.
+        /// What AMD calls a CU(Compute Unit) can be compared to this.
+        /// </summary>
+        public int? ComputeClockMhz { get; set; }
+        public int? GraphicsClockMhz { get; set; }
+        public int? VideoClockMhz { get; set; }
+    }
+
     public class PCIE_ThroughPut
     {
         

@@ -23,14 +23,14 @@ namespace VitalService.Services.PerformanceServices
     {
         public GetMachineStaticDataResponse MachineStaticData { get; set; } = new();
         public MemoryUsage CurrentRamUsage { get { lastServiceAccess = DateTime.Now; return ramUsageData; } }
-        public List<GpuUsages> CurrentGpuUsage { get { lastServiceAccess = DateTime.Now; return gpuUsageData; } }
+        public List<GpuUsage> CurrentGpuUsage { get { lastServiceAccess = DateTime.Now; return gpuUsageData; } }
         public CpuUsage CurrentCpuUsage { get { lastServiceAccess = DateTime.Now; return cpuUsageData; } }
         public DiskUsages CurrentDiskUsages { get { lastServiceAccess = DateTime.Now; return diskUsagesData; } }
 
 
         public Dtos.Coms.NetworkAdapterUsages CurrentNetworkUsage { get { lastServiceAccess = DateTime.Now; return networkUsageData; } }
 
-        private List<GpuUsages> gpuUsageData = new();
+        private List<GpuUsage> gpuUsageData = new();
         private CpuUsage cpuUsageData = new();
         private MemoryUsage ramUsageData = new();
         private Dtos.Coms.NetworkAdapterUsages networkUsageData = new();
@@ -43,6 +43,8 @@ namespace VitalService.Services.PerformanceServices
         private DiskUsages diskUsagesData = new();
         private CpuUsage cpuDataFromRust;
         private MemoryUsage memDataFromRust;
+        private GpuUsage[] gpuDataFromRust;
+
         //private VitalRustServiceClasses.GpuUsage[] gpuDataFromRust;
 
         public bool ThrottleActive { get; private set; }
@@ -81,7 +83,7 @@ namespace VitalService.Services.PerformanceServices
         {
             cpuDataFromRust = hardwareUsage.CpuUsage;
             memDataFromRust = hardwareUsage.MemUsage;
-            //gpuDataFromRust = hardwareUsage.GpuUsage;
+            gpuDataFromRust = hardwareUsage.GpuUsage;
         }
 
         private void SetStaticData()
@@ -267,10 +269,10 @@ namespace VitalService.Services.PerformanceServices
         {
             Utilities.Debug.LogExecutionTime(null, () =>
             {
-                var toReturn = new List<GpuUsages>();
+                var toReturn = new List<GpuUsage>();
                 foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd))
                 {
-                    var gpu = new GpuUsages();
+                    var gpu = new GpuUsage();
                     foreach (var sensor in hardwareItem.Sensors)
                     {
                         if (sensor.Value is null)
@@ -328,16 +330,19 @@ namespace VitalService.Services.PerformanceServices
                             case SensorType.Clock:
                                 {
                                     var value = sensor.Value;
+                                    if (gpu.ClockSpeeds is null)
+                                        gpu.ClockSpeeds = new();
+
                                     switch (sensor.Name)
                                     {
                                         case "GPU Core":
-                                            gpu.CoreClockMhz = (int)value;
+                                            gpu.ClockSpeeds.GraphicsClockMhz = (int)value;
                                             break;
                                         case "GPU Memory":
-                                            gpu.MemoryClockMhz = (int)value;
+                                            gpu.ClockSpeeds.MemoryClockMhz = (int)value;
                                             break;
                                         case "GPU Shader":
-                                            gpu.ShaderClockMhz = (int)value;
+                                            gpu.ClockSpeeds.ComputeClockMhz = (int)value;
                                             break;
                                         default:
                                             break;
@@ -438,7 +443,7 @@ namespace VitalService.Services.PerformanceServices
                     {
                         toReturn.CoreClocksMhz = cpuDataFromRust.CoreClocksMhz;
                         toReturn.TotalCorePercentage = MathF.Round(cpuDataFromRust.TotalCorePercentage);
-                        toReturn.CorePercentages = cpuDataFromRust.CorePercentages.Select(e=> MathF.Round(e)).ToList();
+                        toReturn.CorePercentages = cpuDataFromRust.CorePercentages.Select(e => MathF.Round(e)).ToList();
                     }
                     cpuUsageData = toReturn;
                 });

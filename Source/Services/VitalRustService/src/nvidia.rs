@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use log::error;
 use nvml::{struct_wrappers::device::ProcessUtilizationSample, Nvml};
-use vital_service_api::models::{GpuUsages, LoadData, PcieThroughPut};
+use vital_service_api::models::{GpuUsage, LoadData, PcieThroughPut};
 
-pub fn get_gpu_util(device: &nvml::Device) -> GpuUsages {
+pub fn get_gpu_util(device: &nvml::Device) -> GpuUsage {
     let utilization = device.utilization_rates().unwrap();
     let mem = device.memory_info().unwrap();
     let mut fans = HashMap::<String, f32>::new();
@@ -20,7 +20,7 @@ pub fn get_gpu_util(device: &nvml::Device) -> GpuUsages {
         }
     }
 
-    return GpuUsages {
+    return GpuUsage {
         name: match device.name() {
             Ok(name) => Some(name),
             Err(e) => {
