@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **cpu_usage_data** | Option<[**crate::models::CpuUsage**](CpuUsage.md)> |  | [optional]
 **ram_usages_data** | Option<[**crate::models::MemoryUsage**](MemoryUsage.md)> |  | [optional]
-**gpu_usage_data** | Option<[**Vec<crate::models::GpuUsages>**](GpuUsages.md)> |  | [optional]
+**gpu_usage_data** | Option<[**Vec<crate::models::GpuUsage>**](GpuUsage.md)> |  | [optional]
 **disk_usages** | Option<[**crate::models::DiskUsages**](DiskUsages.md)> |  | [optional]
 **network_usage_data** | Option<[**crate::models::NetworkAdapterUsages**](NetworkAdapterUsages.md)> |  | [optional]
 **process_cpu_usage** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]

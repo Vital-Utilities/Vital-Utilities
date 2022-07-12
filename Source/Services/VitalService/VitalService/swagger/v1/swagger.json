@@ -1599,7 +1599,7 @@
             ],
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GpuUsages"
+              "$ref": "#/components/schemas/GpuUsage"
             }
           },
           "diskUsages": {
@@ -1848,6 +1848,44 @@
         },
         "additionalProperties": false
       },
+      "GpuClockSpeeds": {
+        "type": "object",
+        "properties": {
+          "memoryClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "computeClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "graphicsClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "videoClockMhz": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "GpuData": {
         "required": [
           "name"
@@ -1868,6 +1906,85 @@
             ],
             "type": "number",
             "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GpuUsage": {
+        "required": [
+          "temperatureReadings"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "required": [
+              "chars",
+              "length"
+            ],
+            "type": "string"
+          },
+          "temperatureReadings": {
+            "required": [
+              "item",
+              "comparer",
+              "count",
+              "isEmpty",
+              "keys",
+              "values"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "totalMemoryBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "memoryUsedBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "clockSpeeds": {
+            "$ref": "#/components/schemas/GpuClockSpeeds"
+          },
+          "fanPercentage": {
+            "required": [
+              "comparer",
+              "count",
+              "keys",
+              "values",
+              "item"
+            ],
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "format": "float",
+              "nullable": true
+            }
+          },
+          "powerDrawWatt": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int32"
+          },
+          "load": {
+            "$ref": "#/components/schemas/LoadData"
+          },
+          "pcIe": {
+            "$ref": "#/components/schemas/PCIE_ThroughPut"
           }
         },
         "additionalProperties": false
@@ -1937,107 +2054,6 @@
               "format": "float",
               "nullable": true
             }
-          }
-        },
-        "additionalProperties": false
-      },
-      "GpuUsages": {
-        "required": [
-          "pCIe",
-          "temperatureReadings"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "required": [
-              "chars",
-              "length"
-            ],
-            "type": "string"
-          },
-          "temperatureReadings": {
-            "required": [
-              "item",
-              "comparer",
-              "count",
-              "isEmpty",
-              "keys",
-              "values"
-            ],
-            "type": "object",
-            "additionalProperties": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          "totalMemoryBytes": {
-            "required": [
-              "hasValue",
-              "value"
-            ],
-            "type": "integer",
-            "format": "int64"
-          },
-          "memoryUsedBytes": {
-            "required": [
-              "hasValue",
-              "value"
-            ],
-            "type": "integer",
-            "format": "int64"
-          },
-          "memoryClockMhz": {
-            "required": [
-              "hasValue",
-              "value"
-            ],
-            "type": "integer",
-            "format": "int32"
-          },
-          "shaderClockMhz": {
-            "required": [
-              "hasValue",
-              "value"
-            ],
-            "type": "integer",
-            "format": "int32"
-          },
-          "coreClockMhz": {
-            "required": [
-              "hasValue",
-              "value"
-            ],
-            "type": "integer",
-            "format": "int32"
-          },
-          "fanPercentage": {
-            "required": [
-              "comparer",
-              "count",
-              "keys",
-              "values",
-              "item"
-            ],
-            "type": "object",
-            "additionalProperties": {
-              "type": "number",
-              "format": "float",
-              "nullable": true
-            }
-          },
-          "powerDrawWatt": {
-            "required": [
-              "hasValue",
-              "value"
-            ],
-            "type": "integer",
-            "format": "int32"
-          },
-          "load": {
-            "$ref": "#/components/schemas/LoadData"
-          },
-          "pcIe": {
-            "$ref": "#/components/schemas/PCIE_ThroughPut"
           }
         },
         "additionalProperties": false
@@ -2986,6 +3002,7 @@
         "required": [
           "cpuUsage",
           "diskUsage",
+          "gpuUsage",
           "memUsage",
           "networkAdapterUsage"
         ],
@@ -2996,6 +3013,21 @@
           },
           "memUsage": {
             "$ref": "#/components/schemas/MemoryUsage"
+          },
+          "gpuUsage": {
+            "required": [
+              "length",
+              "longLength",
+              "rank",
+              "syncRoot",
+              "isReadOnly",
+              "isFixedSize",
+              "isSynchronized"
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GpuUsage"
+            }
           },
           "networkAdapterUsage": {
             "required": [

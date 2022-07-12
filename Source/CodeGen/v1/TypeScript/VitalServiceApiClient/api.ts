@@ -599,10 +599,10 @@ export interface GetMachineDynamicDataResponse {
     'ramUsagesData'?: MemoryUsage;
     /**
      * 
-     * @type {Array<GpuUsages>}
+     * @type {Array<GpuUsage>}
      * @memberof GetMachineDynamicDataResponse
      */
-    'gpuUsageData'?: Array<GpuUsages>;
+    'gpuUsageData'?: Array<GpuUsage>;
     /**
      * 
      * @type {DiskUsages}
@@ -750,6 +750,37 @@ export interface GetRunningProcessesResponse {
 /**
  * 
  * @export
+ * @interface GpuClockSpeeds
+ */
+export interface GpuClockSpeeds {
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuClockSpeeds
+     */
+    'memoryClockMhz'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuClockSpeeds
+     */
+    'computeClockMhz'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuClockSpeeds
+     */
+    'graphicsClockMhz'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuClockSpeeds
+     */
+    'videoClockMhz'?: number;
+}
+/**
+ * 
+ * @export
  * @interface GpuData
  */
 export interface GpuData {
@@ -765,6 +796,67 @@ export interface GpuData {
      * @memberof GpuData
      */
     'memoryTotalBytes'?: number;
+}
+/**
+ * 
+ * @export
+ * @interface GpuUsage
+ */
+export interface GpuUsage {
+    /**
+     * 
+     * @type {string}
+     * @memberof GpuUsage
+     */
+    'name'?: string;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof GpuUsage
+     */
+    'temperatureReadings': { [key: string]: number; };
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsage
+     */
+    'totalMemoryBytes'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsage
+     */
+    'memoryUsedBytes'?: number;
+    /**
+     * 
+     * @type {GpuClockSpeeds}
+     * @memberof GpuUsage
+     */
+    'clockSpeeds'?: GpuClockSpeeds;
+    /**
+     * 
+     * @type {{ [key: string]: number; }}
+     * @memberof GpuUsage
+     */
+    'fanPercentage'?: { [key: string]: number; };
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsage
+     */
+    'powerDrawWatt'?: number;
+    /**
+     * 
+     * @type {LoadData}
+     * @memberof GpuUsage
+     */
+    'load'?: LoadData;
+    /**
+     * 
+     * @type {PCIEThroughPut}
+     * @memberof GpuUsage
+     */
+    'pcIe'?: PCIEThroughPut;
 }
 /**
  * 
@@ -820,79 +912,6 @@ export interface GpuUsageMetricModel {
      * @memberof GpuUsageMetricModel
      */
     'uniqueIdentifier'?: string;
-}
-/**
- * 
- * @export
- * @interface GpuUsages
- */
-export interface GpuUsages {
-    /**
-     * 
-     * @type {string}
-     * @memberof GpuUsages
-     */
-    'name'?: string;
-    /**
-     * 
-     * @type {{ [key: string]: number; }}
-     * @memberof GpuUsages
-     */
-    'temperatureReadings': { [key: string]: number; };
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsages
-     */
-    'totalMemoryBytes'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsages
-     */
-    'memoryUsedBytes'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsages
-     */
-    'memoryClockMhz'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsages
-     */
-    'shaderClockMhz'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsages
-     */
-    'coreClockMhz'?: number;
-    /**
-     * 
-     * @type {{ [key: string]: number; }}
-     * @memberof GpuUsages
-     */
-    'fanPercentage'?: { [key: string]: number; };
-    /**
-     * 
-     * @type {number}
-     * @memberof GpuUsages
-     */
-    'powerDrawWatt'?: number;
-    /**
-     * 
-     * @type {LoadData}
-     * @memberof GpuUsages
-     */
-    'load'?: LoadData;
-    /**
-     * 
-     * @type {PCIEThroughPut}
-     * @memberof GpuUsages
-     */
-    'pcIe'?: PCIEThroughPut;
 }
 /**
  * 
@@ -1748,6 +1767,12 @@ export interface SystemUsage {
      * @memberof SystemUsage
      */
     'memUsage': MemoryUsage;
+    /**
+     * 
+     * @type {Array<GpuUsage>}
+     * @memberof SystemUsage
+     */
+    'gpuUsage': Array<GpuUsage>;
     /**
      * 
      * @type {Array<NetworkAdapterUsage>}

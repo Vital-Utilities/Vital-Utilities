@@ -11,7 +11,7 @@ namespace VitalService.Dtos.Coms
         
         public MemoryUsage? RamUsagesData { get; set; }
         
-        public List<GpuUsages>? GpuUsageData { get; set; }
+        public List<GpuUsage>? GpuUsageData { get; set; }
         
         public DiskUsages? DiskUsages { get; set; }
         

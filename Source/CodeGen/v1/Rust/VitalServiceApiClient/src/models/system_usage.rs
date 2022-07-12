@@ -17,6 +17,8 @@ pub struct SystemUsage {
     pub cpu_usage: Box<crate::models::CpuUsage>,
     #[serde(rename = "memUsage")]
     pub mem_usage: Box<crate::models::MemoryUsage>,
+    #[serde(rename = "gpuUsage")]
+    pub gpu_usage: Vec<crate::models::GpuUsage>,
     #[serde(rename = "networkAdapterUsage")]
     pub network_adapter_usage: Vec<crate::models::NetworkAdapterUsage>,
     #[serde(rename = "diskUsage")]
@@ -24,10 +26,11 @@ pub struct SystemUsage {
 }
 
 impl SystemUsage {
-    pub fn new(cpu_usage: crate::models::CpuUsage, mem_usage: crate::models::MemoryUsage, network_adapter_usage: Vec<crate::models::NetworkAdapterUsage>, disk_usage: ::std::collections::HashMap<String, crate::models::DiskUsage>) -> SystemUsage {
+    pub fn new(cpu_usage: crate::models::CpuUsage, mem_usage: crate::models::MemoryUsage, gpu_usage: Vec<crate::models::GpuUsage>, network_adapter_usage: Vec<crate::models::NetworkAdapterUsage>, disk_usage: ::std::collections::HashMap<String, crate::models::DiskUsage>) -> SystemUsage {
         SystemUsage {
             cpu_usage: Box::new(cpu_usage),
             mem_usage: Box::new(mem_usage),
+            gpu_usage,
             network_adapter_usage,
             disk_usage,
         }

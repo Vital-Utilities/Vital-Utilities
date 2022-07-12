@@ -60,15 +60,13 @@ async fn app() {
 
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
-        let (cpu_util, mem_util, adapter_util, disk_usage) = join!(
+        let (cpu_util, mem_util, adapter_util, disk_usage, gpu_usage) = join!(
             machine::get_cpu_util(&sys_info, &sys_stat),
             machine::get_mem_util(&sys_info),
             machine::get_net_adapters(&sys_info),
             machine::get_disk_util(&sys_info),
+            machine::get_gpu_util(&nvml),
         );
-
-        //let mut gpu_usage = Vec::new();
-        //#gpu_usage.push(nvidia::get_gpu_util(&device));
 
         if process_data.len() > 0 {
             let send_util = post_request(
@@ -78,7 +76,8 @@ async fn app() {
                         cpu_usage: cpu_util,
                         mem_usage: Box::new(mem_util),
                         network_adapter_usage: adapter_util,
-                        disk_usage: *disk_usage, //gpu_usage: gpu_usage,
+                        disk_usage: *disk_usage,
+                        gpu_usage: gpu_usage,
                     }),
                 },
                 format!(
