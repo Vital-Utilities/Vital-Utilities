@@ -126,7 +126,7 @@ pub fn get_mainwindowtitles() -> HashMap<u32, String> {
             .unwrap();
 
         main_window_titles = guard.clone();
-        std::mem::drop(&guard);
+        std::mem::drop(guard);
     }
 
     return main_window_titles;
