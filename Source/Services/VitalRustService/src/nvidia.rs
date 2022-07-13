@@ -26,8 +26,9 @@ pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
             let device = device.unwrap();
             let fan_count = device.num_fans();
             let mut fan_percentages = HashMap::new();
-            if fan_count.is_ok() {
-                for fan_index in 0..fan_count.unwrap() {
+
+            if let Ok(fan_count) = fan_count {
+                for fan_index in 0..fan_count {
                     match device.fan_speed(fan_index) {
                         Ok(speed) => {
                             fan_percentages.insert(format!("Fan {}", fan_index), speed as f32);
@@ -42,13 +43,13 @@ pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
                     }
                 }
             }
-            let mut mem_total: Option<i64> = None;
-            let mut mem_used: Option<i64> = None;
+            let mut total_memory_bytes: Option<i64> = None;
+            let mut memory_used_bytes: Option<i64> = None;
 
             match device.memory_info() {
                 Ok(info) => {
-                    mem_total = Some(info.total as i64);
-                    mem_used = Some(info.used as i64);
+                    total_memory_bytes = Some(info.total as i64);
+                    memory_used_bytes = Some(info.used as i64);
                 }
                 Err(e) => {
                     error!(
@@ -79,10 +80,9 @@ pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
                     Ok(name) => Some(name),
                     Err(_) => None,
                 },
-                temperature_readings: temperature_readings,
-                total_memory_bytes: mem_total,
-                memory_used_bytes: mem_used,
-
+                temperature_readings,
+                total_memory_bytes,
+                memory_used_bytes,
                 fan_percentage: Some(fan_percentages),
                 power_draw_watt: match device.power_usage() {
                     Ok(milliwatt) => Some((milliwatt / 1000) as i32),
@@ -95,11 +95,11 @@ pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
             list.push(data);
         }
     }
-    return list;
+    list
 }
 
 fn get_gpu_load(device: &Device) -> LoadData {
-    return LoadData {
+    LoadData {
         core_percentage: Some(device.utilization_rates().unwrap().gpu as f32),
         frame_buffer_percentage: None,
         video_engine_percentage: None,
@@ -108,11 +108,11 @@ fn get_gpu_load(device: &Device) -> LoadData {
         memory_controller_percentage: Some(device.utilization_rates().unwrap().gpu as f32),
         cuda_percentage: None,
         three_d_percentage: None,
-    };
+    }
 }
 
 fn get_gpu_clock_speeds(device: &Device) -> GpuClockSpeeds {
-    return GpuClockSpeeds {
+    GpuClockSpeeds {
         memory_clock_mhz: match device.clock_info(nvml::enum_wrappers::device::Clock::Memory) {
             Ok(speed) => Some(speed as i32),
             Err(_) => None,
@@ -129,11 +129,11 @@ fn get_gpu_clock_speeds(device: &Device) -> GpuClockSpeeds {
             Ok(speed) => Some(speed as i32),
             Err(_) => None,
         },
-    };
+    }
 }
 
 fn get_pcie_throughput(device: &Device) -> PcieThroughPut {
-    return PcieThroughPut {
+    PcieThroughPut {
         pc_ie_rx_bytes_per_second: match device
             .pcie_throughput(nvml::enum_wrappers::device::PcieUtilCounter::Receive)
         {
@@ -146,7 +146,7 @@ fn get_pcie_throughput(device: &Device) -> PcieThroughPut {
             Ok(bytes) => Some(bytes as i64),
             Err(_) => None,
         },
-    };
+    }
 }
 
 pub fn get_process_gpu_util(nvml: &Option<Nvml>) -> Option<Vec<ProcessUtilizationSample>> {
@@ -165,13 +165,13 @@ pub fn get_process_gpu_util(nvml: &Option<Nvml>) -> Option<Vec<ProcessUtilizatio
             let device = nvml.device_by_index(i);
             if let Ok(device) = device {
                 let util = device.process_utilization_stats(None);
-                if util.is_ok() {
-                    process_data.push(util.unwrap());
+                if let Ok(util) = util {
+                    process_data.push(util);
                 }
             }
         }
     }
 
     // flat map the vector of vectors
-    return Some(process_data.into_iter().flatten().collect());
+    Some(process_data.into_iter().flatten().collect())
 }

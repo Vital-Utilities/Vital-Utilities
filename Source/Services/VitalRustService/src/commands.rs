@@ -1,5 +1,5 @@
 use directories::UserDirs;
-use log::{debug, error, info};
+use log::error;
 use vital_service_api::models::{LaunchSettings, SettingsDto};
 
 pub fn get_backend_settings() -> Result<SettingsDto, String> {
@@ -23,12 +23,10 @@ pub fn get_backend_settings() -> Result<SettingsDto, String> {
 
     let settings = serde_json::from_str::<SettingsDto>(&settings_file.unwrap());
     match settings {
-        Ok(settings) => {
-            return Ok(settings);
-        }
+        Ok(settings) => Ok(settings),
         Err(e) => {
             error!("{}", e);
-            return Err(format!("{}", e));
+            Err(format!("{}", e))
         }
     }
 }
@@ -36,12 +34,10 @@ pub fn get_backend_settings() -> Result<SettingsDto, String> {
 pub fn get_vital_service_ports() -> Result<LaunchSettings, String> {
     let settings_file = get_backend_settings();
     match settings_file {
-        Ok(settings) => {
-            return Ok(*settings.launch);
-        }
+        Ok(settings) => Ok(*settings.launch),
         Err(e) => {
             error!("{}", e);
-            return Err(format!("{}", e));
+            Err(e)
         }
     }
 }

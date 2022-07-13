@@ -1,6 +1,7 @@
 use crate::nvidia;
 use chrono::{DateTime, Utc};
 use core::slice;
+use log::error;
 use nvml::Nvml;
 use once_cell::sync::OnceCell;
 use vital_service_api::models::{ProcessData, ProcessDiskUsage, ProcessGpuUtil};
@@ -33,7 +34,7 @@ pub fn get_process_util(
     let mut list = Vec::new();
     let processes = sysinfo.processes();
 
-    let process_gpu_utilization_samples = nvidia::get_process_gpu_util(&nvml).unwrap_or(Vec::new());
+    let process_gpu_utilization_samples = nvidia::get_process_gpu_util(nvml).unwrap_or_default();
     /*
     let using_compute = gpu_device.running_compute_processes().unwrap();
     let using_graphics = gpu_device.running_graphics_processes().unwrap();
@@ -51,27 +52,21 @@ pub fn get_process_util(
         let pid = pid.as_u32();
         let path = get_process_path(pid); // takes some time
 
-        let mut description: Option<String> = None; // takes some time
-                                                    /*         if path.is_some() {
-                                                        description = match windows::get_file_description(path.to_owned().unwrap().to_string())
-                                                        {
-                                                            Ok(title) => Some(title),
-                                                            Err(_) => None,
-                                                        };
-                                                    }; */
+        let description: Option<String> = None; // takes some time
+                                                /*         if path.is_some() {
+                                                    description = match windows::get_file_description(path.to_owned().unwrap().to_string())
+                                                    {
+                                                        Ok(title) => Some(title),
+                                                        Err(_) => None,
+                                                    };
+                                                }; */
         // windows::get_process_ideal_processors(pid); //takes a lot of time
         list.push(ProcessData {
             pid: pid as i32,
-            parent_pid: match process.parent() {
-                Some(pid) => Some(pid.as_u32() as i32),
-                None => None,
-            },
+            parent_pid: process.parent().map(|pid| pid.as_u32() as i32),
             executable_path: path,
             description,
-            main_window_title: match main_window_titles.get(&pid) {
-                Some(title) => Some(title.to_string()),
-                None => None,
-            },
+            main_window_title: main_window_titles.get(&pid).map(|title| title.to_string()),
             name: process.name().to_string(),
             time_stamp: time_stamp.to_rfc3339(),
             cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f32,
@@ -82,21 +77,20 @@ pub fn get_process_util(
             }),
             status: Some(process.status().to_string()),
 
-            gpu_util: match process_gpu_utilization_samples
+            gpu_util: process_gpu_utilization_samples
                 .iter()
                 .find(|sample| sample.pid == pid)
-            {
-                Some(util) => Some(Box::new(ProcessGpuUtil {
-                    gpu_core_percentage: Some(util.sm_util as f32),
-                    gpu_decoding_percentage: Some(util.dec_util as f32),
-                    gpu_encoding_percentage: Some(util.enc_util as f32),
-                    gpu_mem_percentage: Some(util.mem_util as f32),
-                })),
-                None => None,
-            },
+                .map(|util| {
+                    Box::new(ProcessGpuUtil {
+                        gpu_core_percentage: Some(util.sm_util as f32),
+                        gpu_decoding_percentage: Some(util.dec_util as f32),
+                        gpu_encoding_percentage: Some(util.enc_util as f32),
+                        gpu_mem_percentage: Some(util.mem_util as f32),
+                    })
+                }),
         });
     }
-    return Some(list);
+    Some(list)
 }
 
 static WINDOW_TITLES: OnceCell<Mutex<HashMap<u32, String>>> = OnceCell::new();
@@ -129,15 +123,15 @@ pub fn get_mainwindowtitles() -> HashMap<u32, String> {
         std::mem::drop(guard);
     }
 
-    return main_window_titles;
+    main_window_titles
 }
 
 fn lpfn() -> windows::Win32::UI::WindowsAndMessaging::WNDENUMPROC {
-    return handle();
+    handle()
 }
 
 fn handle() -> Option<unsafe extern "system" fn(hwnd: HWND, lparam: LPARAM) -> BOOL> {
-    return Some(callback);
+    Some(callback)
 }
 
 unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
@@ -153,18 +147,17 @@ unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
     let mut id: u32 = 0;
 
     GetWindowThreadProcessId(hwnd, &mut id);
-    if (text.contains("Default IME")
+    if (!text.contains("Default IME")
         || text.contains("MSCTFIME UI")
         || text.contains("GDI+ Window")
-        || text == "")
-        == false
+        || text.is_empty())
         && IsWindowVisible(hwnd) == true
     {
         guard.insert(id, text);
     }
     std::mem::drop(guard);
 
-    return true.into();
+    true.into()
 }
 
 pub fn get_file_description(path: impl AsRef<Path>) -> Result<String, String> {
@@ -215,8 +208,8 @@ pub fn get_file_description(path: impl AsRef<Path>) -> Result<String, String> {
 }
 
 fn get_process_path(pid: u32) -> Option<String> {
-    let mut path = None;
     unsafe {
+        let mut path = None;
         let h_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
 
         if let Ok(h_snap) = h_snap {
@@ -236,28 +229,32 @@ fn get_process_path(pid: u32) -> Option<String> {
             }
             CloseHandle(h_snap);
         }
+        path
     }
-
-    return path;
 }
 
-pub fn get_process_ideal_processors(pid: u32) -> HashSet<u32> {
+pub fn get_process_ideal_processors(pid: u32) -> Result<HashSet<u32>, winproc::Error> {
     let proc = winproc::Process::from_id(pid as u32);
-    let mut ideal_processors = HashSet::new();
     match proc {
         Ok(proc) => {
+            let mut ideal_processors = HashSet::new();
+
             let threads = proc.threads().unwrap();
             for thread in threads {
                 match thread.ideal_processor() {
                     Ok(ideal_processor) => {
                         ideal_processors.insert(ideal_processor);
                     }
-                    Err(_) => {}
+                    Err(e) => {
+                        error!("Error getting ideal processor: {:?}", e);
+                    }
                 }
             }
+            Ok(ideal_processors)
         }
-        Err(_) => {}
+        Err(e) => {
+            error!("Error getting process: {:?}", e);
+            Err(e)
+        }
     }
-
-    return ideal_processors;
 }

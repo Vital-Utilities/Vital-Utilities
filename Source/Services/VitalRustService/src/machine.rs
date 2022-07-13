@@ -1,13 +1,11 @@
 use std::collections::HashMap;
 
-use log::error;
-use nvml::{Device, Nvml};
+use nvml::Nvml;
 use sysinfo::{CpuExt, DiskExt, NetworkExt, SystemExt};
 use systemstat::Platform;
 use vital_service_api::models::{
-    CpuUsage, DiskLoad, DiskType, DiskUsage, DriveType, GpuClockSpeeds, GpuUsage,
-    IpInterfaceProperties, LoadData, MemoryUsage, NetAdapterUsage, NetworkAdapterProperties,
-    NetworkAdapterUsage, PcieThroughPut,
+    CpuUsage, DiskLoad, DiskType, DiskUsage, DriveType, GpuUsage, IpInterfaceProperties,
+    MemoryUsage, NetAdapterUsage, NetworkAdapterProperties, NetworkAdapterUsage,
 };
 
 use crate::nvidia;
@@ -39,20 +37,19 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
                 speed_bps: None,
                 connection_type: None,
             }),
-            usage: match stats {
-                Some(stats) => Some(Box::new(NetAdapterUsage {
+            usage: stats.map(|stats| {
+                Box::new(NetAdapterUsage {
                     send_bps: stats.1.transmitted() as i64,
                     recieve_bps: stats.1.received() as i64,
                     recieved_bytes: stats.1.total_received() as i64,
                     sent_bytes: stats.1.total_transmitted() as i64,
                     usage_percentage: None,
-                })),
-                None => None,
-            },
+                })
+            }),
         });
     }
 
-    return list;
+    list
 }
 
 pub async fn get_cpu_util(
@@ -68,14 +65,11 @@ pub async fn get_cpu_util(
     }
 
     let mut temperature_readings = HashMap::new();
-    match sysstat.cpu_temp() {
-        Ok(temp) => {
-            temperature_readings.insert("CPU Package".to_string(), temp as f32);
-        }
-        Err(_) => {}
+    if let Ok(temp) = sysstat.cpu_temp() {
+        temperature_readings.insert("CPU Package".to_string(), temp as f32);
     }
     let info = sysinfo.global_cpu_info();
-    return Box::new(CpuUsage {
+    Box::new(CpuUsage {
         name: info.name().to_string(),
         brand: Some(info.brand().to_string()),
         vendor_id: Some(info.vendor_id().to_string()),
@@ -84,7 +78,7 @@ pub async fn get_cpu_util(
         power_draw_wattage: None,
         core_percentages,
         temperature_readings: temperature_readings.clone(),
-    });
+    })
 }
 
 pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, DiskUsage>> {
@@ -125,26 +119,26 @@ pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, Dis
         );
     }
 
-    return list;
+    list
 }
 
 pub async fn get_mem_util(sysinfo: &sysinfo::System) -> MemoryUsage {
-    return MemoryUsage {
+    MemoryUsage {
         total_visible_memory_bytes: (sysinfo.total_memory() * 1000) as i64,
         used_memory_bytes: (sysinfo.used_memory() * 1000) as i64,
         swap_percentage: (sysinfo.used_swap() as f32 / sysinfo.total_swap() as f32) * 100.0,
         swap_total_bytes: sysinfo.total_swap() as i64,
         swap_used_bytes: sysinfo.used_swap() as i64,
-    };
+    }
 }
 
 pub async fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
     let mut list = Vec::new();
 
     // append nvidia_gpus into list
-    for gpu in nvidia::get_gpu_util(&nvml) {
+    for gpu in nvidia::get_gpu_util(nvml) {
         list.push(gpu);
     }
 
-    return list;
+    list
 }
