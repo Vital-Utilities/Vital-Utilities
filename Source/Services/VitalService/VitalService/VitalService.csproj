@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+		<RuntimeIdentifier>win10</RuntimeIdentifier>
 		<IsPackable>false</IsPackable>
 		<StartupObject></StartupObject>
 		<SignAssembly>False</SignAssembly>

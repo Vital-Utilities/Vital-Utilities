@@ -68,7 +68,7 @@ async fn app() {
             machine::get_gpu_util(&nvml),
         );
 
-        if process_data.len() > 0 {
+        if !process_data.is_empty() {
             let send_util = post_request(
                 SendUtilizationRequest {
                     process_data,
@@ -77,7 +77,7 @@ async fn app() {
                         mem_usage: Box::new(mem_util),
                         network_adapter_usage: adapter_util,
                         disk_usage: *disk_usage,
-                        gpu_usage: gpu_usage,
+                        gpu_usage,
                     }),
                 },
                 format!(
