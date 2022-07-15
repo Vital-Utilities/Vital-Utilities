@@ -455,9 +455,10 @@ export const PerformancePage: React.FunctionComponent = props => {
 
                                                     <div>
                                                         <h4 style={{ borderBottom: "1px solid" }}>Clocks</h4>
-                                                        <div>Core: {`${gpuUsageData?.[index]?.coreClockMhz?.toFixed(0)} Mhz`}</div>
-                                                        <div>Memory: {`${gpuUsageData?.[index]?.memoryClockMhz?.toFixed(0)} Mhz`}</div>
-                                                        <div>Shader: {`${gpuUsageData?.[index]?.shaderClockMhz?.toFixed(0)} Mhz`}</div>
+                                                        <div>Graphics: {`${gpuUsageData?.[index]?.clockSpeeds?.graphicsClockMhz?.toFixed(0)} Mhz`}</div>
+                                                        <div>Compute: {`${gpuUsageData?.[index]?.clockSpeeds?.computeClockMhz?.toFixed(0)} Mhz`}</div>
+                                                        <div>Video: {`${gpuUsageData?.[index]?.clockSpeeds?.videoClockMhz?.toFixed(0)} Mhz`}</div>
+                                                        <div>Memory: {`${gpuUsageData?.[index]?.clockSpeeds?.memoryClockMhz?.toFixed(0)} Mhz`}</div>
                                                     </div>
                                                 </InterfaceDetails>
                                             </div>
@@ -545,7 +546,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                         </div>
                                                     </InterfaceDetails>
                                                 ) : (
-                                                    <div style={{ height: 150 }}>{chartable && <NetworkAdapterMetricChart macAddress={value.properties.macAddress} {...chartable} />}</div>
+                                                    <div style={{ height: 150 }}>{chartable && value.properties.macAddress && <NetworkAdapterMetricChart macAddress={value.properties.macAddress} {...chartable} />}</div>
                                                 )}
                                             </div>
                                         </Card>
