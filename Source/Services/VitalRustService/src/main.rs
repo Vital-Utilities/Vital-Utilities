@@ -26,7 +26,7 @@ pub mod software;
 
 use api::post_request;
 static LOGGER: SimpleLogger = SimpleLogger;
-static WAIT_TIME: core::time::Duration = Duration::from_millis(1000);
+static SECOND: core::time::Duration = Duration::from_millis(1000);
 
 #[rocket::main]
 async fn main() {
@@ -52,9 +52,10 @@ async fn app() {
     let sys_stat = systemstat::System::new();
     let mut sys_info = sysinfo::System::new_all();
     sys_info.refresh_all(); // required to get the correct usage as data relies on previous sample
+    thread::sleep(SECOND);
     loop {
-        thread::sleep(WAIT_TIME);
         let now = Instant::now();
+
         sys_info.refresh_all();
         let time = chrono::Utc::now();
 
@@ -91,6 +92,12 @@ async fn app() {
             error!("no process data found");
         }
         info!("time taken: {}", now.elapsed().as_millis());
+
+        if now.elapsed().as_millis() < SECOND.as_millis() {
+            thread::sleep(Duration::from_millis(
+                (SECOND.as_millis() - now.elapsed().as_millis()) as u64,
+            ));
+        }
     }
 }
 struct SimpleLogger;
