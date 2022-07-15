@@ -78,14 +78,14 @@ namespace VitalService
 
                 options.SchemaFilter<SwaggerRequiredSchemaFilter>();
                 options.SupportNonNullableReferenceTypes();
-               // options.UseAllOfToExtendReferenceSchemas(); // Allows $ref enums to be nullable
+                // options.UseAllOfToExtendReferenceSchemas(); // Allows $ref enums to be nullable
                 options.UseAllOfForInheritance();  // Allows $ref objects to be nullable
             });
 
             services.AddResponseCompression();
             services.AddControllers().AddJsonOptions(opts =>
             {
-                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(),new Hashset );
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
             services.AddCors(options =>
