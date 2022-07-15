@@ -55,7 +55,7 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
             showRange
             bottomItems={
                 <>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 15 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 15, overflowY: "auto" }}>
                         {current?.coreUsagePercentage !== undefined && <ItemOne color="#3182bd" title="Core Utilization" value={`${current.coreUsagePercentage}%`} />}
                         {current?.vRamUsagePercentage !== undefined && <ItemOne color="orange" title="Memory" value={`${current.vRamUsagePercentage}%`} />}
                         {current?.powerDrawWattage !== undefined && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />}
@@ -67,11 +67,12 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
                                 .map((key, index) => {
                                     return <ItemOne key={index} color="lightgray" title={`${key.replace("GPU ", "")}`} value={`${Math.ceil(thisGpuDynamic?.temperatureReadings[key] ?? 0)}°C`} />;
                                 })}
-                        {thisGpuDynamic?.pcIe?.pcIe_RxBytesPerSecond !== undefined && <ItemOne color="lightgray" title="PCIE Recieve" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIe_RxBytesPerSecond, 0)} />}
-                        {thisGpuDynamic?.pcIe?.pcIe_TxBytesPerSecond !== undefined && <ItemOne color="lightgray" title="PCIE Transmit" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIe_TxBytesPerSecond, 0)} />}
-                        {thisGpuDynamic?.memoryClockMhz !== undefined && <ItemOne color="lightgray" title="Memory Clock" value={`${Math.ceil(thisGpuDynamic?.memoryClockMhz)}mhz`} />}
-                        {thisGpuDynamic?.shaderClockMhz !== undefined && <ItemOne color="lightgray" title="Shader Clock" value={`${Math.ceil(thisGpuDynamic?.shaderClockMhz)}mhz`} />}
-
+                        {thisGpuDynamic?.pcIe?.pcIe_RxBytesPerSecond && <ItemOne color="lightgray" title="PCIE Recieve" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIe_RxBytesPerSecond, 0)} />}
+                        {thisGpuDynamic?.pcIe?.pcIe_TxBytesPerSecond && <ItemOne color="lightgray" title="PCIE Transmit" value={getReadableBytesPerSecondString(thisGpuDynamic?.pcIe.pcIe_TxBytesPerSecond, 0)} />}
+                        {thisGpuDynamic?.clockSpeeds?.graphicsClockMhz && <ItemOne color="lightgray" title="Graphics Clock" value={`${Math.ceil(thisGpuDynamic?.clockSpeeds?.graphicsClockMhz)}mhz`} />}
+                        {thisGpuDynamic?.clockSpeeds?.memoryClockMhz && <ItemOne color="lightgray" title="Memory Clock" value={`${Math.ceil(thisGpuDynamic?.clockSpeeds?.memoryClockMhz)}mhz`} />}
+                        {thisGpuDynamic?.clockSpeeds?.computeClockMhz && <ItemOne color="lightgray" title="Compute Clock" value={`${Math.ceil(thisGpuDynamic?.clockSpeeds?.computeClockMhz)}mhz`} />}
+                        {thisGpuDynamic?.clockSpeeds?.videoClockMhz && <ItemOne color="lightgray" title="Video Clock" value={`${Math.ceil(thisGpuDynamic?.clockSpeeds?.videoClockMhz)}mhz`} />}
                         {current?.fanPercentage &&
                             Object.keys(current.fanPercentage).map((key, index) => {
                                 return <ItemOne key={index} color="lightgray" title={`Fan ${index + 1}`} value={`${current?.fanPercentage?.[key]}%`} />;
