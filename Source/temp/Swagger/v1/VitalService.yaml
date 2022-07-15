@@ -1747,12 +1747,13 @@ components:
         parent:
           $ref: '#/components/schemas/ProcessViewDto'
         children:
-          uniqueItems: true
           required:
-            - count
             - comparer
-          type: array
-          items:
+            - count
+            - keys
+            - values
+          type: object
+          additionalProperties:
             $ref: '#/components/schemas/ProcessViewDto'
       additionalProperties: false
     ProcessData:

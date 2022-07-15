@@ -16,11 +16,11 @@ pub struct ParentChildModelDto {
     #[serde(rename = "parent")]
     pub parent: Box<crate::models::ProcessViewDto>,
     #[serde(rename = "children")]
-    pub children: Vec<crate::models::ProcessViewDto>,
+    pub children: ::std::collections::HashMap<String, crate::models::ProcessViewDto>,
 }
 
 impl ParentChildModelDto {
-    pub fn new(parent: crate::models::ProcessViewDto, children: Vec<crate::models::ProcessViewDto>) -> ParentChildModelDto {
+    pub fn new(parent: crate::models::ProcessViewDto, children: ::std::collections::HashMap<String, crate::models::ProcessViewDto>) -> ParentChildModelDto {
         ParentChildModelDto {
             parent: Box::new(parent),
             children,

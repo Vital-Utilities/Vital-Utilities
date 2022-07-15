@@ -1625,21 +1625,13 @@ components:
     NetAdapterUsage:
       required:
         - recieveBps
-        - recievedBytes
         - sendBps
-        - sentBytes
       type: object
       properties:
         sendBps:
           type: integer
           format: int64
         recieveBps:
-          type: integer
-          format: int64
-        sentBytes:
-          type: integer
-          format: int64
-        recievedBytes:
           type: integer
           format: int64
         usagePercentage:
@@ -1652,7 +1644,6 @@ components:
     NetworkAdapterProperties:
       required:
         - iPInterfaceProperties
-        - macAddress
         - name
       type: object
       properties:
@@ -1756,12 +1747,13 @@ components:
         parent:
           $ref: '#/components/schemas/ProcessViewDto'
         children:
-          uniqueItems: true
           required:
-            - count
             - comparer
-          type: array
-          items:
+            - count
+            - keys
+            - values
+          type: object
+          additionalProperties:
             $ref: '#/components/schemas/ProcessViewDto'
       additionalProperties: false
     ProcessData:

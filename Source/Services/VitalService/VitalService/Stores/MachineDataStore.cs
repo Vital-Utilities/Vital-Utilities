@@ -167,7 +167,7 @@ namespace VitalService.Stores
                                                        .Select(e => e.Value)
                                                        .Select(e => new ProcessViewDto { Id = e.ProcessId, ProcessName = e.Name, ProcessTitle = e.MainWindowTitle })
                                                        .OrderBy(e => e.Id)
-                                                       .ToHashSet()
+                                                       .ToDictionary(k => k.Id, v=> v)
                         }
 
                     );

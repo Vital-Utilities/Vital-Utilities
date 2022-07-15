@@ -1325,10 +1325,10 @@ export interface ParentChildModelDto {
     'parent': ProcessViewDto;
     /**
      * 
-     * @type {Set<ProcessViewDto>}
+     * @type {{ [key: string]: ProcessViewDto; }}
      * @memberof ParentChildModelDto
      */
-    'children': Set<ProcessViewDto>;
+    'children': { [key: string]: ProcessViewDto; };
 }
 /**
  * 

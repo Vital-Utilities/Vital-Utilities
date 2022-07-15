@@ -2508,13 +2508,14 @@
             "$ref": "#/components/schemas/ProcessViewDto"
           },
           "children": {
-            "uniqueItems": true,
             "required": [
+              "comparer",
               "count",
-              "comparer"
+              "keys",
+              "values"
             ],
-            "type": "array",
-            "items": {
+            "type": "object",
+            "additionalProperties": {
               "$ref": "#/components/schemas/ProcessViewDto"
             }
           }

@@ -2336,9 +2336,7 @@
       "NetAdapterUsage": {
         "required": [
           "recieveBps",
-          "recievedBytes",
-          "sendBps",
-          "sentBytes"
+          "sendBps"
         ],
         "type": "object",
         "properties": {
@@ -2347,14 +2345,6 @@
             "format": "int64"
           },
           "recieveBps": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "sentBytes": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "recievedBytes": {
             "type": "integer",
             "format": "int64"
           },
@@ -2372,7 +2362,6 @@
       "NetworkAdapterProperties": {
         "required": [
           "iPInterfaceProperties",
-          "macAddress",
           "name"
         ],
         "type": "object",
@@ -2519,13 +2508,14 @@
             "$ref": "#/components/schemas/ProcessViewDto"
           },
           "children": {
-            "uniqueItems": true,
             "required": [
+              "comparer",
               "count",
-              "comparer"
+              "keys",
+              "values"
             ],
-            "type": "array",
-            "items": {
+            "type": "object",
+            "additionalProperties": {
               "$ref": "#/components/schemas/ProcessViewDto"
             }
           }
