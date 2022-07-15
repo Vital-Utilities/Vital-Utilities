@@ -13,8 +13,7 @@ import { gpuMetricsModel, GpuMetricChart } from "../../components/Charts/GpuMetr
 import { networkMetricsModel, NetworkAdapterMetricChart } from "../../components/Charts/NetworkAdapterMetricChart";
 import { ramMetricsModel, RamMetricChart } from "../../components/Charts/RamMetricChart";
 import { ChartData } from "../../components/Charts/Shared";
-import { MBpsToMbps, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
-import { NetworkActivityFormat } from "../../Dtos/UiModel";
+import { ByteToBits, getReadableBytesString, getReadableBitsPerSecondString, getReadableBytesPerSecondString } from "../../components/FormatUtils";
 import { VitalState } from "../../Redux/States";
 import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
 import { ClassicDiskView } from "./Classic/ClassicDiskView";
@@ -74,9 +73,9 @@ export const PerformancePage: React.FunctionComponent = props => {
     const [pauseTime, setPauseTime] = React.useState(false);
     const [updateRate, setUpdateRate] = React.useState<number>(0);
     const [chartable, setChartable] = React.useState<ChartData>();
-    const [networkActivityFormat, setNetworkActivityFormat] = useLocalStorageState("networkActivityFormat", { defaultValue: NetworkActivityFormat.BitsPerSecond });
     const [classicCpuGraphView, setClassicCpuGraphView] = useLocalStorageState<"Overall" | "Logical">("classicCpuGraphView", { defaultValue: "Overall" });
     const [classicViewProps, setClassicViewProps] = React.useState<{ selectedKey: string; driveLetter?: string; macAddress?: string; gpuNumber?: number }>({ selectedKey: "CPU" });
+
     useEffect(() => {
         const getUpdateRate = (time: relativeTypeStringOptions) => {
             switch (time) {
@@ -130,7 +129,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                     }) as gpuMetricsModel[],
                     ramMetrics: getRamUsageData(e),
                     networkMetrics: e.networkUsageData.map(d => {
-                        return { dateTimeOffset: new Date(e.dateTimeOffset), macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -MBpsToMbps(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && MBpsToMbps(d.downloadSpeedBps)) ?? null };
+                        return { dateTimeOffset: new Date(e.dateTimeOffset), macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -ByteToBits(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && ByteToBits(d.downloadSpeedBps)) ?? null };
                     }) as networkMetricsModel[],
                     diskMetrics: e.diskUsageData.map(d => {
                         return { ...d, dateTimeOffset: e.dateTimeOffset };
@@ -295,16 +294,6 @@ export const PerformancePage: React.FunctionComponent = props => {
         );
     }
 
-    function networkActivityMenu() {
-        return (
-            <Menu>
-                <Menu.ItemGroup title="Change network activity format">
-                    <Menu.Item onClick={() => setNetworkActivityFormat(NetworkActivityFormat.BytesPerSecond)}>Bytes Per Second (B/s, KB/s, MB/s) </Menu.Item>
-                    <Menu.Item onClick={() => setNetworkActivityFormat(NetworkActivityFormat.BitsPerSecond)}>Bits Per Second (B/s, Kb/s, Mb/s) </Menu.Item>
-                </Menu.ItemGroup>
-            </Menu>
-        );
-    }
     function cpuActivityMenu() {
         return (
             <Menu>
@@ -321,7 +310,7 @@ export const PerformancePage: React.FunctionComponent = props => {
     }
     function getClassicContent() {
         if (!chartable) return;
-        const contextMenu = classicViewProps.selectedKey.includes("NetAdapter") ? networkActivityMenu() : classicViewProps.selectedKey === "CPU" ? cpuActivityMenu() : null;
+        const contextMenu = classicViewProps.selectedKey === "CPU" ? cpuActivityMenu() : null;
         return (
             <Dropdown key={"dropdown"} overlay={contextMenu ? contextMenu : <></>} trigger={contextMenu ? ["contextMenu"] : undefined}>
                 <div style={{ display: "grid", gridTemplateRows: "60px auto 50px 250px", overflowY: "scroll", paddingBottom: 50, paddingLeft: 10, width: "100%" }}>
@@ -336,7 +325,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                         <ClassicDiskView {...chartable} driveLetter={classicViewProps.driveLetter!} />
                     ) : classicViewProps.selectedKey.includes("NetAdapter") && classicViewProps.macAddress ? (
-                        <ClassicNetworkAdapterView {...chartable} macAddress={classicViewProps.macAddress} networkActivityFormat={networkActivityFormat} />
+                        <ClassicNetworkAdapterView {...chartable} macAddress={classicViewProps.macAddress} />
                     ) : (
                         <></>
                     )}
