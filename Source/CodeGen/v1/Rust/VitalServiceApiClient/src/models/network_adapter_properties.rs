@@ -19,8 +19,8 @@ pub struct NetworkAdapterProperties {
     pub name: String,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(rename = "macAddress")]
-    pub mac_address: String,
+    #[serde(rename = "macAddress", skip_serializing_if = "Option::is_none")]
+    pub mac_address: Option<String>,
     #[serde(rename = "speedBps", skip_serializing_if = "Option::is_none")]
     pub speed_bps: Option<i64>,
     #[serde(rename = "connectionType", skip_serializing_if = "Option::is_none")]
@@ -28,12 +28,12 @@ pub struct NetworkAdapterProperties {
 }
 
 impl NetworkAdapterProperties {
-    pub fn new(name: String, mac_address: String) -> NetworkAdapterProperties {
+    pub fn new(name: String) -> NetworkAdapterProperties {
         NetworkAdapterProperties {
             ip_interface_properties: None,
             name,
             description: None,
-            mac_address,
+            mac_address: None,
             speed_bps: None,
             connection_type: None,
         }

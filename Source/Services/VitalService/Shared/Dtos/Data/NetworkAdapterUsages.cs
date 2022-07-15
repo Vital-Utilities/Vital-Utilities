@@ -23,7 +23,7 @@ namespace VitalService.Dtos.Coms
         
         public string? Description { get; set; }
         
-        public string MacAddress { get; set; }
+        public string? MacAddress { get; set; }
         
         public long? SpeedBps { get; set; }
         
@@ -41,16 +41,12 @@ namespace VitalService.Dtos.Coms
         
         public bool? IsDnsEnabled { get; set; }
     }
+
     public class NetAdapterUsage
     {
-        
         public long SendBps { get; set; }
         
         public long RecieveBps { get; set; }
-        
-        public long SentBytes { get; set; }
-        
-        public long RecievedBytes { get; set; }
         
         public float? UsagePercentage { get; set; }
     }

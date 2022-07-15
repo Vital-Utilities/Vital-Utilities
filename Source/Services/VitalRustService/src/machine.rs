@@ -27,7 +27,7 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
             properties: Box::new(NetworkAdapterProperties {
                 name: int.name,
                 description: int.description,
-                mac_address: int.mac_addr.unwrap().address(),
+                mac_address: Some(int.mac_addr.unwrap().address()),
                 ip_interface_properties: Some(Box::new(IpInterfaceProperties {
                     i_pv4_address: Some(int.ipv4.into_iter().map(|x| x.addr.to_string()).collect()),
                     i_pv6_address: Some(int.ipv6.into_iter().map(|x| x.addr.to_string()).collect()),
@@ -41,8 +41,6 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
                 Box::new(NetAdapterUsage {
                     send_bps: stats.1.transmitted() as i64,
                     recieve_bps: stats.1.received() as i64,
-                    recieved_bytes: stats.1.total_received() as i64,
-                    sent_bytes: stats.1.total_transmitted() as i64,
                     usage_percentage: None,
                 })
             }),

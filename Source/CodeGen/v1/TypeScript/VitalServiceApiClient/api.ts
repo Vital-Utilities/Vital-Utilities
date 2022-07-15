@@ -1184,18 +1184,6 @@ export interface NetAdapterUsage {
      * @type {number}
      * @memberof NetAdapterUsage
      */
-    'sentBytes': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof NetAdapterUsage
-     */
-    'recievedBytes': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof NetAdapterUsage
-     */
     'usagePercentage'?: number;
 }
 /**
@@ -1227,7 +1215,7 @@ export interface NetworkAdapterProperties {
      * @type {string}
      * @memberof NetworkAdapterProperties
      */
-    'macAddress': string;
+    'macAddress'?: string;
     /**
      * 
      * @type {number}
