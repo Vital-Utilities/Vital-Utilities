@@ -60,10 +60,10 @@ async fn app() {
 
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
-        let (cpu_util, mem_util, adapter_util, disk_usage, gpu_usage) = join!(
+        let (cpu_util, mem_util, disk_usage, gpu_usage) = join!(
             machine::get_cpu_util(&sys_info, &sys_stat),
             machine::get_mem_util(&sys_info),
-            machine::get_net_adapters(&sys_info),
+            //machine::get_net_adapters(&sys_info),
             machine::get_disk_util(&sys_info),
             machine::get_gpu_util(&nvml),
         );
@@ -75,7 +75,7 @@ async fn app() {
                     system_usage: Box::new(SystemUsage {
                         cpu_usage: cpu_util,
                         mem_usage: Box::new(mem_util),
-                        network_adapter_usage: adapter_util,
+                        network_adapter_usage: Vec::new(),
                         disk_usage: *disk_usage,
                         gpu_usage,
                     }),
