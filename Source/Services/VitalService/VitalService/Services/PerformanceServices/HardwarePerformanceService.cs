@@ -221,12 +221,6 @@ namespace VitalService.Services.PerformanceServices
 
                                 switch (sensor.Name)
                                 {
-                                    case "Data Uploaded":
-                                        adapterObj.Usage.SentBytes = (long)sensor.Value;
-                                        break;
-                                    case "Data Downloaded":
-                                        adapterObj.Usage.RecievedBytes = (long)sensor.Value;
-                                        break;
                                     case "Upload Speed":
                                         adapterObj.Usage.SendBps = (long)sensor.Value;
                                         break;
