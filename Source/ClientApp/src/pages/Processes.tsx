@@ -196,8 +196,6 @@ export const Processes: React.FunctionComponent = () => {
     }
 
     function renderProcess(e: ParentChildModelDto): React.ReactNode {
-        console.log(e.children);
-
         const returnValue: React.ReactNode[] = [];
         const childrenLength = Object.keys(e.children).length;
         const hasChildren = childrenLength > 0;
