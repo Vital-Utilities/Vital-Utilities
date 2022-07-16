@@ -102,15 +102,23 @@ namespace VitalService.Services.PerformanceServices
                 {
                     try
                     {
+                        var description = FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription;
+                        if (description != null)
+                        {
+                            description = description.Trim();
+                            if (string.IsNullOrEmpty(description))
+                                description = null;
+                        }
                         var processData = new ProcessData
                         {
                             ProcessId = data.Pid,
                             MainWindowTitle = data.MainWindowTitle,
-                            Description = data.ExecutablePath is not null ? FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription : null,
+                            Description = description,
                             Name = data.Name,
                             ExecutablePath = data.ExecutablePath,
                             ParentProcessId = data.ParentPid,
                         };
+
                         returnValue.TryAdd(pid, processData);
                     }
                     catch (Exception e)

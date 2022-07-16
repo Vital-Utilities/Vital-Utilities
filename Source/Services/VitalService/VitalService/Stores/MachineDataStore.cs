@@ -165,9 +165,9 @@ namespace VitalService.Stores
                         ,
                             Children = runningProcesses.Where(e => e.Value.ParentProcessId == process.ProcessId)
                                                        .Select(e => e.Value)
-                                                       .Select(e => new ProcessViewDto { Id = e.ProcessId, ProcessName = e.Name, ProcessTitle = e.MainWindowTitle })
+                                                       .Select(e => new ProcessViewDto { Id = e.ProcessId, ProcessName = e.Name, ProcessTitle = e.MainWindowTitle, Description = e.Description })
                                                        .OrderBy(e => e.Id)
-                                                       .ToDictionary(k => k.Id, v=> v)
+                                                       .ToDictionary(k => k.Id, v => v)
                         }
 
                     );

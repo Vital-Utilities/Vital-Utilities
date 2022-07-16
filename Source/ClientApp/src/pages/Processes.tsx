@@ -263,13 +263,13 @@ export const Processes: React.FunctionComponent = () => {
                             <div>
                                 <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <CaretRightOutlined /> : <CaretDownOutlined />}</span>
                                 <span>
-                                    {e.parent.description ?? e.parent.processName} {`(+${childrenLength})`}
+                                    {e.parent.description ?? e.parent.processTitle ?? e.parent.processName} {`(+${childrenLength})`}
                                 </span>
                             </div>
                         </td>
-                        <td title={e.parent.processTitle ?? undefined} style={{ maxWidth: 250 }}>
+                        <td title={e.parent.processTitle ?? e.parent.processName} style={{ maxWidth: 250 }}>
                             <p style={{ margin: 0 }} className="cut-text">
-                                {e.parent.processTitle}
+                                {e.parent.processTitle ?? undefined}
                             </p>
                         </td>
                         <td title={e.parent.processName}>{e.parent.processName}</td>
@@ -301,10 +301,10 @@ export const Processes: React.FunctionComponent = () => {
                                 }}
                             >
                                 <div>
-                                    <span>{e.parent.description || e.parent.processName}</span>
+                                    <span>{e.parent.description ?? e.parent.processName}</span>
                                 </div>
                             </td>
-                            <td title={e.parent.processTitle ?? undefined} style={{ maxWidth: 250 }}>
+                            <td title={e.parent.processTitle ?? e.parent.processName} style={{ maxWidth: 250 }}>
                                 <p style={{ margin: 0 }} className="cut-text">
                                     {e.parent.processTitle}
                                 </p>
@@ -325,7 +325,7 @@ export const Processes: React.FunctionComponent = () => {
                             <Dropdown key={`dropdown - ${c.id}`} overlay={contextMenu(c)} trigger={["contextMenu"]}>
                                 <tr key={c.id} className="child process">
                                     <td style={{ paddingLeft: 70, maxWidth: 200 }}>{c.description || c.processName}</td>
-                                    <td title={c.processTitle ?? undefined} style={{ maxWidth: 250 }}>
+                                    <td title={c.processTitle ?? c.processName} style={{ maxWidth: 250 }}>
                                         <p style={{ margin: 0 }} className="cut-text">
                                             {c.processTitle}
                                         </p>
