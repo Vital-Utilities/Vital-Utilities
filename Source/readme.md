@@ -63,8 +63,8 @@ This needs to be running for UI to display all data.
 
 7. Open [ClientApp](./ClientApp) as work directory in vscode
 8. Install app recommended vscode extensions
-9. `npm ci`
-10. `npm start` (if you want to use the browser only to access the UI, port is :3000)
+9. `pnpm i --frozen-lockfile`
+10. `pnpm start` (if you want to use the browser only to access the UI, port is :3000)
 
 ## For Web App in Desktop Client
 
@@ -72,4 +72,4 @@ This needs to be running for UI to display all data.
 
 - [install Rust lang](https://www.rust-lang.org/tools/install)
 
-11. npm run tauri:dev (if you want to develop with the web app inside the desktop client)
+11. pnpm run tauri:dev (if you want to develop with the web app inside the desktop client)
