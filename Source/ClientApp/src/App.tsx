@@ -34,9 +34,8 @@ const App: React.FunctionComponent = () => {
 
     useInterval(
         () => {
-            if (appState.appReady) return;
-
             if (appState.httpConnected && appState.signalRConnected) {
+                setNoConnectionModalVisible(false);
                 dispatch(updateAppReadyAction(true));
             } else if (moment().diff(initializedTime, "seconds") > 10) {
                 setNoConnectionModalVisible(true);
