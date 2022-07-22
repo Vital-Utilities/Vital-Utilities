@@ -21,6 +21,7 @@ import { updateAppReadyAction } from "./Redux/actions/appActions";
 import { PerformancePage, relativeTimeOptions, relativeTypeStringOptions } from "./pages/Performance/Performance";
 import moment from "moment";
 import * as vitalservice from "@vital/vitalservice";
+import { SplashScreen } from "./pages/SpashScreen";
 export const config = new vitalservice.Configuration();
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App: React.FunctionComponent = () => {
@@ -29,12 +30,21 @@ const App: React.FunctionComponent = () => {
     const appState = useSelector<VitalState, AppState>(state => state.appState);
     const [noConnectionModalVisible, setNoConnectionModalVisible] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
-    React.useEffect(() => {
-        if (appState.vitalServicePort !== undefined) {
-            dispatch(updateAppReadyAction(true));
-        }
-        setNoConnectionModalVisible(!appState.httpConnected);
-    }, [appState.httpConnected, appState.signalRConnected, appState.vitalServicePort]);
+    const [initializedTime] = React.useState(moment());
+    // create 3 second timer and set appState.ready to true when it ends
+    useInterval(
+        () => {
+            if (appState.appReady) return;
+
+            if (appState.httpConnected && appState.signalRConnected) {
+                dispatch(updateAppReadyAction(true));
+            } else if (moment().diff(initializedTime, "seconds") > 10) {
+                setNoConnectionModalVisible(true);
+            }
+        },
+
+        1000
+    );
 
     useInterval(
         () => {
@@ -63,7 +73,8 @@ const App: React.FunctionComponent = () => {
         dispatch(fetchManagedProcessesAction());
     }
 
-    if (!appState.appReady) return <>App Loading...</>;
+    // eslint-disable-next-line no-constant-condition
+    if (!appState.appReady) return <>{noConnectionModalVisible ? <ConnnectionIssuePage /> : <SplashScreen />}</>;
 
     return (
         <div id="page" style={{ display: "flex", flexDirection: "column", overflow: "hidden", height: "100vh", width: "100vw" }}>
