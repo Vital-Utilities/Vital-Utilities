@@ -28,17 +28,17 @@ const App: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const appState = useSelector<VitalState, AppState>(state => state.appState);
-    const [noConnectionModalVisible, setNoConnectionModalVisible] = React.useState(false);
+    const [noConnection, setNoConnection] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
     const [initializedTime] = React.useState(moment());
 
     useInterval(
         () => {
             if (appState.httpConnected && appState.signalRConnected) {
-                setNoConnectionModalVisible(false);
+                setNoConnection(false);
                 dispatch(updateAppReadyAction(true));
             } else if (moment().diff(initializedTime, "seconds") > 10) {
-                setNoConnectionModalVisible(true);
+                setNoConnection(true);
             }
         },
 
@@ -73,12 +73,12 @@ const App: React.FunctionComponent = () => {
     }
 
     // eslint-disable-next-line no-constant-condition
-    if (!appState.appReady) return <>{noConnectionModalVisible ? <ConnnectionIssuePage /> : <SplashScreen />}</>;
+    if (!appState.appReady) return <>{noConnection ? <ConnnectionIssuePage /> : <SplashScreen />}</>;
 
     return (
         <div id="page" style={{ display: "flex", flexDirection: "column", overflow: "hidden", height: "100vh", width: "100vw" }}>
             <Router>
-                <Modal visible={noConnectionModalVisible} centered footer={null} title={"Problem connecting to Vital Service"} width={600} onCancel={() => setNoConnectionModalVisible(false)}>
+                <Modal visible={noConnection} centered footer={null} title={"Problem connecting to Vital Service"} width={600} onCancel={() => setNoConnection(false)}>
                     <ConnnectionIssuePage />
                 </Modal>
                 <Modal visible={aboutModalVisible} centered footer={null} title={"Info"} width={500} onCancel={() => setAboutModalVisible(false)}>
@@ -108,7 +108,7 @@ const App: React.FunctionComponent = () => {
                         <GpuPerfBadge />
                         <span>
                             {!appState.httpConnected && (
-                                <span style={{ color: "orange", cursor: "pointer" }} onClick={() => setNoConnectionModalVisible(true)}>
+                                <span style={{ color: "orange", cursor: "pointer" }} onClick={() => setNoConnection(true)}>
                                     <WarningOutlined style={{ color: "orange" }} /> Disconnected
                                 </span>
                             )}
