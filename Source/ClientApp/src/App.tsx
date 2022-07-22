@@ -31,7 +31,7 @@ const App: React.FunctionComponent = () => {
     const [noConnectionModalVisible, setNoConnectionModalVisible] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
     const [initializedTime] = React.useState(moment());
-    // create 3 second timer and set appState.ready to true when it ends
+
     useInterval(
         () => {
             if (appState.appReady) return;
