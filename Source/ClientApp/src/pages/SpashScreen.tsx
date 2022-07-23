@@ -7,7 +7,7 @@ export const SplashScreen: React.FunctionComponent = () => {
             <div style={{ fontSize: "3vh" }}>Booting</div>
             <div style={{ display: "grid", justifyContent: "center" }}>
                 <div>
-                    <PulseLoader size={"3vh"} color={"purple"} />
+                    <PulseLoader size={"3vh"} color={"white"} />
                 </div>
             </div>
         </div>
