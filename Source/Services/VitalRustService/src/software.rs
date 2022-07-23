@@ -1,7 +1,7 @@
 use crate::nvidia;
 use chrono::{DateTime, Utc};
 use core::slice;
-use log::error;
+use log::{error, info};
 use nvml::Nvml;
 use once_cell::sync::OnceCell;
 use vital_service_api::models::{ProcessData, ProcessDiskUsage, ProcessGpuUtil};
@@ -16,6 +16,7 @@ use std::{
 };
 use sysinfo::{PidExt, ProcessExt, SystemExt};
 use windows::{
+    core::{HSTRING, PCWSTR},
     Win32::Foundation::*,
     Win32::{
         Storage::FileSystem::{GetFileVersionInfoSizeW, GetFileVersionInfoW, VerQueryValueW},
@@ -52,14 +53,16 @@ pub fn get_process_util(
         let pid = pid.as_u32();
         let path = get_process_path(pid); // takes some time
 
-        let description: Option<String> = None; // takes some time
-                                                /*         if path.is_some() {
-                                                    description = match windows::get_file_description(path.to_owned().unwrap().to_string())
-                                                    {
-                                                        Ok(title) => Some(title),
-                                                        Err(_) => None,
-                                                    };
-                                                }; */
+        /* let mut description: Option<String> = None; // takes some time
+        if path.is_some() {
+            description = match get_file_description(path.to_owned().unwrap()) {
+                Ok(title) => Some(title),
+                Err(_) => None,
+            };
+        };
+        info!("{:?}", description);
+        */
+
         // windows::get_process_ideal_processors(pid); //takes a lot of time
         list.push(ProcessData {
             pid: pid as i32,
@@ -160,9 +163,11 @@ unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
     true.into()
 }
 
-pub fn get_file_description(path: impl AsRef<Path>) -> Result<String, String> {
+pub fn get_file_description(path: String) -> Result<String, String> {
+    let p: HSTRING = path.into();
+    let file_name = PCWSTR::from(&p);
     // Determine version info size
-    let size = unsafe { GetFileVersionInfoSizeW(path.as_ref().as_os_str(), null_mut()) };
+    let size = unsafe { GetFileVersionInfoSizeW(file_name, null_mut()) };
     if size == 0 {
         return Err("".to_string());
     }
@@ -172,7 +177,7 @@ pub fn get_file_description(path: impl AsRef<Path>) -> Result<String, String> {
     // Read version info
     unsafe {
         GetFileVersionInfoW(
-            path.as_ref().as_os_str(),
+            file_name,
             0,
             size,
             buffer.as_mut_ptr() as *mut std::ffi::c_void,
@@ -182,11 +187,12 @@ pub fn get_file_description(path: impl AsRef<Path>) -> Result<String, String> {
     // Declare pointer/size pair for output
     let mut ptr = null_mut();
     let mut len = 0;
+    let subblock = HSTRING::from("\\StringFileInfo\\040904B0\\FileDescription");
     // Query for file description
     let success = unsafe {
         VerQueryValueW(
             buffer.as_ptr() as *const std::ffi::c_void,
-            "\\StringFileInfo\\040904B0\\FileDescription",
+            &subblock.into(),
             &mut ptr,
             &mut len,
         )
