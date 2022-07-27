@@ -4,7 +4,7 @@ on:
   workflow_call:
   workflow_dispatch:
   push:
-    paths: 'Source/Services/VitalService/**'
+    paths: ['Source/Services/VitalService/**', '.github/workflows/vital-service-tests.yml']
 jobs:
   build:
     runs-on: windows-latest
