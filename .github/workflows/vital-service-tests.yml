@@ -41,7 +41,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore ${{env.source}}
     - name: Restore dotnet tools
-      run: dotnet tool restore ${{env.source}}
+      run: cd ${{env.source}} && dotnet tool restore 
     - name: Build
       run: dotnet build ${{env.source}} 
     - name: Test
