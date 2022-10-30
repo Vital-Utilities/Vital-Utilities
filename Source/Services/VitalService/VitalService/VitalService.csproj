@@ -54,7 +54,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="6.0.0" />
 		<PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.4" />
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.2" />
-		<PackageReference Include="Octokit" Version="0.50.0" />
+		<PackageReference Include="Octokit" Version="4.0.1" />
 		<PackageReference Include="Sentry.AspNetCore" Version="3.18.0" />
 		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />

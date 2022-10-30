@@ -102,12 +102,16 @@ namespace VitalService.Services.PerformanceServices
                 {
                     try
                     {
-                        var description = FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription;
-                        if (description != null)
+                        string description = null;
+                        if (data.ExecutablePath is not null)
                         {
-                            description = description.Trim();
-                            if (string.IsNullOrEmpty(description))
-                                description = null;
+                            var des = FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription;
+                            if (des != null)
+                            {
+                                des = des.Trim();
+                                if (!string.IsNullOrEmpty(des))
+                                    description = des;
+                            }
                         }
                         var processData = new ProcessData
                         {
