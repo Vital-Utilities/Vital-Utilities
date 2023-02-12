@@ -764,6 +764,8 @@ components:
             - hour
             - kind
             - millisecond
+            - microsecond
+            - nanosecond
             - minute
             - month
             - now
@@ -784,6 +786,8 @@ components:
             - hour
             - kind
             - millisecond
+            - microsecond
+            - nanosecond
             - minute
             - month
             - now
@@ -1193,6 +1197,8 @@ components:
             - hour
             - kind
             - millisecond
+            - microsecond
+            - nanosecond
             - minute
             - month
             - now
@@ -1213,6 +1219,8 @@ components:
             - hour
             - kind
             - millisecond
+            - microsecond
+            - nanosecond
             - minute
             - month
             - now
@@ -1472,11 +1480,13 @@ components:
           type: integer
           format: int32
         endPoint:
+          minLength: 1
           required:
             - chars
             - length
           type: string
         token:
+          minLength: 1
           required:
             - chars
             - length
@@ -1804,6 +1814,8 @@ components:
             - hour
             - kind
             - millisecond
+            - microsecond
+            - nanosecond
             - minute
             - month
             - now
@@ -2165,7 +2177,6 @@ components:
           format: int32
         dateTimeOffset:
           required:
-            - now
             - utcNow
             - dateTime
             - utcDateTime
@@ -2176,6 +2187,8 @@ components:
             - dayOfYear
             - hour
             - millisecond
+            - microsecond
+            - nanosecond
             - minute
             - month
             - offset
@@ -2184,6 +2197,7 @@ components:
             - utcTicks
             - timeOfDay
             - year
+            - now
           type: string
           format: date-time
         cpuUsageData:
