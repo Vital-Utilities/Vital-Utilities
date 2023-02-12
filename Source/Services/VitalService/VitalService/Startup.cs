@@ -5,18 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using VitalService.Data;
-using VitalService.Dtos;
 using VitalService.Services;
 using VitalService.Services.PerformanceServices;
 using VitalService.Services.SignalR;
@@ -64,9 +57,6 @@ namespace VitalService
             services.AddHostedService(provider => provider.GetService<ConfigApplyerService>());
 
             services.AddHostedService<UpdateWatcherService>();
-
-            if (settingsStore.Settings.InfluxDb.Enabled)
-                services.AddHostedService<InfluxDbInterfacingService>();
 
             services.AddSignalR().AddJsonProtocol(options =>
             {
