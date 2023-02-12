@@ -1178,6 +1178,8 @@
               "hour",
               "kind",
               "millisecond",
+              "microsecond",
+              "nanosecond",
               "minute",
               "month",
               "now",
@@ -1200,6 +1202,8 @@
               "hour",
               "kind",
               "millisecond",
+              "microsecond",
+              "nanosecond",
               "minute",
               "month",
               "now",
@@ -1752,6 +1756,8 @@
               "hour",
               "kind",
               "millisecond",
+              "microsecond",
+              "nanosecond",
               "minute",
               "month",
               "now",
@@ -1774,6 +1780,8 @@
               "hour",
               "kind",
               "millisecond",
+              "microsecond",
+              "nanosecond",
               "minute",
               "month",
               "now",
@@ -2129,6 +2137,7 @@
             "format": "int32"
           },
           "endPoint": {
+            "minLength": 1,
             "required": [
               "chars",
               "length"
@@ -2136,6 +2145,7 @@
             "type": "string"
           },
           "token": {
+            "minLength": 1,
             "required": [
               "chars",
               "length"
@@ -2582,6 +2592,8 @@
               "hour",
               "kind",
               "millisecond",
+              "microsecond",
+              "nanosecond",
               "minute",
               "month",
               "now",
@@ -3067,7 +3079,6 @@
           },
           "dateTimeOffset": {
             "required": [
-              "now",
               "utcNow",
               "dateTime",
               "utcDateTime",
@@ -3078,6 +3089,8 @@
               "dayOfYear",
               "hour",
               "millisecond",
+              "microsecond",
+              "nanosecond",
               "minute",
               "month",
               "offset",
@@ -3085,7 +3098,8 @@
               "ticks",
               "utcTicks",
               "timeOfDay",
-              "year"
+              "year",
+              "now"
             ],
             "type": "string",
             "format": "date-time"

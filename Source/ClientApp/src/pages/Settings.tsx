@@ -45,7 +45,7 @@ export const Settings: React.FunctionComponent = () => {
                         {clientSettings && (
                             <>
                                 <Form.Item label="Window is always on top">
-                                    <Input type={"checkbox"} checked={clientSettings.alwaysOnTop} onChange={e => updateClientSettings({ ...clientSettings, alwaysOnTop: !clientSettings.alwaysOnTop })} />
+                                    <Input type={"checkbox"} checked={clientSettings.alwaysOnTop} onChange={() => updateClientSettings({ ...clientSettings, alwaysOnTop: !clientSettings.alwaysOnTop })} />
                                 </Form.Item>
                             </>
                         )}
