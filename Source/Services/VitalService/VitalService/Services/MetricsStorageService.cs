@@ -90,9 +90,16 @@ namespace VitalService.Services
                     .Include(e => e.NetworkUsageData)
                     .Include(e => e.DiskUsageData)
                     .AsSplitQuery()
-                    .ToDictionaryAsync(k => k.DateTimeOffset, v => v);
+                    .ToArrayAsync();
+
+                var dictionary = new ConcurrentDictionary<DateTimeOffset, TimeSeriesMachineMetricsModel>();
 
                 foreach (var item in result)
+                {
+                    dictionary.AddOrUpdate(item.DateTimeOffset, item, (key, existingValue) => item); // overcomes duplicate key being loaded into cache.
+                }
+
+                foreach (var item in dictionary)
                 {
                     MetricsCache.TryAdd(item.Value.DateTimeOffset, item.Value);
                 }
