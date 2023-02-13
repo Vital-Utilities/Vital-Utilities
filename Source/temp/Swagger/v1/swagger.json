@@ -1648,7 +1648,7 @@
               "format": "float"
             }
           },
-          "processRamUsageGb": {
+          "processRamUsageBytes": {
             "required": [
               "item",
               "keys",
@@ -1912,8 +1912,8 @@
               "hasValue",
               "value"
             ],
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -2536,7 +2536,7 @@
         "required": [
           "cpuPercentage",
           "diskUsage",
-          "memoryKb",
+          "memoryBytes",
           "name",
           "pid",
           "timeStamp"
@@ -2611,7 +2611,7 @@
             "type": "number",
             "format": "float"
           },
-          "memoryKb": {
+          "memoryBytes": {
             "type": "integer",
             "format": "int64"
           },

@@ -8,7 +8,7 @@ import { VitalState, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ProfileDto } from "@vital/vitalservice";
 import { profileApi } from "../../Redux/actions/api";
 
@@ -24,7 +24,6 @@ export const Profiles: React.FunctionComponent = () => {
     const profileState = useSelector<VitalState, ProfileState>(state => state.profileState);
     const [sortBy, setSortBy] = React.useState<{ sortBy: SortByEnum; descending: boolean }>({ sortBy: SortByEnum.Name, descending: false });
     const dispatch = useDispatch();
-    const location = useLocation();
     useEffect(() => {
         render();
     }, [profileState, filter_LowerCased, sortBy]);

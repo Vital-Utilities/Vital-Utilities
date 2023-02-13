@@ -1,17 +1,12 @@
-﻿using JM.LinqFaster;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Management;
-using System.Management.Automation;
 using System.Threading;
 using System.Threading.Tasks;
-using VitalRustServiceClasses;
 using VitalService.Stores;
 namespace VitalService.Services.PerformanceServices
 {
@@ -84,7 +79,7 @@ namespace VitalService.Services.PerformanceServices
                     InstanceName = v.Value.Name,
                     IDProcess = v.Value.Pid,
                     PercentProcessorTime = MathF.Round(v.Value.CpuPercentage, 2),
-                    WorkingSetGB = MathF.Round((float)v.Value.MemoryKb / 1024 / 1024, 3),
+                    WorkingSetBytes = v.Value.MemoryBytes,
                     WriteBytesPerSec = v.Value.DiskUsage.WriteBytesPerSecond,
                     ReadBytesPerSec = v.Value.DiskUsage.ReadBytesPerSecond,
                     GpuPercentage = v.Value.GpuUtil?.GpuCorePercentage ?? 0
@@ -97,7 +92,7 @@ namespace VitalService.Services.PerformanceServices
             Utilities.Debug.LogExecutionTime(null, () =>
             {
                 var returnValue = new ConcurrentDictionary<int, ProcessData>();
-                
+
                 foreach (var (pid, data) in processPerformanceData)
                 {
                     try
@@ -129,7 +124,7 @@ namespace VitalService.Services.PerformanceServices
                     {
                         Log.Logger.Error(e.Message);
                     }
-                    
+
                 }
                 runningProcesses = returnValue;
             });
@@ -155,7 +150,7 @@ namespace VitalService.Services.PerformanceServices
             /// <summary>
             /// Ram
             /// </summary>
-            public float WorkingSetGB { get; set; }
+            public float WorkingSetBytes { get; set; }
             public double WriteBytesPerSec { get; set; }
             public double ReadBytesPerSec { get; set; }
             public float GpuPercentage { get; internal set; }

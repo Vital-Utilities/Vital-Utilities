@@ -16,7 +16,7 @@ pub struct GpuData {
     #[serde(rename = "name")]
     pub name: String,
     #[serde(rename = "memoryTotalBytes", skip_serializing_if = "Option::is_none")]
-    pub memory_total_bytes: Option<f32>,
+    pub memory_total_bytes: Option<i64>,
 }
 
 impl GpuData {

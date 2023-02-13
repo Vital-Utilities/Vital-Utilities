@@ -37,7 +37,7 @@ export const Processes: React.FunctionComponent = () => {
     const dynamicData = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const processCpuThreadPercentage = dynamicData?.processCpuThreadsUsage;
     const processCpuPercentage = dynamicData?.processCpuUsage;
-    const processRamGb = dynamicData?.processRamUsageGb;
+    const processRamBytes = dynamicData?.processRamUsageBytes;
     const processBytesPerSecActivity = dynamicData?.processDiskBytesPerSecActivity;
     const processGpuPercentage = dynamicData?.processGpuUsage;
     const [expandedIds, setExpandedIds] = React.useState<number[]>([]);
@@ -45,9 +45,9 @@ export const Processes: React.FunctionComponent = () => {
     const dispatch = useDispatch();
 
     const totalRam = (dto: ParentChildModelDto) =>
-        valueOrZero(processRamGb?.[dto.parent.id]) +
+        valueOrZero(processRamBytes?.[dto.parent.id]) +
         Object.values(dto.children)
-            .flatMap(e => valueOrZero(processRamGb?.[e.id]))
+            .flatMap(e => valueOrZero(processRamBytes?.[e.id]))
             .reduce((a, b) => a + b, 1);
     const totalCpu = (dto: ParentChildModelDto) =>
         valueOrZero(processCpuPercentage?.[dto.parent.id]) +
@@ -138,7 +138,7 @@ export const Processes: React.FunctionComponent = () => {
             }
             setView(returnList);
         }
-    }, [profileState, showAllProcess, processViewState, filter_LowerCased, processCpuThreadPercentage, processCpuPercentage, processRamGb, sortBy]);
+    }, [profileState, showAllProcess, processViewState, filter_LowerCased, processCpuThreadPercentage, processCpuPercentage, processRamBytes, sortBy]);
 
     useInterval(
         () => {
@@ -160,12 +160,6 @@ export const Processes: React.FunctionComponent = () => {
     function valueOrZero(value: undefined | never | number): number {
         return value || 0;
     }
-
-    // function converts gb to bytes and returns the value in bytes
-    const convertGbToBytes = (value: number | undefined): number => {
-        if (value === undefined) return 0;
-        return value * 1024 * 1024 * 1024;
-    };
 
     const contextMenu = (process: ProcessViewDto) => {
         return (
@@ -230,7 +224,7 @@ export const Processes: React.FunctionComponent = () => {
                         <td title={e.parent.processName}>{e.parent.processName}</td>
                         <td>{e.parent.id}</td>
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(valueOrZero(processCpuPercentage?.[e.parent.id]) ?? 0) }}>{valueOrZero(processCpuPercentage?.[e.parent.id]).toFixed(1)}%</td>
-                        <td style={{ textAlign: "right", minWidth: 80 }}>{processRamGb && getReadableBytesString(convertGbToBytes(valueOrZero(processRamGb[e.parent.id])), 1)}</td>
+                        <td style={{ textAlign: "right", minWidth: 80 }}>{processRamBytes && getReadableBytesString(valueOrZero(processRamBytes[e.parent.id]))}</td>
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processBytesPerSecActivity && getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
                     </tr>
@@ -241,7 +235,7 @@ export const Processes: React.FunctionComponent = () => {
         function hasChildrenRender() {
             const values = Object.values(e.children);
             const totalCpu = valueOrZero(processCpuPercentage?.[e.parent.id]) + values.map(e => valueOrZero(processCpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
-            const totalRam = valueOrZero(processRamGb?.[e.parent.id]) + values.map(e => valueOrZero(processRamGb?.[e.id])).reduce((a, b) => a + b, 0);
+            const totalRam = valueOrZero(processRamBytes?.[e.parent.id]) + values.map(e => valueOrZero(processRamBytes?.[e.id])).reduce((a, b) => a + b, 0);
             const diskBytesPerSecActivity = valueOrZero(processBytesPerSecActivity?.[e.parent.id]) + values.map(e => valueOrZero(processBytesPerSecActivity?.[e.id])).reduce((a, b) => a + b, 0);
             const gpuActivity = valueOrZero(processGpuPercentage?.[e.parent.id]) + values.map(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
 
@@ -275,7 +269,7 @@ export const Processes: React.FunctionComponent = () => {
                         <td title={e.parent.processName}>{e.parent.processName}</td>
                         <td>{e.parent.id}</td>
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(totalCpu ?? 0) }}>{totalCpu?.toFixed(1)}%</td>
-                        <td style={{ textAlign: "right" }}>{getReadableBytesString(convertGbToBytes(totalRam), 1)}</td>
+                        <td style={{ textAlign: "right" }}>{getReadableBytesString(totalRam)}</td>
                         <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(diskBytesPerSecActivity, 1)}</td>
                         <td style={{ textAlign: "right" }}>{gpuActivity && gpuActivity}%</td>
                     </tr>
@@ -312,7 +306,7 @@ export const Processes: React.FunctionComponent = () => {
                             <td title={e.parent.processName}>{e.parent.processName}</td>
                             <td>{e.parent.id}</td>
                             <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
-                            <td style={{ textAlign: "right" }}>{getReadableBytesString(convertGbToBytes(valueOrZero(processRamGb?.[e.parent.id])), 1)}</td>
+                            <td style={{ textAlign: "right" }}>{getReadableBytesString(valueOrZero(processRamBytes?.[e.parent.id]))}</td>
                             <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
                             <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
                         </tr>
@@ -333,7 +327,7 @@ export const Processes: React.FunctionComponent = () => {
                                     <td>{c.processName}</td>
                                     <td>{c.id}</td>
                                     <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
-                                    <td style={{ textAlign: "right" }}>{getReadableBytesString(convertGbToBytes(processRamGb?.[c.id]), 1)}</td>
+                                    <td style={{ textAlign: "right" }}>{getReadableBytesString(processRamBytes?.[c.id])}</td>
                                     <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[c.id], 1)}</td>
                                     <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[c.id]}%</td>
                                 </tr>

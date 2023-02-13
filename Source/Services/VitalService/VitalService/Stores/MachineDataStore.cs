@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using VitalService.Dtos;
 using VitalService.Dtos.Coms;
@@ -133,11 +132,11 @@ namespace VitalService.Stores
         {
             throw new NotImplementedException();
         }
-        public Dictionary<int, float> GetProcessRamUsagesInGb()
+        public Dictionary<int, float> GetProcessRamUsagesInBytes()
         {
             var metrics = SoftwarePerformanceService.GetProcessMetrics();
 
-            return metrics.ToDictionary(k => k.Value.IDProcess, v => v.Value.WorkingSetGB);
+            return metrics.ToDictionary(k => k.Value.IDProcess, v => v.Value.WorkingSetBytes);
 
         }
 

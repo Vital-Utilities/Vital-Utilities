@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -100,7 +99,7 @@ namespace VitalService.Services.PerformanceServices
                     var gpu = new GpuData
                     {
                         Name = hardwareItem.Name.Trim(),
-                        MemoryTotalBytes = memoryTotal is null ? null : memoryTotal * 1024 * 1024
+                        MemoryTotalBytes = (long?)memoryTotal
                     };
                     data.Gpu.Add(gpu);
                 }

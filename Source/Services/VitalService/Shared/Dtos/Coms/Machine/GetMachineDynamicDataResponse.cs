@@ -23,7 +23,7 @@ namespace VitalService.Dtos.Coms
         
         public IDictionary<int, float>? ProcessThreadCount { get; set; }
         
-        public IDictionary<int, float>? ProcessRamUsageGb { get; set; }
+        public IDictionary<int, float>? ProcessRamUsageBytes { get; set; }
         
         public IDictionary<int, double>? ProcessDiskBytesPerSecActivity { get; set; }
         

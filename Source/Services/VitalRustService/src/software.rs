@@ -73,7 +73,7 @@ pub fn get_process_util(
             name: process.name().to_string(),
             time_stamp: time_stamp.to_rfc3339(),
             cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f32,
-            memory_kb: process.memory() as i64,
+            memory_bytes: process.memory() as i64,
             disk_usage: Box::new(ProcessDiskUsage {
                 read_bytes_per_second: disk_bytes.read_bytes as i64,
                 write_bytes_per_second: disk_bytes.written_bytes as i64,

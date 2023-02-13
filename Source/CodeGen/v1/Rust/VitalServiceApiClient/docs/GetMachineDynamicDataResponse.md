@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **process_cpu_usage** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
 **process_cpu_threads_usage** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
 **process_thread_count** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
-**process_ram_usage_gb** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
+**process_ram_usage_bytes** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
 **process_disk_bytes_per_sec_activity** | Option<**::std::collections::HashMap<String, f64>**> |  | [optional]
 **cpu_temperature** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]
 **process_gpu_usage** | Option<**::std::collections::HashMap<String, f32>**> |  | [optional]

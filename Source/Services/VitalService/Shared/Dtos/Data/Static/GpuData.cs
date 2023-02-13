@@ -2,9 +2,9 @@
 {
     public class GpuData
     {
-        
+
         public string Name { get; set; }
-        
-        public float? MemoryTotalBytes { get; set; }
+
+        public long? MemoryTotalBytes { get; set; }
     }
 }

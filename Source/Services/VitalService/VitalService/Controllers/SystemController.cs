@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using VitalService.Dtos.Coms;
 using VitalService.Services.PerformanceServices;
 using VitalService.Stores;
@@ -47,7 +42,7 @@ namespace VitalService.Controllers
                 DiskUsages = HardwarePerformanceService.CurrentDiskUsages,
                 //ProcessCpuThreadsUsage = await MachineDataStore.GetProcessTotalCpuThreadsUsagesAsync(),
                 ProcessCpuUsage = processCpuUsage,
-                ProcessRamUsageGb = MachineDataStore.GetProcessRamUsagesInGb(),
+                ProcessRamUsageBytes = MachineDataStore.GetProcessRamUsagesInBytes(),
                 ProcessDiskBytesPerSecActivity = MachineDataStore.GetProcessDiskBytesPerSecActivity(),
                 ProcessGpuUsage = MachineDataStore.GetProcessGpuUsage(),
                 //ProcessThreadCount = MachineDataStore.GetProcessMetrics(MachineDataStore.MetricType.ThreadCount)

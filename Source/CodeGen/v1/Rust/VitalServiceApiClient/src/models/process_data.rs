@@ -29,8 +29,8 @@ pub struct ProcessData {
     pub time_stamp: String,
     #[serde(rename = "cpuPercentage")]
     pub cpu_percentage: f32,
-    #[serde(rename = "memoryKb")]
-    pub memory_kb: i64,
+    #[serde(rename = "memoryBytes")]
+    pub memory_bytes: i64,
     #[serde(rename = "diskUsage")]
     pub disk_usage: Box<crate::models::ProcessDiskUsage>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
@@ -40,7 +40,7 @@ pub struct ProcessData {
 }
 
 impl ProcessData {
-    pub fn new(pid: i32, name: String, time_stamp: String, cpu_percentage: f32, memory_kb: i64, disk_usage: crate::models::ProcessDiskUsage) -> ProcessData {
+    pub fn new(pid: i32, name: String, time_stamp: String, cpu_percentage: f32, memory_bytes: i64, disk_usage: crate::models::ProcessDiskUsage) -> ProcessData {
         ProcessData {
             pid,
             parent_pid: None,
@@ -50,7 +50,7 @@ impl ProcessData {
             name,
             time_stamp,
             cpu_percentage,
-            memory_kb,
+            memory_bytes,
             disk_usage: Box::new(disk_usage),
             status: None,
             gpu_util: None,

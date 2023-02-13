@@ -12,7 +12,7 @@ Name | Type | Description | Notes
 **name** | **String** |  | 
 **time_stamp** | **String** |  | 
 **cpu_percentage** | **f32** |  | 
-**memory_kb** | **i64** |  | 
+**memory_bytes** | **i64** |  | 
 **disk_usage** | [**crate::models::ProcessDiskUsage**](ProcessDiskUsage.md) |  | 
 **status** | Option<**String**> |  | [optional]
 **gpu_util** | Option<[**crate::models::ProcessGpuUtil**](ProcessGpuUtil.md)> |  | [optional]

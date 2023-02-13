@@ -638,7 +638,7 @@ export interface GetMachineDynamicDataResponse {
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
-    'processRamUsageGb'?: { [key: string]: number; };
+    'processRamUsageBytes'?: { [key: string]: number; };
     /**
      * 
      * @type {{ [key: string]: number; }}
@@ -1389,7 +1389,7 @@ export interface ProcessData {
      * @type {number}
      * @memberof ProcessData
      */
-    'memoryKb': number;
+    'memoryBytes': number;
     /**
      * 
      * @type {ProcessDiskUsage}

@@ -29,8 +29,8 @@ pub struct GetMachineDynamicDataResponse {
     pub process_cpu_threads_usage: Option<::std::collections::HashMap<String, f32>>,
     #[serde(rename = "processThreadCount", skip_serializing_if = "Option::is_none")]
     pub process_thread_count: Option<::std::collections::HashMap<String, f32>>,
-    #[serde(rename = "processRamUsageGb", skip_serializing_if = "Option::is_none")]
-    pub process_ram_usage_gb: Option<::std::collections::HashMap<String, f32>>,
+    #[serde(rename = "processRamUsageBytes", skip_serializing_if = "Option::is_none")]
+    pub process_ram_usage_bytes: Option<::std::collections::HashMap<String, f32>>,
     #[serde(rename = "processDiskBytesPerSecActivity", skip_serializing_if = "Option::is_none")]
     pub process_disk_bytes_per_sec_activity: Option<::std::collections::HashMap<String, f64>>,
     #[serde(rename = "cpuTemperature", skip_serializing_if = "Option::is_none")]
@@ -50,7 +50,7 @@ impl GetMachineDynamicDataResponse {
             process_cpu_usage: None,
             process_cpu_threads_usage: None,
             process_thread_count: None,
-            process_ram_usage_gb: None,
+            process_ram_usage_bytes: None,
             process_disk_bytes_per_sec_activity: None,
             cpu_temperature: None,
             process_gpu_usage: None,
