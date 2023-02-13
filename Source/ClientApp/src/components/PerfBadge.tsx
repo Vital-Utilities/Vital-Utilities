@@ -13,7 +13,7 @@ export const ProcessorThreadPerfBadge: React.FunctionComponent<props> = ({ proce
     const processCpuThreadPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuThreadsUsage ?? undefined);
     const processCpuPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processCpuUsage ?? undefined);
 
-    const processRamPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processRamUsageGb ?? undefined);
+    const processRamPercentage = useSelector<VitalState, { [key: string]: number } | undefined>(state => state.machineState.dynamic?.processRamUsageBytes ?? undefined);
     const totalRamBytes = useSelector<VitalState, number | undefined>(state => state.machineState.dynamic?.ramUsagesData?.totalVisibleMemoryBytes);
     function getStroke(value: number) {
         if (value > 90) {
