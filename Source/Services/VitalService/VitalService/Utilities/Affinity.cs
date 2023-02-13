@@ -56,7 +56,7 @@ namespace VitalService.Utilities
 
         public static int[] IntPtrToBinary(IntPtr hex)
         {
-            var hexVal = hex.ToInt32();
+            var hexVal = hex.ToInt64();
 
             var result = Convert.ToString(hexVal, 2);
             return result.Select(e => int.Parse(e.ToString())).ToArray();

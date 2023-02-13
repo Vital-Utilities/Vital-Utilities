@@ -45,7 +45,7 @@ namespace VitalService.Controllers
             });
         }
 
-        [ProducesResponseType(typeof(GetManagedResponse),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetManagedResponse), StatusCodes.Status200OK)]
         [Route("Managed")]
         [HttpGet]
         public async Task<ActionResult<GetManagedResponse>> GetManagedAsync()
@@ -156,7 +156,7 @@ namespace VitalService.Controllers
         }
 
 
-        [ProducesResponseType( StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("kill/{id}")]
         public ActionResult KillProcessTree(int id)
         {
