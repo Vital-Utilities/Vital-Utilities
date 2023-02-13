@@ -82,6 +82,8 @@ Please get in contact with Snazzie if you're interested in helping with anything
 - Windows 11. (Will likely run fine on windows 10, but will require you to have
   [webview2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section) installed.)
   - You can check if webview 2 is installed already by going to the Start Menu --> Add or Remove Programs and searching for WebView2.
+- Linux (Not currently supported, slowly moving towards this)
+- OSX (support for m1 or x86 is not currently supported, will need someone with this device to help)
 - 64bit only
 
 ---
