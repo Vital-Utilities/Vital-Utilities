@@ -72,4 +72,5 @@ This needs to be running for UI to display all data.
 
 - [install Rust lang](https://www.rust-lang.org/tools/install)
 
-11. pnpm run tauri:dev (if you want to develop with the web app inside the desktop client)
+11. `pnpm run tauri:dev` (if you want to develop with the web app inside the desktop client)
+    1. You will see a white screen for up to a minute while the frontend is transpiling, once ready, you will start seeing a booting spinner.
