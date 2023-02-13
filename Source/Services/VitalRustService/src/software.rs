@@ -147,16 +147,17 @@ unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
         .lock()
         .unwrap();
 
-    let mut id: u32 = 0;
+    let mut u = 0;
+    let id: Option<*mut u32> = Some(&mut u);
 
-    GetWindowThreadProcessId(hwnd, &mut id);
+    GetWindowThreadProcessId(hwnd, id);
     if (!text.contains("Default IME")
         || text.contains("MSCTFIME UI")
         || text.contains("GDI+ Window")
         || text.is_empty())
         && IsWindowVisible(hwnd) == true
     {
-        guard.insert(id, text);
+        guard.insert(*id.unwrap(), text);
     }
     std::mem::drop(guard);
 
@@ -164,10 +165,9 @@ unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
 }
 
 pub fn get_file_description(path: String) -> Result<String, String> {
-    let p: HSTRING = path.into();
-    let file_name = PCWSTR::from(&p);
+    let file_name: HSTRING = path.into();
     // Determine version info size
-    let size = unsafe { GetFileVersionInfoSizeW(file_name, null_mut()) };
+    let size = unsafe { GetFileVersionInfoSizeW(&file_name, None) };
     if size == 0 {
         return Err("".to_string());
     }
@@ -177,7 +177,7 @@ pub fn get_file_description(path: String) -> Result<String, String> {
     // Read version info
     unsafe {
         GetFileVersionInfoW(
-            file_name,
+            &file_name,
             0,
             size,
             buffer.as_mut_ptr() as *mut std::ffi::c_void,
@@ -192,7 +192,7 @@ pub fn get_file_description(path: String) -> Result<String, String> {
     let success = unsafe {
         VerQueryValueW(
             buffer.as_ptr() as *const std::ffi::c_void,
-            &subblock.into(),
+            &subblock,
             &mut ptr,
             &mut len,
         )
