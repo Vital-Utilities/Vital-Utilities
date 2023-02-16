@@ -23,6 +23,9 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
     environment: production
+    env: 
+      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+      TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
