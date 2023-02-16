@@ -56,8 +56,6 @@ namespace VitalService
             services.AddSingleton<ConfigApplyerService>();
             services.AddHostedService(provider => provider.GetService<ConfigApplyerService>());
 
-            services.AddHostedService<UpdateWatcherService>();
-
             services.AddSignalR().AddJsonProtocol(options =>
             {
                 options.PayloadSerializerOptions.Converters
