@@ -100,5 +100,5 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         files: |
           ./Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi
-          './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip'
-          './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip.sig'
+          ./Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip
+          ./Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip.sig
