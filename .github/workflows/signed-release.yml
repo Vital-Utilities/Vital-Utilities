@@ -64,7 +64,6 @@ jobs:
       run: |
         cd "./Source"
         echo ${{ github.event.inputs.version }} > Version.txt
-        
     - name: version bump
       run: |
         git config --local user.email "action@github.com"
@@ -87,7 +86,6 @@ jobs:
         cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
-
     - name: Build release
       run: |
         cd "./Source"
@@ -100,5 +98,5 @@ jobs:
         fail_on_unmatched_files: true
         tag_name: ${{ github.event.inputs.version }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        files: |
-          '.\Source\ClientApp\src-tauri\target\release\bundle\msi\*.msi'
+        files: 
+          './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi'
