@@ -1,0 +1,11 @@
+{
+    "version": "v1.0.0",
+    "notes": "Test version",
+    "pub_date": "2020-06-22T19:25:57Z",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "",
+            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.1.6/Vital.Utilities_0.1.6_x64_en-US.msi"
+        }
+    }
+}
