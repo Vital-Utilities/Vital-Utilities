@@ -34,7 +34,7 @@ tauri-build = { version = "1.2.1", features = [] }
 serde_json = "1.0"
 serde_derive ="1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.0", features = ["api-all", "devtools", "system-tray", "updater"] }
+tauri = { version = "1.2.4", features = ["api-all", "devtools", "system-tray", "updater"] }
 winapi = { version = "0.3", features = ["winuser"] }
 log = {version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
 fern = "0.6"
