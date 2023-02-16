@@ -10,14 +10,6 @@
         "beforeBuildCommand": "",
         "withGlobalTauri": true
     },
-    "updater": {
-        "active": true,
-        "endpoints": [
-            "https://raw.githubusercontent.com/Vital-Utilities/Vital-Utilities/master/latest_update_meta.json"
-        ],
-        "dialog": true,
-        "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERDQjE1OEUxQTUxRkY4QTUKUldTbCtCK2w0Vml4M0ZkN1NVK21GbW94aU9OL0FjdStvcFBsS0pTY29ZcDI4RVNaWWh5Wk1MYysK"
-    },
     "tauri": {
         "bundle": {
             "active": true,
@@ -48,7 +40,12 @@
             "iconPath": "icons/icon.ico"
         },
         "updater": {
-            "active": false
+            "active": true,
+            "endpoints": [
+                "https://raw.githubusercontent.com/Vital-Utilities/Vital-Utilities/master/latest_update_meta.json"
+            ],
+            "dialog": true,
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERDQjE1OEUxQTUxRkY4QTUKUldTbCtCK2w0Vml4M0ZkN1NVK21GbW94aU9OL0FjdStvcFBsS0pTY29ZcDI4RVNaWWh5Wk1MYysK"
         },
         "allowlist": {
             "all": true,
