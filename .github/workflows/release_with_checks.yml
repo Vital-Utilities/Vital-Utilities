@@ -95,5 +95,7 @@ jobs:
         fail_on_unmatched_files: true
         tag_name: ${{ github.event.inputs.version }}
         token: ${{ secrets.GITHUB_TOKEN }}
-        files:
+        files: |
           './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi'
+          './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip'
+          './Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip.sig'
