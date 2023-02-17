@@ -28,7 +28,6 @@
 - [Things being worked on](#things-being-worked-on)
   - [V1](#v1)
   - [Distant Future Goals](#distant-future-goals)
-- [Screenshots](#screenshots)
 
 ## Links
 
@@ -37,6 +36,8 @@ Feature requests and questions >> [Discussion](https://github.com/Vital-Utilitie
 Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issues)
 
 [Discord Server](https://discord.gg/ghQ8nQK2ma)
+
+[Screenshots](https://github.com/Vital-Utilities/Vital-Utilities/tree/master/Screenshots)
 
 ## License
 
@@ -175,10 +176,3 @@ If you want your profiles applied and metrics collected when you log in. You can
     - Auto copy/move files from one directory to another
 - Investigate ability to identify which threads a process has been executing work on. ( Investigation result: Yes, a spike has been successful in Rust )
 - Vulnerability Alerts for installed applications.
-
-## Screenshots
-
-![vital_utilities_xh91hLBYCE](https://user-images.githubusercontent.com/19627023/150882479-397ee539-6a2c-4654-86ea-a9fa6d082340.gif)
-![vital_utilities_0f28NydPeT](https://user-images.githubusercontent.com/19627023/150866174-3a918715-e606-4e30-8b56-8c8cacc5f9b2.gif)
-![vital_utilities_zyB21Liz2u](https://user-images.githubusercontent.com/19627023/150884846-4d960bb8-feef-4564-8c7e-1a69f3c87704.gif)
-![vital_utilities_Nt35LUPfzy](https://user-images.githubusercontent.com/19627023/150865860-d2739c78-f269-4498-b1b6-1813fe7319ec.png)
