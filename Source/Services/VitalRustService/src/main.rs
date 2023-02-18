@@ -83,7 +83,10 @@ async fn app() {
                 },
                 format!(
                     "http://localhost:{}/api/ingest/Utilization",
-                    vital_service_port.as_ref().unwrap().vital_service_http_port
+                    vital_service_port
+                        .to_owned()
+                        .unwrap()
+                        .vital_service_http_port
                 ),
             );
 

@@ -14,7 +14,7 @@ pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
         let count = nvml.device_count();
         if count.is_err() {
             error!("{:?}", count.err().unwrap());
-            return Vec::new();
+            return list;
         }
 
         for device_index in 0..count.unwrap() {
