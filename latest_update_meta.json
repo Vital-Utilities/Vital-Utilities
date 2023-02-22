@@ -1,7 +1,7 @@
 {
+    "notes": "## What's Changed\r\n* stripped out update checker code in C#\r\n* add updater to tauri client\r\n* sign update zip\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.1.6...0.1.7",
+    "pub_date": "Thu, 16 Feb 2023 22:22:37 GMT",
     "version": "0.1.7",
-    "notes": "Test version",
-    "pub_date": "2023-02-16T22:19:00Z",
     "platforms": {
         "windows-x86_64": {
             "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M0tqcGl0VHhIVUZ4QnFlTmp1MGtHc2NxZXlCMlZhTTRlMWtqV3RtbjVyQzJscUpHOTVod1F6QVl3QmF5cG1vU3ZsNW8yWDk3VTM1cUE1c2xTUEdxOVE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc2NTg1ODYxCWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMS43X3g2NF9lbi1VUy5tc2kuemlwCmJRUnRSY3BjcFZDekpHLzRaQlNBa1JYbHN4QUVsTnN2NmdBZmRBcGNEanZ4eUpQNlZlZmVFaGhJVDNsWGRUVFF6bmtUS3liQ0Q0VEV0REhjbTRCZkRRPT0K",
