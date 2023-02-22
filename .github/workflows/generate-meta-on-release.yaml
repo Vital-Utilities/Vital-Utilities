@@ -1,0 +1,22 @@
+name: Generate update meta on relase publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 7.5.0
+        run_install: false
+    - name: run script
+      run: |
+        cd "./Source"
+        pnpm i -g ts-node
+        pnpm i -D @types/node
+        pnpm i
+        pnpm run GenerateUpdateMeta -- -t ${{ github.ref_name }} -o ../latest_update_meta.json
