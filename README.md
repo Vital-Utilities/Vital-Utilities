@@ -141,7 +141,7 @@ If you want your profiles applied and metrics collected when you log in. You can
 ### V1
 
 - Custom Installer.
-- Check for new updates.
+- Check for new updates. ✔️
 - Quick Common Fixes. (common issues users experience fixed with a few clicks).
   - Fix Discord + Voicemeeter Audio problem (Create a profile with audioDg set with one thread).
 - Metrics data retention config.
