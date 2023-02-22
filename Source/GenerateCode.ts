@@ -1,7 +1,10 @@
 import path from "path";
 import fse from "fs-extra";
-import { execute } from "./Scripts/Execute";
+import { execute } from "./Scripts/Execute.js";
+import url from 'url'
 
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const tempFolder = path.join(__dirname, "/temp");
 const version = fse.readFileSync("./Version.txt", "utf8");
 if (fse.existsSync(tempFolder)) fse.removeSync(tempFolder);
