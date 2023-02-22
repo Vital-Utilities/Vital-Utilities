@@ -4,7 +4,8 @@
 
 
 //@ts-ignore
-const fs = require("fs");
+import fs from "fs";
+import {execSync}  from "child_process"
 const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()
@@ -127,7 +128,7 @@ function setVitalRustServiceVersions(){
 // function that takes a command and executes it synchronously
 function execute(command: string) {
     console.log(`Executing: ${command}`);
-    require("child_process").execSync(
+    execSync(
         command,
         {
             stdio: "inherit",
