@@ -8,8 +8,8 @@ type UpdateMetaData = {
     pub_date: string,
     platforms: {
         "windows-x86_64": {
-            "signature": string,
-            "url": string
+            signature: string,
+            url: string
         }
     }
 }
@@ -56,6 +56,6 @@ await axios.get<string>(release.data.assets.filter(asset => msiZipSigMatch.test(
         meta.platforms['windows-x86_64'].signature = signature;
     });
 
-console.log(meta);
+console.log(JSON.stringify(meta, null, 4));
 if (args.outputPath.length > 0)
     fs.writeFileSync(args.outputPath, JSON.stringify(meta, null, 4), { encoding: 'utf8' });
