@@ -1,12 +1,14 @@
-name: Generate update meta on relase publish
+name: Generate update meta on release publish
 
 on:
   release:
     types: [published]
 
 jobs:
-  greet:
+  generate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v2
     - uses: pnpm/action-setup@v2.2.1
@@ -20,3 +22,8 @@ jobs:
         pnpm i -D @types/node
         pnpm i
         pnpm run GenerateUpdateMeta -- -t ${{ github.ref_name }} -o ../latest_update_meta.json
+    - name: commit and push
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: update latest update meta
+        branch: master
