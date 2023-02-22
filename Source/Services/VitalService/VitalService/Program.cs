@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using VitalService.Data;
-using VitalService.Dtos;
 using VitalService.Stores;
 
 namespace VitalService
@@ -71,7 +70,7 @@ namespace VitalService
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
             {
-               scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+                scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
                 scope.ServiceProvider.GetRequiredService<MetricDbContext>().Database.Migrate();
             }
             host.Run();

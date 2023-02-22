@@ -1,7 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
 import { execute } from "./Scripts/Execute";
-import { exec } from "child_process";
 
 const tempFolder = path.join(__dirname, "/temp");
 const version = fse.readFileSync("./Version.txt", "utf8");
@@ -30,7 +29,6 @@ function collectSwaggerFoldersIntoTemp(swaggerPaths: string[]) {
     // To copy a folder or file
     fse.copySync(e, path.join(tempFolder, "/Swagger"), {
       errorOnExist: false,
-      recursive: true,
     });
   });
 }
