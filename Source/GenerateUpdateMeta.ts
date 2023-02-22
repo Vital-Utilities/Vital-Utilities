@@ -45,7 +45,7 @@ const release = await octokit.repos.getReleaseByTag({
 });
 
 meta.notes = release.data.body ?? "";
-meta.pub_date = new Date(release.data.published_at ?? "").toUTCString();
+meta.pub_date = new Date(release.data.published_at ?? "").toISOString();
 meta.version = release.data.tag_name;
 
 meta.platforms['windows-x86_64'].url = release.data.assets.filter(asset => msiZipMatch.test(asset.name))[0].browser_download_url;
