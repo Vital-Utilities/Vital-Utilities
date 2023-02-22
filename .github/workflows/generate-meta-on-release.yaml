@@ -21,7 +21,7 @@ jobs:
         pnpm i -g ts-node
         pnpm i -D @types/node
         pnpm i
-        pnpm run GenerateUpdateMeta -- -t ${{ github.ref_name }} -o ../latest_update_meta.json
+        pnpm run GenerateUpdateMeta -t ${{ github.ref_name }} -o ../latest_update_meta.json
     - name: commit and push
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
