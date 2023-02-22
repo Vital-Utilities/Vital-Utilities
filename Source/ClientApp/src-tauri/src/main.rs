@@ -53,6 +53,13 @@ fn main() {
                             ..Default::default()
                         },
                     ));
+                    sentry::configure_scope(|scope| {
+                        scope.set_user(Some(sentry::User {
+                            ip_address: Some(sentry::protocol::IpAddress::Auto),
+                            id: None,
+                            ..Default::default()
+                        }))
+                    });
                     info!("Sentry initialized");
                 }
                 None => {
