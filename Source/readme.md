@@ -20,8 +20,8 @@
 
 ### You will need
 
-- Visual Studio (2019 or later)
-- install .Net 6 if using 2019 (2022 should come with this)
+- Visual Studio 2022
+- .Net 7
 
 1. Open .sln in Backend Folder
 2. Build
