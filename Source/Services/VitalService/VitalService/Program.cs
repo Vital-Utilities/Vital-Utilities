@@ -62,8 +62,15 @@ namespace VitalService
             }
 
 
+
 #if DEBUG == false
-            // ensure rust service is running
+
+            foreach (var process in Process.GetProcessesByName("VitalRustService.exe"))
+            {
+                Log.Logger.Information($"Running VitalRustService found! killing process {process.Id}.");
+                process.Kill();
+            }
+            Log.Logger.Information($"Starting VitalRustService");
             Process.Start(rustServiceExe);
 #endif
 
