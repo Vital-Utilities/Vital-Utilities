@@ -65,7 +65,7 @@ namespace VitalService
 
 #if DEBUG == false
 
-            foreach (var process in Process.GetProcessesByName("VitalRustService.exe"))
+            foreach (var process in Process.GetProcessesByName("VitalRustService"))
             {
                 Log.Logger.Information($"Running VitalRustService found! killing process {process.Id}.");
                 process.Kill();
