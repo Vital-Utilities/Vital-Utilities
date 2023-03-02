@@ -33,10 +33,6 @@ jobs:
       run: |
         cd "./Source"
         pnpm run GenerateCode
-    - name: Generate Code
-      run: |
-        cd "./Source"
-        pnpm run GenerateCode
     - name: Fail if something to commmit
       run: |
         git status
