@@ -1,11 +1,11 @@
 {
-    "notes": "## Whats Changed\r\n* Updated Client packages\r\n\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.1.7...0.1.8",
-    "pub_date": "2023-02-22T15:53:38.000Z",
-    "version": "0.1.8",
+    "notes": "### Whats Changed\r\n* Should no longer have duplicate VitalRustServices running.\r\n* Some code refactor, removing dead code.\r\n* Added help links on connection problem popup in client.\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.1.8...0.1.11",
+    "pub_date": "2023-03-02T23:19:54.000Z",
+    "version": "0.1.11",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M0ZvOWJrZVFNZjdwL0NaRmx0TjhXOWxBVllYZlhOeG9QQ2NXcjEzSjd2L0RYZFB3a2VzOHI5d0JWRG1rKzVyNkxXSElJSWh6SURBYmxpYmdZak9Wb1FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3MDc4Nzk1CWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMS44X3g2NF9lbi1VUy5tc2kuemlwClJVeW9kUjJBelhjcFVaSTVERDdIWnB4R0wzc29rZE9hY0Jpci93QnJlZzYzZFd0UFM0MFhQWkhGWHd3dFdNQVU1RFZWTDZ3TVVmenhpMFdxc05XNkJRPT0K",
-            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.1.8/Vital.Utilities_0.1.8_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M1BqY1hYQVJnTW9wdkFRWnpXTkdGVE1ZRnlOVURYNXNOMGxraUFsam0rWmUyd052Vm53UjFVYXM3bDJ4eUpUeE16UHNOWHdibFNUR2NQQ01MclIyN0FrPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3Nzk4MDQ1CWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMS4xMV94NjRfZW4tVVMubXNpLnppcApOczl6VUZGdndLVDJOeDJFRmxzNVBKbkpKY1hPRE1QUmVSdXhJTUMyZ05hRTdJMVpueXFYRUtzTnV1dVdRM01pZy9pbEw0RURTYjIwOU55YWV2YXBDQT09Cg==",
+            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.1.11/Vital.Utilities_0.1.11_x64_en-US.msi.zip"
         }
     }
 }
