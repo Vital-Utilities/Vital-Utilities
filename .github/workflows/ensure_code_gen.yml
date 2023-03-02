@@ -7,6 +7,7 @@ name: Ensure generated code is not outdated
 
 on:
   push:
+  workflow_call:
 
 jobs:
   job:
