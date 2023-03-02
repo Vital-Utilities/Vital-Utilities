@@ -19,17 +19,14 @@ pub struct SettingsDto {
     pub launch: Box<crate::models::LaunchSettings>,
     #[serde(rename = "metrics")]
     pub metrics: Box<crate::models::MetricsSettings>,
-    #[serde(rename = "influxDb")]
-    pub influx_db: Box<crate::models::InfluxDbSettings>,
 }
 
 impl SettingsDto {
-    pub fn new(launch: crate::models::LaunchSettings, metrics: crate::models::MetricsSettings, influx_db: crate::models::InfluxDbSettings) -> SettingsDto {
+    pub fn new(launch: crate::models::LaunchSettings, metrics: crate::models::MetricsSettings) -> SettingsDto {
         SettingsDto {
             run_at_starup: None,
             launch: Box::new(launch),
             metrics: Box::new(metrics),
-            influx_db: Box::new(influx_db),
         }
     }
 }

@@ -31,7 +31,6 @@ docs/GpuUsage.md
 docs/GpuUsageMetricModel.md
 docs/HardwareMetricModel.md
 docs/HelloApi.md
-docs/InfluxDbSettings.md
 docs/IngestApi.md
 docs/IpInterfaceProperties.md
 docs/LaunchSettings.md
@@ -103,7 +102,6 @@ src/models/gpu_data.rs
 src/models/gpu_usage.rs
 src/models/gpu_usage_metric_model.rs
 src/models/hardware_metric_model.rs
-src/models/influx_db_settings.rs
 src/models/ip_interface_properties.rs
 src/models/launch_settings.rs
 src/models/load_data.rs

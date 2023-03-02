@@ -2120,41 +2120,6 @@
         },
         "additionalProperties": false
       },
-      "InfluxDbSettings": {
-        "required": [
-          "enabled",
-          "endPoint",
-          "reportIntervalSeconds",
-          "token"
-        ],
-        "type": "object",
-        "properties": {
-          "enabled": {
-            "type": "boolean"
-          },
-          "reportIntervalSeconds": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "endPoint": {
-            "minLength": 1,
-            "required": [
-              "chars",
-              "length"
-            ],
-            "type": "string"
-          },
-          "token": {
-            "minLength": 1,
-            "required": [
-              "chars",
-              "length"
-            ],
-            "type": "string"
-          }
-        },
-        "additionalProperties": false
-      },
       "LaunchSettings": {
         "required": [
           "vitalServiceHttpPort",
@@ -2975,7 +2940,6 @@
       },
       "SettingsDto": {
         "required": [
-          "influxDb",
           "launch",
           "metrics"
         ],
@@ -2993,9 +2957,6 @@
           },
           "metrics": {
             "$ref": "#/components/schemas/MetricsSettings"
-          },
-          "influxDb": {
-            "$ref": "#/components/schemas/InfluxDbSettings"
           }
         },
         "additionalProperties": false

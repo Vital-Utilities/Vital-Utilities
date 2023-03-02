@@ -52,8 +52,6 @@ pub mod gpu_usage_metric_model;
 pub use self::gpu_usage_metric_model::GpuUsageMetricModel;
 pub mod hardware_metric_model;
 pub use self::hardware_metric_model::HardwareMetricModel;
-pub mod influx_db_settings;
-pub use self::influx_db_settings::InfluxDbSettings;
 pub mod ip_interface_properties;
 pub use self::ip_interface_properties::IpInterfaceProperties;
 pub mod launch_settings;

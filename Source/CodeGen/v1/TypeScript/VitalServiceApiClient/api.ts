@@ -966,37 +966,6 @@ export interface IPInterfaceProperties {
 /**
  * 
  * @export
- * @interface InfluxDbSettings
- */
-export interface InfluxDbSettings {
-    /**
-     * 
-     * @type {boolean}
-     * @memberof InfluxDbSettings
-     */
-    'enabled': boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof InfluxDbSettings
-     */
-    'reportIntervalSeconds': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof InfluxDbSettings
-     */
-    'endPoint': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof InfluxDbSettings
-     */
-    'token': string;
-}
-/**
- * 
- * @export
  * @interface LaunchSettings
  */
 export interface LaunchSettings {
@@ -1730,12 +1699,6 @@ export interface SettingsDto {
      * @memberof SettingsDto
      */
     'metrics': MetricsSettings;
-    /**
-     * 
-     * @type {InfluxDbSettings}
-     * @memberof SettingsDto
-     */
-    'influxDb': InfluxDbSettings;
 }
 /**
  * 

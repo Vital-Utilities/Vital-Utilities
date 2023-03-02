@@ -79,7 +79,6 @@ Class | Method | HTTP request | Description
  - [GpuUsage](docs/GpuUsage.md)
  - [GpuUsageMetricModel](docs/GpuUsageMetricModel.md)
  - [HardwareMetricModel](docs/HardwareMetricModel.md)
- - [InfluxDbSettings](docs/InfluxDbSettings.md)
  - [IpInterfaceProperties](docs/IpInterfaceProperties.md)
  - [LaunchSettings](docs/LaunchSettings.md)
  - [LoadData](docs/LoadData.md)

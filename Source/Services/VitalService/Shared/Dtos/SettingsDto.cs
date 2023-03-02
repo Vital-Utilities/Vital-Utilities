@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace VitalService.Dtos
 {
@@ -9,7 +7,6 @@ namespace VitalService.Dtos
         public bool? RunAtStarup { get; set; } = false;
         public SettingsClasses.LaunchSettings Launch { get; set; } = new();
         public SettingsClasses.MetricsSettings Metrics { get; set; } = new();
-        public SettingsClasses.InfluxDbSettings InfluxDb { get; set; } = new();
         //public SettingsClasses.LoggingSettings Logging { get; set; } = new();
     }
 
@@ -40,18 +37,6 @@ namespace VitalService.Dtos
         {
             [Required]
             public bool PersistMetrics { get; set; } = true;
-        }
-
-        public class InfluxDbSettings
-        {
-            [Required]
-            public bool Enabled { get; set; } = false;
-            [Required]
-            public int ReportIntervalSeconds { get; set; } = 5;
-            [Required]
-            public string EndPoint { get; set; } = "http://localhost:8086";
-            [Required]
-            public string Token { get; set; } = "";
         }
     }
 }
