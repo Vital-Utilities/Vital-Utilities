@@ -1,0 +1,46 @@
+# This workflow warns and then closes issues and PRs that have had no activity for a specified amount of time.
+#
+# You can adjust the behavior by modifying this file.
+# For more information, see:
+# https://github.com/actions/stale
+name: Ensure generated code is not outdated
+
+on:
+  push:
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache pnpm modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - uses: pnpm/action-setup@v2.2.1
+      with:
+        version: 7.5.0
+        run_install: false
+    - name: install ts-node
+      run: |
+        cd "./Source"
+        pnpm i -g ts-node
+        pnpm i -D @types/node
+    - name: Generate Code
+      run: |
+        cd "./Source"
+        pnpm run GenerateCode
+    - name: Generate Code
+      run: |
+        cd "./Source"
+        pnpm run GenerateCode
+    - name: Fail if something to commmit
+      run: |
+        git status
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "There is something to commit, failing the step..."
+          exit 1
+        fi
