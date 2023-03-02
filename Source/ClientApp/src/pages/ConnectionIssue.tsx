@@ -2,8 +2,10 @@ import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
 import { invoke } from "@tauri-apps/api";
 import { Button, Input, message } from "antd";
 import React from "react";
+import { BsDiscord, BsGithub } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { AppState, VitalState } from "../Redux/States";
+import { openUrl } from "../Utilities/TauriCommands";
 
 export const ConnnectionIssuePage: React.FunctionComponent = () => {
     const appState = useSelector<VitalState, AppState>(state => state.appState);
@@ -59,6 +61,18 @@ export const ConnnectionIssuePage: React.FunctionComponent = () => {
                             Save And Start Vital Service
                         </Button>
                     </span>
+                </div>
+                <br />
+                <div style={{ marginLeft: 10 }}>
+                    <h4>Get Help</h4>
+                    <div style={{ display: "flex", flexDirection: "row", gap: 20, fontSize: 16 }}>
+                        <a onClick={() => openUrl("https://discord.gg/ghQ8nQK2ma")}>
+                            <BsDiscord /> Discord Hangout
+                        </a>
+                        <a onClick={() => openUrl("https://github.com/Vital-Utilities/Vital-Utilities/issues/new?assignees=&labels=Bug&template=bug_report.yaml&title=Bug")}>
+                            <BsGithub /> Submit a bug
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
