@@ -43,7 +43,7 @@ jobs:
     - name: Restore dotnet tools
       run: cd ${{env.source}} && dotnet tool restore 
     - name: Build
-      run: dotnet build ${{env.source}} 
+      run: dotnet build ${{env.source}} -c release
     - name: Test
       run: dotnet test ${{env.source}}
     
