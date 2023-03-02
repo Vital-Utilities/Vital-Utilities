@@ -131,7 +131,7 @@ pub fn restart_vital_service() -> Result<String, String> {
         return Err(msg);
     }
 
-    match get_running_vital_service_pid() {
+    match get_running_vital_service_pid(ServiceName::VitalService) {
         Some(pid) => {
             info!("Found an existing Vital Service instance running, killing it");
             let end_process_result = end_process(pid);
@@ -142,7 +142,7 @@ pub fn restart_vital_service() -> Result<String, String> {
         }
         None => {}
     }
-    return start_vital_service();
+    return start_vital_service(ServiceName::VitalService);
 }
 
 #[tauri::command]
@@ -276,18 +276,29 @@ pub fn end_process(pid: Pid) -> Result<(), String> {
     }
 }
 
-pub fn start_vital_service() -> Result<String, String> {
+pub fn start_vital_service(service_name: ServiceName) -> Result<String, String> {
     if !cfg!(feature = "release") {
         info!("Debug mode: backend will not be started");
         return Ok("Debug mode: backend will not be started".to_string());
     }
 
-    info!("Starting Vital Service");
+    info!("Starting {}", service_name.as_str());
+    let result;
     const CREATE_NO_WINDOW: u32 = 0x08000000;
-    let result = Command::new("cmd")
-        .args(&["/C", "start", "./bin/VitalService/VitalService.exe"])
-        .creation_flags(CREATE_NO_WINDOW)
-        .spawn();
+    match service_name {
+        ServiceName::VitalService => {
+            result = Command::new("cmd")
+                .args(&["/C", "start", "./bin/VitalService/VitalService.exe"])
+                .creation_flags(CREATE_NO_WINDOW)
+                .spawn();
+        }
+        ServiceName::VitalRustService => {
+            result = Command::new("cmd")
+                .args(&["/C", "start", "./bin/VitalRustService/VitalRustService.exe"])
+                .creation_flags(CREATE_NO_WINDOW)
+                .spawn();
+        }
+    }
 
     match result {
         Ok(_) => {
@@ -301,18 +312,32 @@ pub fn start_vital_service() -> Result<String, String> {
     }
 }
 
-pub fn is_vital_service_running() -> bool {
+pub fn is_vital_service_running(service_name: ServiceName) -> bool {
     let s = System::new_all();
-    for _process in s.processes_by_exact_name("VitalService") {
+    for _process in s.processes_by_exact_name(service_name.as_str()) {
         return true;
     }
     return false;
 }
 
-pub fn get_running_vital_service_pid() -> Option<Pid> {
+pub fn get_running_vital_service_pid(service_name: ServiceName) -> Option<Pid> {
     let s = System::new_all();
-    for _process in s.processes_by_exact_name("VitalService") {
+    for _process in s.processes_by_exact_name(service_name.as_str()) {
         return Some(_process.pid());
     }
     return None;
+}
+
+pub enum ServiceName {
+    VitalService,
+    VitalRustService,
+}
+
+impl ServiceName {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            ServiceName::VitalService => "VitalService",
+            ServiceName::VitalRustService => "VitalRustService",
+        }
+    }
 }

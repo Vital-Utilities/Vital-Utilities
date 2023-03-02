@@ -72,8 +72,8 @@ fn main() {
         }
     }
 
-    if cfg!(feature = "release") && !is_vital_service_running() {
-        let _ = start_vital_service();
+    if cfg!(feature = "release") && !is_vital_service_running(commands::ServiceName::VitalService) {
+        let _ = start_vital_service(commands::ServiceName::VitalService);
     }
 
     tauri::Builder::default()
