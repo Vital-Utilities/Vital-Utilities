@@ -10,7 +10,7 @@
 <br/>
 </p>
 <p align="center">
-🌟🌠✨⭐Show your support by hitting that Star and yap your neighbours ears of about it ⭐✨🌠🌟
+🌟🌠✨⭐Show your support by hitting that Star⭐✨🌠🌟
 </p>
 
 - [Links](#links)
