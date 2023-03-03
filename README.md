@@ -1,8 +1,8 @@
 <p align="center">
-<img height="200" src="Source/Assets/Vital-large.png"/>
+<img height="200" src="Source/Assets/Logo.svg"/>
 </p>
-<p align="center">
 
+<p align="center">
 <a href="https://github.com/Vital-Utilities/Vital-Utilities/releases">
 <img src="https://img.shields.io/github/v/release/Vital-Utilities/Vital-Utilities?style=flat-square"/>
 </a>
@@ -43,15 +43,14 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 
 [Vital License v1.0](./LICENSE)
 
-| Permissions     | Limitations      |
-| --------------- | ---------------- |
+| Permissions     | Limitations       |
+| --------------- | ----------------- |
 | ✅ Private use  | ❌ Commercial use |
 | ✅ Modification | ❌ Trademark use  |
 |                 | ❌ Patent use     |
 |                 | ❌ Warranty       |
 |                 | ❌ Liability      |
 |                 | ❌ Distribution   |
-
 
 ## Notice
 
