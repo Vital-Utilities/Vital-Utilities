@@ -6,7 +6,7 @@
 		<SignAssembly>False</SignAssembly>
 		<Nullable>enable</Nullable>
 		<UserSecretsId>4f340cb3-d382-4643-b0c4-12888907bb06</UserSecretsId>
-		<ApplicationIcon>..\..\..\Assets\Vital-large.ico</ApplicationIcon>
+		<ApplicationIcon>..\..\..\Assets\Logo.ico</ApplicationIcon>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<Platforms>AnyCPU;x64</Platforms>
 		<Company></Company>
