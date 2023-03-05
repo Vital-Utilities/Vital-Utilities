@@ -457,12 +457,6 @@ export interface DiskUsageMetricModel {
     'driveLetter'?: string;
     /**
      * 
-     * @type {DriveType}
-     * @memberof DiskUsageMetricModel
-     */
-    'driveType'?: DriveType;
-    /**
-     * 
      * @type {number}
      * @memberof DiskUsageMetricModel
      */

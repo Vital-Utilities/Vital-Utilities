@@ -31,20 +31,6 @@ namespace VitalService.Stores
             return HardwarePerformanceService.MachineStaticData;
         }
 
-        public MemoryUsage GetRamUsage()
-        {
-            return HardwarePerformanceService.CurrentRamUsage;
-        }
-
-        public List<GpuUsage> GetGpuUsage()
-        {
-            return HardwarePerformanceService.CurrentGpuUsage;
-        }
-        public NetworkAdapterUsages GetNetworkUsage()
-        {
-            return HardwarePerformanceService.CurrentNetworkUsage;
-        }
-
         internal IDictionary<int, float> GetProcessGpuUsage()
         {
             var metrics = SoftwarePerformanceService.GetProcessMetrics();
@@ -89,10 +75,6 @@ namespace VitalService.Stores
             return metrics;
         }
 
-        public CpuUsage GetCpuUsage()
-        {
-            return HardwarePerformanceService.CurrentCpuUsage;
-        }
         public (DateRange requestDateRange, TimeSeriesMachineMetricsModel[] model) GetMetrics(DateTime earliest, DateTime latest)
         {
             TimeSeriesMachineMetricsModel[] model = Array.Empty<TimeSeriesMachineMetricsModel>();
@@ -123,15 +105,6 @@ namespace VitalService.Stores
             return returnValue;
         }
 
-        public float GetCpuUsagePercentage()
-        {
-            return (float)Math.Round(HardwarePerformanceService.CurrentCpuUsage.TotalCorePercentage, 1);
-        }
-
-        internal float? GetCpuClockSpeed()
-        {
-            throw new NotImplementedException();
-        }
         public Dictionary<int, float> GetProcessRamUsagesInBytes()
         {
             var metrics = SoftwarePerformanceService.GetProcessMetrics();

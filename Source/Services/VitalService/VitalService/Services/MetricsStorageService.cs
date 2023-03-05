@@ -129,8 +129,8 @@ namespace VitalService.Services
                      HardwarePerformanceService.CurrentNetworkUsage.Adapters.Select(e =>
                      new NetworkUsageMetricModel(
                         e.Value.Properties.MacAddress,
-                        e.Value.Usage.SendBps,
-                        e.Value.Usage.RecieveBps)).ToList(),
+                        e.Value.Usage?.SendBps,
+                        e.Value.Usage?.RecieveBps)).ToList(),
                       HardwarePerformanceService.CurrentDiskUsages.Disks.Select(e =>
                           new DiskUsageMetricModel(e.Value.Name,
                             e.Value.Letter,
@@ -144,8 +144,7 @@ namespace VitalService.Services
                             e.Value.Load?.UsedSpacePercentage,
                             e.Value.Temperatures.ToDictionary(k => k.Key, v => v.Value),
                             e.Value.Load?.UsedSpaceBytes,
-                            e.Value.Serial,
-                            e.Value.DriveType
+                            e.Value.Serial
                         )).ToList());
 
             List<GpuUsageMetricModel> GetGpuMetricModels()

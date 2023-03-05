@@ -2,6 +2,7 @@
 using LibreHardwareMonitor.Hardware;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Management.Infrastructure;
+using Namotion.Reflection;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -21,18 +22,18 @@ namespace VitalService.Services.PerformanceServices
     public class HardwarePerformanceService : IHostedService
     {
         public GetMachineStaticDataResponse MachineStaticData { get; set; } = new();
-        public MemoryUsage CurrentRamUsage { get { lastServiceAccess = DateTime.Now; return ramUsageData; } }
-        public List<GpuUsage> CurrentGpuUsage { get { lastServiceAccess = DateTime.Now; return gpuUsageData; } }
-        public CpuUsage CurrentCpuUsage { get { lastServiceAccess = DateTime.Now; return cpuUsageData; } }
-        public DiskUsages CurrentDiskUsages { get { lastServiceAccess = DateTime.Now; return diskUsagesData; } }
+        public MemoryUsage CurrentRamUsage { get { RecordAccess(); return ramUsageData; } }
+        public List<GpuUsage> CurrentGpuUsage { get { RecordAccess(); return gpuUsageData; } }
+        public CpuUsage CurrentCpuUsage { get { RecordAccess(); return cpuUsageData; } }
+        public DiskUsages CurrentDiskUsages { get { RecordAccess(); return diskUsagesData; } }
+        public NetworkAdapterUsages CurrentNetworkUsage { get { lastServiceAccess = DateTime.Now; return networkUsageData; } }
 
-
-        public Dtos.Coms.NetworkAdapterUsages CurrentNetworkUsage { get { lastServiceAccess = DateTime.Now; return networkUsageData; } }
+        void RecordAccess() => lastServiceAccess = DateTime.Now;
 
         private List<GpuUsage> gpuUsageData = new();
         private CpuUsage cpuUsageData = new();
         private MemoryUsage ramUsageData = new();
-        private Dtos.Coms.NetworkAdapterUsages networkUsageData = new();
+        private NetworkAdapterUsages networkUsageData = new();
         private bool IsUpdatingCpuUsage { get; set; }
         private bool IsUpdatingDiskUsage { get; set; }
         private bool IsUpdatingNetworkUsage { get; set; }
@@ -43,6 +44,7 @@ namespace VitalService.Services.PerformanceServices
         private CpuUsage cpuDataFromRust;
         private MemoryUsage memDataFromRust;
         private GpuUsage[] gpuDataFromRust;
+        Dictionary<string, DiskUsage> diskUsageDataFromRust;
 
         //private VitalRustServiceClasses.GpuUsage[] gpuDataFromRust;
 
@@ -59,7 +61,6 @@ namespace VitalService.Services.PerformanceServices
             IsNetworkEnabled = true,
             IsStorageEnabled = true,
         };
-
 
         public HardwarePerformanceService()
         {
@@ -83,6 +84,7 @@ namespace VitalService.Services.PerformanceServices
             cpuDataFromRust = hardwareUsage.CpuUsage;
             memDataFromRust = hardwareUsage.MemUsage;
             gpuDataFromRust = hardwareUsage.GpuUsage;
+            diskUsageDataFromRust = hardwareUsage.DiskUsage;
         }
 
         private void SetStaticData()
@@ -454,7 +456,7 @@ namespace VitalService.Services.PerformanceServices
 
         private void UpdateDiskUsage()
         {
-            if (IsUpdatingDiskUsage)
+            if (IsUpdatingDiskUsage || diskUsageDataFromRust is null)
                 return;
             IsUpdatingDiskUsage = true;
             try
@@ -463,36 +465,29 @@ namespace VitalService.Services.PerformanceServices
                 {
 
                     var toReturn = new DiskUsages();
+
+                    var libreDisks = computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage).ToArray();
                     var drives = DriveInfo.GetDrives();
-                    foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage))
+                    foreach ((var key, var disk) in diskUsageDataFromRust)
                     {
-
-                        var disk = new DiskUsage { Name = hardwareItem.Name };
-
-                        var generic = hardwareItem as LibreHardwareMonitor.Hardware.Storage.AbstractStorage;
-                        var letter = generic?.DriveInfos[0].Name ?? "";
+                        var hardwareItem = libreDisks.Single(e => e.TryGetPropertyValue<DriveInfo[]>("DriveInfos", null)[0].Name == disk.Name);
                         var obj = GetInstanceField(typeof(LibreHardwareMonitor.Hardware.Storage.AbstractStorage), hardwareItem, "_storageInfo");
-                        disk.Serial = obj.GetType().GetProperties().SingleOrDefaultF(e => e.Name == "Serial")?.GetValue(obj) as string;
-
-                        var diskFromInfo = drives.SingleOrDefaultF(e => e.Name == letter);
-                        if (diskFromInfo != null)
+                        var diskFromInfo = drives.SingleOrDefaultF(e => e.Name == disk.Letter);
+                        var usage = new DiskUsage
                         {
-                            disk.Load.UsedSpaceBytes = diskFromInfo.TotalSize - diskFromInfo.TotalFreeSpace;
-                            disk.Load.TotalFreeSpaceBytes = diskFromInfo.TotalFreeSpace;
-                            disk.DriveType = diskFromInfo.DriveType;
-                            disk.VolumeLabel = diskFromInfo.VolumeLabel;
-                            disk.Letter = letter.EndsWith("\\") ? letter[..^1] : letter;
-                            disk.UniqueIdentifier = disk.Letter;
-                        }
+                            Name = diskFromInfo.VolumeLabel,
+                            Letter = disk.Letter,
+                            DriveType = diskFromInfo.DriveType,
+                            DiskType = disk.DiskType,
+                            DiskHealth = new(),
+                            Load = disk.Load,
+                            Serial = obj.GetType().GetProperties().SingleOrDefaultF(e => e.Name == "Serial")?.GetValue(obj) as string,
+                            Temperatures = disk.Temperatures,
+                            Throughput = disk.Throughput,
+                            UniqueIdentifier = disk.Letter,
+                            VolumeLabel = diskFromInfo.VolumeLabel
+                        };
 
-                        //var diskSession = CimSession.Create(null) // null instead of localhost which would otherwise require certain MMI services running
-                        //.QueryInstances(@"root\cimv2", "WQL", "SELECT Model, Size, Manufacturer, Name, SerialNumber FROM Win32_DiskDrive");
-                        //foreach (var queryObj in diskSession)
-                        //{
-                        //    //var ram = new RamData();
-
-                        //    //ram.PartNumber = (string)Convert.ChangeType(queryObj.CimInstanceProperties["PartNumber"].Value, typeof(string));
-                        //}
                         foreach (var sensor in hardwareItem.Sensors)
                         {
                             if (sensor.Value is null)
@@ -519,9 +514,6 @@ namespace VitalService.Services.PerformanceServices
                                     disk.Throughput.WriteRateBytesPerSecond = (long)sensor.Value;
                                     break;
 
-                                case SensorType.Load when sensor.Name == "Used Space":
-                                    disk.Load.UsedSpacePercentage = sensor.Value;
-                                    break;
                                 case SensorType.Load when sensor.Name == "Write Activity":
                                     disk.Load.WriteActivityPercentage = MathF.Round((float)sensor.Value, 2);
                                     break;
@@ -530,7 +522,7 @@ namespace VitalService.Services.PerformanceServices
                                     break;
 
                                 case SensorType.Temperature:
-                                    disk.Temperatures.Add(sensor.Name, (float)sensor.Value);
+                                    disk.Temperatures[sensor.Name] = (float)sensor.Value;
                                     break;
                                 default:
                                     break;
@@ -539,6 +531,7 @@ namespace VitalService.Services.PerformanceServices
 
                         toReturn.Disks.TryAdd(hardwareItem.Name, disk);
                     }
+
                     diskUsagesData = toReturn;
                 });
             }
@@ -584,17 +577,14 @@ namespace VitalService.Services.PerformanceServices
         private void UpdateRamUsage()
         {
 
-            Utilities.Debug.LogExecutionTime(null, () =>
-            {
-                if (memDataFromRust is null)
-                    return;
+            if (memDataFromRust is null)
+                return;
 
-                ramUsageData = new MemoryUsage
-                {
-                    UsedMemoryBytes = memDataFromRust.UsedMemoryBytes,
-                    TotalVisibleMemoryBytes = memDataFromRust.TotalVisibleMemoryBytes
-                };
-            });
+            ramUsageData = new MemoryUsage
+            {
+                UsedMemoryBytes = memDataFromRust.UsedMemoryBytes,
+                TotalVisibleMemoryBytes = memDataFromRust.TotalVisibleMemoryBytes
+            };
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

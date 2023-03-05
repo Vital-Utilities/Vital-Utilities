@@ -50,7 +50,7 @@ export const ClassicDiskView: React.FunctionComponent<{ driveLetter: string } & 
                         })}
                     </div>
                     <div>
-                        <ItemTwo title="Type:" value={current?.driveType} />
+                        {/* <ItemTwo title="Type:" value={`${current?.driveType}`} /> */}
                         {current?.dataReadBytes && <ItemTwo title="Total Read:" value={getReadableBytesString(current?.dataReadBytes)} />}
                         {current?.dataWrittenBytes && <ItemTwo title="Total Written:" value={getReadableBytesString(current?.dataWrittenBytes)} />}
                     </div>

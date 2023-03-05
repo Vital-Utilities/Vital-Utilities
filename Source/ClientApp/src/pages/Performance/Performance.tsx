@@ -256,7 +256,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             onClick={() => {
                                                 setClassicViewProps({ ...classicViewProps, selectedKey: `Disk ${index}`, driveLetter: value[1].letter });
                                             }}
-                                            detail={`${value[1].name}`}
+                                            detail={`${value[0]}`}
                                             stat={
                                                 <>
                                                     <CaretDownOutlined /> {getReadableBytesPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0, 0)} <CaretUpOutlined /> {getReadableBytesPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0, 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)

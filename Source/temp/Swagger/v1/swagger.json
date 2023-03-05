@@ -1428,9 +1428,6 @@
             ],
             "type": "string"
           },
-          "driveType": {
-            "$ref": "#/components/schemas/DriveType"
-          },
           "usedSpacePercentage": {
             "required": [
               "hasValue",

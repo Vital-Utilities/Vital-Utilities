@@ -35,10 +35,10 @@ namespace VitalService.Controllers
 
             var toReturn = new GetMachineDynamicDataResponse
             {
-                CpuUsageData = MachineDataStore.GetCpuUsage(),
-                RamUsagesData = MachineDataStore.GetRamUsage(),
-                GpuUsageData = MachineDataStore.GetGpuUsage(),
-                NetworkUsageData = MachineDataStore.GetNetworkUsage(),
+                CpuUsageData = HardwarePerformanceService.CurrentCpuUsage,
+                RamUsagesData = HardwarePerformanceService.CurrentRamUsage,
+                GpuUsageData = HardwarePerformanceService.CurrentGpuUsage,
+                NetworkUsageData = HardwarePerformanceService.CurrentNetworkUsage,
                 DiskUsages = HardwarePerformanceService.CurrentDiskUsages,
                 //ProcessCpuThreadsUsage = await MachineDataStore.GetProcessTotalCpuThreadsUsagesAsync(),
                 ProcessCpuUsage = processCpuUsage,

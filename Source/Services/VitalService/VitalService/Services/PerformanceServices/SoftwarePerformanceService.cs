@@ -17,11 +17,12 @@ namespace VitalService.Services.PerformanceServices
         /// <summary>
         /// pid, obj
         /// </summary>
-        public ConcurrentDictionary<int, ProcessData> RunningProcesses { get { LastServiceAccess = DateTime.Now; return runningProcesses; } }
-        public ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> ProcessPerformanceData { get { LastServiceAccess = DateTime.Now; return processPerformanceData; } }
+        public ConcurrentDictionary<int, ProcessData> RunningProcesses { get { RecordAccess(); return runningProcesses; } }
+        public ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> ProcessPerformanceData { get { RecordAccess(); return processPerformanceData; } }
 
-        public ConcurrentDictionary<int, string> IdName { get { LastServiceAccess = DateTime.Now; return idName; } }
-
+        public ConcurrentDictionary<int, string> IdName { get { RecordAccess(); return idName; } }
+        void RecordAccess() =>
+            LastServiceAccess = DateTime.Now;
         private bool IsUpdatingRunningProcesses { get; set; }
 
         private ConcurrentDictionary<int, VitalRustServiceClasses.ProcessData> processPerformanceData = new();

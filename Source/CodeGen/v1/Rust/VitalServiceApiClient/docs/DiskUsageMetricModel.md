@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 **serial** | Option<**String**> |  | [optional]
 **name** | Option<**String**> |  | [optional]
 **drive_letter** | Option<**String**> |  | [optional]
-**drive_type** | Option<[**crate::models::DriveType**](DriveType.md)> |  | [optional]
 **used_space_percentage** | Option<**f32**> |  | [optional]
 **used_space_bytes** | Option<**i64**> |  | [optional]
 **write_activity_percentage** | Option<**f32**> |  | [optional]
