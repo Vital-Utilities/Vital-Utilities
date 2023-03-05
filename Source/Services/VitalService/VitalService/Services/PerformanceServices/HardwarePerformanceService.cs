@@ -263,7 +263,7 @@ namespace VitalService.Services.PerformanceServices
             Utilities.Debug.LogExecutionTime(null, () =>
             {
                 var toReturn = new List<GpuUsage>();
-                foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd))
+                foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel))
                 {
                     var gpu = new GpuUsage();
                     foreach (var sensor in hardwareItem.Sensors)
