@@ -52,8 +52,8 @@ jobs:
       with:
         prefix-key: "Cargo"
         workspaces: |
-          - ./Source/ClientApp/src-tauri
-          - ./Source/Services/VitalRustService
+          ./Source/ClientApp/src-tauri
+          ./Source/Services/VitalRustService
     - name: modify version
       run: |
         cd "./Source"
