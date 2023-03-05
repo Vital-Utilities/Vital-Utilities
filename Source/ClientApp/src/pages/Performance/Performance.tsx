@@ -152,7 +152,7 @@ export const PerformancePage: React.FunctionComponent = props => {
 
     function topControlBar() {
         return (
-            <div style={{ display: "grid", borderBottom: "1px solid #ddd", padding: 20 }}>
+            <div style={{ display: "grid", padding: 20 }}>
                 <div style={{ display: "flex", gap: "20px", justifySelf: "right" }}>
                     {view === viewOptions.TimeSeries && (
                         <>
