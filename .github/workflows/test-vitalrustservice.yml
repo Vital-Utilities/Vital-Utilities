@@ -27,8 +27,12 @@ jobs:
         prefix-key: "Cargo"
         workspaces: |
           ./Source/Services/VitalRustService
-    - name: Build & Test
+          ./Source/CodeGen/v1/Rust/VitalServiceApiClient
+    - name: Build
       run: |
         cd "./Source/Services/VitalRustService"
         cargo build
+    - name: Test
+      run: |
+        cd "./Source/Services/VitalRustService"
         cargo test
