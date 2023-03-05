@@ -76,7 +76,7 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
     const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData[0]?.totalCoreUsagePercentage ?? undefined;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
-            CPU
+            Cpu
             <Progress
                 style={{ marginLeft: 4, marginTop: -4 }}
                 strokeColor={{
@@ -96,7 +96,7 @@ export const GpuPerfBadge: React.FunctionComponent = () => {
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
-            GPU
+            Gpu
             <Progress
                 style={{ marginLeft: 4, marginTop: -4 }}
                 strokeColor={{
