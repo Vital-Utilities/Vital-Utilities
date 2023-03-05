@@ -26,7 +26,7 @@ jobs:
         prefix-key: "Cargo"
         workspaces: |
           ./Source/Services/VitalRustService
-    - name: install ts-node
+    - name: Build & Test
       run: |
         cd "./Source/Services/VitalRustService"
         cargo build
