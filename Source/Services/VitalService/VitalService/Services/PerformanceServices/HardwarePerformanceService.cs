@@ -459,11 +459,11 @@ namespace VitalService.Services.PerformanceServices
             if (IsUpdatingDiskUsage || diskUsageDataFromRust is null)
                 return;
             IsUpdatingDiskUsage = true;
-            try
-            {
-                Utilities.Debug.LogExecutionTime(null, () =>
-                {
 
+            Utilities.Debug.LogExecutionTime(null, () =>
+            {
+                try
+                {
                     var toReturn = new DiskUsages();
 
                     var libreDisks = computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage).ToArray();
@@ -533,16 +533,13 @@ namespace VitalService.Services.PerformanceServices
                     }
 
                     diskUsagesData = toReturn;
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Logger.Error(e, e.Message);
-            }
-            finally
-            {
-                IsUpdatingDiskUsage = false;
-            }
+                }
+                finally
+                {
+                    IsUpdatingDiskUsage = false;
+                }
+            });
+
         }
 
         /// <summary>
