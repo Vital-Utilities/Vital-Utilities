@@ -282,18 +282,7 @@ export const Processes: React.FunctionComponent = () => {
                 returnValue.push(
                     <Dropdown key={`dropdown - ${e.parent.id} child`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
                         <tr className="child process">
-                            <td
-                                style={{ paddingLeft: 40, maxWidth: 250 }}
-                                onClick={() => {
-                                    if (expandedIds.find(f => f === e.parent.id) === undefined) {
-                                        const copy = _.cloneDeep(expandedIds);
-                                        copy.push(e.parent.id);
-                                        setExpandedIds(copy);
-                                    } else {
-                                        setExpandedIds(expandedIds.filter(g => g !== e.parent.id));
-                                    }
-                                }}
-                            >
+                            <td style={{ paddingLeft: 40, maxWidth: 250 }}>
                                 <div>
                                     <span>{e.parent.description ?? e.parent.processName}</span>
                                 </div>
