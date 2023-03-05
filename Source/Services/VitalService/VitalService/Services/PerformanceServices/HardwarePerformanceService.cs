@@ -535,6 +535,10 @@ namespace VitalService.Services.PerformanceServices
                     diskUsagesData = toReturn;
                 });
             }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, e.Message);
+            }
             finally
             {
                 IsUpdatingDiskUsage = false;
