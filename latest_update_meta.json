@@ -1,11 +1,11 @@
 {
-    "notes": "## Whats changed\r\n* Code refactoring\r\n* Small UI changes and fixes\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.2.0...0.2.1",
-    "pub_date": "2023-03-05T04:45:06.000Z",
-    "version": "0.2.1",
+    "notes": "## Whats changed\r\n* small fix for error handling\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.2.1...0.2.2",
+    "pub_date": "2023-03-05T05:16:17.000Z",
+    "version": "0.2.2",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M0s5VUdwWXNqa1FMUGpQZkdrcjVoN0ZVdy9rcXZqYzJ2SVBIRmQzU2ZCMFpJOGRINTRQNng0R3JFZjhNLy9iaFpPWnRCY3NaclB0ZFlleXluS2NjSGdVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3OTkxMTcyCWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMi4xX3g2NF9lbi1VUy5tc2kuemlwClQ4MzVucVRXZGdyN3dqYTRrbVZjTUVhb2RqVTByOE01Skk1RjdjT3czTkhyd2ZzQ09KaTdBaWNJQm1hdXRVVngwazRTbFl2dkYzdFZTWG91Q1NiNEFnPT0K",
-            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.2.1/Vital.Utilities_0.2.1_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M0QxeDlmTndmb2h3Zys1LzhtMWxzWUFXU1BSalMrT1kxVU5QNlBZT0tKaVhGdDFIN1dRcWN5VEpUcE9LZUY5RlBIdmRMU1BZaDFVZEFGMmNxQWpmK3dFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3OTkzMjY2CWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMi4yX3g2NF9lbi1VUy5tc2kuemlwCkFTQlBXZGxVUnpyaGUxNmhZVzJwUEhoeWJTOUpkL1VFZXdEb1hLelZEdXJ6OUtSaTA1TXFweDRaYVJaS1c4R1hod0tIbjNLY3g5cER6WDlyNDZFK0JRPT0K",
+            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.2.2/Vital.Utilities_0.2.2_x64_en-US.msi.zip"
         }
     }
 }

@@ -1,0 +1,38 @@
+# This is a basic workflow that is manually triggered
+
+name: VitalRustService Tests
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+  push:
+env:
+  CARGO_TERM_COLOR: always
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  test:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install Rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: cargo cache    
+      uses: Swatinem/rust-cache@v2
+      with:
+        prefix-key: "Cargo"
+        workspaces: |
+          ./Source/Services/VitalRustService
+          ./Source/CodeGen/v1/Rust/VitalServiceApiClient
+    - name: Build
+      run: |
+        cd "./Source/Services/VitalRustService"
+        cargo build
+    - name: Test
+      run: |
+        cd "./Source/Services/VitalRustService"
+        cargo test
