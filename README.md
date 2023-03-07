@@ -16,8 +16,6 @@
 - [Links](#links)
 - [License](#license)
 - [Notice](#notice)
-- [Tech Stack](#tech-stack)
-- [Looking for help](#looking-for-help)
 - [Platform / Support Focus](#platform--support-focus)
 - [What is Vital](#what-is-vital)
 - [Why use Vital?](#why-use-vital)
@@ -28,6 +26,8 @@
 - [Things being worked on](#things-being-worked-on)
   - [V1](#v1)
   - [Distant Future Goals](#distant-future-goals)
+- [Tech Stack](#tech-stack)
+- [Looking for help](#looking-for-help)
 
 ## Links
 
@@ -58,24 +58,6 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 - The state of this project is very much in alpha stage.
 - Bugs exists. UI and features are missing and are subject to change throughout its development.
 - Versions from 0.1.7 check for updates on launch.
-
-## Tech Stack
-
-See [Readme in ./Source](./Source/readme.md)
-
-## Looking for help
-
-Please get in contact with Snazzie if you're interested in helping with anything below.
-
-- Looking for someone who has experience with Wix toolkit to complete the installer
-- Looking for someone who has experience with AMD and NVIDIA SDK to grab cpu and gpu data
-  - To get process FPS and GPU usage
-  - To get AMD's cpu data like fastest cores
-- Looking for someone who has experience with rolling sqlite db file
-  - Perferbly to stick with Entity Framework
-  - Need to be able to configure to create a new db to write to every X period
-- Looking for someone to help develop OSX support
-- Looking for someone to help develop Linux support
 
 ## Platform / Support Focus
 
@@ -175,3 +157,21 @@ If you want your profiles applied and metrics collected when you log in. You can
     - Auto copy/move files from one directory to another
 - Investigate ability to identify which threads a process has been executing work on. ( Investigation result: Yes, a spike has been successful in Rust )
 - Vulnerability Alerts for installed applications.
+
+## Tech Stack
+
+See [Readme in ./Source](./Source/readme.md)
+
+## Looking for help
+
+Please get in contact with Snazzie if you're interested in helping with anything below.
+
+- Looking for someone who has experience with Wix toolkit to complete the installer
+- Looking for someone who has experience with AMD and NVIDIA SDK to grab cpu and gpu data
+  - To get process FPS and GPU usage
+  - To get AMD's cpu data like fastest cores
+- Looking for someone who has experience with rolling sqlite db file
+  - Perferbly to stick with Entity Framework
+  - Need to be able to configure to create a new db to write to every X period
+- Looking for someone to help develop OSX support
+- Looking for someone to help develop Linux support
