@@ -90,8 +90,7 @@ namespace VitalService.Services.PerformanceServices
 
         private void GetProcesses()
         {
-            Utilities.Debug.LogExecutionTime(null, () =>
-            {
+
                 var returnValue = new ConcurrentDictionary<int, ProcessData>();
 
                 foreach (var (pid, data) in processPerformanceData)
@@ -128,7 +127,6 @@ namespace VitalService.Services.PerformanceServices
 
                 }
                 runningProcesses = returnValue;
-            });
         }
 
         public class ProcessData
