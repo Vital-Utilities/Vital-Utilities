@@ -1,11 +1,11 @@
 {
-    "notes": "## Whats changed\r\n* small fix for error handling\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.2.1...0.2.2",
-    "pub_date": "2023-03-05T05:16:17.000Z",
-    "version": "0.2.2",
+    "notes": "## Changes\r\n* Fix potential index out of range error in metrics collector\r\n\r\n**Full Changelog**: https://github.com/Vital-Utilities/Vital-Utilities/compare/0.2.2...0.2.3",
+    "pub_date": "2023-04-19T17:47:42.000Z",
+    "version": "0.2.3",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M0QxeDlmTndmb2h3Zys1LzhtMWxzWUFXU1BSalMrT1kxVU5QNlBZT0tKaVhGdDFIN1dRcWN5VEpUcE9LZUY5RlBIdmRMU1BZaDFVZEFGMmNxQWpmK3dFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjc3OTkzMjY2CWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMi4yX3g2NF9lbi1VUy5tc2kuemlwCkFTQlBXZGxVUnpyaGUxNmhZVzJwUEhoeWJTOUpkL1VFZXdEb1hLelZEdXJ6OUtSaTA1TXFweDRaYVJaS1c4R1hod0tIbjNLY3g5cER6WDlyNDZFK0JRPT0K",
-            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.2.2/Vital.Utilities_0.2.2_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTbCtCK2w0Vml4M0w4anhmbXBFaU0zRjBQTS8yVHdnZEZ2V3dZOUd1RmN0QVNpVDBvYUFWNzJET3ZRYk0rN2VORmk2dDk3UjVJbUt2VXNydmxqbXZlWFZyczc2Mm5JZVE0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjgxOTE5MzQ2CWZpbGU6Vml0YWwgVXRpbGl0aWVzXzAuMi4zX3g2NF9lbi1VUy5tc2kuemlwCmVBanc4VzlHM21LNlZjOXYyQVhwTVI1cmgxMnhPSlNPVjZiTytudTJQYkk1cjNrTkxVTXFKTWNFcEVHZlZJeFM2ZUsrTzduZlFBQjAxbWNWcno2MEFRPT0K",
+            "url": "https://github.com/Vital-Utilities/Vital-Utilities/releases/download/0.2.3/Vital.Utilities_0.2.3_x64_en-US.msi.zip"
         }
     }
 }
