@@ -180,67 +180,64 @@ namespace VitalService.Services.PerformanceServices
             IsUpdatingNetworkUsage = true;
             try
             {
-                Utilities.Debug.LogExecutionTime(null, () =>
+                Dictionary<string, NetworkInterface>? adapters = null;
+
+                Utilities.Debug.LogExecutionTime("GetAllNetworkInterfaces", () => adapters = NetworkInterface.GetAllNetworkInterfaces().ToDictionary(k => k.Name, v => v));
+
+
+                var toReturn = new NetworkAdapterUsages();
+                foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Network))
                 {
-                    Dictionary<string, NetworkInterface>? adapters = null;
-
-                    Utilities.Debug.LogExecutionTime("GetAllNetworkInterfaces", () => adapters = NetworkInterface.GetAllNetworkInterfaces().ToDictionary(k => k.Name, v => v));
-
-
-                    var toReturn = new NetworkAdapterUsages();
-                    foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Network))
+                    if (adapters!.TryGetValue(hardwareItem.Name, out var adapter)
+                    && adapter.OperationalStatus is not OperationalStatus.Down or OperationalStatus.Unknown or OperationalStatus.NotPresent)
                     {
-                        if (adapters!.TryGetValue(hardwareItem.Name, out var adapter)
-                        && adapter.OperationalStatus is not OperationalStatus.Down or OperationalStatus.Unknown or OperationalStatus.NotPresent)
+                        var ipProperties = adapter.GetIPProperties();
+                        var adapterObj = new NetworkAdapterUsage()
                         {
-                            var ipProperties = adapter.GetIPProperties();
-                            var adapterObj = new NetworkAdapterUsage()
+                            Properties = new NetworkAdapterProperties
                             {
-                                Properties = new NetworkAdapterProperties
+                                Name = adapter.Name,
+                                Description = adapter.Description,
+                                SpeedBps = adapter.Speed,
+                                ConnectionType = Enum.GetName(adapter.NetworkInterfaceType) ?? "Unknown",
+                                IPInterfaceProperties = new Dtos.Coms.IPInterfaceProperties()
                                 {
-                                    Name = adapter.Name,
-                                    Description = adapter.Description,
-                                    SpeedBps = adapter.Speed,
-                                    ConnectionType = Enum.GetName(adapter.NetworkInterfaceType) ?? "Unknown",
-                                    IPInterfaceProperties = new Dtos.Coms.IPInterfaceProperties()
-                                    {
-                                        IPv4Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.Address.ToString(),
-                                        IPv6Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)?.Address.ToString(),
-                                        DnsSuffix = ipProperties.DnsSuffix,
-                                        IsDnsEnabled = ipProperties.IsDnsEnabled
-                                    },
-                                    MacAddress = adapter.GetPhysicalAddress().ToString()
-                                }
-                            };
-
-                            foreach (var sensor in hardwareItem.Sensors)
-                            {
-                                if (sensor.Value is null)
-                                    continue;
-                                if (adapterObj.Usage is null)
-                                    adapterObj.Usage = new();
-
-                                switch (sensor.Name)
-                                {
-                                    case "Upload Speed":
-                                        adapterObj.Usage.SendBps = (long)sensor.Value;
-                                        break;
-                                    case "Download Speed":
-                                        adapterObj.Usage.RecieveBps = (long)sensor.Value;
-                                        break;
-                                    case "Network Utilization":
-                                        adapterObj.Usage.UsagePercentage = (long)sensor.Value;
-                                        break;
-                                    default:
-                                        break;
-                                }
-
+                                    IPv4Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.Address.ToString(),
+                                    IPv6Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)?.Address.ToString(),
+                                    DnsSuffix = ipProperties.DnsSuffix,
+                                    IsDnsEnabled = ipProperties.IsDnsEnabled
+                                },
+                                MacAddress = adapter.GetPhysicalAddress().ToString()
                             }
-                            toReturn.Adapters.TryAdd(hardwareItem.Name, adapterObj);
+                        };
+
+                        foreach (var sensor in hardwareItem.Sensors)
+                        {
+                            if (sensor.Value is null)
+                                continue;
+                            if (adapterObj.Usage is null)
+                                adapterObj.Usage = new();
+
+                            switch (sensor.Name)
+                            {
+                                case "Upload Speed":
+                                    adapterObj.Usage.SendBps = (long)sensor.Value;
+                                    break;
+                                case "Download Speed":
+                                    adapterObj.Usage.RecieveBps = (long)sensor.Value;
+                                    break;
+                                case "Network Utilization":
+                                    adapterObj.Usage.UsagePercentage = (long)sensor.Value;
+                                    break;
+                                default:
+                                    break;
+                            }
+
                         }
+                        toReturn.Adapters.TryAdd(hardwareItem.Name, adapterObj);
                     }
-                    networkUsageData = toReturn;
-                });
+                }
+                networkUsageData = toReturn;
             }
             finally
             {
@@ -262,144 +259,142 @@ namespace VitalService.Services.PerformanceServices
         }
         private void UpdateGpuUsage()
         {
-            Utilities.Debug.LogExecutionTime(null, () =>
+
+            var toReturn = new List<GpuUsage>();
+            foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel))
             {
-                var toReturn = new List<GpuUsage>();
-                foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel))
+                var gpu = new GpuUsage();
+                foreach (var sensor in hardwareItem.Sensors)
                 {
-                    var gpu = new GpuUsage();
-                    foreach (var sensor in hardwareItem.Sensors)
+                    if (sensor.Value is null)
+                        continue;
+
+                    switch (sensor.SensorType)
                     {
-                        if (sensor.Value is null)
-                            continue;
+                        case SensorType.Temperature:
+                            {
+                                var value = MathF.Round((float)sensor.Value, 2);
 
-                        switch (sensor.SensorType)
-                        {
-                            case SensorType.Temperature:
+                                if (sensor.Name == "GPU Core")
+                                    gpu.TemperatureReadings.AddOrUpdate("GPU Core", (float)value, (key, oldValue) => oldValue = (float)value);
+                                else
+                                    gpu.TemperatureReadings.AddOrUpdate(sensor.Name, (float)value, (key, oldValue) => oldValue = (float)value);
+                                break;
+                            }
+                        case SensorType.Load:
+                            {
+                                if (gpu.Load is null)
+                                    gpu.Load = new();
+                                var value = MathF.Round((float)sensor.Value, 2);
+
+                                switch (sensor.Name)
                                 {
-                                    var value = MathF.Round((float)sensor.Value, 2);
-
-                                    if (sensor.Name == "GPU Core")
-                                        gpu.TemperatureReadings.AddOrUpdate("GPU Core", (float)value, (key, oldValue) => oldValue = (float)value);
-                                    else
-                                        gpu.TemperatureReadings.AddOrUpdate(sensor.Name, (float)value, (key, oldValue) => oldValue = (float)value);
-                                    break;
+                                    case "GPU Core":
+                                        gpu.Load.CorePercentage = value;
+                                        break;
+                                    case "GPU Frame Buffer":
+                                        gpu.Load.FrameBufferPercentage = value;
+                                        break;
+                                    case "GPU Video Engine":
+                                        gpu.Load.VideoEnginePercentage = value;
+                                        break;
+                                    case "GPU Bus":
+                                        gpu.Load.BusInterfacePercentage = value;
+                                        break;
+                                    case "GPU Memory":
+                                        gpu.Load.MemoryUsedPercentage = value;
+                                        break;
+                                    case "GPU Memory Controller":
+                                        gpu.Load.MemoryControllerPercentage = value;
+                                        break;
+                                    case "D3D Cuda":
+                                        gpu.Load.CudaPercentage = value;
+                                        break;
+                                    case "D3D 3D":
+                                        gpu.Load.ThreeDPercentage = value;
+                                        break;
+                                    default:
+                                        break;
                                 }
-                            case SensorType.Load:
+                                break;
+                            }
+                        case SensorType.Clock:
+                            {
+                                var value = sensor.Value;
+                                if (gpu.ClockSpeeds is null)
+                                    gpu.ClockSpeeds = new();
+
+                                switch (sensor.Name)
                                 {
-                                    if (gpu.Load is null)
-                                        gpu.Load = new();
-                                    var value = MathF.Round((float)sensor.Value, 2);
-
-                                    switch (sensor.Name)
-                                    {
-                                        case "GPU Core":
-                                            gpu.Load.CorePercentage = value;
-                                            break;
-                                        case "GPU Frame Buffer":
-                                            gpu.Load.FrameBufferPercentage = value;
-                                            break;
-                                        case "GPU Video Engine":
-                                            gpu.Load.VideoEnginePercentage = value;
-                                            break;
-                                        case "GPU Bus":
-                                            gpu.Load.BusInterfacePercentage = value;
-                                            break;
-                                        case "GPU Memory":
-                                            gpu.Load.MemoryUsedPercentage = value;
-                                            break;
-                                        case "GPU Memory Controller":
-                                            gpu.Load.MemoryControllerPercentage = value;
-                                            break;
-                                        case "D3D Cuda":
-                                            gpu.Load.CudaPercentage = value;
-                                            break;
-                                        case "D3D 3D":
-                                            gpu.Load.ThreeDPercentage = value;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    break;
+                                    case "GPU Core":
+                                        gpu.ClockSpeeds.GraphicsClockMhz = (int)value;
+                                        break;
+                                    case "GPU Memory":
+                                        gpu.ClockSpeeds.MemoryClockMhz = (int)value;
+                                        break;
+                                    case "GPU Shader":
+                                        gpu.ClockSpeeds.ComputeClockMhz = (int)value;
+                                        break;
+                                    default:
+                                        break;
                                 }
-                            case SensorType.Clock:
+                                break;
+                            }
+                        case SensorType.Control:
+                            {
+                                if (sensor.Name.Contains("Fan"))
                                 {
-                                    var value = sensor.Value;
-                                    if (gpu.ClockSpeeds is null)
-                                        gpu.ClockSpeeds = new();
-
-                                    switch (sensor.Name)
-                                    {
-                                        case "GPU Core":
-                                            gpu.ClockSpeeds.GraphicsClockMhz = (int)value;
-                                            break;
-                                        case "GPU Memory":
-                                            gpu.ClockSpeeds.MemoryClockMhz = (int)value;
-                                            break;
-                                        case "GPU Shader":
-                                            gpu.ClockSpeeds.ComputeClockMhz = (int)value;
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    break;
+                                    _ = gpu.FanPercentage?.TryAdd(sensor.Name, MathF.Round((float)sensor.Value, 2));
                                 }
-                            case SensorType.Control:
+                                break;
+                            }
+                        case SensorType.SmallData:
+                            {
+                                var value = sensor.Value * 1024 * 1024;
+                                switch (sensor.Name)
                                 {
-                                    if (sensor.Name.Contains("Fan"))
-                                    {
-                                        _ = gpu.FanPercentage?.TryAdd(sensor.Name, MathF.Round((float)sensor.Value, 2));
-                                    }
-                                    break;
+                                    case "GPU Memory Used":
+                                        gpu.MemoryUsedBytes = (long)value;
+                                        break;
+                                    case "GPU Memory Total":
+                                        gpu.TotalMemoryBytes = (long)value;
+                                        break;
                                 }
-                            case SensorType.SmallData:
+                                break;
+                            }
+                        case SensorType.Power:
+                            {
+
+                                gpu.PowerDrawWatt = (int)sensor.Value;
+                                break;
+                            }
+
+                        case SensorType.Throughput:
+                            {
+                                var value = (long)sensor.Value;
+                                switch (sensor.Name)
                                 {
-                                    var value = sensor.Value * 1024 * 1024;
-                                    switch (sensor.Name)
-                                    {
-                                        case "GPU Memory Used":
-                                            gpu.MemoryUsedBytes = (long)value;
-                                            break;
-                                        case "GPU Memory Total":
-                                            gpu.TotalMemoryBytes = (long)value;
-                                            break;
-                                    }
-                                    break;
+                                    case "GPU PCIe Rx":
+                                        gpu.PCIe.PCIe_RxBytesPerSecond = value;
+                                        break;
+                                    case "GPU PCIe Tx":
+                                        gpu.PCIe.PCIe_TxBytesPerSecond = value;
+                                        break;
+
+                                    default:
+                                        var exeption = new NotImplementedException($"{sensor.Name} is not handled");
+                                        Log.Logger.Error(exeption, "Unhandled GPU Throughput Data");
+                                        break;
                                 }
-                            case SensorType.Power:
-                                {
+                                break;
+                            }
 
-                                    gpu.PowerDrawWatt = (int)sensor.Value;
-                                    break;
-                                }
-
-                            case SensorType.Throughput:
-                                {
-                                    var value = (long)sensor.Value;
-                                    switch (sensor.Name)
-                                    {
-                                        case "GPU PCIe Rx":
-                                            gpu.PCIe.PCIe_RxBytesPerSecond = value;
-                                            break;
-                                        case "GPU PCIe Tx":
-                                            gpu.PCIe.PCIe_TxBytesPerSecond = value;
-                                            break;
-
-                                        default:
-                                            var exeption = new NotImplementedException($"{sensor.Name} is not handled");
-                                            Log.Logger.Error(exeption, "Unhandled GPU Throughput Data");
-                                            break;
-                                    }
-                                    break;
-                                }
-
-                        }
-                        toReturn.Add(gpu);
                     }
-
-                    gpuUsageData = toReturn;
+                    toReturn.Add(gpu);
                 }
-            });
+
+                gpuUsageData = toReturn;
+            }
         }
         private void UpdateCpuUsage()
         {
@@ -408,40 +403,37 @@ namespace VitalService.Services.PerformanceServices
             IsUpdatingCpuUsage = true;
             try
             {
-                Utilities.Debug.LogExecutionTime(null, () =>
-                {
-                    var toReturn = new CpuUsage();
+                var toReturn = new CpuUsage();
 
-                    foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Cpu))
+                foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Cpu))
+                {
+                    foreach (var sensor in hardwareItem.Sensors)
                     {
-                        foreach (var sensor in hardwareItem.Sensors)
+                        switch (sensor.SensorType)
                         {
-                            switch (sensor.SensorType)
-                            {
-                                case SensorType.Temperature:
-                                    if (sensor.Value != null)
-                                        if (sensor.Name.Contains("Max") || sensor.Name.Contains("Average"))
-                                            continue;
-                                        else if (sensor.Name == "Core (Tctl/Tdie)")
-                                            toReturn.TemperatureReadings.TryAdd("CPU Package", MathF.Round((float)sensor.Value, 2));
-                                        else
-                                            toReturn.TemperatureReadings.TryAdd(sensor.Name, MathF.Round((float)sensor.Value, 2));
-                                    break;
-                                case SensorType.Power:
-                                    if (sensor.Value != null && sensor.Name == "Package" && sensor.Value != null)
-                                        toReturn.PowerDrawWattage = MathF.Round((float)sensor.Value, 2);
-                                    break;
-                            }
+                            case SensorType.Temperature:
+                                if (sensor.Value != null)
+                                    if (sensor.Name.Contains("Max") || sensor.Name.Contains("Average"))
+                                        continue;
+                                    else if (sensor.Name == "Core (Tctl/Tdie)")
+                                        toReturn.TemperatureReadings.TryAdd("CPU Package", MathF.Round((float)sensor.Value, 2));
+                                    else
+                                        toReturn.TemperatureReadings.TryAdd(sensor.Name, MathF.Round((float)sensor.Value, 2));
+                                break;
+                            case SensorType.Power:
+                                if (sensor.Value != null && sensor.Name == "Package" && sensor.Value != null)
+                                    toReturn.PowerDrawWattage = MathF.Round((float)sensor.Value, 2);
+                                break;
                         }
                     }
-                    if (cpuDataFromRust is not null)
-                    {
-                        toReturn.CoreClocksMhz = cpuDataFromRust.CoreClocksMhz;
-                        toReturn.TotalCorePercentage = MathF.Round(cpuDataFromRust.TotalCorePercentage);
-                        toReturn.CorePercentages = cpuDataFromRust.CorePercentages.Select(e => MathF.Round(e)).ToList();
-                    }
-                    cpuUsageData = toReturn;
-                });
+                }
+                if (cpuDataFromRust is not null)
+                {
+                    toReturn.CoreClocksMhz = cpuDataFromRust.CoreClocksMhz;
+                    toReturn.TotalCorePercentage = MathF.Round(cpuDataFromRust.TotalCorePercentage);
+                    toReturn.CorePercentages = cpuDataFromRust.CorePercentages.Select(e => MathF.Round(e)).ToList();
+                }
+                cpuUsageData = toReturn;
             }
             catch (Exception)
             {
@@ -460,86 +452,82 @@ namespace VitalService.Services.PerformanceServices
                 return;
             IsUpdatingDiskUsage = true;
 
-            Utilities.Debug.LogExecutionTime(null, () =>
+            try
             {
-                try
+                var toReturn = new DiskUsages();
+
+                var libreDisks = computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage).ToArray();
+                var drives = DriveInfo.GetDrives();
+                foreach ((var key, var disk) in diskUsageDataFromRust)
                 {
-                    var toReturn = new DiskUsages();
-
-                    var libreDisks = computer.Hardware.Where(e => e.HardwareType == HardwareType.Storage).ToArray();
-                    var drives = DriveInfo.GetDrives();
-                    foreach ((var key, var disk) in diskUsageDataFromRust)
+                    var hardwareItem = libreDisks.Single(e => e.TryGetPropertyValue<DriveInfo[]>("DriveInfos", null)?[0].Name == disk.Name);
+                    var obj = GetInstanceField(typeof(LibreHardwareMonitor.Hardware.Storage.AbstractStorage), hardwareItem, "_storageInfo");
+                    var diskFromInfo = drives.SingleOrDefaultF(e => e.Name == disk.Letter);
+                    var usage = new DiskUsage
                     {
-                        var hardwareItem = libreDisks.Single(e => e.TryGetPropertyValue<DriveInfo[]>("DriveInfos", null)[0].Name == disk.Name);
-                        var obj = GetInstanceField(typeof(LibreHardwareMonitor.Hardware.Storage.AbstractStorage), hardwareItem, "_storageInfo");
-                        var diskFromInfo = drives.SingleOrDefaultF(e => e.Name == disk.Letter);
-                        var usage = new DiskUsage
+                        Name = diskFromInfo.VolumeLabel,
+                        Letter = disk.Letter,
+                        DriveType = diskFromInfo.DriveType,
+                        DiskType = disk.DiskType,
+                        DiskHealth = new(),
+                        Load = disk.Load,
+                        Serial = obj.GetType().GetProperties().SingleOrDefaultF(e => e.Name == "Serial")?.GetValue(obj) as string,
+                        Temperatures = disk.Temperatures,
+                        Throughput = disk.Throughput,
+                        UniqueIdentifier = disk.Letter,
+                        VolumeLabel = diskFromInfo.VolumeLabel
+                    };
+
+                    foreach (var sensor in hardwareItem.Sensors)
+                    {
+                        if (sensor.Value is null)
+                            continue;
+
+                        if (disk.DiskHealth is null)
+                            disk.DiskHealth = new();
+                        if (disk.Throughput is null)
+                            disk.Throughput = new();
+
+                        switch (sensor.SensorType)
                         {
-                            Name = diskFromInfo.VolumeLabel,
-                            Letter = disk.Letter,
-                            DriveType = diskFromInfo.DriveType,
-                            DiskType = disk.DiskType,
-                            DiskHealth = new(),
-                            Load = disk.Load,
-                            Serial = obj.GetType().GetProperties().SingleOrDefaultF(e => e.Name == "Serial")?.GetValue(obj) as string,
-                            Temperatures = disk.Temperatures,
-                            Throughput = disk.Throughput,
-                            UniqueIdentifier = disk.Letter,
-                            VolumeLabel = diskFromInfo.VolumeLabel
-                        };
+                            case SensorType.Data when sensor.Name == "Data Read":
+                                disk.DiskHealth.TotalBytesRead = (ulong)(sensor.Value * 1e+9);
+                                break;
+                            case SensorType.Data when sensor.Name is "Data Written" or "Total Bytes Written":
+                                disk.DiskHealth.TotalBytesWritten = (ulong)(sensor.Value * 1e+9);
+                                break;
 
-                        foreach (var sensor in hardwareItem.Sensors)
-                        {
-                            if (sensor.Value is null)
-                                continue;
+                            case SensorType.Throughput when sensor.Name == "Read Rate":
+                                disk.Throughput.ReadRateBytesPerSecond = (long)sensor.Value;
+                                break;
+                            case SensorType.Throughput when sensor.Name == "Write Rate":
+                                disk.Throughput.WriteRateBytesPerSecond = (long)sensor.Value;
+                                break;
 
-                            if (disk.DiskHealth is null)
-                                disk.DiskHealth = new();
-                            if (disk.Throughput is null)
-                                disk.Throughput = new();
+                            case SensorType.Load when sensor.Name == "Write Activity":
+                                disk.Load.WriteActivityPercentage = MathF.Round((float)sensor.Value, 2);
+                                break;
+                            case SensorType.Load when sensor.Name == "Total Activity":
+                                disk.Load.TotalActivityPercentage = MathF.Round((float)sensor.Value, 2);
+                                break;
 
-                            switch (sensor.SensorType)
-                            {
-                                case SensorType.Data when sensor.Name == "Data Read":
-                                    disk.DiskHealth.TotalBytesRead = (ulong)(sensor.Value * 1e+9);
-                                    break;
-                                case SensorType.Data when sensor.Name is "Data Written" or "Total Bytes Written":
-                                    disk.DiskHealth.TotalBytesWritten = (ulong)(sensor.Value * 1e+9);
-                                    break;
-
-                                case SensorType.Throughput when sensor.Name == "Read Rate":
-                                    disk.Throughput.ReadRateBytesPerSecond = (long)sensor.Value;
-                                    break;
-                                case SensorType.Throughput when sensor.Name == "Write Rate":
-                                    disk.Throughput.WriteRateBytesPerSecond = (long)sensor.Value;
-                                    break;
-
-                                case SensorType.Load when sensor.Name == "Write Activity":
-                                    disk.Load.WriteActivityPercentage = MathF.Round((float)sensor.Value, 2);
-                                    break;
-                                case SensorType.Load when sensor.Name == "Total Activity":
-                                    disk.Load.TotalActivityPercentage = MathF.Round((float)sensor.Value, 2);
-                                    break;
-
-                                case SensorType.Temperature:
-                                    disk.Temperatures[sensor.Name] = (float)sensor.Value;
-                                    break;
-                                default:
-                                    break;
-                            }
+                            case SensorType.Temperature:
+                                disk.Temperatures[sensor.Name] = (float)sensor.Value;
+                                break;
+                            default:
+                                break;
                         }
-
-                        toReturn.Disks.TryAdd(hardwareItem.Name, disk);
                     }
 
-                    diskUsagesData = toReturn;
+                    toReturn.Disks.TryAdd(hardwareItem.Name, disk);
                 }
-                finally
-                {
-                    IsUpdatingDiskUsage = false;
-                }
-            });
 
+                diskUsagesData = toReturn;
+            }
+            finally
+            {
+                IsUpdatingDiskUsage = false;
+            }
         }
 
         /// <summary>
