@@ -225,7 +225,7 @@ fn get_process_path(pid: u32) -> Option<String> {
                 };
                 mod_entry.dwSize = size_of_val(&mod_entry) as u32;
                 if Module32First(h_snap, &mut mod_entry).as_bool() {
-                    let char_vec = mod_entry.szExePath;
+                    let char_vec = mod_entry.szExePath.iter().map(|f| f.0).collect::<Vec<u8>>();
 
                     path = match from_utf8(&char_vec) {
                         Ok(s) => Some(String::from(s.to_string().trim_end_matches(char::from(0)))),
