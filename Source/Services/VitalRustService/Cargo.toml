@@ -7,7 +7,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-sysinfo = "0.28"
+sysinfo = "0.29"
 systemstat = "0.2"
 nvml-wrapper ="0.9"
 chrono = "0.4"
@@ -18,14 +18,14 @@ directories = "4.0"
 log = {version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.25", features = ["full"] }
-default-net = "0.12"
+default-net = "0.15"
 rocket = {version = "0.5.0-rc.2", features = ["json"] }
 winproc  = { version = "0.6"}
 vital_service_api = { path = "../../CodeGen/v1/Rust/VitalServiceApiClient" }
 once_cell = "1.17"
 
 [dependencies.windows]
-version = "0.44.0"
+version = "0.48.0"
 features = [
     "Data_Xml_Dom",
     "Win32_Security",
