@@ -19,13 +19,13 @@ env:
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  ensure-codegen:
-    uses: ./.github/workflows/ensure_code_gen.yml
+#  ensure-codegen:
+#    uses: ./.github/workflows/ensure_code_gen.yml
   build-release:
     # The type of runner that the job will run on
     runs-on: windows-latest
     environment: production
-    needs: [ensure-codegen]
+#    needs: [ensure-codegen]
     env: 
       TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
       TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
