@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Publish and Sign
+name: Publish and Sign - Draft Release
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
