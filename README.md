@@ -13,7 +13,7 @@
 🌟🌠✨⭐Show your support by hitting that Star⭐✨🌠🌟
 </p>
 <div align="center">
-<a href="https://discord.gg/ghQ8nQK2ma](https://github.com/Vital-Utilities/Vital-Utilities/tree/master/Screenshots">📸Screenshots📸</a>
+<a href="https://github.com/Vital-Utilities/Vital-Utilities/tree/master/Screenshots">📸Screenshots📸</a>
 </div>
 
 - [Links](#links)
