@@ -12,6 +12,9 @@
 <p align="center">
 🌟🌠✨⭐Show your support by hitting that Star⭐✨🌠🌟
 </p>
+<div align="center">
+<a href="https://discord.gg/ghQ8nQK2ma](https://github.com/Vital-Utilities/Vital-Utilities/tree/master/Screenshots">📸Screenshots📸</a>
+</div>
 
 - [Links](#links)
 - [License](#license)
@@ -37,7 +40,6 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 
 [Discord Server](https://discord.gg/ghQ8nQK2ma)
 
-[Screenshots](https://github.com/Vital-Utilities/Vital-Utilities/tree/master/Screenshots)
 
 ## License
 
