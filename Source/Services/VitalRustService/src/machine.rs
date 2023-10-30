@@ -90,10 +90,10 @@ pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, Dis
             DiskUsage {
                 name: key.clone(),
                 letter: Some(key.clone()),
-                disk_type: match disk.type_() {
-                    sysinfo::DiskType::HDD => DiskType::HDD,
-                    sysinfo::DiskType::SSD => DiskType::SSD,
-                    sysinfo::DiskType::Unknown(_) => DiskType::Unknown,
+                disk_type: match disk.kind() {
+                    sysinfo::DiskKind::HDD => DiskType::HDD,
+                    sysinfo::DiskKind::SSD => DiskType::SSD,
+                    sysinfo::DiskKind::Unknown(_) => DiskType::Unknown,
                 },
                 load: Box::new(DiskLoad {
                     used_space_bytes: Some((disk.total_space() - disk.available_space()) as i64),
