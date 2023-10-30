@@ -112,7 +112,7 @@ pub fn get_mainwindowtitles() -> HashMap<u32, String> {
         std::mem::drop(guard);
 
         loop {
-            if EnumWindows(lpfn(), None) == true {
+            if EnumWindows(lpfn(), None).is_ok() {
                 break;
             }
         }
@@ -176,7 +176,7 @@ pub fn get_file_description(path: String) -> Result<String, String> {
     let mut buffer = vec![0u8; size as usize];
     // Read version info
     unsafe {
-        GetFileVersionInfoW(
+        let _ = GetFileVersionInfoW::<_>(
             &file_name,
             0,
             size,
@@ -224,8 +224,12 @@ fn get_process_path(pid: u32) -> Option<String> {
                     ..Default::default()
                 };
                 mod_entry.dwSize = size_of_val(&mod_entry) as u32;
-                if Module32First(h_snap, &mut mod_entry).as_bool() {
-                    let char_vec = mod_entry.szExePath.iter().map(|f| f.0).collect::<Vec<u8>>();
+                if Module32First(h_snap, &mut mod_entry).is_ok() {
+                    let char_vec = mod_entry
+                        .szExePath
+                        .iter()
+                        .map(|f| f.to_owned())
+                        .collect::<Vec<u8>>();
 
                     path = match from_utf8(&char_vec) {
                         Ok(s) => Some(String::from(s.to_string().trim_end_matches(char::from(0)))),
@@ -233,7 +237,10 @@ fn get_process_path(pid: u32) -> Option<String> {
                     };
                 }
             }
-            CloseHandle(h_snap);
+            let c_result = CloseHandle(h_snap);
+            if c_result.is_err() {
+                error!("{:?}", c_result.err());
+            }
         }
         path
     }
