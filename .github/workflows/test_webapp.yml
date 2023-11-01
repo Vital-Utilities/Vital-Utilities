@@ -26,6 +26,6 @@ jobs:
         run_install: false
     - run: pnpm i -g ts-node
     - run: pnpm i -g @types/node
-    - run: pnpm i --frozen-lockfile
+    - run: pnpm i
     - run: pnpm test
     - run: pnpm build
