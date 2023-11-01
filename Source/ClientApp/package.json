@@ -5,7 +5,7 @@
     "copyright": "Copyright © 2023 Snazzie, Aaron Cooper. All rights reserved.",
     "scripts": {
         "start": "vite",
-        "build": "pnpm run GenerateCode && tsc && vite build",
+        "build": "tsc && vite build",
         "preview": "vite preview",
         "test": "jest",
         "vite-tauri": "vite-tauri",
