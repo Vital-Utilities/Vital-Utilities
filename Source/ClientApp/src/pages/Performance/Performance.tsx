@@ -225,8 +225,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 type="memory"
                             />
                         )}
-                        {dynamicState?.gpuUsageData?.map((gpu, index) => {
-                            console.info(gpu.temperatureReadings);
+                        {CurrentMetricState?.gpuUsageData?.map((gpu, index) => {
+                            const d = dynamicState?.gpuUsageData?.[index];
                             return (
                                 <ClassicNavItem
                                     key={`GPU ${index}`}
@@ -236,8 +236,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         setClassicViewProps({ ...classicViewProps, selectedKey: `GPU ${index}`, gpuNumber: index });
                                     }}
                                     title={`GPU ${index}`}
-                                    detail={gpu.name}
-                                    stat={`${gpu.load?.corePercentage}% (${gpu.temperatureReadings["GPU"]}°C)`}
+                                    detail={d?.name}
+                                    stat={`${gpu.coreUsagePercentage}% ${getReadableBytesString(gpu.vramUsageBytes ?? 0)} (${gpu.coreTemperature}°C)`}
                                     type="gpu"
                                 />
                             );
