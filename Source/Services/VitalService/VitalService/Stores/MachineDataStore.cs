@@ -38,36 +38,6 @@ namespace VitalService.Stores
             return metrics.ToDictionary(k => k.Value.IDProcess, v => v.Value.GpuPercentage);
         }
 
-        //public async Task<Dictionary<int, float>> GetProcessTotalCpuThreadsUsagesAsync()
-        //{
-        //    var returnValue = new Dictionary<int, float>();
-        //    var metrics = NewMachineDataService.GetProcessMetrics(MetricType.CpuUsage);
-        //    var mappings = ProcessRelationsService.ProcessChildMapping;
-        //    var managedProcesses = await ManagedProcessStore.GetAsync();
-        //    foreach (var key in mappings.Keys)
-        //    {
-        //        var process = NewMachineDataService.RunningProcesses.SingleOrDefault(e => e.Id == key);
-        //        if (process is null)
-        //            continue;
-        //        var availableProcessorCoresCount = managedProcesses.SingleOrDefault(e => process.Id == key)?.AffinityBinary.Count(e => e == '1') ?? Environment.ProcessorCount;
-        //        var trackers = new List<ITracker>();
-        //        var children = mappings[key];
-        //        foreach (var childId in children)
-        //        {
-        //            try
-        //            {
-        //                trackers.Add(metrics[childId]);
-
-        //            }
-        //            catch
-        //            {
-        //            }
-        //        }
-        //        var sum = (float)Math.Round(trackers.Sum(e => ((TrackedPerformanceCounter)e).Value) / availableProcessorCoresCount, 1);
-        //        returnValue.Add(key, sum);
-        //    }
-        //    return returnValue;
-        //}
         public Dictionary<int, float> GetProcessCpuUsages()
         {
             var metrics = SoftwarePerformanceService.GetProcessMetrics().ToDictionary(k => k.Key, v => v.Value.PercentProcessorTime);

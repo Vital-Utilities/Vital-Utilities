@@ -10,7 +10,9 @@ import { VitalState } from "../../../Redux/States";
 export const ClassicNetworkAdapterView: React.FunctionComponent<{ macAddress: string } & ChartData> = props => {
     const [ordered, setOrdered] = React.useState<networkMetricsModel[]>();
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
-    const thisAdapter = Object.values(dynamicState?.networkUsageData?.adapters ?? {}).find(e => e.properties.macAddress === props.macAddress);
+    const thisAdapter = Object.values(dynamicState?.networkUsageData?.adapters ?? {})
+        .filter(e => e.properties.isUp === true)
+        .find(e => e.properties.macAddress === props.macAddress);
 
     React.useEffect(() => {
         if (!props.metrics) return;
@@ -53,7 +55,7 @@ export const ClassicNetworkAdapterView: React.FunctionComponent<{ macAddress: st
                         {current?.uploadSpeedBps !== null && <ItemOne color="yellow" title="Sent" value={`${currentSentBps}`} />}
                     </div>
                     <div>
-                        {thisAdapter?.properties?.macAddress && <ItemTwo title="Mac Address:" value={thisAdapter.properties.macAddress.replace(/(.{2})/g, "$1-").substring(0, thisAdapter.properties.macAddress.length + 5)} />}
+                        {thisAdapter?.properties?.macAddress && <ItemTwo title="Mac Address:" value={thisAdapter.properties.macAddress} />}
                         {thisAdapter?.properties?.connectionType && <ItemTwo title="Connection Type:" value={thisAdapter.properties.connectionType} />}
                         {thisAdapter?.properties?.speedBps && <ItemTwo title="Connection Speed:" value={getReadableBitsPerSecondString(thisAdapter.properties.speedBps)} />}
                         {thisAdapter?.properties?.ipInterfaceProperties?.iPv4Address && <ItemTwo title="IPv4:" value={thisAdapter?.properties?.ipInterfaceProperties?.iPv4Address} />}

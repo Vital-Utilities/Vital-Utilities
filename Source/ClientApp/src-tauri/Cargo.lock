@@ -4405,6 +4405,7 @@ dependencies = [
  "vital_service_api",
  "webbrowser",
  "winapi",
+ "windows 0.51.1",
 ]
 
 [[package]]

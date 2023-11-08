@@ -9,7 +9,6 @@ namespace VitalService.Dtos.Coms
     }
     public class NetworkAdapterUsage
     {
-        
         public NetAdapterUsage? Usage { get; set; } = new();
         
         public NetworkAdapterProperties Properties { get; set; } = new();
@@ -18,7 +17,8 @@ namespace VitalService.Dtos.Coms
     {
         
         public IPInterfaceProperties IPInterfaceProperties { get; set; } = new();
-        
+        public bool IsUp { get; set; }
+
         public string Name { get; set; }
         
         public string? Description { get; set; }

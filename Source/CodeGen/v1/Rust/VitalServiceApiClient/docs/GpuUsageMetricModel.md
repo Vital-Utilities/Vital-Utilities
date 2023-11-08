@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**name** | **String** |  | 
 **core_usage_percentage** | Option<**f32**> |  | [optional]
 **vram_usage_bytes** | Option<**f32**> |  | [optional]
 **vram_total_bytes** | Option<**f32**> |  | [optional]

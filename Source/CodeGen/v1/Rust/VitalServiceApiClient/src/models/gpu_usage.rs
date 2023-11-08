@@ -17,6 +17,10 @@ pub struct GpuUsage {
     pub name: Option<String>,
     #[serde(rename = "temperatureReadings")]
     pub temperature_readings: ::std::collections::HashMap<String, f32>,
+    #[serde(rename = "deviceIndex")]
+    pub device_index: i32,
+    #[serde(rename = "partNumber", skip_serializing_if = "Option::is_none")]
+    pub part_number: Option<String>,
     #[serde(rename = "totalMemoryBytes", skip_serializing_if = "Option::is_none")]
     pub total_memory_bytes: Option<i64>,
     #[serde(rename = "memoryUsedBytes", skip_serializing_if = "Option::is_none")]
@@ -34,10 +38,12 @@ pub struct GpuUsage {
 }
 
 impl GpuUsage {
-    pub fn new(temperature_readings: ::std::collections::HashMap<String, f32>) -> GpuUsage {
+    pub fn new(temperature_readings: ::std::collections::HashMap<String, f32>, device_index: i32) -> GpuUsage {
         GpuUsage {
             name: None,
             temperature_readings,
+            device_index,
+            part_number: None,
             total_memory_bytes: None,
             memory_used_bytes: None,
             clock_speeds: None,

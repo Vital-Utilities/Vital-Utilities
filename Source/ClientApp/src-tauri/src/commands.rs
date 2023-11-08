@@ -1,10 +1,14 @@
 use std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex};
 
+use crate::file::get_process_path;
 use crate::APP_HANDLE;
 use log::{debug, error, info};
 use sysinfo::{Pid, ProcessExt, System, SystemExt};
 use tauri::{api::path::document_dir, AppHandle, Manager};
 use vital_service_api::models::{ClientSettings, LaunchSettings, SettingsDto};
+
+use winapi::um::processthreadsapi::OpenProcess;
+use winapi::um::winnt::PROCESS_ALL_ACCESS;
 
 #[tauri::command]
 pub fn get_client_settings() -> Result<ClientSettings, String> {
@@ -275,7 +279,7 @@ pub fn end_process(pid: Pid) -> Result<(), String> {
         }
     }
 }
-
+#[cfg(target_os = "windows")]
 pub fn start_vital_service(service_name: ServiceName) -> Result<String, String> {
     if !cfg!(feature = "release") {
         info!("Debug mode: backend will not be started");

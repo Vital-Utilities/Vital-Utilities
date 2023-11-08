@@ -13,6 +13,8 @@
 
 #[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
 pub struct GpuUsageMetricModel {
+    #[serde(rename = "name")]
+    pub name: String,
     #[serde(rename = "coreUsagePercentage", skip_serializing_if = "Option::is_none")]
     pub core_usage_percentage: Option<f32>,
     #[serde(rename = "vramUsageBytes", skip_serializing_if = "Option::is_none")]
@@ -32,8 +34,9 @@ pub struct GpuUsageMetricModel {
 }
 
 impl GpuUsageMetricModel {
-    pub fn new(id: i32) -> GpuUsageMetricModel {
+    pub fn new(name: String, id: i32) -> GpuUsageMetricModel {
         GpuUsageMetricModel {
+            name,
             core_usage_percentage: None,
             vram_usage_bytes: None,
             vram_total_bytes: None,

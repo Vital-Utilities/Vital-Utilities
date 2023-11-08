@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use log::error;
+use log::{error, info};
 use nvml::{struct_wrappers::device::ProcessUtilizationSample, Device, Nvml};
 use vital_service_api::models::{GpuClockSpeeds, GpuUsage, LoadData, PcieThroughPut};
 
@@ -74,12 +74,13 @@ pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
                     );
                 }
             }
-
             let data = GpuUsage {
                 name: match device.name() {
                     Ok(name) => Some(name),
                     Err(_) => None,
                 },
+                device_index: device_index as i32,
+                part_number: Some(device.board_part_number().unwrap_or_default()),
                 temperature_readings,
                 total_memory_bytes,
                 memory_used_bytes,

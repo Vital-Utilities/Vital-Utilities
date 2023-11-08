@@ -21,7 +21,7 @@ log = { version = "0.4", features = [
 ] }
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.33.0", features = ["full"] }
-default-net = "0.18.0"
+default-net = "0.20"
 rocket = { version = "0.5.0-rc.2", features = ["json"] }
 winproc = { version = "0.6" }
 vital_service_api = { path = "../../CodeGen/v1/Rust/VitalServiceApiClient" }

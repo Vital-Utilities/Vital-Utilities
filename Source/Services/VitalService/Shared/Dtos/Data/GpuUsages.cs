@@ -9,6 +9,8 @@ namespace VitalService.Dtos.Coms
         public string? Name { get; set; }
         
         public ConcurrentDictionary<string, float> TemperatureReadings { get; set; } = new();
+        public int DeviceIndex { get; set; }
+        public string? PartNumber { get; set; }
         
         public long? TotalMemoryBytes { get; set; }
         

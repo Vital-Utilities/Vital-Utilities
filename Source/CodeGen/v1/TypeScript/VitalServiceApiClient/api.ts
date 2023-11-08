@@ -814,6 +814,18 @@ export interface GpuUsage {
      * @type {number}
      * @memberof GpuUsage
      */
+    'deviceIndex': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof GpuUsage
+     */
+    'partNumber'?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof GpuUsage
+     */
     'totalMemoryBytes'?: number;
     /**
      * 
@@ -858,6 +870,12 @@ export interface GpuUsage {
  * @interface GpuUsageMetricModel
  */
 export interface GpuUsageMetricModel {
+    /**
+     * 
+     * @type {string}
+     * @memberof GpuUsageMetricModel
+     */
+    'name': string;
     /**
      * 
      * @type {number}
@@ -1161,6 +1179,12 @@ export interface NetworkAdapterProperties {
      * @memberof NetworkAdapterProperties
      */
     'ipInterfaceProperties'?: IPInterfaceProperties;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof NetworkAdapterProperties
+     */
+    'isUp': boolean;
     /**
      * 
      * @type {string}

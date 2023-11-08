@@ -10,10 +10,10 @@ import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../
 import { useInterval } from "ahooks";
 import { getProcessCPUPercentColor } from "../components/PerfBadge";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../components/FormatUtils";
-import { openUrl } from "../Utilities/TauriCommands";
 import { Table } from "../components/Table";
 import { ParentChildModelDto, GetMachineDynamicDataResponse, ProcessViewDto } from "@vital/vitalservice";
 import { processApi } from "../Redux/actions/api";
+import { openUrl } from "../Utilities/TauriCommands";
 
 enum SortByEnum {
     "Description" = "Description",

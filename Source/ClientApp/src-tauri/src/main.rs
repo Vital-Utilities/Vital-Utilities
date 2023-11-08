@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 mod commands;
+mod file;
 
 use commands::get_client_settings;
 use log::{debug, error, info, trace, warn};

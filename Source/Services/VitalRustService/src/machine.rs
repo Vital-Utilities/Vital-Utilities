@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{cmp, collections::HashMap};
 
 use nvml::Nvml;
 use sysinfo::{CpuExt, DiskExt, NetworkExt, SystemExt};
@@ -25,7 +25,8 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
 
         list.push(NetworkAdapterUsage {
             properties: Box::new(NetworkAdapterProperties {
-                name: int.name,
+                is_up: int.is_up(),
+                name: int.friendly_name.unwrap_or(int.name),
                 description: int.description,
                 mac_address: Some(int.mac_addr.unwrap().address()),
                 ip_interface_properties: Some(Box::new(IpInterfaceProperties {
@@ -34,8 +35,17 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
                     is_dns_enabled: None,
                     dns_suffix: None,
                 })),
-                speed_bps: None,
-                connection_type: None,
+                speed_bps: Some(cmp::max(
+                    int.transmit_speed.unwrap_or_default(),
+                    int.receive_speed.unwrap_or_default(),
+                ) as i64),
+                connection_type: match int.if_type {
+                    default_net::interface::InterfaceType::Wireless80211 => {
+                        Some("Wireless".to_string())
+                    }
+                    default_net::interface::InterfaceType::Ethernet => Some("Ethernet".to_string()),
+                    rest => Some(rest.name()),
+                },
             }),
             usage: stats.map(|stats| {
                 Box::new(NetAdapterUsage {

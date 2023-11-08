@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using VitalRustServiceClasses;
 using VitalService.Dtos.Coms;
 using VitalService.Dtos.Data;
@@ -44,6 +45,7 @@ namespace VitalService.Services.PerformanceServices
         private CpuUsage cpuDataFromRust;
         private MemoryUsage memDataFromRust;
         private GpuUsage[] gpuDataFromRust;
+        private NetworkAdapterUsage[] networkDataFromRust;
         Dictionary<string, DiskUsage> diskUsageDataFromRust;
 
         //private VitalRustServiceClasses.GpuUsage[] gpuDataFromRust;
@@ -84,6 +86,7 @@ namespace VitalService.Services.PerformanceServices
             cpuDataFromRust = hardwareUsage.CpuUsage;
             memDataFromRust = hardwareUsage.MemUsage;
             gpuDataFromRust = hardwareUsage.GpuUsage;
+            networkDataFromRust = hardwareUsage.NetworkAdapterUsage;
             diskUsageDataFromRust = hardwareUsage.DiskUsage;
         }
 
@@ -94,7 +97,7 @@ namespace VitalService.Services.PerformanceServices
 
             foreach (var hardwareItem in computer.Hardware)
             {
-                if (hardwareItem.HardwareType == HardwareType.GpuNvidia || hardwareItem.HardwareType == HardwareType.GpuAmd)
+                if (hardwareItem.HardwareType == HardwareType.GpuNvidia || hardwareItem.HardwareType == HardwareType.GpuAmd || hardwareItem.HardwareType == HardwareType.GpuIntel)
                 {
 
                     var memoryTotal = hardwareItem.Sensors.FirstOrDefault(x => x.Name == "GPU Memory Total")?.Value;
@@ -180,61 +183,14 @@ namespace VitalService.Services.PerformanceServices
             IsUpdatingNetworkUsage = true;
             try
             {
-                Dictionary<string, NetworkInterface>? adapters = null;
-
-                Utilities.Debug.LogExecutionTime("GetAllNetworkInterfaces", () => adapters = NetworkInterface.GetAllNetworkInterfaces().ToDictionary(k => k.Name, v => v));
-
-
                 var toReturn = new NetworkAdapterUsages();
-                foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType == HardwareType.Network))
+
+                if (networkDataFromRust is not null)
                 {
-                    if (adapters!.TryGetValue(hardwareItem.Name, out var adapter)
-                    && adapter.OperationalStatus is not OperationalStatus.Down or OperationalStatus.Unknown or OperationalStatus.NotPresent)
+                    foreach (var adapter in networkDataFromRust)
                     {
-                        var ipProperties = adapter.GetIPProperties();
-                        var adapterObj = new NetworkAdapterUsage()
-                        {
-                            Properties = new NetworkAdapterProperties
-                            {
-                                Name = adapter.Name,
-                                Description = adapter.Description,
-                                SpeedBps = adapter.Speed,
-                                ConnectionType = Enum.GetName(adapter.NetworkInterfaceType) ?? "Unknown",
-                                IPInterfaceProperties = new Dtos.Coms.IPInterfaceProperties()
-                                {
-                                    IPv4Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.Address.ToString(),
-                                    IPv6Address = ipProperties.UnicastAddresses.FirstOrDefault(e => e.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)?.Address.ToString(),
-                                    DnsSuffix = ipProperties.DnsSuffix,
-                                    IsDnsEnabled = ipProperties.IsDnsEnabled
-                                },
-                                MacAddress = adapter.GetPhysicalAddress().ToString()
-                            }
-                        };
 
-                        foreach (var sensor in hardwareItem.Sensors)
-                        {
-                            if (sensor.Value is null)
-                                continue;
-                            if (adapterObj.Usage is null)
-                                adapterObj.Usage = new();
-
-                            switch (sensor.Name)
-                            {
-                                case "Upload Speed":
-                                    adapterObj.Usage.SendBps = (long)sensor.Value;
-                                    break;
-                                case "Download Speed":
-                                    adapterObj.Usage.RecieveBps = (long)sensor.Value;
-                                    break;
-                                case "Network Utilization":
-                                    adapterObj.Usage.UsagePercentage = (long)sensor.Value;
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                        }
-                        toReturn.Adapters.TryAdd(hardwareItem.Name, adapterObj);
+                        toReturn.Adapters.TryAdd(adapter.Properties.Name, adapter);
                     }
                 }
                 networkUsageData = toReturn;
@@ -261,9 +217,21 @@ namespace VitalService.Services.PerformanceServices
         {
 
             var toReturn = new List<GpuUsage>();
-            foreach (var hardwareItem in computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel))
+
+            if (gpuDataFromRust != null)
+                toReturn.AddRange(gpuDataFromRust);
+
+            var devices = computer.Hardware.Where(e => e.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel).ToArray();
+            for (int i = 0; i < devices.Length; i++)
             {
+                var hardwareItem = devices[i];
+                if (hardwareItem.HardwareType == HardwareType.GpuNvidia)
+                    continue;
+
                 var gpu = new GpuUsage();
+                gpu.DeviceIndex = i;
+                gpu.Name = hardwareItem.Name.Trim();
+
                 foreach (var sensor in hardwareItem.Sensors)
                 {
                     if (sensor.Value is null)

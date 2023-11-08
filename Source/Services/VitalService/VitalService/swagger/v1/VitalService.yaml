@@ -1319,6 +1319,7 @@ components:
       additionalProperties: false
     GpuUsage:
       required:
+        - deviceIndex
         - temperatureReadings
       type: object
       properties:
@@ -1339,6 +1340,14 @@ components:
           additionalProperties:
             type: number
             format: float
+        deviceIndex:
+          type: integer
+          format: int32
+        partNumber:
+          required:
+            - chars
+            - length
+          type: string
         totalMemoryBytes:
           required:
             - hasValue
@@ -1626,11 +1635,14 @@ components:
     NetworkAdapterProperties:
       required:
         - iPInterfaceProperties
+        - isUp
         - name
       type: object
       properties:
         ipInterfaceProperties:
           $ref: '#/components/schemas/IPInterfaceProperties'
+        isUp:
+          type: boolean
         name:
           required:
             - chars

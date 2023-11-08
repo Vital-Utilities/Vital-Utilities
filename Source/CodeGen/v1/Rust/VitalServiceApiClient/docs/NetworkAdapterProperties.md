@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ip_interface_properties** | Option<[**crate::models::IpInterfaceProperties**](IPInterfaceProperties.md)> |  | [optional]
+**is_up** | **bool** |  | 
 **name** | **String** |  | 
 **description** | Option<**String**> |  | [optional]
 **mac_address** | Option<**String**> |  | [optional]

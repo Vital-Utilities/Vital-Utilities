@@ -15,6 +15,8 @@
 pub struct NetworkAdapterProperties {
     #[serde(rename = "ipInterfaceProperties", skip_serializing_if = "Option::is_none")]
     pub ip_interface_properties: Option<Box<crate::models::IpInterfaceProperties>>,
+    #[serde(rename = "isUp")]
+    pub is_up: bool,
     #[serde(rename = "name")]
     pub name: String,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
@@ -28,9 +30,10 @@ pub struct NetworkAdapterProperties {
 }
 
 impl NetworkAdapterProperties {
-    pub fn new(name: String) -> NetworkAdapterProperties {
+    pub fn new(is_up: bool, name: String) -> NetworkAdapterProperties {
         NetworkAdapterProperties {
             ip_interface_properties: None,
+            is_up,
             name,
             description: None,
             mac_address: None,

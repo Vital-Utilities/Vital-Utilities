@@ -50,7 +50,7 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
     }
     return thisGpuStatic ? (
         <ClassicLayout
-            header={{ title: "GPU", deviceName: thisGpuStatic?.name }}
+            header={{ title: "GPU", deviceName: thisGpuDynamic?.name }}
             graph={getGraphView()}
             showRange
             bottomItems={
@@ -59,11 +59,11 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
                         {current?.coreUsagePercentage !== undefined && <ItemOne color="#3182bd" title="Core Utilization" value={`${current.coreUsagePercentage}%`} />}
                         {current?.vRamUsagePercentage !== undefined && <ItemOne color="orange" title="Memory" value={`${current.vRamUsagePercentage}%`} />}
                         {current?.powerDrawWattage !== undefined && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />}
-                        {current?.coreTemperature !== undefined && <ItemOne color="white" title="GPU Core" value={`${current?.coreTemperature}°C`} />}
+                        {current?.coreTemperature !== undefined && <ItemOne color="white" title="Temperature" value={`${current?.coreTemperature}°C`} />}
 
                         {thisGpuDynamic?.temperatureReadings &&
                             Object.keys(thisGpuDynamic?.temperatureReadings)
-                                .filter(e => e !== "GPU Core")
+                                .filter(e => e !== "GPU")
                                 .map((key, index) => {
                                     return <ItemOne key={index} color="lightgray" title={`${key.replace("GPU ", "")}`} value={`${Math.ceil(thisGpuDynamic?.temperatureReadings[key] ?? 0)}°C`} />;
                                 })}
@@ -79,7 +79,7 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
                             })}
                     </div>
                     <div>
-                        <ItemTwo title="Total Memory:" value={getReadableBytesString(staticState?.gpu[props.gpuNumber].memoryTotalBytes)} />
+                        <ItemTwo title="Memory:" value={`${getReadableBytesString(thisGpuDynamic?.memoryUsedBytes)} / ${getReadableBytesString(thisGpuDynamic?.totalMemoryBytes)}`} />
                         <ItemTwo title="Physical Location:" value={`device ${props.gpuNumber}`} />
                     </div>
                 </>

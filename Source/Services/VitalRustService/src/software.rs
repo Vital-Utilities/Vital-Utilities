@@ -53,15 +53,13 @@ pub fn get_process_util(
         let pid = pid.as_u32();
         let path = get_process_path(pid); // takes some time
 
-        let description: Option<String> = None; // takes some time
-                                                /* if path.is_some() {
-                                                    description = match get_file_description(path.to_owned().unwrap()) {
-                                                        Ok(title) => Some(title),
-                                                        Err(_) => None,
-                                                    };
-                                                };
-                                                info!("{:?}", description);
-                                                */
+        let mut description: Option<String> = None; // takes some time
+        if path.is_some() {
+            description = match get_file_description(path.to_owned().unwrap()) {
+                Ok(title) => Some(title),
+                Err(_) => None,
+            };
+        };
 
         // windows::get_process_ideal_processors(pid); //takes a lot of time
         list.push(ProcessData {

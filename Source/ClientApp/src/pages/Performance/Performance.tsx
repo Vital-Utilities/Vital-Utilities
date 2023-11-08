@@ -225,7 +225,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 type="memory"
                             />
                         )}
-                        {staticState?.gpu.map((gpu, index) => {
+                        {dynamicState?.gpuUsageData?.map((gpu, index) => {
+                            console.info(gpu.temperatureReadings);
                             return (
                                 <ClassicNavItem
                                     key={`GPU ${index}`}
@@ -236,7 +237,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                     }}
                                     title={`GPU ${index}`}
                                     detail={gpu.name}
-                                    stat={`${CurrentMetricState?.gpuUsageData[index].coreUsagePercentage}% (${CurrentMetricState?.gpuUsageData[index].coreTemperature}°C)`}
+                                    stat={`${gpu.load?.corePercentage}% (${gpu.temperatureReadings["GPU"]}°C)`}
                                     type="gpu"
                                 />
                             );
@@ -266,26 +267,28 @@ export const PerformancePage: React.FunctionComponent = props => {
                                     );
                                 })}
                         {networkAdapters &&
-                            Object.entries(networkAdapters).map((value, index) => {
-                                return (
-                                    <ClassicNavItem
-                                        key={`NetAdapter ${index}`}
-                                        Key={`NetAdapter ${index}`}
-                                        selectedKey={classicViewProps.selectedKey}
-                                        title={`${value[1].properties.connectionType} (${value[1].properties.name})`}
-                                        detail={`${value[1].properties.description}`}
-                                        onClick={() => {
-                                            setClassicViewProps({ ...classicViewProps, selectedKey: `NetAdapter ${index}`, macAddress: value[1].properties.macAddress });
-                                        }}
-                                        stat={
-                                            <>
-                                                <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
-                                            </>
-                                        }
-                                        type="network"
-                                    />
-                                );
-                            })}
+                            Object.entries(networkAdapters)
+                                .filter(e => e[1].properties.isUp === true)
+                                .map((value, index) => {
+                                    return (
+                                        <ClassicNavItem
+                                            key={`NetAdapter ${index}`}
+                                            Key={`NetAdapter ${index}`}
+                                            selectedKey={classicViewProps.selectedKey}
+                                            title={`${value[1].properties.connectionType} (${value[1].properties.name})`}
+                                            detail={`${value[1].properties.description}`}
+                                            onClick={() => {
+                                                setClassicViewProps({ ...classicViewProps, selectedKey: `NetAdapter ${index}`, macAddress: value[1].properties.macAddress });
+                                            }}
+                                            stat={
+                                                <>
+                                                    <CaretDownOutlined /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
+                                                </>
+                                            }
+                                            type="network"
+                                        />
+                                    );
+                                })}
                     </div>
 
                     {getClassicContent()}
