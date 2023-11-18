@@ -4,8 +4,12 @@
 )]
 mod commands;
 mod file;
-
-use commands::get_client_settings;
+use crate::commands::commands::{
+    get_client_settings, get_vital_service_ports, open_url, restart_vital_service,
+    update_client_settings, update_vital_service_port, ServiceName,
+};
+use commands::commands::is_vital_service_running;
+use commands::vital_service::start_vital_service;
 use log::{debug, error, info, trace, warn};
 use once_cell::sync::OnceCell;
 use sentry::IntoDsn;
@@ -16,11 +20,6 @@ use tauri::{AppHandle, Manager};
 use tauri::{
     CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
     SystemTraySubmenu,
-};
-
-use crate::commands::{
-    get_vital_service_ports, is_vital_service_running, open_url, restart_vital_service,
-    start_vital_service, update_client_settings, update_vital_service_port,
 };
 
 static APP_HANDLE: OnceCell<Mutex<AppHandle>> = OnceCell::new();
@@ -73,8 +72,8 @@ fn main() {
         }
     }
 
-    if cfg!(feature = "release") && !is_vital_service_running(commands::ServiceName::VitalService) {
-        let _ = start_vital_service(commands::ServiceName::VitalService);
+    if cfg!(feature = "release") && !is_vital_service_running(ServiceName::VitalService) {
+        let _ = start_vital_service(ServiceName::VitalService);
     }
 
     tauri::Builder::default()
