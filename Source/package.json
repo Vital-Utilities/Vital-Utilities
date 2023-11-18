@@ -3,8 +3,8 @@
     "build:backend": "rimraf ./Build/VitalService && dotnet build ./Services/VitalService/VitalService/VitalService.csproj -c release -o ./Build/VitalService -v detailed -p:Version=0.0.1",
     "build:release": "npx ts-node --esm build.ts",
     "tauri": "tauri",
-    "GenerateCode": "ts-node --esm ./GenerateCode.ts",
-    "GenerateUpdateMeta": "ts-node --esm ./GenerateUpdateMeta.ts"
+    "GenerateCode": "node --no-warnings --loader ts-node/esm ./GenerateCode.ts",
+    "GenerateUpdateMeta": "node --no-warnings --loader ts-node/esm  ./GenerateUpdateMeta.ts"
   },
   "type": "module",
   "devDependencies": {
