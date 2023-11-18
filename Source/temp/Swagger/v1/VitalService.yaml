@@ -1388,16 +1388,10 @@ components:
     GpuUsageMetricModel:
       required:
         - id
-        - name
       type: object
       allOf:
         - $ref: '#/components/schemas/HardwareMetricModel'
       properties:
-        name:
-          required:
-            - chars
-            - length
-          type: string
         coreUsagePercentage:
           required:
             - hasValue

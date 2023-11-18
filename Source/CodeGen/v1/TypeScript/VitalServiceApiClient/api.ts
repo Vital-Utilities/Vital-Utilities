@@ -872,12 +872,6 @@ export interface GpuUsage {
 export interface GpuUsageMetricModel {
     /**
      * 
-     * @type {string}
-     * @memberof GpuUsageMetricModel
-     */
-    'name': string;
-    /**
-     * 
      * @type {number}
      * @memberof GpuUsageMetricModel
      */
