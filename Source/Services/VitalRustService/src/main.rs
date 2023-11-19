@@ -6,6 +6,7 @@ use std::time::Duration;
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
 use crate::commands::get_vital_service_ports;
+use crate::machine_stats::{cpu, disk, gpu, memory, net};
 use crate::software::get_process_util;
 use log::{error, info, LevelFilter};
 use log::{Level, Metadata, Record};
@@ -19,7 +20,7 @@ use systemstat::Platform;
 use tokio::join;
 mod api;
 mod commands;
-mod machine;
+mod machine_stats;
 mod nvidia;
 pub mod rocket_endpoints;
 pub mod software;
@@ -62,11 +63,11 @@ async fn app() {
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
         let (cpu_util, mem_util, net_util, disk_usage, gpu_usage) = join!(
-            machine::get_cpu_util(&sys_info, &sys_stat),
-            machine::get_mem_util(&sys_info),
-            machine::get_net_adapters(&sys_info),
-            machine::get_disk_util(&sys_info),
-            machine::get_gpu_util(&nvml),
+            cpu::get_cpu_util(&sys_info, &sys_stat),
+            memory::get_mem_util(&sys_info),
+            net::get_net_adapters(&sys_info),
+            disk::get_disk_util(&sys_info),
+            gpu::get_gpu_util(&nvml),
         );
 
         if !process_data.is_empty() {

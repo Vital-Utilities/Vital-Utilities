@@ -13,13 +13,15 @@
  */
 
 
-import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import type { Configuration } from './configuration';
+import type { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import type { RequestArgs } from './base';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError } from './base';
 
 /**
  * 
@@ -64,6 +66,8 @@ export interface AddProccessRequest {
      */
     'profileId': number;
 }
+
+
 /**
  * 
  * @export
@@ -76,6 +80,49 @@ export interface ClientSettings {
      * @memberof ClientSettings
      */
     'alwaysOnTop': boolean;
+}
+/**
+ * 
+ * @export
+ * @interface CpuCache
+ */
+export interface CpuCache {
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuCache
+     */
+    'l1Size'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuCache
+     */
+    'l1LineSize'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuCache
+     */
+    'l2Size'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuCache
+     */
+    'l2LineSize'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuCache
+     */
+    'l3Size'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof CpuCache
+     */
+    'l3LineSize'?: number;
 }
 /**
  * 
@@ -180,6 +227,12 @@ export interface CpuUsage {
      * @memberof CpuUsage
      */
     'corePercentages': Array<number>;
+    /**
+     * 
+     * @type {CpuCache}
+     * @memberof CpuUsage
+     */
+    'cpuCache'?: CpuCache;
     /**
      * 
      * @type {{ [key: string]: number; }}
@@ -431,6 +484,8 @@ export interface DiskUsage {
      */
     'letter'?: string;
 }
+
+
 /**
  * 
  * @export
@@ -1086,6 +1141,8 @@ export interface ManagedModelDto {
      */
     'parentProfileId': number;
 }
+
+
 /**
  * 
  * @export
@@ -1508,6 +1565,8 @@ export interface ProcessToAddDto {
      */
     'processPriority': ProcessPriorityEnum;
 }
+
+
 /**
  * 
  * @export
@@ -1938,6 +1997,7 @@ export class HelloApi extends BaseAPI {
 }
 
 
+
 /**
  * IngestApi - axios parameter creator
  * @export
@@ -2037,6 +2097,7 @@ export class IngestApi extends BaseAPI {
         return IngestApiFp(this.configuration).apiIngestUtilizationPost(sendUtilizationRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -2488,6 +2549,7 @@ export class ProcessApi extends BaseAPI {
         return ProcessApiFp(this.configuration).apiProcessRunningProcessesGet(options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 
 /**
@@ -3025,6 +3087,7 @@ export class ProfileApi extends BaseAPI {
 }
 
 
+
 /**
  * SettingsApi - axios parameter creator
  * @export
@@ -3243,6 +3306,7 @@ export class SettingsApi extends BaseAPI {
 }
 
 
+
 /**
  * SystemApi - axios parameter creator
  * @export
@@ -3454,5 +3518,6 @@ export class SystemApi extends BaseAPI {
         return SystemApiFp(this.configuration).apiSystemTimeseriesPost(getMachineTimeSeriesRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
 
 

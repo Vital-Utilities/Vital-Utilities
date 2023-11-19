@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetRunningProcessesResponse {
     #[serde(rename = "processView")]
     pub process_view: ::std::collections::HashMap<String, crate::models::ParentChildModelDto>,

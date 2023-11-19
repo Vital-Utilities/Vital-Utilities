@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GpuUsageMetricModel {
     #[serde(rename = "coreUsagePercentage", skip_serializing_if = "Option::is_none")]
     pub core_usage_percentage: Option<f32>,

@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ProcessDiskUsage {
     #[serde(rename = "readBytesPerSecond")]
     pub read_bytes_per_second: i64,

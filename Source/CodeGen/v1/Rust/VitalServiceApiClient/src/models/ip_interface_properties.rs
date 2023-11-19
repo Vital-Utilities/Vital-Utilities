@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct IpInterfaceProperties {
     #[serde(rename = "iPv4Address", skip_serializing_if = "Option::is_none")]
     pub i_pv4_address: Option<String>,

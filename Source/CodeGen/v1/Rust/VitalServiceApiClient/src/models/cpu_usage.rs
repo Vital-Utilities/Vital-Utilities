@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CpuUsage {
     #[serde(rename = "name")]
     pub name: String,
@@ -27,6 +27,8 @@ pub struct CpuUsage {
     pub power_draw_wattage: Option<f32>,
     #[serde(rename = "corePercentages")]
     pub core_percentages: Vec<f32>,
+    #[serde(rename = "cpuCache", skip_serializing_if = "Option::is_none")]
+    pub cpu_cache: Option<Box<crate::models::CpuCache>>,
     #[serde(rename = "temperatureReadings")]
     pub temperature_readings: ::std::collections::HashMap<String, f32>,
 }
@@ -41,6 +43,7 @@ impl CpuUsage {
             total_core_percentage,
             power_draw_wattage: None,
             core_percentages,
+            cpu_cache: None,
             temperature_readings,
         }
     }

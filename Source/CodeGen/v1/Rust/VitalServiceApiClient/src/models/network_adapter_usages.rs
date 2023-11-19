@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct NetworkAdapterUsages {
     #[serde(rename = "adapters")]
     pub adapters: ::std::collections::HashMap<String, crate::models::NetworkAdapterUsage>,

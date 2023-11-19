@@ -586,6 +586,46 @@ components:
         alwaysOnTop:
           type: boolean
       additionalProperties: false
+    CpuCache:
+      type: object
+      properties:
+        l1Size:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        l1LineSize:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        l2Size:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        l2LineSize:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        l3Size:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+        l3LineSize:
+          required:
+            - hasValue
+            - value
+          type: integer
+          format: int64
+      additionalProperties: false
     CpuData:
       required:
         - l1CacheSize
@@ -675,6 +715,8 @@ components:
           items:
             type: number
             format: float
+        cpuCache:
+          $ref: '#/components/schemas/CpuCache'
         temperatureReadings:
           required:
             - item

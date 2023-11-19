@@ -15,9 +15,9 @@ pub enum DiskType {
     #[serde(rename = "Unknown")]
     Unknown,
     #[serde(rename = "HDD")]
-    HDD,
+    Hdd,
     #[serde(rename = "SSD")]
-    SSD,
+    Ssd,
 
 }
 
@@ -25,8 +25,8 @@ impl ToString for DiskType {
     fn to_string(&self) -> String {
         match self {
             Self::Unknown => String::from("Unknown"),
-            Self::HDD => String::from("HDD"),
-            Self::SSD => String::from("SSD"),
+            Self::Hdd => String::from("HDD"),
+            Self::Ssd => String::from("SSD"),
         }
     }
 }

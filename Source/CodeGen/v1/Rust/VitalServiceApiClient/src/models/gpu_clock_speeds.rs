@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GpuClockSpeeds {
     #[serde(rename = "memoryClockMhz", skip_serializing_if = "Option::is_none")]
     pub memory_clock_mhz: Option<i32>,

@@ -20,7 +20,7 @@ if (fse.existsSync(CodeGenPath))
 if (!fse.existsSync(CodeGenPath))
   fse.mkdirsSync(CodeGenPath);
   
-execute(`npx openapi-generator-cli version`);
+execute(`npx @openapitools/openapi-generator-cli version-manager set 7.0.1`)
 execute(`npx @openapitools/openapi-generator-cli generate -i ./temp/Swagger/v1/VitalService.yaml -g rust -o ./CodeGen/v1/Rust/VitalServiceApiClient  --additional-properties=packageName="vital_service_api",packageVersion=${version}`);
 execute(`npx @openapitools/openapi-generator-cli generate -i ./temp/Swagger/v1/VitalService.yaml -g typescript-axios -o ./CodeGen/v1/TypeScript/VitalServiceApiClient -p npmName=VitalService --additional-properties=npmVersion=${version}`)
 

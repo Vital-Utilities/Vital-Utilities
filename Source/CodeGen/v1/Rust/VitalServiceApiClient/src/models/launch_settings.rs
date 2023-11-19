@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LaunchSettings {
     #[serde(rename = "vitalServiceHttpsPort")]
     pub vital_service_https_port: i32,

@@ -2,6 +2,8 @@ pub mod add_proccess_request;
 pub use self::add_proccess_request::AddProccessRequest;
 pub mod client_settings;
 pub use self::client_settings::ClientSettings;
+pub mod cpu_cache;
+pub use self::cpu_cache::CpuCache;
 pub mod cpu_data;
 pub use self::cpu_data::CpuData;
 pub mod cpu_usage;

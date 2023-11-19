@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct NetworkUsageMetricModel {
     #[serde(rename = "uploadSpeedBps", skip_serializing_if = "Option::is_none")]
     pub upload_speed_bps: Option<i64>,

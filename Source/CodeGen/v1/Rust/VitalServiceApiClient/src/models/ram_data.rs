@@ -11,14 +11,14 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RamData {
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "partNumber", skip_serializing_if = "Option::is_none")]
     pub part_number: Option<String>,
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
-    pub _type: Option<String>,
+    pub r#type: Option<String>,
     #[serde(rename = "speedMhz", skip_serializing_if = "Option::is_none")]
     pub speed_mhz: Option<i32>,
     #[serde(rename = "slotNumber", skip_serializing_if = "Option::is_none")]
@@ -36,7 +36,7 @@ impl RamData {
         RamData {
             name: None,
             part_number: None,
-            _type: None,
+            r#type: None,
             speed_mhz: None,
             slot_number: None,
             slot_channel: None,

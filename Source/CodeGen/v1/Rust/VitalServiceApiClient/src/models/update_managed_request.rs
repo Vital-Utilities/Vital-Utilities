@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateManagedRequest {
     #[serde(rename = "managedModelDto")]
     pub managed_model_dto: Box<crate::models::ManagedModelDto>,

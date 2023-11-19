@@ -9,7 +9,7 @@
   "type": "module",
   "devDependencies": {
     "@octokit/rest": "^19.0.13",
-    "@openapitools/openapi-generator-cli": "^2.6.0",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@tauri-apps/cli": "^1.4.0",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.18.8",
