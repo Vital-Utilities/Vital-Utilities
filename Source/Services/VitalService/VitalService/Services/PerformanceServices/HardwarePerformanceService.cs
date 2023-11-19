@@ -211,18 +211,7 @@ namespace VitalService.Services.PerformanceServices
             }
 
         }
-        public class RamUsageRaw
-        {
-            /// <summary>
-            /// Bytes
-            /// </summary>
-            public float FreePhysicalMemory { get; set; }
 
-            /// <summary>
-            /// Bytes
-            /// </summary>
-            public float TotalVisibleMemorySize { get; set; }
-        }
         private void UpdateGpuUsage()
         {
 
