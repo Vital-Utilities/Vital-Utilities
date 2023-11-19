@@ -8,12 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using VitalRustServiceClasses;
 using VitalService.Dtos.Coms;
 using VitalService.Dtos.Data;
@@ -123,32 +121,45 @@ namespace VitalService.Services.PerformanceServices
                                 propertyInfo.SetValue(cpu, Convert.ChangeType(queryObj.CimInstanceProperties[propertyInfo.Name]?.Value ?? "", propertyInfo.PropertyType), null);
                         }
                     }
-
-                    session = CimSession.Create(null) // null instead of localhost which would otherwise require certain MMI services running
-                                            .QueryInstances(@"root\cimv2", "WQL", $"SELECT DeviceId, MaxCacheSize FROM Win32_CacheMemory");
-
-                    foreach (var queryObj in session)
-                    {
-                        var val = (float)Convert.ChangeType(queryObj.CimInstanceProperties["MaxCacheSize"].Value ?? "", typeof(float));
-                        switch (queryObj.CimInstanceProperties["DeviceId"].Value)
-                        {
-                            case "Cache Memory 0":
-                                cpu.L1CacheSize = val;
-                                break;
-                            case "Cache Memory 1":
-                                cpu.L2CacheSize = val;
-                                break;
-                            case "Cache Memory 2":
-                                cpu.L3CacheSize = val;
-                                break;
-                            default:
-                                Log.Logger.Error("more than three cpu cache was found");
-                                break;
-                        }
-                    }
                 }
             }
+            var cacheData = GetCpuCacheData();
+            data.Cpu.L1CacheSize = cacheData.L1Size ?? 0;
+            data.Cpu.L2CacheSize = cacheData.L2Size ?? 0;
+            data.Cpu.L3CacheSize = cacheData.L3Size ?? 0;
+            data.Ram = GetRamData().ToList();
 
+            MachineStaticData = data;
+        }
+
+        private CpuCache GetCpuCacheData()
+        {
+            var session = CimSession.Create(null) // null instead of localhost which would otherwise require certain MMI services running
+                                            .QueryInstances(@"root\cimv2", "WQL", $"SELECT DeviceId, MaxCacheSize FROM Win32_CacheMemory");
+            var cache = new CpuCache();
+            foreach (var queryObj in session)
+            {
+                var val = (ulong)Convert.ChangeType(queryObj.CimInstanceProperties["MaxCacheSize"].Value ?? "", typeof(ulong));
+                switch (queryObj.CimInstanceProperties["DeviceId"].Value)
+                {
+                    case "Cache Memory 0":
+                        cache.L1Size = val;
+                        break;
+                    case "Cache Memory 1":
+                        cache.L2Size = val;
+                        break;
+                    case "Cache Memory 2":
+                        cache.L3Size = val;
+                        break;
+                    default:
+                        Log.Logger.Error("more than three cpu cache was found");
+                        break;
+                }
+            }
+            return cache;
+        }
+        private IEnumerable<RamData> GetRamData()
+        {
             var ramSession = CimSession.Create(null) // null instead of localhost which would otherwise require certain MMI services running
                         .QueryInstances(@"root\cimv2", "WQL", "SELECT PartNumber, Speed, ConfiguredClockSpeed, Capacity, DeviceLocator, BankLabel FROM Win32_PhysicalMemory");
             foreach (var queryObj in ramSession)
@@ -172,9 +183,8 @@ namespace VitalService.Services.PerformanceServices
 
                 ram.SlotChannel = (string?)Convert.ChangeType(queryObj.CimInstanceProperties["BankLabel"].Value, typeof(string));
 
-                data.Ram.Add(ram);
+                yield return ram;
             }
-            MachineStaticData = data;
         }
         private void UpdateNetworkUsage()
         {

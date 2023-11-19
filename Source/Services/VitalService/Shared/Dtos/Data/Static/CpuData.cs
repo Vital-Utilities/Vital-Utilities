@@ -13,10 +13,10 @@
         
         public bool VirtualizationFirmwareEnabled { get; set; }
         
-        public float L1CacheSize { get; set; }
+        public ulong L1CacheSize { get; set; }
         
-        public float L2CacheSize { get; set; }
+        public ulong L2CacheSize { get; set; }
         
-        public float L3CacheSize { get; set; }
+        public ulong L3CacheSize { get; set; }
     }
 }
