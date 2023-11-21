@@ -92,7 +92,7 @@ jobs:
         path: ./Source/ClientApp/src-tauri/target/release/bundle
         if-no-files-found: error
 
-  build:
+  build-macos:
     strategy: 
       matrix: 
         platform: [aarch64-apple-darwin, x86_64-apple-darwin]
@@ -169,7 +169,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     environment: production
-    needs: [build]
+    needs: [build-win64, build-macos]
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@v3
