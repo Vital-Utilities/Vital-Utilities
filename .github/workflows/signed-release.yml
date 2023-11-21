@@ -136,7 +136,6 @@ jobs:
       with:
         name: dist
         path: ./Source/ClientApp/dist
-        if-no-files-found: error
     - name: Build release
       run: |
         cd "./Source"
@@ -215,8 +214,8 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
+        name: dist
         path: ./Source/ClientApp/dist
-        if-no-files-found: error
     - name: Build release
       run: |
         cd "./Source"
