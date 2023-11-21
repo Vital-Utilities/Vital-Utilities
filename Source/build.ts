@@ -72,8 +72,19 @@ function buildSoftware() {
     execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
     execute(`cd ${vitalRustServiceDir} && cargo build --release`);
 
-    //@ts-ignore
-    fs.cpSync(`${vitalRustServiceDir}/target/release`, `${vitalRustServiceBin}`);
+    let filesToCopy: string[] = []
+    fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {
+        if (err)
+            throw err;
+        filesToCopy = files.filter(e=> e.includes("VitalRustService") && !e.endsWith(".d") && !e.endsWith(".pdb"))
+    });
+
+    filesToCopy.forEach(f => {
+        let split =  f.split("/");
+        let count = split.length;
+        fs.copyFileSync(f, `${vitalRustServiceBin}/${split[count - 1]}`);
+    });
+   
 
     execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
 }
