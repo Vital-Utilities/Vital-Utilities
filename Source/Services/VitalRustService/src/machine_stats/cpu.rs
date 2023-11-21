@@ -23,7 +23,7 @@ pub async fn get_cpu_util(
     let info = sysinfo.global_cpu_info();
     Box::new(CpuUsage {
         name: info.name().to_string(),
-        cpu_cache: Some(Box::new(get_cpu_cache())),
+        cpu_cache: None,
         brand: Some(info.brand().to_string()),
         vendor_id: Some(info.vendor_id().to_string()),
         core_clocks_mhz,
@@ -34,20 +34,20 @@ pub async fn get_cpu_util(
     })
 }
 
-fn get_cpu_cache() -> CpuCache {
-    CpuCache {
-        l1_line_size: optional_i64_from(cache_size::l1_cache_line_size()),
-        l1_size: optional_i64_from(cache_size::l1_cache_size()),
-        l2_line_size: optional_i64_from(cache_size::l2_cache_line_size()),
-        l2_size: optional_i64_from(cache_size::l2_cache_size()),
-        l3_line_size: optional_i64_from(cache_size::l3_cache_line_size()),
-        l3_size: optional_i64_from(cache_size::l3_cache_size()),
-    }
-}
+// fn get_cpu_cache() -> CpuCache {
+//     CpuCache {
+//         l1_line_size: optional_i64_from(cache_size::l1_cache_line_size()),
+//         l1_size: optional_i64_from(cache_size::l1_cache_size()),
+//         l2_line_size: optional_i64_from(cache_size::l2_cache_line_size()),
+//         l2_size: optional_i64_from(cache_size::l2_cache_size()),
+//         l3_line_size: optional_i64_from(cache_size::l3_cache_line_size()),
+//         l3_size: optional_i64_from(cache_size::l3_cache_size()),
+//     }
+// }
 
-fn optional_i64_from(obj: Option<usize>) -> Option<i64> {
-    match obj {
-        Some(num) => Some(num as i64),
-        None => None,
-    }
-}
+// fn optional_i64_from(obj: Option<usize>) -> Option<i64> {
+//     match obj {
+//         Some(num) => Some(num as i64),
+//         None => None,
+//     }
+// }

@@ -6,6 +6,23 @@
 //@ts-ignore
 import fs from "fs";
 import {execSync}  from "child_process"
+import { parse } from "ts-command-line-args";
+
+const args = parse({
+    platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
+});
+
+
+switch (args.platform) {
+    case "windows-x86_64":
+    case "aarch64-apple-darwin":
+    case "x86_64-apple-darwin":
+        console.log(`${args.platform} is valid target`);
+        break;
+    default:
+        throw new Error(`${args.platform} is not a valid target`);
+}
+
 const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()
@@ -56,7 +73,7 @@ function buildSoftware() {
     execute(`cd ${vitalRustServiceDir} && cargo build --release`);
 
     //@ts-ignore
-    fs.copyFileSync(`${vitalRustServiceDir}/target/release/VitalRustService.exe`, `${vitalRustServiceBin}/VitalRustService.exe`);
+    fs.cpSync(`${vitalRustServiceDir}/target/release`, `${vitalRustServiceBin}`);
 
     execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
 }
@@ -116,7 +133,7 @@ function buildInstaller() {
     tauriConf.package.version = version;
     // eslint-disable-next-line security/detect-non-literal-fs-filename
 
-    execute(`cd ${vitalTauriDir} && tauri build --features "release" --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
+    execute(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
 }
 
 function setVitalRustServiceVersions(){
