@@ -24,15 +24,15 @@ pub struct CpuData {
     #[serde(rename = "virtualizationFirmwareEnabled")]
     pub virtualization_firmware_enabled: bool,
     #[serde(rename = "l1CacheSize")]
-    pub l1_cache_size: f32,
+    pub l1_cache_size: i64,
     #[serde(rename = "l2CacheSize")]
-    pub l2_cache_size: f32,
+    pub l2_cache_size: i64,
     #[serde(rename = "l3CacheSize")]
-    pub l3_cache_size: f32,
+    pub l3_cache_size: i64,
 }
 
 impl CpuData {
-    pub fn new(name: String, number_of_enabled_core: i32, number_of_cores: i32, thread_count: i32, virtualization_firmware_enabled: bool, l1_cache_size: f32, l2_cache_size: f32, l3_cache_size: f32) -> CpuData {
+    pub fn new(name: String, number_of_enabled_core: i32, number_of_cores: i32, thread_count: i32, virtualization_firmware_enabled: bool, l1_cache_size: i64, l2_cache_size: i64, l3_cache_size: i64) -> CpuData {
         CpuData {
             name,
             number_of_enabled_core,

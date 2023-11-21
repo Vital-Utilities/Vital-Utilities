@@ -1033,16 +1033,16 @@
             "type": "boolean"
           },
           "l1CacheSize": {
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           },
           "l2CacheSize": {
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           },
           "l3CacheSize": {
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false

@@ -1,17 +1,10 @@
 #[cfg(target_os = "macos")]
-use super::commands::ServiceName;
-use crate::APP_HANDLE;
 use log::{debug, error, info};
-use sysinfo::{Pid, ProcessExt, System, SystemExt};
-use tauri::{api::path::document_dir, AppHandle, Manager};
-use vital_service_api::models::{ClientSettings, LaunchSettings, SettingsDto};
 #[cfg(target_os = "windows")]
-use {
-    crate::file::get_process_path,
-    std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex},
-    winapi::um::processthreadsapi::OpenProcess,
-    winapi::um::winnt::PROCESS_ALL_ACCESS,
-};
+use std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex};
+
+use super::commands::ServiceName;
+use log::{debug, error, info};
 
 #[cfg(target_os = "windows")]
 pub fn start_vital_service(service_name: ServiceName) -> Result<String, String> {
