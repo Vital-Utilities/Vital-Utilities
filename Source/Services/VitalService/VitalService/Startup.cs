@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using VitalService.Data;
@@ -47,7 +49,13 @@ namespace VitalService
             services.AddSingleton<SoftwarePerformanceService>();
             services.AddHostedService(provider => provider.GetService<SoftwarePerformanceService>());
 
-            services.AddSingleton<HardwarePerformanceService>();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                services.AddSingleton<HardwarePerformanceService>(new HardwarePerformanceServiceWindows());
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                services.AddSingleton<HardwarePerformanceService>(new HardwarePerformanceServiceMac());
+            else
+                throw new ArgumentOutOfRangeException("OS not supported");
+
             services.AddHostedService(provider => provider.GetService<HardwarePerformanceService>());
 
             services.AddSingleton<MetricsStorageService>();
