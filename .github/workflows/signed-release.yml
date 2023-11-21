@@ -23,7 +23,7 @@ jobs:
 #    uses: ./.github/workflows/ensure_code_gen.yml
 
   build-ui:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     environment: production
     steps:
     - uses: actions/checkout@v2
@@ -52,6 +52,10 @@ jobs:
         cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '20'
     - name: Build release
       run: |
         cd "./Source"
