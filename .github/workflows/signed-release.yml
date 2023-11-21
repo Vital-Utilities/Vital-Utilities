@@ -61,6 +61,7 @@ jobs:
         cd "./Source"
         pnpm run GenerateCode
         cd "./ClientApp"
+        pnpm i
         pnpm run build
     - name: upload artifact
       uses: actions/upload-artifact@v3
