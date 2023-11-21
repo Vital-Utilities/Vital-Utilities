@@ -66,6 +66,7 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
+        name: dist
         path: ./Source/ClientApp/dist
         if-no-files-found: error
   build-win64:
@@ -133,6 +134,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
+        name: dist
         path: ./Source/ClientApp/dist
         if-no-files-found: error
     - name: Build release
