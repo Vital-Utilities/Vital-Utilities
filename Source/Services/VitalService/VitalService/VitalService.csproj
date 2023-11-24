@@ -41,7 +41,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
 	  <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-	  <PlatformTarget>x64</PlatformTarget>
+	  <PlatformTarget>ARM64</PlatformTarget>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
