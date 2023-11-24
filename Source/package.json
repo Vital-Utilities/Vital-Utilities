@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "build:backend": "rimraf ./Build/VitalService && dotnet build ./Services/VitalService/VitalService/VitalService.csproj -c release -o ./Build/VitalService -v detailed -p:Version=0.0.1",
     "build:release": "node --no-warnings --loader ts-node/esm build.ts",
     "pack:dotnetservice": "node --no-warnings --loader ts-node/esm pack-dotnetservice.ts",
     "pack:rustservice": "node --no-warnings --loader ts-node/esm pack-rustservice.ts",
