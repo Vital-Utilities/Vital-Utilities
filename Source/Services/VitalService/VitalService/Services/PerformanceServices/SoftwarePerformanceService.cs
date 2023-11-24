@@ -97,7 +97,7 @@ namespace VitalService.Services.PerformanceServices
                 {
                     try
                     {
-                        string description = null;
+                        string? description = null;
                         if (data.ExecutablePath is not null)
                         {
                             var des = FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription;

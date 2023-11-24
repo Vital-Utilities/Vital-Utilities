@@ -1,4 +1,4 @@
-﻿namespace VitalService.Dtos.Coms
+﻿namespace VitalService.Dtos.Data.Static
 {
     public class GpuData
     {

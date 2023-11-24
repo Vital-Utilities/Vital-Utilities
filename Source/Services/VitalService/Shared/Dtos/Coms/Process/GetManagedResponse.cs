@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace VitalService.Dtos
+namespace VitalService.Dtos.Coms.Process
 {
     public class GetManagedResponse
     {

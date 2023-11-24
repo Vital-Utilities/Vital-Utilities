@@ -14,8 +14,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using VitalRustServiceClasses;
-using VitalService.Dtos.Coms;
+using VitalService.Dtos.Coms.Machine;
 using VitalService.Dtos.Data;
+using VitalService.Dtos.Data.Static;
 
 namespace VitalService.Services.PerformanceServices
 {

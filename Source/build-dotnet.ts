@@ -27,9 +27,6 @@ switch (args.platform) {
         throw new Error(`${args.platform} is not a valid target`);
 }
 
-
-
-
 const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()

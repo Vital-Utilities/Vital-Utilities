@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using VitalService.Dtos.Coms;
 using VitalService.Dtos.Data;
 using VitalRustServiceClasses;
 using LibreHardwareMonitor.Hardware;
 using Serilog;
+using VitalService.Dtos.Coms.Machine;
 
 namespace VitalService.Services.PerformanceServices
 {

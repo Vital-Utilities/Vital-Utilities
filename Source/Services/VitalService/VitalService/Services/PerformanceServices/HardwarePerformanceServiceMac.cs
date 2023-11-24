@@ -15,7 +15,7 @@ namespace VitalService.Services.PerformanceServices
     public class HardwarePerformanceServiceMac : HardwarePerformanceService
     {
 
-        public HardwarePerformanceServiceMac()
+        public HardwarePerformanceServiceMac(): base()
         {
         }
 
@@ -40,12 +40,7 @@ namespace VitalService.Services.PerformanceServices
             diskUsagesData = toReturn;
         }
 
-        internal override void UpdateGpuUsage()
-        {
-            if (gpuDataFromRust is null)
-                return;
-            gpuUsageData = gpuDataFromRust.ToList();
-        }
+        internal override void UpdateGpuUsage() => gpuUsageData = [.. gpuDataFromRust];
 
         internal override void UpdateNetworkUsage()
         {

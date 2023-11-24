@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VitalService.Data;
 using VitalService.Dtos;
+using VitalService.Dtos.Coms.Process;
 using VitalService.Stores;
 using VitalService.Utilities;
 

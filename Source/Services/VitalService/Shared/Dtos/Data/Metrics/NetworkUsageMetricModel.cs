@@ -1,4 +1,6 @@
 ﻿
+using VitalService.Interfaces;
+
 namespace VitalService.Dtos.Data.Metrics
 {
     public class NetworkUsageMetricModel : HardwareMetricModel

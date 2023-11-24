@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using VitalService.Data;
+using VitalService.Dtos;
 using VitalService.Services;
 using VitalService.Services.PerformanceServices;
 using VitalService.Services.SignalR;
@@ -69,6 +70,14 @@ namespace VitalService
                 options.PayloadSerializerOptions.Converters
                    .Add(new JsonStringEnumConverter());
             });
+
+
+            var features = new Features(Affinity: true);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                features = new Features(Affinity: false);
+
+            services.AddSingleton(features);
+
             services.AddSwaggerGen(options =>
             {
 

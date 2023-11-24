@@ -7,6 +7,7 @@ using VitalService.Data;
 using VitalService.Data.App;
 using VitalService.Dtos;
 using VitalService.Dtos.Coms.Process;
+using VitalService.Dtos.Coms.Profile;
 using VitalService.Stores;
 
 namespace VitalService.Controllers
