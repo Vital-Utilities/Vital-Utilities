@@ -7,6 +7,8 @@
 import fs from "fs";
 import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
+import { PackDotnet } from "./pack-dotnet";
+import { PackRustService } from "./pack-rust";
 
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
@@ -43,7 +45,6 @@ setWebPackageJsonVersion();
 buildSoftware();
 beforePackage();
 buildInstaller();
-returnToDevEnv();
 
 function setupBuildDir() {
     cleanup();
@@ -61,16 +62,13 @@ function cleanup() {
         fs.rmSync(buildFolder, { recursive: true });
     }
 }
-function returnToDevEnv() {
-    setCsprojOutputType("Exe");
-}
+
 
 function buildSoftware() {
-    setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
-    execute(`dotnet build ${vitalServiceDir}/VitalService.csproj -c release -o ${vitalServiceBin} -p:Version=${version}`);
-    execute(`cd ${vitalRustServiceDir} && cargo build --release`);
+    PackDotnet(args.platform);
+    PackRustService(args.platform);
 
     let filesToCopy: string[] = []
     fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {
@@ -90,10 +88,7 @@ function buildSoftware() {
 }
 
 function beforePackage() {
-    fs.rmSync(vitalServiceBin + "/appsettings.development.json", { recursive: true });
-    if (fs.existsSync(vitalServiceBin + "/Logs")) {
-        fs.rmSync(vitalServiceBin + "/Logs", { recursive: true });
-    }
+
 }
 
 function getSecretsFromEnviornment() {
@@ -102,24 +97,11 @@ function getSecretsFromEnviornment() {
 
 function replaceInCodeSecretPlaceholders() {
     const secret = getSecretsFromEnviornment();
-    if (secret.sentryBackend) {
-        const filePath = `${vitalServiceDir}/program.cs`;
-        const file = fs.readFileSync(filePath, "utf-8") as string;
-        const replaced = file.replace(/REPLACE_WITH_SENTRYIO_BACKEND_DSN/g, secret.sentryBackend);
-        fs.writeFileSync(filePath, replaced);
-    }
 
     if (secret.sentryReact) {
         const filePath = `${vitalClientDir}/src/main.tsx`;
         const file = fs.readFileSync(filePath, "utf-8") as string;
         const replaced = file.replace(/REPLACE_WITH_SENTRYIO_REACT_DSN/g, secret.sentryReact);
-        fs.writeFileSync(filePath, replaced);
-    }
-
-    if (secret.sentryRust) {
-        const filePath = `${vitalTauriDir}/src/main.rs`;
-        const file = fs.readFileSync(filePath, "utf-8") as string;
-        const replaced = file.replace(/REPLACE_WITH_SENTRYIO_RUST_DSN/g, secret.sentryRust);
         fs.writeFileSync(filePath, replaced);
     }
 }

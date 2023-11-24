@@ -8,34 +8,41 @@ import fs from "fs";
 import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
 
+const vitalServiceDir = "Services/VitalService/VitalService";
+const vitalClientDir = "ClientApp";
+const buildFolder = "./ClientApp/src-tauri/bin";
+const vitalServiceBin = `${buildFolder}/VitalService`;
+
+export function cleanup() {
+    if (fs.existsSync(vitalServiceBin)) {
+        fs.rmSync(vitalServiceBin, { recursive: true });
+    }
+}
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
 });
+export function PackDotnet(platform: string) {
+    let runtime = "";
+    switch (args.platform ?? platform) {
+        case "windows-x86_64":
+            runtime = "windows-x64";
+            break;
+        case "aarch64-apple-darwin":
+            runtime = "osx-arm64";
+            break;
+        case "x86_64-apple-darwin":
+            runtime = "osx-x64";
+            break;
+        default:
+            throw new Error(`${args.platform} is not a valid target`);
+    }
 
-let runtime = "";
-switch (args.platform) {
-    case "windows-x86_64":
-        runtime = "windows-x64";
-        break;
-    case "aarch64-apple-darwin":
-        runtime = "osx-arm64";
-        break;
-    case "x86_64-apple-darwin":
-        runtime = "osx-x64";
-        break;
-    default:
-        throw new Error(`${args.platform} is not a valid target`);
-}
 
 const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()
     .replace(/\r?\n|\r/g, "");
-const vitalServiceDir = "Services/VitalService/VitalService";
-const vitalClientDir = "ClientApp";
 
-const buildFolder = "./ClientApp/src-tauri/bin";
-const vitalServiceBin = `${buildFolder}/VitalService`;
 
 setupBuildDir();
 
@@ -51,11 +58,7 @@ function setupBuildDir() {
     }
 }
 
-function cleanup() {
-    if (fs.existsSync(buildFolder)) {
-        fs.rmSync(buildFolder, { recursive: true });
-    }
-}
+
 function returnToDevEnv() {
     setCsprojOutputType("Exe");
 }
@@ -130,4 +133,5 @@ function execute(command: string) {
             console.log(`stdout: ${stdout}`);
         }
     );
+}
 }
