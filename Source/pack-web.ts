@@ -15,6 +15,7 @@ const version = fs
 const vitalClientDir = "ClientApp";
 const buildFolder = "./ClientApp/src-tauri/bin";
 
+packWeb();
 
 export default function packWeb() {
     setupBuildDir();
