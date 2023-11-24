@@ -13,8 +13,11 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   test:
-    # The type of runner that the job will run on
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: install Rust stable
