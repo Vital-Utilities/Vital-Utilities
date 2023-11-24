@@ -4,6 +4,7 @@
     "build:release": "node --no-warnings --loader ts-node/esm build.ts",
     "pack:dotnetservice": "node --no-warnings --loader ts-node/esm pack-dotnetservice.ts",
     "pack:rustservice": "node --no-warnings --loader ts-node/esm pack-rustservice.ts",
+    "pack:web": "node --no-warnings --loader ts-node/esm pack-web.ts",
     "tauri": "tauri",
     "GenerateCode": "node --no-warnings --loader ts-node/esm ./GenerateCode.ts",
     "GenerateUpdateMeta": "node --no-warnings --loader ts-node/esm  ./GenerateUpdateMeta.ts",

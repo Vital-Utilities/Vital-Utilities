@@ -10,6 +10,7 @@ import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
 import PackDotnet, {  cleanup as cleanUpDotnetService} from "./pack-dotnetservice.js";
 import PackRustService, { cleanup as cleanUpRustService } from "./pack-rustservice.js";
+import packWeb from "./pack-web.js";
 
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
@@ -38,11 +39,8 @@ const buildFolder = "./ClientApp/src-tauri/bin";
 const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
 setupBuildDir();
-setWebPackageJsonVersion();
-//setVitalRustServiceVersions();
 
 buildSoftware();
-beforePackage();
 buildInstaller();
 
 function setupBuildDir() {
@@ -64,11 +62,10 @@ function cleanup() {
 
 
 function buildSoftware() {
-    replaceInCodeSecretPlaceholders();
-
+    packWeb();
     PackDotnet(args.platform);
     PackRustService(args.platform);
-
+    
     let filesToCopy: string[] = []
     fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {
         if (err)
@@ -86,39 +83,10 @@ function buildSoftware() {
     execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
 }
 
-function beforePackage() {
-
-}
-
-function getSecretsFromEnviornment() {
-    return { sentryBackend: process.env.SENTRYIO_BACKEND_DSN, sentryReact: process.env.SENTRYIO_REACT_DSN, sentryRust: process.env.SENTRYIO_RUST_DSN };
-}
-
-function replaceInCodeSecretPlaceholders() {
-    const secret = getSecretsFromEnviornment();
-
-    if (secret.sentryReact) {
-        const filePath = `${vitalClientDir}/src/main.tsx`;
-        const file = fs.readFileSync(filePath, "utf-8") as string;
-        const replaced = file.replace(/REPLACE_WITH_SENTRYIO_REACT_DSN/g, secret.sentryReact);
-        fs.writeFileSync(filePath, replaced);
-    }
-}
-
-
-function setWebPackageJsonVersion() {
-    const filePath = `${vitalClientDir}/package.json`;
-    const packageJson = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    packageJson.version = version;
-    fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 4));
-}
-
 function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     tauriConf.package.version = version;
-    // eslint-disable-next-line security/detect-non-literal-fs-filename
-
     execute(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
 }
 
