@@ -12,8 +12,14 @@ import PackDotnet, {  cleanup as cleanUpDotnetService} from "./pack-dotnetservic
 import PackRustService, { cleanup as cleanUpRustService } from "./pack-rustservice.js";
 import packWeb from "./pack-web.js";
 
-const args = parse({
+interface Args {
+    platform: string, 
+    skipPack: boolean
+}
+
+const args = parse<Args>({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
+    skipPack: { type: Boolean, alias: 's', multiple: false, optional: true},
 });
 
 
@@ -39,8 +45,8 @@ const buildFolder = "./ClientApp/src-tauri/bin";
 const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
 setupBuildDir();
-
-buildSoftware();
+if(!args.skipPack)
+    buildSoftware();
 buildInstaller();
 
 function setupBuildDir() {
@@ -65,24 +71,8 @@ function buildSoftware() {
     packWeb();
     PackDotnet(args.platform);
     PackRustService(args.platform);
-    
-    let filesToCopy: string[] = []
-    fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {
-        if (err)
-            throw err;
-        filesToCopy = files.filter(e=> e.includes("VitalRustService") && !e.endsWith(".d") && !e.endsWith(".pdb"))
-    });
-
-    filesToCopy.forEach(f => {
-        let split =  f.split("/");
-        let count = split.length;
-        fs.copyFileSync(f, `${vitalRustServiceBin}/${split[count - 1]}`);
-    });
-   
-
-    execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
 }
-
+    
 function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
