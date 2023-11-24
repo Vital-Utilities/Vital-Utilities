@@ -40,7 +40,6 @@ jobs:
 
     - name: modify version
       run: |
-        cd "./Source"
         echo ${{ github.event.inputs.version }} > Version.txt
     - name: Install Node.js
       uses: actions/setup-node@v3
@@ -52,7 +51,6 @@ jobs:
         run_install: false
     - name: install ts-node
       run: |
-        cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
     - uses: actions/setup-java@v3
@@ -61,6 +59,8 @@ jobs:
         java-version: '20'
     - name: Generate Code
       run: pnpm run GenerateCode
+    - name: Build web
+      run: pnpm run pack:web
     - name: Build web
       run: pnpm run pack:web
     - name: upload artifact
