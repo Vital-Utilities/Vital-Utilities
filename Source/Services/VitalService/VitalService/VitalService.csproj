@@ -7,7 +7,7 @@
 		<UserSecretsId>4f340cb3-d382-4643-b0c4-12888907bb06</UserSecretsId>
 		<ApplicationIcon>..\..\..\Assets\Logo.ico</ApplicationIcon>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<Platforms>AnyCPU;x64;ARM64</Platforms>
+		<Platforms>AnyCPU;</Platforms>
     
 		<Company></Company>
 		<Product>VitalService</Product>
@@ -23,6 +23,7 @@
 		<OutputType>WinExe</OutputType>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
     <LangVersion>latest</LangVersion>
+    <PlatformTarget>ARM64</PlatformTarget>
   </PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
