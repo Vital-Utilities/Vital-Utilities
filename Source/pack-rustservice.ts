@@ -33,15 +33,17 @@ export default function PackRustService(platform: string) {
     switch (args.platform ?? platform) {
         case "windows-x86_64":
             runtime = "x86_64-pc-windows-msvc";
+            break;
         case "aarch64-apple-darwin":
             runtime = "aarch64-apple-darwin";
+            break;
         case "x86_64-apple-darwin":
             runtime = "x86_64-apple-darwin";
-            console.log(`${args.platform} is valid target`);
             break;
         default:
             throw new Error(`${args.platform} is not a valid target`);
     }
+    console.log(`${args.platform} is valid target`);
 
     const version = fs
         .readFileSync("Version.txt", "utf-8")
