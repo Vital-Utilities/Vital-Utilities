@@ -26,15 +26,19 @@ PackDotnet(args.platform);
 
 export default function PackDotnet(platform: string) {
     let runtime = "";
+    let p = "";
     switch (args.platform ?? platform) {
         case "windows-x86_64":
             runtime = "win-x64";
+            p = "x64";
             break;
         case "aarch64-apple-darwin":
             runtime = "osx-arm64";
+            p = "arm64";
             break;
         case "x86_64-apple-darwin":
             runtime = "osx-x64";
+            p = "x64";
             break;
         default:
             throw new Error(`${args.platform} is not a valid target`);
@@ -70,7 +74,7 @@ function buildSoftware() {
     setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
-    execute(`dotnet publish ${vitalServiceDir}/VitalService.csproj -c release --self-contained -p:PublishReadyToRun=true -o ${vitalServiceBin} -r ${runtime} -p:Platform="Any CPU" -p:Version=${version}`);
+    execute(`dotnet publish ${vitalServiceDir}/VitalService.csproj -c release --self-contained -p:PublishReadyToRun=true -o ${vitalServiceBin} -r ${runtime} -p:Platform="${p}" -p:Version=${version}`);
 }
 
 function beforePackage() {

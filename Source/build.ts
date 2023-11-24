@@ -19,8 +19,8 @@ interface Args {
 
 const args = parse<Args>({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
-    skipPack: { type: Boolean, alias: 's', multiple: false, optional: true},
-});
+    skipPack: { type: Boolean, alias: 's', optional: true, defaultValue: false},
+},{});
 
 
 switch (args.platform) {
