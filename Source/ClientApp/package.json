@@ -10,7 +10,7 @@
         "test": "jest",
         "vite-tauri": "vite-tauri",
         "tauri:dev": "pnpm run GenerateCode && set RUST_DEBUG=1 && tauri dev",
-        "tauri:build": "pnpm run GenerateCode && tauri build",
+        "tauri:build": "tauri build",
         "GenerateCode": "cd .. && pnpm i --frozen-lockfile && pnpm run GenerateCode && cd ./ClientApp && pnpm i --force",
         "clean": "npx rimraf node_modules"
     },
