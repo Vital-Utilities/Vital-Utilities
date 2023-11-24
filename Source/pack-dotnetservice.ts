@@ -8,136 +8,130 @@ import fs from "fs";
 import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
 
-const vitalRustServiceDir = "Services/VitalRustService";
-const vitalTauriDir = "ClientApp/src-tauri";
+const vitalServiceDir = "Services/VitalService/VitalService";
 const vitalClientDir = "ClientApp";
-
 const buildFolder = "./ClientApp/src-tauri/bin";
-const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
+const vitalServiceBin = `${buildFolder}/VitalService`;
 
+export function cleanup() {
+    if (fs.existsSync(vitalServiceBin)) {
+        fs.rmSync(vitalServiceBin, { recursive: true });
+    }
+}
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
 });
-
-export function cleanup() {
-    if (fs.existsSync(vitalRustServiceBin)) {
-        fs.rmSync(vitalRustServiceBin, { recursive: true });
-    }
-}
-
-export function PackRustService(platform: string) {
+export function PackDotnet(platform: string) {
+    let runtime = "";
     switch (args.platform ?? platform) {
         case "windows-x86_64":
+            runtime = "windows-x64";
+            break;
         case "aarch64-apple-darwin":
+            runtime = "osx-arm64";
+            break;
         case "x86_64-apple-darwin":
-            console.log(`${args.platform} is valid target`);
+            runtime = "osx-x64";
             break;
         default:
             throw new Error(`${args.platform} is not a valid target`);
     }
 
-    const version = fs
-        .readFileSync("Version.txt", "utf-8")
-        .trim()
-        .replace(/\r?\n|\r/g, "");
 
-    setupBuildDir();
-    //setVitalRustServiceVersions();
+const version = fs
+    .readFileSync("Version.txt", "utf-8")
+    .trim()
+    .replace(/\r?\n|\r/g, "");
 
-    buildSoftware();
-    beforePackage();
 
-    function setupBuildDir() {
-        cleanup();
+setupBuildDir();
 
-        if (!fs.existsSync(buildFolder)) {
-            fs.mkdirSync(buildFolder);
-        }
-        if (!fs.existsSync(vitalRustServiceBin)) {
-            fs.mkdirSync(vitalRustServiceBin);
-        }
+buildSoftware();
+beforePackage();
+returnToDevEnv();
+
+function setupBuildDir() {
+    cleanup();
+
+    if (!fs.existsSync(buildFolder)) {
+        fs.mkdirSync(buildFolder);
+    }
+}
+
+
+function returnToDevEnv() {
+    setCsprojOutputType("Exe");
+}
+
+function buildSoftware() {
+    setCsprojOutputType("WinExe");
+    replaceInCodeSecretPlaceholders();
+
+    execute(`dotnet publish ${vitalServiceDir}/VitalService.csproj -c release --self-contained -p:PublishReadyToRun=true -o ${vitalServiceBin} -r ${runtime} -p:Version=${version}`);
+}
+
+function beforePackage() {
+    try {
+    fs.rmSync(vitalServiceBin + "/appsettings.development.json", { recursive: true });
+    } 
+    catch (err) {
+        
+    }
+    if (fs.existsSync(vitalServiceBin + "/Logs")) {
+        fs.rmSync(vitalServiceBin + "/Logs", { recursive: true });
+    }
+}
+
+function getSecretsFromEnviornment() {
+    return { sentryBackend: process.env.SENTRYIO_BACKEND_DSN, sentryReact: process.env.SENTRYIO_REACT_DSN, sentryRust: process.env.SENTRYIO_RUST_DSN };
+}
+
+function replaceInCodeSecretPlaceholders() {
+    const secret = getSecretsFromEnviornment();
+    if (secret.sentryBackend) {
+        const filePath = `${vitalServiceDir}/program.cs`;
+        const file = fs.readFileSync(filePath, "utf-8") as string;
+        const replaced = file.replace(/REPLACE_WITH_SENTRYIO_BACKEND_DSN/g, secret.sentryBackend);
+        fs.writeFileSync(filePath, replaced);
     }
 
-
-
-    function buildSoftware() {
-        replaceInCodeSecretPlaceholders();
-
-        execute(`cd ${vitalRustServiceDir} && cargo build --target ${args.platform} --release`);
-
-        let filesToCopy: string[] = []
-        fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {
-            if (err)
-                throw err;
-            filesToCopy = files.filter(e=> e.includes("VitalRustService") && !e.endsWith(".d") && !e.endsWith(".pdb"))
-        });
-
-        filesToCopy.forEach(f => {
-            let split =  f.split("/");
-            let count = split.length;
-            fs.copyFileSync(f, `${vitalRustServiceBin}/${split[count - 1]}`);
-        });
-    
-
-        execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
+    if (secret.sentryReact) {
+        const filePath = `${vitalClientDir}/src/main.tsx`;
+        const file = fs.readFileSync(filePath, "utf-8") as string;
+        const replaced = file.replace(/REPLACE_WITH_SENTRYIO_REACT_DSN/g, secret.sentryReact);
+        fs.writeFileSync(filePath, replaced);
     }
+}
 
-    function beforePackage() {
+function setCsprojOutputType(str: string) {
+    const filePath = `${vitalServiceDir}/VitalService.csproj`;
+    let csproj = fs.readFileSync(filePath, "utf-8") as string;
+    csproj = csproj.replace(/<OutputType>.*<\/OutputType>/g, `<OutputType>${str}</OutputType>`);
+    fs.writeFileSync(filePath, csproj);
+}
 
-    }
-
-    function getSecretsFromEnviornment() {
-        return { sentryBackend: process.env.SENTRYIO_BACKEND_DSN, sentryReact: process.env.SENTRYIO_REACT_DSN, sentryRust: process.env.SENTRYIO_RUST_DSN };
-    }
-
-    function replaceInCodeSecretPlaceholders() {
-        const secret = getSecretsFromEnviornment();
-
-        if (secret.sentryRust) {
-            const filePath = `${vitalTauriDir}/src/main.rs`;
-            const file = fs.readFileSync(filePath, "utf-8") as string;
-            const replaced = file.replace(/REPLACE_WITH_SENTRYIO_RUST_DSN/g, secret.sentryRust);
-            fs.writeFileSync(filePath, replaced);
-        }
-    }
-
-
-    function setWebPackageJsonVersion() {
-        const filePath = `${vitalClientDir}/package.json`;
-        const packageJson = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-        packageJson.version = version;
-        fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 4));
-    }
-
-
-    function setVitalRustServiceVersions(){
-        const vitalrustserviceConf = fs.readFileSync(`${vitalRustServiceDir}/cargo.toml`, "utf-8");
-        const replaced = vitalrustserviceConf.replace(/\[package\]\n(version = ".*")/g, `\[package\]\n(version = "21312")`);
-        fs.writeFileSync(`${vitalRustServiceDir}/Cargo.toml`, replaced);
-    }
-
-    // function that takes a command and executes it synchronously
-    function execute(command: string) {
-        console.log(`Executing: ${command}`);
-        execSync(
-            command,
-            {
-                stdio: "inherit",
-                maxBuffer: 10 * 1000 * 1024
-                // 10Mo of logs allowed for module with big npm install
-            },
-            // @ts-ignore
-            (error: { message: unknown }, stdout: unknown, stderr: unknown) => {
-                if (error) {
-                    console.error(`error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.error(`stderr: ${stderr}`);
-                    return;
-                }
-                console.log(`stdout: ${stdout}`);
+// function that takes a command and executes it synchronously
+function execute(command: string) {
+    console.log(`Executing: ${command}`);
+    execSync(
+        command,
+        {
+            stdio: "inherit",
+            maxBuffer: 10 * 1000 * 1024
+            // 10Mo of logs allowed for module with big npm install
+        },
+        // @ts-ignore
+        (error: { message: unknown }, stdout: unknown, stderr: unknown) => {
+            if (error) {
+                console.error(`error: ${error.message}`);
+                return;
             }
-        );
-    }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+        }
+    );
+}
 }

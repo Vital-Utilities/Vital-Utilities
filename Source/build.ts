@@ -7,8 +7,8 @@
 import fs from "fs";
 import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
-import { PackDotnet } from "./pack-dotnet";
-import { PackRustService } from "./pack-rust";
+import { PackDotnet, cleanup as cleanUpDotnetService} from "./pack-dotnetservice";
+import { PackRustService, cleanup as cleanUpRustService } from "./pack-rustservice";
 
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
@@ -33,9 +33,7 @@ const vitalServiceDir = "Services/VitalService/VitalService";
 const vitalRustServiceDir = "Services/VitalRustService";
 const vitalTauriDir = "ClientApp/src-tauri";
 const vitalClientDir = "ClientApp";
-
 const buildFolder = "./ClientApp/src-tauri/bin";
-const vitalServiceBin = `${buildFolder}/VitalService`;
 const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
 setupBuildDir();
@@ -52,12 +50,12 @@ function setupBuildDir() {
     if (!fs.existsSync(buildFolder)) {
         fs.mkdirSync(buildFolder);
     }
-    if (!fs.existsSync(vitalRustServiceBin)) {
-        fs.mkdirSync(vitalRustServiceBin);
-    }
+
 }
 
 function cleanup() {
+    cleanUpDotnetService();
+    cleanUpRustService();
     if (fs.existsSync(buildFolder)) {
         fs.rmSync(buildFolder, { recursive: true });
     }
