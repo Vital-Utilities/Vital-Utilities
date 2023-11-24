@@ -61,8 +61,6 @@ jobs:
       run: pnpm run GenerateCode
     - name: Build web
       run: pnpm run pack:web
-    - name: Build web
-      run: pnpm run pack:web
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
