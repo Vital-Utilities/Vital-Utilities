@@ -25,6 +25,9 @@ jobs:
   build-ui:
     runs-on: ubuntu-latest
     environment: production
+    defaults:
+      run:
+        working-directory: ./Source
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v3
@@ -56,11 +59,10 @@ jobs:
       with:
         distribution: 'temurin' # See 'Supported distributions' for available options
         java-version: '20'
-    - name: Build release
-      run: |
-        cd "./Source"
-        pnpm run GenerateCode
-        pnpm run pack:web
+    - name: Generate Code
+      run: pnpm run GenerateCode
+    - name: Build web
+      run: pnpm run pack:web
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
