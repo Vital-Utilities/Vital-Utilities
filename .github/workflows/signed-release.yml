@@ -146,10 +146,10 @@ jobs:
         path: ./Source/ClientApp/src-tauri/target/release/bundle
         if-no-files-found: error
 
-  build-macos:
+  build-macos64:
     strategy: 
       matrix: 
-        platform: [aarch64-apple-darwin, x86_64-apple-darwin]
+        platform: [x86_64-apple-darwin]
     runs-on: macos-latest
     environment: production
     needs: [build-ui]
@@ -225,11 +225,89 @@ jobs:
       with:
         path: ./Source/ClientApp/src-tauri/target/release/bundle
         if-no-files-found: error
-        
+  build-macosarm:
+    strategy: 
+      matrix: 
+        platform: [aarch64-apple-darwin]
+    runs-on: macos-13
+    environment: production
+    needs: [build-ui]
+    env: 
+      TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+      TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v3
+      with:
+        path: ~/.nuget/packages
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 8.0.x
+        include-prerelease: false
+    - name: install Rust stable
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: cargo cache    
+      uses: Swatinem/rust-cache@v2
+      with:
+        prefix-key: "Cargo"
+        workspaces: |
+          ./Source/ClientApp/src-tauri
+          ./Source/Services/VitalRustService
+    - name: modify version
+      run: |
+        cd "./Source"
+        echo ${{ github.event.inputs.version }} > Version.txt
+    - name: version bump
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./Source/Version.txt
+        git commit -m "Update Version" -a
+    - name: Cache pnpm modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 19
+    - uses: pnpm/action-setup@v2.4.0
+      with:
+        version: 8.10.0
+        run_install: false
+    - name: install ts-node
+      run: |
+        cd "./Source"
+        pnpm i -g ts-node
+        pnpm i -D @types/node
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: dist
+        path: ./Source/ClientApp/dist
+    - name: Build release
+      run: |
+        cd "./Source"
+        pnpm run build:release -p ${{matrix.platform}}
+    - name: upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        path: ./Source/ClientApp/src-tauri/target/release/bundle
+        if-no-files-found: error
   release:
     runs-on: ubuntu-latest
     environment: production
-    needs: [build-win64, build-macos]
+    needs: [build-win64, build-macos64, build-macosarm]
     steps:
     - name: Download artifacts
       uses: actions/download-artifact@v3
