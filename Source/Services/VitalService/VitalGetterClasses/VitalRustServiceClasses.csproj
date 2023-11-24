@@ -5,6 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+		<Platforms>AnyCPU;ARM64</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>

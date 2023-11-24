@@ -70,7 +70,7 @@ function buildSoftware() {
     setCsprojOutputType("WinExe");
     replaceInCodeSecretPlaceholders();
 
-    execute(`dotnet publish ${vitalServiceDir}/VitalService.csproj -c release --self-contained -p:PublishReadyToRun=true -o ${vitalServiceBin} -r ${runtime} -p:Version=${version}`);
+    execute(`dotnet publish ${vitalServiceDir}/VitalService.csproj -c release --self-contained -p:PublishReadyToRun=true -o ${vitalServiceBin} -r ${runtime} -p:Platform="Any CPU" -p:Version=${version}`);
 }
 
 function beforePackage() {

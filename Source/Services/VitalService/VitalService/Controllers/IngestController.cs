@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
 using VitalRustServiceClasses;
+using VitalService.Dtos.Data.Static;
 using VitalService.Services.PerformanceServices;
 
 namespace VitalService.Controllers

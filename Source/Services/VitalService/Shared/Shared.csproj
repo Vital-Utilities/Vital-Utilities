@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>VitalService.Shared</AssemblyName>
     <RootNamespace>VitalService</RootNamespace>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;ARM64</Platforms>
     <DebugType>embedded</DebugType>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
