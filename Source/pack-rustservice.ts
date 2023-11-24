@@ -18,13 +18,13 @@ const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
 });
+PackRustService(args.platform);
 
 export function cleanup() {
     if (fs.existsSync(vitalRustServiceBin)) {
         fs.rmSync(vitalRustServiceBin, { recursive: true });
     }
 }
-
 export function PackRustService(platform: string) {
     switch (args.platform ?? platform) {
         case "windows-x86_64":

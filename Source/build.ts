@@ -104,12 +104,6 @@ function replaceInCodeSecretPlaceholders() {
     }
 }
 
-function setCsprojOutputType(str: string) {
-    const filePath = `${vitalServiceDir}/VitalService.csproj`;
-    let csproj = fs.readFileSync(filePath, "utf-8") as string;
-    csproj = csproj.replace(/<OutputType>.*<\/OutputType>/g, `<OutputType>${str}</OutputType>`);
-    fs.writeFileSync(filePath, csproj);
-}
 
 function setWebPackageJsonVersion() {
     const filePath = `${vitalClientDir}/package.json`;
@@ -125,12 +119,6 @@ function buildInstaller() {
     // eslint-disable-next-line security/detect-non-literal-fs-filename
 
     execute(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
-}
-
-function setVitalRustServiceVersions(){
-    const vitalrustserviceConf = fs.readFileSync(`${vitalRustServiceDir}/cargo.toml`, "utf-8");
-    const replaced = vitalrustserviceConf.replace(/\[package\]\n(version = ".*")/g, `\[package\]\n(version = "21312")`);
-    fs.writeFileSync(`${vitalRustServiceDir}/Cargo.toml`, replaced);
 }
 
 // function that takes a command and executes it synchronously
