@@ -16,8 +16,10 @@ const buildFolder = "./ClientApp/src-tauri/bin";
 const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
 const args = parse({
-    platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
+    platform: { type: String, alias: 'p', multiple: false, optional: true,   defaultValue: "" },
 });
+
+console.log(args)
 PackRustService(args.platform);
 
 export function cleanup() {
@@ -25,11 +27,16 @@ export function cleanup() {
         fs.rmSync(vitalRustServiceBin, { recursive: true });
     }
 }
-export function PackRustService(platform: string) {
+export default function PackRustService(platform: string) {
+    let runtime = "";
+
     switch (args.platform ?? platform) {
         case "windows-x86_64":
+            runtime = "x86_64-pc-windows-msvc";
         case "aarch64-apple-darwin":
+            runtime = "aarch64-apple-darwin";
         case "x86_64-apple-darwin":
+            runtime = "x86_64-apple-darwin";
             console.log(`${args.platform} is valid target`);
             break;
         default:
@@ -63,7 +70,7 @@ export function PackRustService(platform: string) {
     function buildSoftware() {
         replaceInCodeSecretPlaceholders();
 
-        execute(`cd ${vitalRustServiceDir} && cargo build --target ${args.platform} --release`);
+        execute(`cd ${vitalRustServiceDir} && cargo build --target ${runtime} --release`);
 
         let filesToCopy: string[] = []
         fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {

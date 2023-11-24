@@ -4,31 +4,21 @@ import axios from 'axios';
 import * as fs from 'fs';
 
 
-
+type PlatformData = {
+    signature: string;
+    url: string;
+  }
 type UpdateMetaData = {
     version: string,
     notes: string,
     pub_date: string,
-    platforms: {
-        "windows-x86_64": {
-            signature: string,
-            url: string
-        },
-        "aarch64-apple-darwin": {
-            signature: string,
-            url: string
-        },
-        "x86_64-apple-darwin": {
-            signature: string,
-            url: string
-        }
-    }  | undefined
+    platforms: {[key: string]: PlatformData}
 }
 const meta: UpdateMetaData = {
     notes: "",
     pub_date: "",
     version: "",
-    platforms: undefined
+    platforms: {}
 };
 
 const args = parse({

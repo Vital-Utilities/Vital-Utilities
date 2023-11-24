@@ -4,11 +4,12 @@
 
 
 //@ts-ignore
+
 import fs from "fs";
 import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
-import { PackDotnet, cleanup as cleanUpDotnetService} from "./pack-dotnetservice";
-import { PackRustService, cleanup as cleanUpRustService } from "./pack-rustservice";
+import PackDotnet, {  cleanup as cleanUpDotnetService} from "./pack-dotnetservice.js";
+import PackRustService, { cleanup as cleanUpRustService } from "./pack-rustservice.js";
 
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },

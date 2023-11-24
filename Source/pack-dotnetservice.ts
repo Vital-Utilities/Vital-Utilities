@@ -21,11 +21,14 @@ export function cleanup() {
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
 });
-export function PackDotnet(platform: string) {
+
+PackDotnet(args.platform);
+
+export default function PackDotnet(platform: string) {
     let runtime = "";
     switch (args.platform ?? platform) {
         case "windows-x86_64":
-            runtime = "windows-x64";
+            runtime = "win-x64";
             break;
         case "aarch64-apple-darwin":
             runtime = "osx-arm64";
