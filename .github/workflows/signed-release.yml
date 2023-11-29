@@ -301,14 +301,11 @@ jobs:
         name: dist
         path: ./Source/ClientApp/dist
     - name: Pack Dotnet
-      run: 
-        pnpm run pack:dotnetservice -p ${{matrix.platform}}
+      run: pnpm run pack:dotnetservice -p ${{matrix.platform}}
     - name: Pack RustService
-      run: 
-        pnpm run pack:rustservice -p ${{matrix.platform}}
+      run: pnpm run pack:rustservice -p ${{matrix.platform}}
     - name: Build release
-      run: 
-        pnpm run build:release -p ${{matrix.platform}} -s
+      run: pnpm run build:release -p ${{matrix.platform}} -s
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
