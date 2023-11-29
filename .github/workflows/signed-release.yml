@@ -233,6 +233,9 @@ jobs:
       matrix: 
         platform: [aarch64-apple-darwin]
     runs-on: macos-13
+    defaults:
+      run:
+        working-directory: ./Source
     environment: production
     needs: [build-ui]
     env: 
@@ -261,11 +264,10 @@ jobs:
       with:
         prefix-key: "Cargo"
         workspaces: |
-          ./Source/ClientApp/src-tauri
-          ./Source/Services/VitalRustService
+          ./ClientApp/src-tauri
+          ./Services/VitalRustService
     - name: modify version
       run: |
-        cd "./Source"
         echo ${{ github.event.inputs.version }} > Version.txt
     - name: version bump
       run: |
@@ -298,11 +300,14 @@ jobs:
       with:
         name: dist
         path: ./Source/ClientApp/dist
-    - name: Build release
-      run: |
-        cd "./Source"
+    - name: Pack Dotnet
+      run: 
         pnpm run pack:dotnetservice -p ${{matrix.platform}}
+    - name: Pack RustService
+      run: 
         pnpm run pack:rustservice -p ${{matrix.platform}}
+    - name: Build release
+      run: 
         pnpm run build:release -p ${{matrix.platform}} -s
     - name: upload artifact
       uses: actions/upload-artifact@v3
