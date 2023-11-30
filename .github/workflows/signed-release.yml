@@ -144,6 +144,7 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
+        name: x86_64-pc-windows-msvc
         path: ./Source/ClientApp/src-tauri/target/release/bundle
         if-no-files-found: error
 
@@ -226,7 +227,8 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
-        path: ./Source/ClientApp/src-tauri/target/release/bundle
+        name: ${{matrix.platform}}
+        path: ./Source/ClientApp/src-tauri/target/${{matrix.platform}}/release/bundle
         if-no-files-found: error
   build-macosarm:
     strategy: 
@@ -308,17 +310,28 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
-        path: ./ClientApp/src-tauri/target/release/bundle
+        name: ${{matrix.platform}}
+        path: ./ClientApp/src-tauri/target/${{matrix.platform}}/release/bundle
         if-no-files-found: error
   release:
     runs-on: ubuntu-latest
     environment: production
     needs: [build-win64, build-macos64, build-macosarm]
     steps:
-    - name: Download artifacts
+    - name: Download applex86
       uses: actions/download-artifact@v3
       with:
-        path: ./Source/ClientApp/src-tauri/target/release/bundle
+        name: x86_64-apple-darwin
+        if-no-files-found: error
+    - name: Download appleArm
+      uses: actions/download-artifact@v3
+      with:
+        name: aarch64-apple-darwin
+        if-no-files-found: error
+    - name: Download windows
+      uses: actions/download-artifact@v3
+      with:
+        name: x86_64-pc-windows-msvc
         if-no-files-found: error
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -329,9 +342,12 @@ jobs:
         tag_name: ${{ github.event.inputs.version }}
         token: ${{ secrets.GITHUB_TOKEN }}
         files: |
-          ./Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi
-          ./Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip
-          ./Source/ClientApp/src-tauri/target/release/bundle/msi/*.msi.zip.sig
-          ./Source/ClientApp/src-tauri/target/release/bundle/app/*.app
-          ./Source/ClientApp/src-tauri/target/release/bundle/app/*.app.zip
-          ./Source/ClientApp/src-tauri/target/release/bundle/app/*.app.zip.sig
+          ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
+          ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi.zip
+          ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi.zip.sig
+          ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app
+          ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app.zip
+          ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app.zip.sig
+          ./Source/ClientApp/src-tauri/target/x86_64-apple-darwin/release/bundle/app/*.app
+          ./Source/ClientApp/src-tauri/target/x86_64-apple-darwin/release/bundle/app/*.app.zip
+          ./Source/ClientApp/src-tauri/target/x86_64-apple-darwin/release/bundle/app/*.app.zip.sig
