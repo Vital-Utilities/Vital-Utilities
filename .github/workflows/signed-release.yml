@@ -95,10 +95,10 @@ jobs:
     - name: cargo cache    
       uses: Swatinem/rust-cache@v2
       with:
-        prefix-key: "Cargo"
+        prefix-key: "Cargo-win"
         workspaces: |
-          tauri -> ./Source/ClientApp/src-tauri/target
-          rservice -> ./Source/Services/VitalRustService/target
+          ./Source/ClientApp/src-tauri
+          ./Source/Services/VitalRustService
     - name: modify version
       run: |
         cd "./Source"
@@ -179,10 +179,10 @@ jobs:
     - name: cargo cache    
       uses: Swatinem/rust-cache@v2
       with:
-        prefix-key: "Cargo"
+        prefix-key: "Cargo-${{matrix.platform}}"
         workspaces: |
-          tauri -> ./Source/ClientApp/src-tauri/target
-          rservice -> ./Source/Services/VitalRustService/target
+          ./Source/ClientApp/src-tauri/target
+          ./Source/Services/VitalRustService/target
     - name: modify version
       run: |
         cd "./Source"
@@ -264,10 +264,10 @@ jobs:
     - name: cargo cache    
       uses: Swatinem/rust-cache@v2
       with:
-        prefix-key: "Cargo"
+        prefix-key: "Cargo-${{matrix.platform}}"
         workspaces: |
-          tauri -> ./ClientApp/src-tauri/target
-          rservice -> ./Services/VitalRustService/target
+          ./Source/ClientApp/src-tauri/target
+          ./Source/Services/VitalRustService/target
     - name: modify version
       run: |
         echo ${{ github.event.inputs.version }} > Version.txt
