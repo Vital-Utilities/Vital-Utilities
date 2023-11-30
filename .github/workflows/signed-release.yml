@@ -145,7 +145,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: x86_64-pc-windows-msvc
-        path: ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle
+        path: ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi
         if-no-files-found: error
 
   build-macos64:
@@ -228,7 +228,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{matrix.platform}}
-        path: ./Source/ClientApp/src-tauri/target/${{matrix.platform}}/release/bundle
+        path: ./Source/ClientApp/src-tauri/target/${{matrix.platform}}/release/bundle/macos
         if-no-files-found: error
   build-macosarm:
     strategy: 
@@ -351,9 +351,6 @@ jobs:
           ./artifacts/*.msi
           ./artifacts/*.msi.zip
           ./artifacts/*.msi.zip.sig
-          ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app
-          ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app.zip
-          ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app.zip.sig
-          ./Source/ClientApp/src-tauri/target/x86_64-apple-darwin/release/bundle/app/*.app
-          ./Source/ClientApp/src-tauri/target/x86_64-apple-darwin/release/bundle/app/*.app.zip
-          ./Source/ClientApp/src-tauri/target/x86_64-apple-darwin/release/bundle/app/*.app.zip.sig
+          ./artifacts/Vital Utilities.app
+          ./artifacts/Vital Utilities.app.tar.tg
+          ./artifacts/Vital Utilities.app.tar.tg.sig
