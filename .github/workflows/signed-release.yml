@@ -352,5 +352,5 @@ jobs:
           ./artifacts/*.msi.zip
           ./artifacts/*.msi.zip.sig
           ./artifacts/*.app
-          ./artifacts/*.app.zip
-          ./artifacts/*.app.zip.sig
+          ./artifacts/*.app.tar.tg
+          ./artifacts/*.app.tar.tg.sig
