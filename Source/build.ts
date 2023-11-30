@@ -49,6 +49,8 @@ function buildInstaller() {
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     tauriConf.package.version = version;
     execute(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
+    if(args.platform ==="aarch64-apple-darwin" || args.platform === "x86_64-apple-darwin")
+        execute(`cd ${vitalTauriDir}/targets/${args.platform}/release/bundle && npx create-dmg 'Vital Utilities.app'`)
 }
 
 // function that takes a command and executes it synchronously
