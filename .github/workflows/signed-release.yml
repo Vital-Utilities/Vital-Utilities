@@ -322,17 +322,23 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: x86_64-apple-darwin
+        path: ./artifacts
         if-no-files-found: error
     - name: Download appleArm
       uses: actions/download-artifact@v3
       with:
         name: aarch64-apple-darwin
+        path: ./artifacts/aar
         if-no-files-found: error
     - name: Download windows
       uses: actions/download-artifact@v3
       with:
         name: x86_64-pc-windows-msvc
+        path: ./artifacts
         if-no-files-found: error
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: ./artifacts
     - name: Release
       uses: softprops/action-gh-release@v1
       with: 
@@ -342,9 +348,9 @@ jobs:
         tag_name: ${{ github.event.inputs.version }}
         token: ${{ secrets.GITHUB_TOKEN }}
         files: |
-          ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi
-          ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi.zip
-          ./Source/ClientApp/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/msi/*.msi.zip.sig
+          ./artifacts/*.msi
+          ./artifacts/*.msi.zip
+          ./artifacts/*.msi.zip.sig
           ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app
           ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app.zip
           ./Source/ClientApp/src-tauri/target/aarch64-apple-darwin/release/bundle/app/*.app.zip.sig
