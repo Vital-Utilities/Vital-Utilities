@@ -311,7 +311,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{matrix.platform}}
-        path: ./ClientApp/src-tauri/target/${{matrix.platform}}/release/bundle
+        path: ./ClientApp/src-tauri/target/${{matrix.platform}}/release/bundle/macos
         if-no-files-found: error
   release:
     runs-on: ubuntu-latest
