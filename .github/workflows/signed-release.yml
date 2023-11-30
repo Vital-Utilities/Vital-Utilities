@@ -97,8 +97,8 @@ jobs:
       with:
         prefix-key: "Cargo"
         workspaces: |
-          ./Source/ClientApp/src-tauri
-          ./Source/Services/VitalRustService
+          tauri -> ./Source/ClientApp/src-tauri/target
+          rservice -> ./Source/Services/VitalRustService/target
     - name: modify version
       run: |
         cd "./Source"
