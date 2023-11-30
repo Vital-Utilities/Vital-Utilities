@@ -273,7 +273,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add ./Source/Version.txt
+        git add ./Version.txt
         git commit -m "Update Version" -a
     - name: Cache pnpm modules
       uses: actions/cache@v3
