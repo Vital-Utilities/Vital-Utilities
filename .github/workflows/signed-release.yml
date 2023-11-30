@@ -292,14 +292,13 @@ jobs:
         run_install: false
     - name: install ts-node
       run: |
-        cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
         name: dist
-        path: ./Source/ClientApp/dist
+        path: ./ClientApp/dist
     - name: Pack Dotnet
       run: pnpm run pack:dotnetservice -p ${{matrix.platform}}
     - name: Pack RustService
@@ -309,7 +308,7 @@ jobs:
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
-        path: ./Source/ClientApp/src-tauri/target/release/bundle
+        path: ./ClientApp/src-tauri/target/release/bundle
         if-no-files-found: error
   release:
     runs-on: ubuntu-latest
