@@ -77,16 +77,19 @@ export function PackRustService(platform: string) {
         execute(`cd ${vitalRustServiceDir} && cargo build --target ${runtime} --release`);
 
         let filesToCopy: string[] = []
-        fs.readdir(`${vitalRustServiceDir}/target/release`,(err,files) => {
-            if (err)
-                throw err;
-            filesToCopy = files.filter(e=> e.includes("VitalRustService") && !e.endsWith(".d") && !e.endsWith(".pdb"))
-        });
+        let outputDir = `${vitalRustServiceDir}/target/${runtime}/release`;
+        let result =  fs.readdirSync(`${vitalRustServiceDir}/target/${runtime}/release`);
+        
+        filesToCopy = result.filter(e=> e.startsWith("VitalRustService") && !e.endsWith(".d") && !e.endsWith(".pdb"))
+        console.info("Files to copy", filesToCopy);
 
         filesToCopy.forEach(f => {
             let split =  f.split("/");
             let count = split.length;
-            fs.copyFileSync(f, `${vitalRustServiceBin}/${split[count - 1]}`);
+            const s = `${vitalRustServiceBin}/${split[count - 1]}`;
+            console.log("copy",f, s);
+            
+            fs.copyFileSync(`${outputDir}/${f}`, s);
         });
     }
 
