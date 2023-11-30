@@ -130,7 +130,6 @@ pub fn get_process_util(
             };
         };
 
-        // windows::get_process_ideal_processors(pid); //takes a lot of time
         list.push(ProcessData {
             pid: pid as i32,
             parent_pid: process.parent().map(|pid| pid.as_u32() as i32),
@@ -174,24 +173,21 @@ fn get_mainwindow_title(pid: u32) -> Option<String> {
         ))
         .output()
         .expect("Failed to execute command");
- 
-    match String::from_utf8(output.stdout){
-        Ok(s)=>{
-            Some(s)
-        }
-        Err(_) => {
-            None
-        }
+
+    match String::from_utf8(output.stdout) {
+        Ok(s) => Some(s),
+        Err(_) => None,
     }
- }
- #[cfg(target_os = "macos")]
+}
+
+#[cfg(target_os = "macos")]
 fn get_process_path(pid: u32) -> Option<String> {
     None
 }
 #[cfg(target_os = "macos")]
- fn get_file_description(path: String) -> Result<String,()> {
+fn get_file_description(path: String) -> Result<String, ()> {
     Err(())
- }
+}
 
 static WINDOW_TITLES: OnceCell<Mutex<HashMap<u32, String>>> = OnceCell::new();
 

@@ -89,9 +89,6 @@ export default function PackRustService(platform: string) {
             let count = split.length;
             fs.copyFileSync(f, `${vitalRustServiceBin}/${split[count - 1]}`);
         });
-    
-
-        execute(`cd ${vitalClientDir} && pnpm i --force && pnpm test && pnpm run build`); // force is required as the openapi package isnt ESM and causes failed import through file hack if not forced
     }
 
     function beforePackage() {
@@ -111,14 +108,6 @@ export default function PackRustService(platform: string) {
             const replaced = file.replace(/REPLACE_WITH_SENTRYIO_RUST_DSN/g, secret.sentryRust);
             fs.writeFileSync(filePath, replaced);
         }
-    }
-
-
-    function setWebPackageJsonVersion() {
-        const filePath = `${vitalClientDir}/package.json`;
-        const packageJson = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-        packageJson.version = version;
-        fs.writeFileSync(filePath, JSON.stringify(packageJson, null, 4));
     }
 
 
