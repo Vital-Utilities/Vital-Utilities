@@ -13,7 +13,7 @@ const version = fs
     .trim()
     .replace(/\r?\n|\r/g, "");
 const vitalClientDir = "ClientApp";
-const buildFolder = "./ClientApp/src-tauri/bin";
+const binFolder = "./ClientApp/src-tauri/bin";
 
 packWeb();
 
@@ -24,8 +24,8 @@ export function packWeb() {
     buildSoftware();
 
     function setupBuildDir() {
-        if (!fs.existsSync(buildFolder)) {
-            fs.mkdirSync(buildFolder);
+        if (!fs.existsSync(binFolder)) {
+            fs.mkdirSync(binFolder);
         }
 
     }

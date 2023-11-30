@@ -12,8 +12,8 @@ const vitalRustServiceDir = "Services/VitalRustService";
 const vitalTauriDir = "ClientApp/src-tauri";
 const vitalClientDir = "ClientApp";
 
-const buildFolder = "./ClientApp/src-tauri/bin";
-const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
+const binFolder = "./ClientApp/src-tauri/bin";
+const vitalRustServiceBin = `${binFolder}/VitalRustService`;
 
 const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true,   defaultValue: "" },
@@ -61,8 +61,8 @@ export function PackRustService(platform: string) {
     function setupBuildDir() {
         cleanup();
 
-        if (!fs.existsSync(buildFolder)) {
-            fs.mkdirSync(buildFolder);
+        if (!fs.existsSync(binFolder)) {
+            fs.mkdirSync(binFolder);
         }
         if (!fs.existsSync(vitalRustServiceBin)) {
             fs.mkdirSync(vitalRustServiceBin);
