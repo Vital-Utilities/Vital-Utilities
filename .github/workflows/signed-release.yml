@@ -298,7 +298,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: dist
-        path: ./ClientApp/dist
+        path: ./Source/ClientApp/dist
     - name: Pack Dotnet
       run: pnpm run pack:dotnetservice -p ${{matrix.platform}}
     - name: Pack RustService
