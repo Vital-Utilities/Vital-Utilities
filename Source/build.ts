@@ -32,25 +32,17 @@ const version = fs
     .trim()
     .replace(/\r?\n|\r/g, "");
 const vitalTauriDir = "ClientApp/src-tauri";
-const buildFolder = "./ClientApp/src-tauri/bin";
+const binFolder = "./ClientApp/src-tauri/bin";
 
 setupBuildDir();
 buildInstaller();
 
 function setupBuildDir() {
-    cleanup();
-
-    if (!fs.existsSync(buildFolder)) {
-        fs.mkdirSync(buildFolder);
+    if (!fs.existsSync(binFolder)) {
+        fs.mkdirSync(binFolder);
     }
 
 }
-function cleanup() {
-    if (fs.existsSync(buildFolder)) {
-        fs.rmSync(buildFolder, { recursive: true });
-    }
-}
-
 
 function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
