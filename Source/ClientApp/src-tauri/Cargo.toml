@@ -18,6 +18,7 @@ codegen-units = 1
 lto = true
 incremental = false
 opt-level = "s"
+strip = true        # Remove debug symbols
 
 [profile.release.package.wry]
 debug = false
