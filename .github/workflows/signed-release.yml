@@ -222,7 +222,7 @@ jobs:
         cd "./Source"
         pnpm run pack:dotnetservice -p ${{matrix.platform}}
         pnpm run pack:rustservice -p ${{matrix.platform}}
-        pnpm run build:release -p ${{matrix.platform}} -s
+        pnpm run build:release -p ${{matrix.platform}}
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
@@ -304,7 +304,7 @@ jobs:
     - name: Pack RustService
       run: pnpm run pack:rustservice -p ${{matrix.platform}}
     - name: Build release
-      run: pnpm run build:release -p ${{matrix.platform}} -s
+      run: pnpm run build:release -p ${{matrix.platform}}
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
