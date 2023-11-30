@@ -1,5 +1,3 @@
-#[cfg(target_os = "macos")]
-use log::{debug, error, info};
 #[cfg(target_os = "windows")]
 use std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex};
 
