@@ -17,7 +17,7 @@ const buildFolder = "./ClientApp/src-tauri/bin";
 
 packWeb();
 
-export default function packWeb() {
+export function packWeb() {
     setupBuildDir();
     setWebPackageJsonVersion();
     replaceInCodeSecretPlaceholders();

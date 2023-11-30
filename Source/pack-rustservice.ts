@@ -19,7 +19,6 @@ const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true,   defaultValue: "" },
 });
 
-console.log(args)
 PackRustService(args.platform);
 
 export function cleanup() {
@@ -27,11 +26,11 @@ export function cleanup() {
         fs.rmSync(vitalRustServiceBin, { recursive: true });
     }
 }
-export default function PackRustService(platform: string) {
+export function PackRustService(platform: string) {
     let runtime = "";
 
     switch (args.platform ?? platform) {
-        case "windows-x86_64":
+        case "x86_64-pc-windows-msvc":
             runtime = "x86_64-pc-windows-msvc";
             execute("rustup target add x86_64-pc-windows-msvc");
             break;

@@ -8,26 +8,20 @@
 import fs from "fs";
 import {execSync}  from "child_process"
 import { parse } from "ts-command-line-args";
-import PackDotnet, {  cleanup as cleanUpDotnetService} from "./pack-dotnetservice.js";
-import PackRustService, { cleanup as cleanUpRustService } from "./pack-rustservice.js";
-import packWeb from "./pack-web.js";
+
 
 interface Args {
-    platform: string, 
-    skipPack: boolean
+    platform: string
 }
 
 const args = parse<Args>({
-    platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
-    skipPack: { type: Boolean, alias: 's', optional: true, defaultValue: false},
+    platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" }
 },{});
 
-
 switch (args.platform) {
-    case "windows-x86_64":
+    case "x86_64-pc-windows-msvc":
     case "aarch64-apple-darwin":
     case "x86_64-apple-darwin":
-        console.log(`${args.platform} is valid target`);
         break;
     default:
         throw new Error(`${args.platform} is not a valid target`);
@@ -37,16 +31,10 @@ const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()
     .replace(/\r?\n|\r/g, "");
-const vitalServiceDir = "Services/VitalService/VitalService";
-const vitalRustServiceDir = "Services/VitalRustService";
 const vitalTauriDir = "ClientApp/src-tauri";
-const vitalClientDir = "ClientApp";
 const buildFolder = "./ClientApp/src-tauri/bin";
-const vitalRustServiceBin = `${buildFolder}/VitalRustService`;
 
 setupBuildDir();
-if(!args.skipPack)
-    buildSoftware();
 buildInstaller();
 
 function setupBuildDir() {
@@ -57,22 +45,13 @@ function setupBuildDir() {
     }
 
 }
-
 function cleanup() {
-    cleanUpDotnetService();
-    cleanUpRustService();
     if (fs.existsSync(buildFolder)) {
         fs.rmSync(buildFolder, { recursive: true });
     }
 }
 
 
-function buildSoftware() {
-    packWeb();
-    PackDotnet(args.platform);
-    PackRustService(args.platform);
-}
-    
 function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));

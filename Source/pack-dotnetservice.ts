@@ -22,13 +22,11 @@ const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
 });
 
-PackDotnet(args.platform);
-
-export default function PackDotnet(platform: string) {
+export function PackDotnet(platform: string) {
     let runtime = "";
     let p = "";
     switch (args.platform ?? platform) {
-        case "windows-x86_64":
+        case "x86_64-pc-windows-msvc":
             runtime = "win-x64";
             p = "x64";
             break;
@@ -49,6 +47,7 @@ const version = fs
     .readFileSync("Version.txt", "utf-8")
     .trim()
     .replace(/\r?\n|\r/g, "");
+
 
 
 setupBuildDir();
