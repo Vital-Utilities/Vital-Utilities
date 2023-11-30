@@ -96,6 +96,7 @@ jobs:
       uses: Swatinem/rust-cache@v2
       with:
         prefix-key: "Cargo-win"
+        cache-on-failure: "true"
         workspaces: |
           ./Source/ClientApp/src-tauri
           ./Source/Services/VitalRustService
@@ -180,6 +181,7 @@ jobs:
       uses: Swatinem/rust-cache@v2
       with:
         prefix-key: "Cargo-${{matrix.platform}}"
+        cache-on-failure: "true"
         workspaces: |
           ./Source/ClientApp/src-tauri/target
           ./Source/Services/VitalRustService/target
@@ -265,6 +267,7 @@ jobs:
       uses: Swatinem/rust-cache@v2
       with:
         prefix-key: "Cargo-${{matrix.platform}}"
+        cache-on-failure: "true"
         workspaces: |
           ./Source/ClientApp/src-tauri/target
           ./Source/Services/VitalRustService/target
