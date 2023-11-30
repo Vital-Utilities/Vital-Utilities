@@ -137,9 +137,9 @@ jobs:
     - name: Build release
       run: |
         cd "./Source"
-        pnpm run pack:dotnetservice -p windows-x86_64
-        pnpm run pack:rustservice -p windows-x86_64
-        pnpm run build:release -p windows-x86_64 -s
+        pnpm run pack:dotnetservice -p x86_64-pc-windows-msvc
+        pnpm run pack:rustservice -p x86_64-pc-windows-msvc
+        pnpm run build:release -p x86_64-pc-windows-msvc
         
     - name: upload artifact
       uses: actions/upload-artifact@v3
