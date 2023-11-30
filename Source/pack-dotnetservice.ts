@@ -22,6 +22,7 @@ const args = parse({
     platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
 });
 
+PackDotnet(args.platform);
 export function PackDotnet(platform: string) {
     let runtime = "";
     let p = "";
@@ -53,7 +54,7 @@ const version = fs
 setupBuildDir();
 
 buildSoftware();
-beforePackage();
+postBuild();
 returnToDevEnv();
 
 function setupBuildDir() {
@@ -76,7 +77,7 @@ function buildSoftware() {
     execute(`dotnet publish ${vitalServiceDir}/VitalService.csproj -c release --self-contained -p:PublishReadyToRun=true -o ${vitalServiceBin} -r ${runtime} -p:Platform="${p}" -p:Version=${version}`);
 }
 
-function beforePackage() {
+function postBuild() {
     try {
     fs.rmSync(vitalServiceBin + "/appsettings.development.json", { recursive: true });
     } 
