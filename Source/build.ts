@@ -48,32 +48,34 @@ function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     tauriConf.package.version = version;
-    execute(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
-    if(args.platform ==="aarch64-apple-darwin" || args.platform === "x86_64-apple-darwin")
-        execute(`cd ${vitalTauriDir}/target/${args.platform}/release/bundle/macos && npx create-dmg 'Vital Utilities.app'`)
+    if(args.platform ==="aarch64-apple-darwin" || args.platform === "x86_64-apple-darwin"){
+       const result =  execute(`cd ${vitalTauriDir}/target/${args.platform}/release/bundle/macos && npx create-dmg 'Vital Utilities.app' --overwrite `, true)
+       if (!result[1].includes("No suitable code signing identity found"))
+            throw result[1];
+    }
 }
 
 // function that takes a command and executes it synchronously
-function execute(command: string) {
+function execute(command: string, suppressError: boolean = false) : string[] {
     console.log(`Executing: ${command}`);
-    execSync(
-        command,
-        {
-            stdio: "inherit",
-            maxBuffer: 10 * 1000 * 1024
-            // 10Mo of logs allowed for module with big npm install
-        },
-        // @ts-ignore
-        (error: { message: unknown }, stdout: unknown, stderr: unknown) => {
-            if (error) {
-                console.error(`error: ${error.message}`);
-                return;
+    try {
+        execSync(
+            command,
+            {
+                stdio: "pipe",
+                maxBuffer: 10 * 1000 * 1024
+                // 10Mo of logs allowed for module with big npm install
             }
-            if (stderr) {
-                console.error(`stderr: ${stderr}`);
-                return;
-            }
-            console.log(`stdout: ${stdout}`);
-        }
-    );
+        );
+    return ["","",""];
+    }
+    catch (error) {
+        console.error(`error: ${error}`);
+        console.error(`stdin: ${error.stdin}`);
+        console.error(`stderr: ${error.stderr}`);
+        console.error(`stdout: ${error.stdout}`);
+        if (!suppressError)
+            throw error;
+        return [error.message, error.stderr, error.stdout];
+    }
 }
