@@ -135,13 +135,12 @@ jobs:
       with:
         name: dist
         path: ./Source/ClientApp/dist
+    - name: Pack Dotnet
+      run: pnpm run pack:dotnetservice -p x86_64-pc-windows-msvc
+    - name: Pack RustService
+      run: pnpm run pack:rustservice -p x86_64-pc-windows-msvc
     - name: Build release
-      run: |
-        cd "./Source"
-        pnpm run pack:dotnetservice -p x86_64-pc-windows-msvc
-        pnpm run pack:rustservice -p x86_64-pc-windows-msvc
-        pnpm run build:release -p x86_64-pc-windows-msvc
-        
+      run: pnpm run build:release -p x86_64-pc-windows-msvc
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
@@ -220,12 +219,14 @@ jobs:
       with:
         name: dist
         path: ./Source/ClientApp/dist
+    - name: Pack Dotnet
+      run: pnpm run pack:dotnetservice -p ${{matrix.platform}}
+    - name: Pack RustService
+      run: pnpm run pack:rustservice -p ${{matrix.platform}}
+    - name: install missing distutil package for dmg workaround
+      run: pip install setuptools
     - name: Build release
-      run: |
-        cd "./Source"
-        pnpm run pack:dotnetservice -p ${{matrix.platform}}
-        pnpm run pack:rustservice -p ${{matrix.platform}}
-        pnpm run build:release -p ${{matrix.platform}}
+      run: pnpm run build:release -p ${{matrix.platform}}
     - name: upload artifact
       uses: actions/upload-artifact@v3
       with:
@@ -308,6 +309,8 @@ jobs:
       run: pnpm run pack:dotnetservice -p ${{matrix.platform}}
     - name: Pack RustService
       run: pnpm run pack:rustservice -p ${{matrix.platform}}
+    - name: install missing distutil package for dmg workaround
+      run: pip install setuptools
     - name: Build release
       run: pnpm run build:release -p ${{matrix.platform}}
     - name: upload artifact
