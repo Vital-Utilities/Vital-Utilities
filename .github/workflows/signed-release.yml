@@ -84,7 +84,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         include-prerelease: false
@@ -169,7 +169,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         include-prerelease: false
@@ -255,7 +255,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         include-prerelease: false
