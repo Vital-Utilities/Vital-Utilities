@@ -71,6 +71,9 @@ jobs:
     runs-on: windows-latest
     environment: production
     needs: [build-ui]
+    defaults:
+      run:
+        working-directory: ./Source
     env: 
       TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
       TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
@@ -102,7 +105,6 @@ jobs:
           ./Source/Services/VitalRustService
     - name: modify version
       run: |
-        cd "./Source"
         echo ${{ github.event.inputs.version }} > Version.txt
     - name: version bump
       run: |
@@ -154,6 +156,9 @@ jobs:
         platform: [x86_64-apple-darwin]
     runs-on: macos-latest
     environment: production
+    defaults:
+      run:
+        working-directory: ./Source
     needs: [build-ui]
     env: 
       TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
@@ -186,7 +191,6 @@ jobs:
           ./Source/Services/VitalRustService/target
     - name: modify version
       run: |
-        cd "./Source"
         echo ${{ github.event.inputs.version }} > Version.txt
     - name: version bump
       run: |
