@@ -48,7 +48,7 @@ function buildInstaller() {
     const filePath = `${vitalTauriDir}/tauri.conf.json`;
     const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
     tauriConf.package.version = version;
-    execute(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
+    executeInherit(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
     if(args.platform ==="aarch64-apple-darwin" || args.platform === "x86_64-apple-darwin"){
         const result =  execute(`cd ${vitalTauriDir}/target/${args.platform}/release/bundle/macos && npx create-dmg 'Vital Utilities.app' --overwrite `, false)
         if (!result[1].includes("No suitable code signing identity found"))
@@ -80,3 +80,27 @@ function buildInstaller() {
          return [error.message, error.stderr, error.stdout];
      }
  }
+
+ function executeInherit(command: string) {
+    console.log(`Executing: ${command}`);
+    execSync(
+        command,
+        {
+            stdio: "inherit",
+            maxBuffer: 10 * 1000 * 1024
+            // 10Mo of logs allowed for module with big npm install
+        },
+        // @ts-ignore
+        (error: { message: unknown }, stdout: unknown, stderr: unknown) => {
+            if (error) {
+                console.error(`error: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`);
+                return;
+            }
+            console.log(`stdout: ${stdout}`);
+        }
+    );
+}
