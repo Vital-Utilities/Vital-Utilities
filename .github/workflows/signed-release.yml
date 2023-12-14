@@ -129,7 +129,6 @@ jobs:
         run_install: false
     - name: install ts-node
       run: |
-        cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
     - name: Download artifacts
@@ -215,7 +214,6 @@ jobs:
         run_install: false
     - name: install ts-node
       run: |
-        cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
     - name: Download artifacts
