@@ -60,7 +60,7 @@ function buildInstaller() {
         let platform = args.platform ==="x86_64-apple-darwin" ? "x64" : "arm";
         let finalFileNamePrefix = `Vital Utilities_${version}_${platform}_en-US`;
         let finalFileName = `${finalFileNamePrefix}.dmg`;
-        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${initialFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${finalFileName}`);
+        fs.renameSync(`./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${initialFileName}`, `./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${finalFileName}`);
         let zipFileName = `Vital Utilities.app.tar.gz`;
         let newZipFileName = `${finalFileNamePrefix}.app.tar.gz`;
         let sigFileName = `${zipFileName}.sig`;
