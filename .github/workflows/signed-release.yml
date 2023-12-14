@@ -360,5 +360,5 @@ jobs:
           ./artifacts/*.msi.zip
           ./artifacts/*.msi.zip.sig
           ./artifacts/*.dmg
-          ./artifacts/Vital Utilities.app.tar.tg
-          ./artifacts/Vital Utilities.app.tar.tg.sig
+          ./artifacts/*.app.tar.gz
+          ./artifacts/*.app.tar.gz.sig
