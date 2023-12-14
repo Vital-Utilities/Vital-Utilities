@@ -65,8 +65,8 @@ function buildInstaller() {
         let newZipFileName = `${finalFileNamePrefix}.app.tar.gz`;
         let sigFileName = `${zipFileName}.sig`;
         let newSigFileName = `${newZipFileName}.sig`;
-        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${zipFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newZipFileName}`)
-        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${sigFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newSigFileName}`)
+        fs.renameSync(`./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${zipFileName}`, `./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newZipFileName}`)
+        fs.renameSync(`./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${sigFileName}`, `./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newSigFileName}`)
      }
  }
  
