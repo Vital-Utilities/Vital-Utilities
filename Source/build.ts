@@ -51,9 +51,13 @@ function buildInstaller() {
     executeInherit(`cd ${vitalTauriDir} && tauri build --features "release" --target ${args.platform} --verbose -c ${JSON.stringify(JSON.stringify(tauriConf))}`);
     if(args.platform ==="aarch64-apple-darwin" || args.platform === "x86_64-apple-darwin"){
         executeInherit('pnpm i -g create-dmg')
-        const result =  execute(`cd ${vitalTauriDir}/target/${args.platform}/release/bundle/macos && npx create-dmg 'Vital Utilities.app' --overwrite --dmg-title='Vital_${version}_${args.platform.substring(0, args.platform.length-8+1)}'`, true)
+        let dmgTitle = `Vital Utiltiies_${version}`;
+        let initialFileName = `Vital Utilities_${version}.dmg`
+        let finalFileName = `Vital Utilities_${version}_${args.platform}.dmg`;
+        const result =  execute(`cd ${vitalTauriDir}/target/${args.platform}/release/bundle/macos && npx create-dmg 'Vital Utilities.app' --overwrite --dmg-title='${dmgTitle}'`, true)
         if (!result[1].includes("No suitable code signing identity found"))
              throw result[1];
+        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${initialFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${finalFileName}`)
      }
  }
  
