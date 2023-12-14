@@ -129,7 +129,6 @@ jobs:
         run_install: false
     - name: install ts-node
       run: |
-        cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
     - name: Download artifacts
@@ -215,7 +214,6 @@ jobs:
         run_install: false
     - name: install ts-node
       run: |
-        cd "./Source"
         pnpm i -g ts-node
         pnpm i -D @types/node
     - name: Download artifacts
@@ -361,6 +359,6 @@ jobs:
           ./artifacts/*.msi
           ./artifacts/*.msi.zip
           ./artifacts/*.msi.zip.sig
-          ./artifacts/Vital Utilities.dmg
+          ./artifacts/*.dmg
           ./artifacts/Vital Utilities.app.tar.tg
           ./artifacts/Vital Utilities.app.tar.tg.sig
