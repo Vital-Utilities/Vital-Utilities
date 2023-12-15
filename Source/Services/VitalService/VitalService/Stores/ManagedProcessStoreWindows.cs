@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using VitalService.Data;
 using VitalService.Data.App;
@@ -10,12 +11,13 @@ using VitalService.Services.SignalR;
 
 namespace VitalService.Stores
 {
-    public class ManagedProcessStore
+    [SupportedOSPlatform("windows")]
+    public class ManagedProcessStoreWindows: IManagedProcessStore
     {
         private IDbContextFactory<AppDbContext> DbContextFactory { get; }
         public IHubContext<ManagedHub> HubContext { get; }
 
-        public ManagedProcessStore(IDbContextFactory<AppDbContext> dbContextFactory, IHubContext<ManagedHub> hubContext)
+        public ManagedProcessStoreWindows(IDbContextFactory<AppDbContext> dbContextFactory, IHubContext<ManagedHub> hubContext)
         {
             DbContextFactory = dbContextFactory;
             HubContext = hubContext;

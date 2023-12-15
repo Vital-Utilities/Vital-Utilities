@@ -14,7 +14,6 @@ namespace VitalService.Services.PerformanceServices
     [SupportedOSPlatform("osx")]
     public class HardwarePerformanceServiceMac : HardwarePerformanceService
     {
-
         public HardwarePerformanceServiceMac(): base()
         {
         }

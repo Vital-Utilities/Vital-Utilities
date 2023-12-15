@@ -43,40 +43,8 @@ namespace VitalService
             services.AddDbContextFactory<MetricDbContext>(e => e.UseSqlite(metricDbCs).EnableServiceProviderCaching(false));
 
             services.AddSingleton(settingsStore);
-            services.AddTransient<ManagedProcessStore>();
-            services.AddTransient<ProfileStore>();
-            services.AddTransient<MachineDataStore>();
 
-            services.AddSingleton<SoftwarePerformanceService>();
-            services.AddHostedService(provider => provider.GetService<SoftwarePerformanceService>());
-
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                services.AddSingleton<HardwarePerformanceService>(new HardwarePerformanceServiceWindows());
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                services.AddSingleton<HardwarePerformanceService>(new HardwarePerformanceServiceMac());
-            else
-                throw new ArgumentOutOfRangeException("OS not supported");
-
-            services.AddHostedService(provider => provider.GetService<HardwarePerformanceService>());
-
-            services.AddSingleton<MetricsStorageService>();
-            services.AddHostedService(provider => provider.GetService<MetricsStorageService>());
-
-            services.AddSingleton<ConfigApplyerService>();
-            services.AddHostedService(provider => provider.GetService<ConfigApplyerService>());
-
-            services.AddSignalR().AddJsonProtocol(options =>
-            {
-                options.PayloadSerializerOptions.Converters
-                   .Add(new JsonStringEnumConverter());
-            });
-
-
-            var features = new Features(Affinity: true);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                features = new Features(Affinity: false);
-
-            services.AddSingleton(features);
+            services.LoadPlatformServices();
 
             services.AddSwaggerGen(options =>
             {
