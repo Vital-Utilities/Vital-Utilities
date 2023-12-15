@@ -30,10 +30,10 @@ const args = parse({
 const msiZipMatch = /(\.msi\.zip)$/
 const msiZipSigMatch = /(\.msi\.zip\.sig)$/
 
-const x64AppZipMatch = /x64_en-US(\.app\.zip)$/
-const x64AppZipSigMatch = /x64_en-US(\.app\.zip\.sig)$/
-const armAppZipMatch = /arm_en-US(\.app\.zip)$/
-const armAppZipSigMatch = /arm_en-US(\.app\.zip\.sig)$/
+const x64AppZipMatch = /x64_en-US(\.app\.tar\.gz)$/
+const x64AppZipSigMatch = /x64_en-US(\.app\.tar\.gz\.sig)$/
+const armAppZipMatch = /arm_en-US(\.app\.tar\.gz)$/
+const armAppZipSigMatch = /arm_en-US(\.app\.tar\.gz\.sig)$/
 
 const octokit = new Octokit();
 const repo = {
