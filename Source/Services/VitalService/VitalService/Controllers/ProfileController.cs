@@ -19,9 +19,9 @@ namespace VitalService.Controllers
     public class ProfileController : Controller
     {
         public ProfileStore ProfileStore { get; }
-        public ManagedProcessStoreWindows ProcessStore { get; }
+        public IManagedProcessStore ProcessStore { get; }
 
-        public ProfileController(ProfileStore profileStore, ManagedProcessStoreWindows affinityStore)
+        public ProfileController(ProfileStore profileStore, IManagedProcessStore affinityStore)
         {
             ProfileStore = profileStore;
             ProcessStore = affinityStore;

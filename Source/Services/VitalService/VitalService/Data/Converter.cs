@@ -22,7 +22,7 @@ namespace VitalService.Data
                 model.ParentProfileId
             );
         }
-        public static async Task<ProfileModel> ToModelAsync(this ProfileDto dto, ManagedProcessStoreWindows affinityStore)
+        public static async Task<ProfileModel> ToModelAsync(this ProfileDto dto, IManagedProcessStore affinityStore)
         {
             var models = await affinityStore.GetAsync(dto.ManagedModelsIds);
 

@@ -23,12 +23,12 @@ namespace VitalService.Controllers
     [ApiController]
     public partial class ProcessController : Controller
     {
-        private ManagedProcessStoreWindows AffinityStore { get; }
+        private IManagedProcessStore AffinityStore { get; }
         public MachineDataStore MachineDataStore { get; }
         public ProfileStore ProfileStore { get; }
         private ILogger<ProcessController> Logger { get; }
 
-        public ProcessController(ManagedProcessStoreWindows affinityStore, MachineDataStore machineDataStore, ProfileStore profileStore, ILogger<ProcessController> logger)
+        public ProcessController(IManagedProcessStore affinityStore, MachineDataStore machineDataStore, ProfileStore profileStore, ILogger<ProcessController> logger)
         {
             AffinityStore = affinityStore;
             MachineDataStore = machineDataStore;

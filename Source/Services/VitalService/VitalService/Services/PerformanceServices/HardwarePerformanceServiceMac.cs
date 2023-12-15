@@ -39,7 +39,11 @@ namespace VitalService.Services.PerformanceServices
             diskUsagesData = toReturn;
         }
 
-        internal override void UpdateGpuUsage() => gpuUsageData = [.. gpuDataFromRust];
+        internal override void UpdateGpuUsage()
+        {
+            if (gpuDataFromRust != null)
+                gpuUsageData = [.. gpuDataFromRust];
+        }
 
         internal override void UpdateNetworkUsage()
         {
