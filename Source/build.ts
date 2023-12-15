@@ -53,20 +53,21 @@ function buildInstaller() {
         executeInherit('pnpm i -g create-dmg')
         let dmgTitle = `Vital Utiltiies_${version}`;
 
+        execute("ls")
         const result =  execute(`cd ${vitalTauriDir}/target/${args.platform}/release/bundle/macos && npx create-dmg 'Vital Utilities.app' --overwrite --dmg-title='${dmgTitle}'`, true)
         if (!result[1].includes("No suitable code signing identity found"))
              throw result[1];
-        let initialFileName = `Vital Utilities_${version}.dmg`
+        let initialFileName = `Vital Utilities ${version}.dmg`
         let platform = args.platform ==="x86_64-apple-darwin" ? "x64" : "arm";
         let finalFileNamePrefix = `Vital Utilities_${version}_${platform}_en-US`;
         let finalFileName = `${finalFileNamePrefix}.dmg`;
-        fs.renameSync(`./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${initialFileName}`, `./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${finalFileName}`);
+        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${initialFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${finalFileName}`);
         let zipFileName = `Vital Utilities.app.tar.gz`;
         let newZipFileName = `${finalFileNamePrefix}.app.tar.gz`;
         let sigFileName = `${zipFileName}.sig`;
         let newSigFileName = `${newZipFileName}.sig`;
-        fs.renameSync(`./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${zipFileName}`, `./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newZipFileName}`)
-        fs.renameSync(`./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${sigFileName}`, `./${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newSigFileName}`)
+        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${zipFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newZipFileName}`)
+        fs.renameSync(`${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${sigFileName}`, `${vitalTauriDir}/target/${args.platform}/release/bundle/macos/${newSigFileName}`)
      }
  }
  
