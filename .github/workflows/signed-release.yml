@@ -336,7 +336,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: aarch64-apple-darwin
-        path: ./artifacts/aar
+        path: ./artifacts
         if-no-files-found: error
     - name: Download windows
       uses: actions/download-artifact@v3
