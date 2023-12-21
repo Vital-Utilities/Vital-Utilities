@@ -127,7 +127,7 @@ export const EditProfilePage: React.FunctionComponent = () => {
                 <Breadcrumb separator=">" style={{ padding: 15 }}>
                     <Breadcrumb.Item>
                         <Link to="/profiles">
-                            <ProfileFilled rev={1} />
+                            <ProfileFilled rev={""} />
                             <span>Profiles</span>
                         </Link>
                     </Breadcrumb.Item>

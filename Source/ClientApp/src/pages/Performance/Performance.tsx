@@ -260,7 +260,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             detail={`${value[0]}`}
                                             stat={
                                                 <>
-                                                    <CaretDownOutlined rev={1} /> {getReadableBytesPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0, 0)} <CaretUpOutlined rev={1} /> {getReadableBytesPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0, 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
+                                                    <CaretDownOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0, 0)} <CaretUpOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0, 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
                                                 </>
                                             }
                                         />
@@ -282,7 +282,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             }}
                                             stat={
                                                 <>
-                                                    <CaretDownOutlined rev={1} /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined rev={1} /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
+                                                    <CaretDownOutlined rev={""} /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined rev={""} /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
                                                 </>
                                             }
                                             type="network"
@@ -653,7 +653,7 @@ const ClassicNavItem: React.FunctionComponent<{ selectedKey: string; Key: string
     return (
         <div className={`category${props.selectedKey === props.Key ? " selected" : ""}`} onClick={props.onClick}>
             <div style={{ display: "grid", placeContent: "center" }}>
-                <CaretRightOutlined rev={1} key={"1"} style={{ color: getColor() }} />
+                <CaretRightOutlined rev={""} key={"1"} style={{ color: getColor() }} />
             </div>
             {getRender()}
         </div>

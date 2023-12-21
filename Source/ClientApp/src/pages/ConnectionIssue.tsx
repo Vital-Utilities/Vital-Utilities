@@ -14,12 +14,12 @@ export const ConnnectionIssuePage: React.FunctionComponent = () => {
         <div style={{ alignItems: "center", display: "grid", justifyContent: "center", height: "100%", width: "100%" }}>
             <div>
                 <h1>
-                    <WarningOutlined rev={1} style={{ color: "orange", paddingRight: 10 }} />
+                    <WarningOutlined rev={""} style={{ color: "orange", paddingRight: 10 }} />
                     Could not connect to local Vital Service
                 </h1>
                 <br />
-                <h3>Api: {appState.httpConnected ? <CheckCircleOutlined rev={1} style={{ color: "green" }} /> : <WarningOutlined rev={1} style={{ color: "orange" }} />}</h3>
-                <h3>SignalR: {appState.signalRConnected ? <CheckCircleOutlined rev={1} style={{ color: "green" }} /> : <WarningOutlined rev={1} style={{ color: "orange" }} />}</h3>
+                <h3>Api: {appState.httpConnected ? <CheckCircleOutlined rev={""} style={{ color: "green" }} /> : <WarningOutlined rev={""} style={{ color: "orange" }} />}</h3>
+                <h3>SignalR: {appState.signalRConnected ? <CheckCircleOutlined rev={""} style={{ color: "green" }} /> : <WarningOutlined rev={""} style={{ color: "orange" }} />}</h3>
                 <br />
                 <h3>Things to try:</h3>
                 <div style={{ marginLeft: 10 }}>
