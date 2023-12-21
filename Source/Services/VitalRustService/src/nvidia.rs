@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 
-use log::{error, info};
+use log::{error, info, debug};
 use nvml::{struct_wrappers::device::ProcessUtilizationSample, Device, Nvml};
 use vital_service_api::models::{GpuClockSpeeds, GpuUsage, LoadData, PcieThroughPut};
 
 pub fn get_gpu_util(nvml: &Option<Nvml>) -> Vec<GpuUsage> {
     if nvml.is_none() {
+        debug!("No nvml");
         return Vec::new();
     }
     let mut list = Vec::new();

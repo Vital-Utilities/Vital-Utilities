@@ -17,13 +17,12 @@ pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUs
 
     for (_, int) in default_net::get_interfaces().into_iter().enumerate() {
         let stats = utils.get(int.index as usize);
-
         list.push(NetworkAdapterUsage {
             properties: Box::new(NetworkAdapterProperties {
                 is_up: int.is_up(),
                 name: int.friendly_name.unwrap_or(int.name),
                 description: int.description,
-                mac_address: Some(int.mac_addr.unwrap().address()),
+                mac_address: int.mac_addr.map(|e| e.address()),
                 ip_interface_properties: Some(Box::new(IpInterfaceProperties {
                     i_pv4_address: Some(int.ipv4.into_iter().map(|x| x.addr.to_string()).collect()),
                     i_pv6_address: Some(int.ipv6.into_iter().map(|x| x.addr.to_string()).collect()),
