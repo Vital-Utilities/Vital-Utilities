@@ -218,7 +218,7 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
 #[tauri::command]
 pub fn get_os() -> Result<String, String> {
     let os = std::env::consts::OS;
-    error!("{}", os.to_string());
+    debug!("{}", os.to_string());
     return Ok(os.to_string());
 }
 
