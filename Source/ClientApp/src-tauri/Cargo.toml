@@ -47,8 +47,8 @@ log = { version = "0.4", features = [
     "release_max_level_warn",
 ] }
 fern = "0.6"
-sentry = "0.31"
-sysinfo = "0.29"
+sentry = "0.32"
+sysinfo = "0.30"
 regex = "1"
 chrono = "0.4"
 webbrowser = "0.8"

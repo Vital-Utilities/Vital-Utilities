@@ -6,26 +6,29 @@ settings:
 
 dependencies:
   '@ant-design/icons':
-    specifier: ^5.0.1
-    version: 5.0.1(react-dom@17.0.2)(react@17.0.2)
+    specifier: ^5.2.6
+    version: 5.2.6(react-dom@17.0.2)(react@17.0.2)
   '@microsoft/signalr':
     specifier: ^6.0.13
     version: 6.0.13
   '@sentry/browser':
-    specifier: ^7.38.0
-    version: 7.38.0
+    specifier: ^7.90.0
+    version: 7.90.0
   '@sentry/react':
-    specifier: ^7.38.0
-    version: 7.38.0(react@17.0.2)
+    specifier: ^7.90.0
+    version: 7.90.0(react@17.0.2)
   '@sentry/tracing':
-    specifier: ^7.38.0
-    version: 7.38.0
+    specifier: ^7.90.0
+    version: 7.90.0
   '@tanstack/react-query':
     specifier: ^4.24.10
     version: 4.24.10(react-dom@17.0.2)(react@17.0.2)
   '@tauri-apps/api':
-    specifier: 1.5.1
-    version: 1.5.1
+    specifier: 1.5.3
+    version: 1.5.3
+  '@tauri-apps/plugin-os':
+    specifier: 2.0.0-alpha.6
+    version: 2.0.0-alpha.6
   '@vital/vitalservice':
     specifier: file:../CodeGen/v1/TypeScript/VitalServiceApiClient
     version: file:../CodeGen/v1/TypeScript/VitalServiceApiClient
@@ -59,9 +62,6 @@ dependencies:
   react-intersection-observer:
     specifier: ^9.3.5
     version: 9.3.5(react@17.0.2)
-  react-query:
-    specifier: ^4.0.0
-    version: 4.0.0(react-dom@17.0.2)(react@17.0.2)
   react-redux:
     specifier: ^8.0.2
     version: 8.0.2(@types/react-dom@17.0.18)(@types/react@17.0.53)(react-dom@17.0.2)(react@17.0.2)(redux@4.2.0)
@@ -81,8 +81,8 @@ dependencies:
     specifier: ^2.4.1
     version: 2.4.1(redux@4.2.0)
   web-vitals:
-    specifier: ^3.1.1
-    version: 3.1.1
+    specifier: ^3.5.0
+    version: 3.5.0
 
 devDependencies:
   '@reduxjs/toolkit':
@@ -236,6 +236,10 @@ packages:
     resolution: {integrity: sha512-EB0iwlKDGpG93hW8f85CTJTs4SvMX7tt5ceupvhALp1IF44SeUFOMhKUOYqpsoYWQKAOuTRDMqn75rEaKDp0Xw==}
     dev: false
 
+  /@ant-design/icons-svg@4.3.1:
+    resolution: {integrity: sha512-4QBZg8ccyC6LPIRii7A0bZUk3+lEDCLnhB+FVsflGdcWPPmV+j3fire4AwwoqHV/BibgvBmR9ZIo4s867smv+g==}
+    dev: false
+
   /@ant-design/icons@4.8.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-T89P2jG2vM7OJ0IfGx2+9FC5sQjtTzRSz+mCHTXkFn/ELZc2YpfStmYHmqzq2Jx55J0F7+O6i5/ZKFSVNWCKNg==}
     engines: {node: '>=8'}
@@ -252,18 +256,18 @@ packages:
       react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /@ant-design/icons@5.0.1(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-ZyF4ksXCcdtwA/1PLlnFLcF/q8/MhwxXhKHh4oCHDA4Ip+ZzAHoICtyp4wZWfiCVDP0yuz3HsjyvuldHFb3wjA==}
+  /@ant-design/icons@5.2.6(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-4wn0WShF43TrggskBJPRqCD0fcHbzTYjnaoskdiJrVHg86yxoZ8ZUqsXvyn4WUqehRiFKnaclOhqk9w4Ui2KVw==}
     engines: {node: '>=8'}
     peerDependencies:
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
     dependencies:
       '@ant-design/colors': 7.0.0
-      '@ant-design/icons-svg': 4.2.1
+      '@ant-design/icons-svg': 4.3.1
       '@babel/runtime': 7.20.13
       classnames: 2.3.2
-      rc-util: 5.27.2(react-dom@17.0.2)(react@17.0.2)
+      rc-util: 5.38.1(react-dom@17.0.2)(react@17.0.2)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
     dev: false
@@ -2896,70 +2900,84 @@ packages:
     resolution: {integrity: sha512-LwzQKA4vzIct1zNZzBmRKI9QuNpLgTQMEjsQLf3BXuGYb3QPTP4Yjf6mkdX+X1mYttZ808QpOwAzZjv28kq7DA==}
     dev: true
 
-  /@sentry/browser@7.38.0:
-    resolution: {integrity: sha512-rPJr+2jRYL29PeMYA2JgzYKTZQx6bc3T9evbAdIh0n+popSjpVyOpOMV/3l6A7KZeeix3dpp6eUZUxTJukqriQ==}
-    engines: {node: '>=8'}
+  /@sentry-internal/feedback@7.90.0:
+    resolution: {integrity: sha512-ZIdpwK9KmiE/UYGUgNE3N9A5MWm92rbC/0u04LxQfZh0tGqN2EchwivQpFCWuu5QsKMlsza7aO6YQXsKvwt1Ww==}
+    engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.38.0
-      '@sentry/replay': 7.38.0
-      '@sentry/types': 7.38.0
-      '@sentry/utils': 7.38.0
-      tslib: 1.14.1
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
     dev: false
 
-  /@sentry/core@7.38.0:
-    resolution: {integrity: sha512-+hXh/SO3Ie6WC2b+wi01xLhyVREdkRXS5QBmCiv3z2ks2HvYXp7PoKSXJvNKiwCP+pBD+enOnM1YEzM2yEy5yw==}
+  /@sentry-internal/tracing@7.90.0:
+    resolution: {integrity: sha512-74jEtpdio9aRkiVBcrY1ZJXek0oFMqxDJK6BkJNCA+aUK1z96V9viehANRk3Nbxm01rWjmH1U4e1siuo9FhjuQ==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.38.0
-      '@sentry/utils': 7.38.0
-      tslib: 1.14.1
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
     dev: false
 
-  /@sentry/react@7.38.0(react@17.0.2):
-    resolution: {integrity: sha512-IZpQ0aptV3UPjvDj+xorrgPgnW2xIL6Zcy7B6wAgwTC81OUITE7YaShglGD0sJ8M1ReFuH9duwTysr/uv8AytQ==}
+  /@sentry/browser@7.90.0:
+    resolution: {integrity: sha512-ik3Jwo+TYjoEesJlt3PlHDcPE9h//WwyUsVkV9ZsVx0MSXb8c1VC4uDMsyUqjA+gPImmw1l9KlWZtvaOooZEhg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/feedback': 7.90.0
+      '@sentry-internal/tracing': 7.90.0
+      '@sentry/core': 7.90.0
+      '@sentry/replay': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+    dev: false
+
+  /@sentry/core@7.90.0:
+    resolution: {integrity: sha512-HolpdHjULCwehKPWHR6IPQM0NBjmORhlBU7FtCh/e8TtSkZ9ztPsuofNBomMS1+mdbL+yxOIc9KUYEl0zRfeAQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
+    dev: false
+
+  /@sentry/react@7.90.0(react@17.0.2):
+    resolution: {integrity: sha512-ixhSa3+kmmXvJkKiewLYju0FnYDE8dv8c3E1s4CNU/3SjvqCqcTBOnLzgGleixs3JVklS1JUTU2zS3cwQ2uEOw==}
     engines: {node: '>=8'}
     peerDependencies:
       react: 15.x || 16.x || 17.x || 18.x
     dependencies:
-      '@sentry/browser': 7.38.0
-      '@sentry/types': 7.38.0
-      '@sentry/utils': 7.38.0
+      '@sentry/browser': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
       hoist-non-react-statics: 3.3.2
       react: 17.0.2
-      tslib: 1.14.1
     dev: false
 
-  /@sentry/replay@7.38.0:
-    resolution: {integrity: sha512-Ai78/OIYedny605x8uS0n/a5uj7qnuevogGD6agLat9lGc8DFvC07m2iS+EFyGOwtQzyDlRYJvYkHL8peR3crQ==}
+  /@sentry/replay@7.90.0:
+    resolution: {integrity: sha512-fsABtzQ5JQI7G5CC4fg05lVI5DTbd1uwKi41xVKFRmCB5NVTHvK7bHgP8n6uSbnle+gp9rUxVPLLBIPjKfaTmw==}
     engines: {node: '>=12'}
     dependencies:
-      '@sentry/core': 7.38.0
-      '@sentry/types': 7.38.0
-      '@sentry/utils': 7.38.0
+      '@sentry-internal/tracing': 7.90.0
+      '@sentry/core': 7.90.0
+      '@sentry/types': 7.90.0
+      '@sentry/utils': 7.90.0
     dev: false
 
-  /@sentry/tracing@7.38.0:
-    resolution: {integrity: sha512-ejXJp8oOT64MVtBzqdECUUaNzKbpu25St8Klub1i4Sm7xO+ZjDQDI4TIHvWojZvtkwQ3F4jcsCclc8KuyJunyQ==}
+  /@sentry/tracing@7.90.0:
+    resolution: {integrity: sha512-7NeLePk/MaL/VzAJ+uF/ic1dA+3nefeHwKdUtDDxbbz72T3uTfPCfXuiZeSara9ykop3kKWc4Ll5JTSi8LbA0Q==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.38.0
-      '@sentry/types': 7.38.0
-      '@sentry/utils': 7.38.0
-      tslib: 1.14.1
+      '@sentry-internal/tracing': 7.90.0
     dev: false
 
-  /@sentry/types@7.38.0:
-    resolution: {integrity: sha512-NKOALR6pNUMzUrsk2m+dkPrO8uGNvNh1LD0BCPswKNjC2qHo1h1mDGCgBmF9+EWyii8ZoACTIsxvsda+MBf97Q==}
+  /@sentry/types@7.90.0:
+    resolution: {integrity: sha512-dA0Mtba5jYlcQ6xBsGILZuFq4NGrWLfr2ys036z2JE4H1+3PxOVERlD3Di7p+WKYM5gjFw10Hn3EgUV979E3dA==}
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/utils@7.38.0:
-    resolution: {integrity: sha512-MgbI3YmYuyyhUtvcXkgGBqjOW+nuLLNGUdWCK+C4kObf8VbLt3dSE/7SEMT6TSHLYQmxs2BxFgx5Agn97m68kQ==}
+  /@sentry/utils@7.90.0:
+    resolution: {integrity: sha512-6BpqAzONm/HQbdlL4TY2W2vBSmaG/eVvwUaHoz0wB49EkWwpF6j/SO9Kb/XkiA/qp9GoJVXpnGBFQLPx7kv/Yw==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.38.0
-      tslib: 1.14.1
+      '@sentry/types': 7.90.0
     dev: false
 
   /@sinclair/typebox@0.24.20:
@@ -2977,10 +2995,6 @@ packages:
     dependencies:
       '@sinonjs/commons': 1.8.3
     dev: true
-
-  /@tanstack/query-core@4.0.10:
-    resolution: {integrity: sha512-9LsABpZXkWZHi4P1ozRETEDXQocLAxVzQaIhganxbNuz/uA3PsCAJxJTiQrknG5htLMzOF5MqM9G10e6DCxV1A==}
-    dev: false
 
   /@tanstack/query-core@4.24.10:
     resolution: {integrity: sha512-2QywqXEAGBIUoTdgn1lAB4/C8QEqwXHj2jrCLeYTk2xVGtLiPEUD8jcMoeB2noclbiW2mMt4+Fq7fZStuz3wAQ==}
@@ -3004,9 +3018,14 @@ packages:
       use-sync-external-store: 1.2.0(react@17.0.2)
     dev: false
 
-  /@tauri-apps/api@1.5.1:
-    resolution: {integrity: sha512-6unsZDOdlXTmauU3NhWhn+Cx0rODV+rvNvTdvolE5Kls5ybA6cqndQENDt1+FS0tF7ozCP66jwWoH6a5h90BrA==}
+  /@tauri-apps/api@1.5.3:
+    resolution: {integrity: sha512-zxnDjHHKjOsrIzZm6nO5Xapb/BxqUq1tc7cGkFXsFkGTsSWgCPH1D8mm0XS9weJY2OaR73I3k3S+b7eSzJDfqA==}
     engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+    dev: false
+
+  /@tauri-apps/api@2.0.0-alpha.13:
+    resolution: {integrity: sha512-sGgCkFahF3OZAHoGN5Ozt9WK7wJlbVZSgWpPQKNag4nSOX1+Py6VDRTEWriiJHDiV+gg31CWHnNXRy6TFoZmdA==}
+    engines: {node: '>= 18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 
   /@tauri-apps/cli-darwin-arm64@1.5.6:
@@ -3115,6 +3134,12 @@ packages:
       '@tauri-apps/cli-win32-ia32-msvc': 1.5.6
       '@tauri-apps/cli-win32-x64-msvc': 1.5.6
     dev: true
+
+  /@tauri-apps/plugin-os@2.0.0-alpha.6:
+    resolution: {integrity: sha512-ld5p56TiWxnGHCysEfHLmRH5+Lz7rzDRC5H5WzofVNPiqp4ra1O5y1lNOWklE01Rm5P1c0t1PbUVdNGpeYA3GQ==}
+    dependencies:
+      '@tauri-apps/api': 2.0.0-alpha.13
+    dev: false
 
   /@testing-library/dom@8.15.0:
     resolution: {integrity: sha512-KtMhnUST7iUvZPl3LlRKH9V/JGbMIwgCxSeGno+c2VRRgC21l27Ky8rU8n/xRcfUAsO4w9fn3Z70Dq3Tcg6KAg==}
@@ -7980,6 +8005,18 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /rc-util@5.38.1(react-dom@17.0.2)(react@17.0.2):
+    resolution: {integrity: sha512-e4ZMs7q9XqwTuhIK7zBIVFltUtMSjphuPPQXHoHlzRzNdOwUxDejo0Zls5HYaJfRKNURcsS/ceKVULlhjBrxng==}
+    peerDependencies:
+      react: '>=16.9.0'
+      react-dom: '>=16.9.0'
+    dependencies:
+      '@babel/runtime': 7.20.13
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-is: 18.2.0
+    dev: false
+
   /rc-virtual-list@3.4.8(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-qSN+Rv4i/E7RCTvTMr1uZo7f3crJJg/5DekoCagydo9zsXrxj07zsFSxqizqW+ldGA16lwa8So/bIbV9Ofjddg==}
     engines: {node: '>=8.x'}
@@ -8038,26 +8075,6 @@ packages:
 
   /react-lifecycles-compat@3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
-    dev: false
-
-  /react-query@4.0.0(react-dom@17.0.2)(react@17.0.2):
-    resolution: {integrity: sha512-qiW+Yvbl+EK8iwPDJAj4qWAKceh+g8Up8jxoNxJbzhV3bNheeyHF3EyynnkDO3S+CYgSwtCUFaP8vOjB62j7xQ==}
-    deprecated: Please use @tanstack/react-query for v4+
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      '@tanstack/query-core': 4.0.10
-      '@types/use-sync-external-store': 0.0.3
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
-      use-sync-external-store: 1.2.0(react@17.0.2)
     dev: false
 
   /react-redux@8.0.2(@types/react-dom@17.0.18)(@types/react@17.0.53)(react-dom@17.0.2)(react@17.0.2)(redux@4.2.0):
@@ -8956,6 +8973,7 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: true
 
   /tslib@2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
@@ -9233,8 +9251,8 @@ packages:
       makeerror: 1.0.12
     dev: true
 
-  /web-vitals@3.1.1:
-    resolution: {integrity: sha512-qvllU+ZeQChqzBhZ1oyXmWsjJ8a2jHYpH8AMaVuf29yscOPZfTQTjQFRX6+eADTdsDE8IanOZ0cetweHMs8/2A==}
+  /web-vitals@3.5.0:
+    resolution: {integrity: sha512-f5YnCHVG9Y6uLCePD4tY8bO/Ge15NPEQWtvm3tPzDKygloiqtb4SVqRHBcrIAqo2ztqX5XueqDn97zHF0LdT6w==}
     dev: false
 
   /webidl-conversions@3.0.1:

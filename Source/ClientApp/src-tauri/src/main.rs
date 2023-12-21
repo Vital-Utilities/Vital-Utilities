@@ -5,7 +5,7 @@
 mod commands;
 mod file;
 use crate::commands::commands::{
-    get_client_settings, get_vital_service_ports, open_url, restart_vital_service,
+    get_client_settings, get_os, get_vital_service_ports, open_url, restart_vital_service,
     update_client_settings, update_vital_service_port, ServiceName,
 };
 use commands::commands::is_vital_service_running;
@@ -111,7 +111,8 @@ fn main() {
             get_vital_service_ports,
             restart_vital_service,
             update_vital_service_port,
-            open_url
+            open_url,
+            get_os
         ])
         .system_tray(system_tray_setup())
         .on_system_tray_event(|app, event| match event {

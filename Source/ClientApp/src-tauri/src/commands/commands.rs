@@ -2,7 +2,7 @@ use std::{io::Error, path::PathBuf};
 
 use crate::APP_HANDLE;
 use log::{debug, error, info};
-use sysinfo::{Pid, ProcessExt, System, SystemExt};
+use sysinfo::{Pid, System};
 use tauri::{api::path::document_dir, AppHandle, Manager};
 use vital_service_api::models::{ClientSettings, LaunchSettings, SettingsDto};
 
@@ -32,7 +32,6 @@ fn client_settings_path() -> Result<PathBuf, Error> {
 
 #[tauri::command]
 pub fn get_client_settings() -> Result<ClientSettings, String> {
-
     let file_path = client_settings_path().expect("Failed to get documentDir");
 
     info!("{}", file_path.display());
@@ -75,8 +74,7 @@ pub fn get_client_settings() -> Result<ClientSettings, String> {
 #[tauri::command]
 pub fn update_client_settings(client_settings: ClientSettings) -> Result<String, String> {
     let file_path = client_settings_path().expect("Failed to get documentDir");
-    let result =
-        std::fs::write(&file_path, serde_json::to_string(&client_settings).unwrap());
+    let result = std::fs::write(&file_path, serde_json::to_string(&client_settings).unwrap());
     match result {
         Ok(_) => {
             let msg = "Successfully updated client settings file";
@@ -185,10 +183,8 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
                 Ok(mut settings) => {
                     settings.launch.vital_service_http_port = port_number as i32;
 
-                    let result = std::fs::write(
-                        &file_path,
-                        serde_json::to_string(&settings).unwrap(),
-                    );
+                    let result =
+                        std::fs::write(&file_path, serde_json::to_string(&settings).unwrap());
                     match result {
                         Ok(_) => {
                             let msg = format!(
@@ -217,6 +213,13 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
             return Err(format!("{}", e));
         }
     }
+}
+
+#[tauri::command]
+pub fn get_os() -> Result<String, String> {
+    let os = std::env::consts::OS;
+    error!("{}", os.to_string());
+    return Ok(os.to_string());
 }
 
 pub fn set_always_on_top(app: &AppHandle, value: bool) -> Result<(), String> {

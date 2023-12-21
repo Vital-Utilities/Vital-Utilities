@@ -22,6 +22,7 @@ import { PerformancePage, relativeTimeOptions, relativeTypeStringOptions } from 
 import moment from "moment";
 import * as vitalservice from "@vital/vitalservice";
 import { SplashScreen } from "./pages/SpashScreen";
+import { useOs } from "./Utilities/TauriCommands";
 export const config = new vitalservice.Configuration();
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App: React.FunctionComponent = () => {
@@ -31,7 +32,7 @@ const App: React.FunctionComponent = () => {
     const [noConnection, setNoConnection] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
     const [initializedTime] = React.useState(moment());
-
+    const os = useOs();
     useInterval(
         () => {
             if (appState.httpConnected && appState.signalRConnected) {
@@ -78,10 +79,10 @@ const App: React.FunctionComponent = () => {
     return (
         <div id="page" style={{ display: "flex", flexDirection: "column", overflow: "hidden", height: "100vh", width: "100vw" }}>
             <Router>
-                <Modal visible={noConnection} centered footer={null} title={"Problem connecting to Vital Service"} width={600} onCancel={() => setNoConnection(false)}>
+                <Modal open={noConnection} centered footer={null} title={"Problem connecting to Vital Service"} width={600} onCancel={() => setNoConnection(false)}>
                     <ConnnectionIssuePage />
                 </Modal>
-                <Modal visible={aboutModalVisible} centered footer={null} title={"Info"} width={500} onCancel={() => setAboutModalVisible(false)}>
+                <Modal open={aboutModalVisible} centered footer={null} title={"Info"} width={500} onCancel={() => setAboutModalVisible(false)}>
                     <InfoPage />
                 </Modal>
                 <div style={{ display: "grid", borderBottom: "1px solid white", gridTemplateColumns: "auto auto" }}>
@@ -89,16 +90,19 @@ const App: React.FunctionComponent = () => {
                         {/*                         <Menu.Item key="/" icon={<HomeFilled />}>
                             <Link to="/" />
                         </Menu.Item> */}
-                        <Menu.Item key={"/"} icon={<AppstoreOutlined />}>
+                        <Menu.Item key={"/"} icon={<AppstoreOutlined rev={1} />}>
                             <Link to="/" /> Processes
                         </Menu.Item>
-                        <Menu.Item key="/performance" icon={<DashboardOutlined />}>
+                        <Menu.Item key="/performance" icon={<DashboardOutlined rev={1} />}>
                             <Link to="/performance" /> Performance
                         </Menu.Item>
-                        <Menu.Item key="/profiles" icon={<ProfileFilled />}>
-                            <Link to="/profiles" /> Profiles
-                        </Menu.Item>
-                        <Menu.Item key="/settings" icon={<SettingFilled />}>
+                        {os === "windows" && (
+                            <Menu.Item key="/profiles" icon={<ProfileFilled rev={1} />}>
+                                <Link to="/profiles" /> Profiles
+                            </Menu.Item>
+                        )}
+
+                        <Menu.Item key="/settings" icon={<SettingFilled rev={1} />}>
                             <Link to="/settings" /> Settings
                         </Menu.Item>
                     </Menu>
@@ -109,12 +113,12 @@ const App: React.FunctionComponent = () => {
                         <span>
                             {!appState.httpConnected && (
                                 <span style={{ color: "orange", cursor: "pointer" }} onClick={() => setNoConnection(true)}>
-                                    <WarningOutlined style={{ color: "orange" }} /> Disconnected
+                                    <WarningOutlined rev={1} style={{ color: "orange" }} /> Disconnected
                                 </span>
                             )}
                         </span>
                         <span className="interactable" onClick={() => setAboutModalVisible(true)}>
-                            <QuestionCircleFilled style={{ fontSize: 20 }} />
+                            <QuestionCircleFilled rev={1} style={{ fontSize: 20 }} />
                         </span>
                     </div>
                 </div>

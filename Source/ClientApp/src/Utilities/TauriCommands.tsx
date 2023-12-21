@@ -12,6 +12,20 @@ export function openUrl(url: string) {
         });
 }
 
+export function useOs() {
+    const { data } = useRequest(() => getOs(), { manual: false });
+    return data;
+}
+
+export function getOs() {
+    return invoke<string>("get_os")
+        .then(response => response)
+        .catch(error => {
+            notification.error(error);
+            console.error(error);
+            return undefined;
+        });
+}
 export function useRustClientSettings() {
     const { data, run, mutate } = useRequest(() => getSettings(), {});
 
