@@ -255,7 +255,7 @@ export const Processes: React.FunctionComponent = () => {
                             }}
                         >
                             <div>
-                                <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <CaretRightOutlined /> : <CaretDownOutlined />}</span>
+                                <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <CaretRightOutlined rev={1} /> : <CaretDownOutlined rev={1} />}</span>
                                 <span>
                                     {e.parent.description ?? e.parent.processTitle ?? e.parent.processName} {`(+${childrenLength})`}
                                 </span>
@@ -328,7 +328,7 @@ export const Processes: React.FunctionComponent = () => {
         }
     }
     function sortDirectionRender() {
-        return sortBy.descending ? <CaretDownOutlined /> : <CaretUpOutlined />;
+        return sortBy.descending ? <CaretDownOutlined rev={1} /> : <CaretUpOutlined rev={1} />;
     }
 
     function setSort(e: SortByEnum) {
