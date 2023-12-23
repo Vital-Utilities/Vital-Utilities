@@ -82,7 +82,8 @@ pub fn update_client_settings(client_settings: ClientSettings) -> Result<String,
             info!("{}", msg);
             let handle = APP_HANDLE.get();
             if handle.is_none() {
-                error!("Failed to get app handle, app must restart to apply new settings");
+                let msg = "Failed to get app handle, app must restart to apply new settings";
+                error!("{}", msg);
                 return Err(msg.to_string());
             }
 

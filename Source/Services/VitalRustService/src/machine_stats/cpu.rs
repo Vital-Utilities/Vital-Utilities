@@ -12,7 +12,7 @@ pub async fn get_cpu_util(
     let mut core_clocks_mhz = Vec::new();
 
     for processor in sysinfo.cpus() {
-        core_percentages.push(processor.cpu_usage());
+        core_percentages.push(truncate_two_precision(processor.cpu_usage()));
         core_clocks_mhz.push(processor.frequency() as i32);
     }
 
@@ -27,11 +27,15 @@ pub async fn get_cpu_util(
         brand: Some(info.brand().to_string()),
         vendor_id: Some(info.vendor_id().to_string()),
         core_clocks_mhz,
-        total_core_percentage: info.cpu_usage() as f32,
+        total_core_percentage: truncate_two_precision(info.cpu_usage()),
         power_draw_wattage: None,
         core_percentages,
         temperature_readings: temperature_readings.clone(),
     })
+}
+
+fn truncate_two_precision(num:f32) -> f32 {
+    f32::trunc(num  * 100.0) / 100.0
 }
 
 // fn get_cpu_cache() -> CpuCache {
