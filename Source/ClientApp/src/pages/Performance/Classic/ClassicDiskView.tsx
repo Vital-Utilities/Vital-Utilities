@@ -45,6 +45,7 @@ export const ClassicDiskView: React.FunctionComponent<{ driveLetter: string } & 
                         <ItemOne color="#3182bd" title="Utilisation" value={`${current?.totalActivityPercentage}%`} />
                         <ItemOne color="orange" title="Read Speed" value={`${getReadableBytesPerSecondString(current?.readRateBytesPerSecond)}`} />
                         <ItemOne color="yellow" title="Write Speed" value={`${getReadableBytesPerSecondString(current?.writeRateBytesPerSecond)}`} />
+                        <ItemOne color="yellow" title="Storage" value={`${getReadableBytesString(current?.usedSpaceBytes)}`} />
                         {Object.values(current?.temperatures ?? {}).map((e, i) => {
                             return <ItemOne key={i} title={`Temperature ${i}`} value={`${e}°C`} />;
                         })}

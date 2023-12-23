@@ -42,7 +42,7 @@ namespace VitalService.Dtos.Data
 
         public long? UsedSpaceBytes { get; set; }
 
-        public long? TotalFreeSpaceBytes { get; set; }
+        public long? TotalSpaceBytes { get; set; }
 
         public float? WriteActivityPercentage { get; set; }
 
