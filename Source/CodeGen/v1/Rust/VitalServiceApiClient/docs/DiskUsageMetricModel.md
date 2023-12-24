@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **drive_letter** | Option<**String**> |  | [optional]
 **used_space_percentage** | Option<**f32**> |  | [optional]
 **used_space_bytes** | Option<**i64**> |  | [optional]
+**total_space_bytes** | Option<**i64**> |  | [optional]
 **write_activity_percentage** | Option<**f32**> |  | [optional]
 **total_activity_percentage** | Option<**f32**> |  | [optional]
 **read_rate_bytes_per_second** | Option<**f64**> |  | [optional]

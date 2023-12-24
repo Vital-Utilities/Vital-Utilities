@@ -1318,7 +1318,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "totalFreeSpaceBytes": {
+          "totalSpaceBytes": {
             "required": [
               "hasValue",
               "value"
@@ -1494,6 +1494,14 @@
             "format": "float"
           },
           "usedSpaceBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalSpaceBytes": {
             "required": [
               "hasValue",
               "value"
@@ -3125,6 +3133,7 @@
               "minute",
               "month",
               "offset",
+              "totalOffsetMinutes",
               "second",
               "ticks",
               "utcTicks",

@@ -363,7 +363,7 @@ export interface DiskLoad {
      * @type {number}
      * @memberof DiskLoad
      */
-    'totalFreeSpaceBytes'?: number;
+    'totalSpaceBytes'?: number;
     /**
      * 
      * @type {number}
@@ -522,6 +522,12 @@ export interface DiskUsageMetricModel {
      * @memberof DiskUsageMetricModel
      */
     'usedSpaceBytes'?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DiskUsageMetricModel
+     */
+    'totalSpaceBytes'?: number;
     /**
      * 
      * @type {number}

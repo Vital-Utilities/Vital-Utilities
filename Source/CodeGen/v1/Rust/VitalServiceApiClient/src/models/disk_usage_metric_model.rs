@@ -23,6 +23,8 @@ pub struct DiskUsageMetricModel {
     pub used_space_percentage: Option<f32>,
     #[serde(rename = "usedSpaceBytes", skip_serializing_if = "Option::is_none")]
     pub used_space_bytes: Option<i64>,
+    #[serde(rename = "totalSpaceBytes", skip_serializing_if = "Option::is_none")]
+    pub total_space_bytes: Option<i64>,
     #[serde(rename = "writeActivityPercentage", skip_serializing_if = "Option::is_none")]
     pub write_activity_percentage: Option<f32>,
     #[serde(rename = "totalActivityPercentage", skip_serializing_if = "Option::is_none")]
@@ -51,6 +53,7 @@ impl DiskUsageMetricModel {
             drive_letter: None,
             used_space_percentage: None,
             used_space_bytes: None,
+            total_space_bytes: None,
             write_activity_percentage: None,
             total_activity_percentage: None,
             read_rate_bytes_per_second: None,
