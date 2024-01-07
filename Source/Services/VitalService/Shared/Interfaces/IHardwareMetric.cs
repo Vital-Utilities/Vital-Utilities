@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace VitalService.Dtos.Data.Metrics
+namespace VitalService.Interfaces
 {
     public interface IHardwareMetric
     {
-        
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
@@ -14,11 +14,11 @@ namespace VitalService.Dtos.Data.Metrics
 
     public abstract class HardwareMetricModel : IHardwareMetric
     {
-        
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int Id { get; set; }
-        
+
         public string? UniqueIdentifier { get; set; }
 
         public HardwareMetricModel(string? uniqueIdentifier = null)

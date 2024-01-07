@@ -2,23 +2,26 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using VitalService.Data;
 using VitalService.Data.App;
 using VitalService.Dtos;
 using VitalService.Dtos.Coms.Process;
+using VitalService.Dtos.Coms.Profile;
 using VitalService.Stores;
 
 namespace VitalService.Controllers
 {
+    [SupportedOSPlatform("windows")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProfileController : Controller
     {
         public ProfileStore ProfileStore { get; }
-        public ManagedProcessStore ProcessStore { get; }
+        public IManagedProcessStore ProcessStore { get; }
 
-        public ProfileController(ProfileStore profileStore, ManagedProcessStore affinityStore)
+        public ProfileController(ProfileStore profileStore, IManagedProcessStore affinityStore)
         {
             ProfileStore = profileStore;
             ProcessStore = affinityStore;

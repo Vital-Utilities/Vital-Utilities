@@ -15,6 +15,7 @@ use std::{
     sync::Mutex,
 };
 use sysinfo::{PidExt, ProcessExt, SystemExt};
+#[cfg(target_os = "windows")]
 use windows::{
     core::{HSTRING, PCWSTR},
     Win32::Foundation::*,
@@ -27,6 +28,8 @@ use windows::{
         UI::WindowsAndMessaging::*,
     },
 };
+
+#[cfg(target_os = "windows")]
 pub fn get_process_util(
     sysinfo: &sysinfo::System,
     nvml: &Option<Nvml>,
@@ -93,7 +96,110 @@ pub fn get_process_util(
     }
     Some(list)
 }
+#[cfg(target_os = "macos")]
+pub fn get_process_util(
+    sysinfo: &sysinfo::System,
+    nvml: &Option<Nvml>,
+    time_stamp: DateTime<Utc>,
+) -> Option<Vec<ProcessData>> {
+    use std::time::SystemTime;
 
+    let mut list = Vec::new();
+    let processes = sysinfo.processes();
+    let process_gpu_utilization_samples = nvidia::get_process_gpu_util(nvml).unwrap_or_default();
+    
+    /*
+    let using_compute = gpu_device.running_compute_processes().unwrap();
+    let using_graphics = gpu_device.running_graphics_processes().unwrap();
+    
+    for p in using_compute {
+        p.used_gpu_memory();
+    } */
+    
+    for (pid, process) in processes {
+        let disk_bytes = process.disk_usage();
+        // get first gpu usage that has this pid
+        
+        let pid = pid.as_u32();
+        let path: Option<String> = get_process_path(pid); // takes some time
+        
+        let mut description: Option<String> = None; // takes some time
+        if path.is_some() {
+            description = match get_file_description(path.to_owned().unwrap()) {
+                Ok(title) => Some(title),
+                Err(_) => None,
+            };
+        };
+        let cores = sysinfo.physical_core_count();
+
+        let gpu_util = process_gpu_utilization_samples
+        .iter()
+        .find(|sample| sample.pid == pid)
+        .map(|util| {
+            Box::new(ProcessGpuUtil {
+                gpu_core_percentage: Some(util.sm_util as f32),
+                gpu_decoding_percentage: Some(util.dec_util as f32),
+                gpu_encoding_percentage: Some(util.enc_util as f32),
+                gpu_mem_percentage: Some(util.mem_util as f32),
+            })
+        });
+
+        list.push(ProcessData {
+            pid: pid as i32,
+            parent_pid: process.parent().map(|pid| pid.as_u32() as i32),
+            executable_path: path,
+            description,
+            main_window_title: Some(process.name().to_owned()),
+            name: process.name().to_owned(),
+            time_stamp: time_stamp.to_rfc3339(),
+            cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f32,
+            memory_bytes: process.memory() as i64,
+            disk_usage: Box::new(ProcessDiskUsage {
+                read_bytes_per_second: disk_bytes.read_bytes as i64,
+                write_bytes_per_second: disk_bytes.written_bytes as i64,
+            }),
+            status: Some(process.status().to_string()),
+            gpu_util,
+        });
+    }
+    Some(list)
+}
+// TODO:Takes 1-2ms very slow need to find alternative.
+#[cfg(target_os = "macos")]
+fn get_mainwindow_title(pid: u32) -> Option<String> {
+    use std::{process::Command, time::SystemTime};
+
+    use regex::Regex;
+
+    let mut child = Command::new("ps")
+    .arg("-p")
+    .arg(pid.to_string())
+    .arg("-o")
+    .arg("comm=")
+    .spawn()
+    .expect("Failed to execute command");
+
+    let output = child.wait_with_output().expect("Failed to wait on command");
+
+    let process_name = String::from_utf8(output.stdout).expect("Failed to convert output to string");
+    
+    let re = Regex::new(r"[^/]+$").unwrap();
+    let process_name = re.find(&process_name).map(|e| e.as_str().trim_end_matches('\n').to_string());
+    
+    process_name
+}
+
+#[cfg(target_os = "macos")]
+fn get_process_path(pid: u32) -> Option<String> {
+    None
+}
+#[cfg(target_os = "macos")]
+fn get_file_description(path: String) -> Result<String, ()> {
+    Err(())
+}
+
+
+#[cfg(target_os = "windows")]
 static WINDOW_TITLES: OnceCell<Mutex<HashMap<u32, String>>> = OnceCell::new();
 
 // function that gets all running windows and their titles
@@ -126,15 +232,15 @@ pub fn get_mainwindowtitles() -> HashMap<u32, String> {
 
     main_window_titles
 }
-
+#[cfg(target_os = "windows")]
 fn lpfn() -> windows::Win32::UI::WindowsAndMessaging::WNDENUMPROC {
     handle()
 }
-
+#[cfg(target_os = "windows")]
 fn handle() -> Option<unsafe extern "system" fn(hwnd: HWND, lparam: LPARAM) -> BOOL> {
     Some(callback)
 }
-
+#[cfg(target_os = "windows")]
 unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
     let mut text = [0; 1024];
     let length = GetWindowTextW(hwnd, &mut text);
@@ -161,7 +267,7 @@ unsafe extern "system" fn callback(hwnd: HWND, _: LPARAM) -> BOOL {
 
     true.into()
 }
-
+#[cfg(target_os = "windows")]
 pub fn get_file_description(path: String) -> Result<String, String> {
     let file_name: HSTRING = path.into();
     // Determine version info size
@@ -210,7 +316,7 @@ pub fn get_file_description(path: String) -> Result<String, String> {
         Err(_) => Err("Failed to convert file description to UTF-16".into()),
     }
 }
-
+#[cfg(target_os = "windows")]
 fn get_process_path(pid: u32) -> Option<String> {
     unsafe {
         let mut path = None;
@@ -243,7 +349,7 @@ fn get_process_path(pid: u32) -> Option<String> {
         path
     }
 }
-
+#[cfg(target_os = "windows")]
 pub fn get_process_ideal_processors(pid: u32) -> Result<HashSet<u32>, winproc::Error> {
     let proc = winproc::Process::from_id(pid as u32);
     match proc {
@@ -268,4 +374,9 @@ pub fn get_process_ideal_processors(pid: u32) -> Result<HashSet<u32>, winproc::E
             Err(e)
         }
     }
+}
+#[cfg(target_os = "macos")]
+pub fn get_process_ideal_processors(pid: u32) -> Result<HashSet<u32>, String> {
+    error!("Not implemented");
+    Err("Not implemented".to_string())
 }

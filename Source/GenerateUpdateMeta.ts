@@ -2,37 +2,39 @@ import { parse } from 'ts-command-line-args';
 import { Octokit } from "@octokit/rest";
 import axios from 'axios';
 import * as fs from 'fs';
+
+
+type PlatformData = {
+    signature: string;
+    url: string;
+  }
 type UpdateMetaData = {
     version: string,
     notes: string,
     pub_date: string,
-    platforms: {
-        "windows-x86_64": {
-            signature: string,
-            url: string
-        }
-    }
+    platforms: {[key: string]: PlatformData}
 }
 const meta: UpdateMetaData = {
     notes: "",
     pub_date: "",
     version: "",
-    platforms: {
-        "windows-x86_64":
-        {
-            signature: "",
-            url: ""
-        }
-    }
+    platforms: {}
 };
 
 const args = parse({
     releaseTag: { type: String, alias: 't', multiple: false, optional: true, defaultValue: "" },
+    platform: { type: String, alias: 'p', multiple: false, optional: true, defaultValue: "" },
     outputPath: { type: String, alias: 'o', multiple: false, optional: true, defaultValue: "" }
 });
 
 const msiZipMatch = /(\.msi\.zip)$/
 const msiZipSigMatch = /(\.msi\.zip\.sig)$/
+
+const x64AppZipMatch = /x64_en-US(\.app\.tar\.gz)$/
+const x64AppZipSigMatch = /x64_en-US(\.app\.tar\.gz\.sig)$/
+const armAppZipMatch = /arm_en-US(\.app\.tar\.gz)$/
+const armAppZipSigMatch = /arm_en-US(\.app\.tar\.gz\.sig)$/
+
 const octokit = new Octokit();
 const repo = {
     owner: "Vital-Utilities",
@@ -54,6 +56,23 @@ await axios.get<string>(release.data.assets.filter(asset => msiZipSigMatch.test(
     .then(res => res.data)
     .then(signature => {
         meta.platforms['windows-x86_64'].signature = signature;
+    });
+
+
+meta.platforms['aarch64-apple-darwin'].url = release.data.assets.filter(asset => armAppZipMatch.test(asset.name))[0].browser_download_url;
+
+await axios.get<string>(release.data.assets.filter(asset => armAppZipSigMatch.test(asset.name))[0].browser_download_url, { responseType: 'text' })
+    .then(res => res.data)
+    .then(signature => {
+        meta.platforms['aarch64-apple-darwin'].signature = signature;
+    });
+
+meta.platforms['x86_64-apple-darwin'].url = release.data.assets.filter(asset => x64AppZipMatch.test(asset.name))[0].browser_download_url;
+
+await axios.get<string>(release.data.assets.filter(asset => x64AppZipSigMatch.test(asset.name))[0].browser_download_url, { responseType: 'text' })
+    .then(res => res.data)
+    .then(signature => {
+        meta.platforms['x86_64-apple-darwin'].signature = signature;
     });
 
 console.log(JSON.stringify(meta, null, 4));

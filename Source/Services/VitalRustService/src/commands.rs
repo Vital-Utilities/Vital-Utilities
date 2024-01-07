@@ -1,5 +1,5 @@
 use directories::UserDirs;
-use log::error;
+use log::{error, info};
 use vital_service_api::models::{LaunchSettings, SettingsDto};
 
 pub fn get_backend_settings() -> Result<SettingsDto, String> {
@@ -12,8 +12,9 @@ pub fn get_backend_settings() -> Result<SettingsDto, String> {
     }
     let file_path = document_dir
         .unwrap()
-        .join(r#"Vital Utilities\Settings.json"#);
-
+        .join(r#"Vital Utilities"#)
+        .join(r#"Settings.json"#);
+    
     let settings_file = std::fs::read_to_string(file_path);
     if settings_file.is_err() {
         let msg = "failed to read settings file".to_string();

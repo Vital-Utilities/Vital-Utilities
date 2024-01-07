@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SendUtilizationRequest {
     #[serde(rename = "processData")]
     pub process_data: Vec<crate::models::ProcessData>,

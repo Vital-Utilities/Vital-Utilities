@@ -54,6 +54,7 @@ Class | Method | HTTP request | Description
 
  - [AddProccessRequest](docs/AddProccessRequest.md)
  - [ClientSettings](docs/ClientSettings.md)
+ - [CpuCache](docs/CpuCache.md)
  - [CpuData](docs/CpuData.md)
  - [CpuUsage](docs/CpuUsage.md)
  - [CpuUsageMetricModel](docs/CpuUsageMetricModel.md)

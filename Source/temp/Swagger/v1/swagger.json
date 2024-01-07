@@ -943,6 +943,60 @@
         },
         "additionalProperties": false
       },
+      "CpuCache": {
+        "type": "object",
+        "properties": {
+          "l1Size": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "l1LineSize": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "l2Size": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "l2LineSize": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "l3Size": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "l3LineSize": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false
+      },
       "CpuData": {
         "required": [
           "l1CacheSize",
@@ -979,16 +1033,16 @@
             "type": "boolean"
           },
           "l1CacheSize": {
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           },
           "l2CacheSize": {
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           },
           "l3CacheSize": {
-            "type": "number",
-            "format": "float"
+            "type": "integer",
+            "format": "int64"
           }
         },
         "additionalProperties": false
@@ -1059,6 +1113,9 @@
               "type": "number",
               "format": "float"
             }
+          },
+          "cpuCache": {
+            "$ref": "#/components/schemas/CpuCache"
           },
           "temperatureReadings": {
             "required": [
@@ -1261,7 +1318,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "totalFreeSpaceBytes": {
+          "totalSpaceBytes": {
             "required": [
               "hasValue",
               "value"
@@ -1437,6 +1494,14 @@
             "format": "float"
           },
           "usedSpaceBytes": {
+            "required": [
+              "hasValue",
+              "value"
+            ],
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalSpaceBytes": {
             "required": [
               "hasValue",
               "value"
@@ -2008,8 +2073,7 @@
       },
       "GpuUsageMetricModel": {
         "required": [
-          "id",
-          "name"
+          "id"
         ],
         "type": "object",
         "allOf": [
@@ -2018,13 +2082,6 @@
           }
         ],
         "properties": {
-          "name": {
-            "required": [
-              "chars",
-              "length"
-            ],
-            "type": "string"
-          },
           "coreUsagePercentage": {
             "required": [
               "hasValue",
@@ -3076,6 +3133,7 @@
               "minute",
               "month",
               "offset",
+              "totalOffsetMinutes",
               "second",
               "ticks",
               "utcTicks",

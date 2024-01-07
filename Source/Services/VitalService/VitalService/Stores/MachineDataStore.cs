@@ -3,11 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using VitalService.Dtos;
-using VitalService.Dtos.Coms;
+using VitalService.Dtos.Coms.Machine;
 using VitalService.Dtos.Data.Metrics;
 using VitalService.Services;
 using VitalService.Services.PerformanceServices;
-using static VitalService.Dtos.GetRunningProcessesResponse;
+using static VitalService.Dtos.Coms.Process.GetRunningProcessesResponse;
 
 namespace VitalService.Stores
 {

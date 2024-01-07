@@ -5,7 +5,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "hotReloadEnabled": false,
+      "hotReloadEnabled": true,
       "applicationUrl": ""
     }
   }

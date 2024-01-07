@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **used_space_percentage** | Option<**f32**> |  | [optional]
 **used_space_bytes** | Option<**i64**> |  | [optional]
-**total_free_space_bytes** | Option<**i64**> |  | [optional]
+**total_space_bytes** | Option<**i64**> |  | [optional]
 **write_activity_percentage** | Option<**f32**> |  | [optional]
 **total_activity_percentage** | Option<**f32**> |  | [optional]
 

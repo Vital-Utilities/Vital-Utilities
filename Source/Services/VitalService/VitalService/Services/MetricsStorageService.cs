@@ -144,6 +144,7 @@ namespace VitalService.Services
                             e.Value.Load?.UsedSpacePercentage,
                             e.Value.Temperatures.ToDictionary(k => k.Key, v => v.Value),
                             e.Value.Load?.UsedSpaceBytes,
+                            e.Value.Load?.TotalSpaceBytes,
                             e.Value.Serial
                         )).ToList());
 

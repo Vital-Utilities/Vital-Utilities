@@ -5,11 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json.Serialization;
 using VitalService.Data;
+using VitalService.Dtos;
 using VitalService.Services;
 using VitalService.Services.PerformanceServices;
 using VitalService.Services.SignalR;
@@ -40,27 +43,9 @@ namespace VitalService
             services.AddDbContextFactory<MetricDbContext>(e => e.UseSqlite(metricDbCs).EnableServiceProviderCaching(false));
 
             services.AddSingleton(settingsStore);
-            services.AddTransient<ManagedProcessStore>();
-            services.AddTransient<ProfileStore>();
-            services.AddTransient<MachineDataStore>();
 
-            services.AddSingleton<SoftwarePerformanceService>();
-            services.AddHostedService(provider => provider.GetService<SoftwarePerformanceService>());
+            services.LoadPlatformServices();
 
-            services.AddSingleton<HardwarePerformanceService>();
-            services.AddHostedService(provider => provider.GetService<HardwarePerformanceService>());
-
-            services.AddSingleton<MetricsStorageService>();
-            services.AddHostedService(provider => provider.GetService<MetricsStorageService>());
-
-            services.AddSingleton<ConfigApplyerService>();
-            services.AddHostedService(provider => provider.GetService<ConfigApplyerService>());
-
-            services.AddSignalR().AddJsonProtocol(options =>
-            {
-                options.PayloadSerializerOptions.Converters
-                   .Add(new JsonStringEnumConverter());
-            });
             services.AddSwaggerGen(options =>
             {
 

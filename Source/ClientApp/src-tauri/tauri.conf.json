@@ -15,6 +15,7 @@
             "active": true,
             "targets": [
                 "msi",
+                "app",
                 "updater"
             ],
             "identifier": "Vital-Utilities",

@@ -8,10 +8,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using VitalService.Data;
 using VitalService.Dtos;
+using VitalService.Dtos.Coms.Process;
 using VitalService.Stores;
 using VitalService.Utilities;
 
@@ -21,18 +23,19 @@ namespace VitalService.Controllers
     [ApiController]
     public partial class ProcessController : Controller
     {
-        private ManagedProcessStore AffinityStore { get; }
+        private IManagedProcessStore AffinityStore { get; }
         public MachineDataStore MachineDataStore { get; }
         public ProfileStore ProfileStore { get; }
         private ILogger<ProcessController> Logger { get; }
 
-        public ProcessController(ManagedProcessStore affinityStore, MachineDataStore machineDataStore, ProfileStore profileStore, ILogger<ProcessController> logger)
+        public ProcessController(IManagedProcessStore affinityStore, MachineDataStore machineDataStore, ProfileStore profileStore, ILogger<ProcessController> logger)
         {
             AffinityStore = affinityStore;
             MachineDataStore = machineDataStore;
             ProfileStore = profileStore;
             Logger = logger;
         }
+
 
         [ProducesResponseType(typeof(GetAllResponse), StatusCodes.Status200OK)]
         [HttpGet]

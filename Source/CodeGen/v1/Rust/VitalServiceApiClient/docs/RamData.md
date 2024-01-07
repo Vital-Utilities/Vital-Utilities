@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | Option<**String**> |  | [optional]
 **part_number** | Option<**String**> |  | [optional]
-**_type** | Option<**String**> |  | [optional]
+**r#type** | Option<**String**> |  | [optional]
 **speed_mhz** | Option<**i32**> |  | [optional]
 **slot_number** | Option<**i32**> |  | [optional]
 **slot_channel** | Option<**String**> |  | [optional]

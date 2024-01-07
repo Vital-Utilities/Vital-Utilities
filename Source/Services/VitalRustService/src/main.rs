@@ -2,12 +2,13 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-use std::time::Duration;
+use std::time::{Duration, SystemTime};
 use std::{thread, time::Instant};
 extern crate nvml_wrapper as nvml;
 use crate::commands::get_vital_service_ports;
+use crate::machine_stats::{cpu, disk, gpu, memory, net};
 use crate::software::get_process_util;
-use log::{error, info, LevelFilter};
+use log::{error, info, LevelFilter, warn};
 use log::{Level, Metadata, Record};
 use nvml::Nvml;
 use vital_service_api::models::{SendUtilizationRequest, SystemUsage};
@@ -19,7 +20,7 @@ use systemstat::Platform;
 use tokio::join;
 mod api;
 mod commands;
-mod machine;
+mod machine_stats;
 mod nvidia;
 pub mod rocket_endpoints;
 pub mod software;
@@ -41,33 +42,36 @@ async fn app() {
         error!("{}", "failed to get vital service port");
         panic!("{}", "failed to get vital service port");
     }
+
     let nvml_result = Nvml::init();
     let nvml = match nvml_result {
         Ok(nvml) => Some(nvml),
         Err(e) => {
-            error!("{}", e);
+            warn!("{}", e);
             None
         }
     };
+
+    error!("adw");
     let sys_stat = systemstat::System::new();
     let mut sys_info = sysinfo::System::new_all();
     sys_info.refresh_all(); // required to get the correct usage as data relies on previous sample
     thread::sleep(SECOND);
     loop {
-        let now = Instant::now();
+        let start = SystemTime::now();
 
         sys_info.refresh_all();
         let time = chrono::Utc::now();
-
         let process_data = get_process_util(&sys_info, &nvml, time).unwrap();
 
         let (cpu_util, mem_util, net_util, disk_usage, gpu_usage) = join!(
-            machine::get_cpu_util(&sys_info, &sys_stat),
-            machine::get_mem_util(&sys_info),
-            machine::get_net_adapters(&sys_info),
-            machine::get_disk_util(&sys_info),
-            machine::get_gpu_util(&nvml),
+            cpu::get_cpu_util(&sys_info, &sys_stat),
+            memory::get_mem_util(&sys_info),
+            net::get_net_adapters(&sys_info),
+            disk::get_disk_util(&sys_info),
+            gpu::get_gpu_util(&nvml),
         );
+
 
         if !process_data.is_empty() {
             let send_util = post_request(
@@ -94,11 +98,11 @@ async fn app() {
         } else {
             error!("no process data found");
         }
-        info!("time taken: {}", now.elapsed().as_millis());
+        info!("time taken: {:?}", SystemTime::now().duration_since(start));
 
-        if now.elapsed().as_millis() < SECOND.as_millis() {
+        if start.elapsed().unwrap().as_millis() < SECOND.as_millis() {
             thread::sleep(Duration::from_millis(
-                (SECOND.as_millis() - now.elapsed().as_millis()) as u64,
+                (SECOND.as_millis() - start.elapsed().unwrap().as_millis()) as u64,
             ));
         }
     }
