@@ -260,7 +260,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             detail={`${value[0]}`}
                                             stat={
                                                 <>
-                                                    <CaretDownOutlined rev={"data"} /> {getReadableBytesPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0, 0)} <CaretUpOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0, 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
+                                                    <CaretDownOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0, 0)} <CaretUpOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0, 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
                                                 </>
                                             }
                                         />
