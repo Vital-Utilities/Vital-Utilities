@@ -18,7 +18,7 @@ pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, Dis
         
         let disk_load = DiskLoad {
             used_space_bytes: Some((disk.total_space() - disk.available_space()) as i64),
-            total_free_space_bytes: Some(disk.total_space() as i64),
+            total_space_bytes: Some(disk.total_space() as i64),
             used_space_percentage: Some(
                 (disk.total_space() - disk.available_space()) as f32
                 / disk.total_space() as f32
