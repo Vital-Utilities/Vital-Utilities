@@ -1,17 +1,17 @@
 use std::cmp;
 
-use sysinfo::{NetworkExt, SystemExt};
+use sysinfo::Networks;
 use vital_service_api::models::{
     IpInterfaceProperties, NetAdapterUsage, NetworkAdapterProperties, NetworkAdapterUsage,
 };
 
-pub async fn get_net_adapters(sysinfo: &sysinfo::System) -> Vec<NetworkAdapterUsage> {
+pub async fn get_net_adapters() -> Vec<NetworkAdapterUsage> {
     let mut list = Vec::new();
     let mut utils = Vec::new();
 
-    let networks = sysinfo.networks();
+    let networks = Networks::new_with_refreshed_list();
 
-    for data in networks {
+    for data in &networks {
         utils.push(data);
     }
 

@@ -14,7 +14,6 @@ use std::{
     str::from_utf8,
     sync::Mutex,
 };
-use sysinfo::{PidExt, ProcessExt, SystemExt};
 #[cfg(target_os = "windows")]
 use windows::{
     core::{HSTRING, PCWSTR},
@@ -107,22 +106,22 @@ pub fn get_process_util(
     let mut list = Vec::new();
     let processes = sysinfo.processes();
     let process_gpu_utilization_samples = nvidia::get_process_gpu_util(nvml).unwrap_or_default();
-    
+
     /*
     let using_compute = gpu_device.running_compute_processes().unwrap();
     let using_graphics = gpu_device.running_graphics_processes().unwrap();
-    
+
     for p in using_compute {
         p.used_gpu_memory();
     } */
-    
+
     for (pid, process) in processes {
         let disk_bytes = process.disk_usage();
         // get first gpu usage that has this pid
-        
+
         let pid = pid.as_u32();
         let path: Option<String> = get_process_path(pid); // takes some time
-        
+
         let mut description: Option<String> = None; // takes some time
         if path.is_some() {
             description = match get_file_description(path.to_owned().unwrap()) {
@@ -133,16 +132,16 @@ pub fn get_process_util(
         let cores = sysinfo.physical_core_count();
 
         let gpu_util = process_gpu_utilization_samples
-        .iter()
-        .find(|sample| sample.pid == pid)
-        .map(|util| {
-            Box::new(ProcessGpuUtil {
-                gpu_core_percentage: Some(util.sm_util as f32),
-                gpu_decoding_percentage: Some(util.dec_util as f32),
-                gpu_encoding_percentage: Some(util.enc_util as f32),
-                gpu_mem_percentage: Some(util.mem_util as f32),
-            })
-        });
+            .iter()
+            .find(|sample| sample.pid == pid)
+            .map(|util| {
+                Box::new(ProcessGpuUtil {
+                    gpu_core_percentage: Some(util.sm_util as f32),
+                    gpu_decoding_percentage: Some(util.dec_util as f32),
+                    gpu_encoding_percentage: Some(util.enc_util as f32),
+                    gpu_mem_percentage: Some(util.mem_util as f32),
+                })
+            });
 
         list.push(ProcessData {
             pid: pid as i32,
@@ -172,20 +171,23 @@ fn get_mainwindow_title(pid: u32) -> Option<String> {
     use regex::Regex;
 
     let mut child = Command::new("ps")
-    .arg("-p")
-    .arg(pid.to_string())
-    .arg("-o")
-    .arg("comm=")
-    .spawn()
-    .expect("Failed to execute command");
+        .arg("-p")
+        .arg(pid.to_string())
+        .arg("-o")
+        .arg("comm=")
+        .spawn()
+        .expect("Failed to execute command");
 
     let output = child.wait_with_output().expect("Failed to wait on command");
 
-    let process_name = String::from_utf8(output.stdout).expect("Failed to convert output to string");
-    
+    let process_name =
+        String::from_utf8(output.stdout).expect("Failed to convert output to string");
+
     let re = Regex::new(r"[^/]+$").unwrap();
-    let process_name = re.find(&process_name).map(|e| e.as_str().trim_end_matches('\n').to_string());
-    
+    let process_name = re
+        .find(&process_name)
+        .map(|e| e.as_str().trim_end_matches('\n').to_string());
+
     process_name
 }
 
@@ -197,7 +199,6 @@ fn get_process_path(pid: u32) -> Option<String> {
 fn get_file_description(path: String) -> Result<String, ()> {
     Err(())
 }
-
 
 #[cfg(target_os = "windows")]
 static WINDOW_TITLES: OnceCell<Mutex<HashMap<u32, String>>> = OnceCell::new();
@@ -332,7 +333,7 @@ fn get_process_path(pid: u32) -> Option<String> {
                     let char_vec = mod_entry
                         .szExePath
                         .iter()
-                        .map(|f| f.to_owned())
+                        .map(|f| f.to_owned() as u8)
                         .collect::<Vec<u8>>();
 
                     path = match from_utf8(&char_vec) {

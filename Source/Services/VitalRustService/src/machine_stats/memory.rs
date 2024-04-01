@@ -1,4 +1,3 @@
-use sysinfo::SystemExt;
 use vital_service_api::models::MemoryUsage;
 
 pub async fn get_mem_util(sysinfo: &sysinfo::System) -> MemoryUsage {

@@ -1,8 +1,7 @@
 use std::collections::HashMap;
 
-use sysinfo::{CpuExt, DiskExt, NetworkExt, SystemExt};
 use systemstat::Platform;
-use vital_service_api::models::{CpuCache, CpuUsage};
+use vital_service_api::models::CpuUsage;
 
 pub async fn get_cpu_util(
     sysinfo: &sysinfo::System,
@@ -34,8 +33,8 @@ pub async fn get_cpu_util(
     })
 }
 
-fn truncate_two_precision(num:f32) -> f32 {
-    f32::trunc(num  * 100.0) / 100.0
+fn truncate_two_precision(num: f32) -> f32 {
+    f32::trunc(num * 100.0) / 100.0
 }
 
 // fn get_cpu_cache() -> CpuCache {

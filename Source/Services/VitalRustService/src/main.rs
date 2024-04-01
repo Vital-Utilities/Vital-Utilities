@@ -8,14 +8,13 @@ extern crate nvml_wrapper as nvml;
 use crate::commands::get_vital_service_ports;
 use crate::machine_stats::{cpu, disk, gpu, memory, net};
 use crate::software::get_process_util;
-use log::{error, info, LevelFilter, warn};
+use log::{error, info, warn, LevelFilter};
 use log::{Level, Metadata, Record};
 use nvml::Nvml;
 use vital_service_api::models::{SendUtilizationRequest, SystemUsage};
 
 use rocket::routes;
 
-use sysinfo::SystemExt;
 use systemstat::Platform;
 use tokio::join;
 mod api;
@@ -67,11 +66,10 @@ async fn app() {
         let (cpu_util, mem_util, net_util, disk_usage, gpu_usage) = join!(
             cpu::get_cpu_util(&sys_info, &sys_stat),
             memory::get_mem_util(&sys_info),
-            net::get_net_adapters(&sys_info),
+            net::get_net_adapters(),
             disk::get_disk_util(&sys_info),
             gpu::get_gpu_util(&nvml),
         );
-
 
         if !process_data.is_empty() {
             let send_util = post_request(
