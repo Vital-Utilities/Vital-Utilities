@@ -1,6 +1,6 @@
 use log::error;
-use std::{mem::size_of_val, str::from_utf8};
 use std::process::Command;
+use std::{mem::size_of_val, str::from_utf8};
 #[cfg(target_os = "windows")]
 use windows::{
     Win32::Foundation::*,
@@ -26,7 +26,7 @@ pub fn get_process_path(pid: u32) -> Option<String> {
                     let char_vec = mod_entry
                         .szExePath
                         .iter()
-                        .map(|f| f.to_owned())
+                        .map(|f| f.to_owned() as u8)
                         .collect::<Vec<u8>>();
 
                     path = match from_utf8(&char_vec) {
@@ -77,7 +77,7 @@ pub fn get_process_path(pid: u32) -> Option<String> {
         .arg(format!("ps -p {} -o comm=", pid))
         .output()
         .expect("Failed to execute command");
-    
+
     if output.status.success() {
         let path = String::from_utf8(output.stdout).unwrap();
         Some(path.trim().to_string())
@@ -88,7 +88,6 @@ pub fn get_process_path(pid: u32) -> Option<String> {
 
 #[cfg(target_os = "macos")]
 pub fn open_process_properties(pid: u32) -> Result<(), String> {
-
     use log::info;
 
     let file_path = get_process_path(pid);

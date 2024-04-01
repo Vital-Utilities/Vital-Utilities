@@ -57,7 +57,7 @@ vital_service_api = { path = "../../CodeGen/v1/Rust/VitalServiceApiClient" }
 
 
 [dependencies.windows]
-version = "0.51"
+version = "0.54"
 features = [
     "Data_Xml_Dom",
     "Win32_Security",
