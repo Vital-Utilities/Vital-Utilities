@@ -50,9 +50,9 @@ namespace VitalService.Services.PerformanceServices
             if (networkDataFromRust is null)
                 return;
             var toReturn = new NetworkAdapterUsages();
-
+            string[] filterList = ["lo0", "en0", "bridge0"];
             if (networkDataFromRust is not null)
-                foreach (var adapter in networkDataFromRust)
+                foreach (var adapter in networkDataFromRust.Where(e=> filterList.Contains(e.Properties.Name)))
                     toReturn.Adapters.TryAdd(adapter.Properties.Name, adapter);
 
             networkUsageData = toReturn;

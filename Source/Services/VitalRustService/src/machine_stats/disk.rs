@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use log::info;
-use sysinfo::{Disks, System};
+use sysinfo::{Disks};
 use vital_service_api::models::{DiskLoad, DiskType, DiskUsage, DriveType};
 
 pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, DiskUsage>> {
@@ -26,7 +26,6 @@ pub async fn get_disk_util(sysinfo: &sysinfo::System) -> Box<HashMap<String, Dis
             total_activity_percentage: None,
             write_activity_percentage: None,
         };
-        info!("{:?}", disk_load);
         list.insert(
             disk.mount_point().to_str().unwrap().to_string(),
             DiskUsage {
