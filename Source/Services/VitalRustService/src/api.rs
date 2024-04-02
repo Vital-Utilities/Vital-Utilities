@@ -8,6 +8,7 @@ pub async fn post_request<T: Serialize>(request: T, url: String) {
         Ok(res) => {
             if res.status() != 200 {
                 error!("{}", res.status());
+                error!("{:?}", res.text().await);
             }
         }
         Err(e) => {

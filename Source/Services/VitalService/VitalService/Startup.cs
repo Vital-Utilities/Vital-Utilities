@@ -10,13 +10,15 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json.Serialization;
 using VitalService.Data;
 using VitalService.Dtos;
 using VitalService.Services;
 using VitalService.Services.PerformanceServices;
 using VitalService.Services.SignalR;
 using VitalService.Stores;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using VitalService.Utilities;
 
 namespace VitalService
 {
@@ -56,11 +58,15 @@ namespace VitalService
             });
 
             services.AddResponseCompression();
-            services.AddControllers().AddJsonOptions(opts =>
+            services.AddControllers().AddNewtonsoftJson(options =>
             {
-                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+                options.SerializerSettings.Converters.Add(new SingleConverter());
             });
-
+            ;
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
@@ -110,6 +116,19 @@ namespace VitalService
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ManagedHub>(ManagedHub.HubName);
+            });
+
+
+            app.Use(async (context, next) =>
+            {
+                Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
+                foreach (var header in context.Request.Headers)
+                {
+                    Console.WriteLine($"Header: {header.Key}:{header.Value}");
+                }
+                Console.WriteLine(context.Request.Body);
+                Console.WriteLine(context.Response.StatusCode);
+                await next.Invoke();
             });
         }
     }

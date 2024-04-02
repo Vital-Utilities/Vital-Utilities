@@ -37,6 +37,8 @@ async fn main() {
 }
 async fn app() {
     let vital_service_port = get_vital_service_ports();
+
+    info!("adwadawdwd {:?}", vital_service_port);
     if vital_service_port.is_err() {
         error!("{}", "failed to get vital service port");
         panic!("{}", "failed to get vital service port");
@@ -51,7 +53,6 @@ async fn app() {
         }
     };
 
-    error!("adw");
     let sys_stat = systemstat::System::new();
     let mut sys_info = sysinfo::System::new_all();
     sys_info.refresh_all(); // required to get the correct usage as data relies on previous sample
@@ -91,7 +92,6 @@ async fn app() {
                         .vital_service_http_port
                 ),
             );
-
             join!(send_util);
         } else {
             error!("no process data found");

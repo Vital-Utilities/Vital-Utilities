@@ -24,6 +24,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendUtilizationRequest"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SendUtilizationRequest"
@@ -458,6 +463,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProfileRequest"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CreateProfileRequest"
@@ -506,6 +516,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddProccessRequest"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/AddProccessRequest"
@@ -560,6 +575,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateManagedRequest"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateManagedRequest"
@@ -660,6 +680,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/UpdateProfileRequest"
@@ -829,6 +854,11 @@
         ],
         "requestBody": {
           "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMachineTimeSeriesRequest"
+              }
+            },
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/GetMachineTimeSeriesRequest"
@@ -1369,11 +1399,12 @@
       },
       "DiskType": {
         "enum": [
-          "Unknown",
-          "HDD",
-          "SSD"
+          0,
+          1,
+          2
         ],
-        "type": "string"
+        "type": "integer",
+        "format": "int32"
       },
       "DiskUsage": {
         "required": [
@@ -1599,15 +1630,16 @@
       },
       "DriveType": {
         "enum": [
-          "Unknown",
-          "NoRootDirectory",
-          "Removable",
-          "Fixed",
-          "Network",
-          "CDRom",
-          "Ram"
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
         ],
-        "type": "string"
+        "type": "integer",
+        "format": "int32"
       },
       "GetAllResponse": {
         "required": [
@@ -2732,15 +2764,16 @@
       },
       "ProcessPriorityEnum": {
         "enum": [
-          "DontOverride",
-          "Idle",
-          "BelowNormal",
-          "Normal",
-          "AboveNormal",
-          "High",
-          "RealTime"
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
         ],
-        "type": "string"
+        "type": "integer",
+        "format": "int32"
       },
       "ProcessToAddDto": {
         "required": [
