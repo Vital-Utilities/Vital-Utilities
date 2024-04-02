@@ -23,6 +23,7 @@ namespace VitalService.Services.PerformanceServices
             if (cpuDataFromRust is null)
                 return;
             MachineStaticData.Cpu.Name = cpuDataFromRust.Name;
+            MachineStaticData.Cpu.NumberOfCores = cpuDataFromRust.CorePercentages.Count;
             cpuUsageData = cpuDataFromRust;
         }
 

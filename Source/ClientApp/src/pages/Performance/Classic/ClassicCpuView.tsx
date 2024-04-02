@@ -38,7 +38,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                 <Tooltip content={<ClassicTooltip />} />
                                 <Legend />
                                 <Area yAxisId="left" unit="%" type="monotone" dataKey="totalCoreUsagePercentage" name={`Utilisation ${current?.totalCoreUsagePercentage}%`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />
-                                <Area yAxisId="right" unit="w" type="monotone" dataKey="powerDrawWattage" name={`Power ${current?.powerDrawWattage}w`} stroke="yellow" color="yellow" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
+                                {current?.powerDrawWattage && <Area yAxisId="right" unit="w" type="monotone" dataKey="powerDrawWattage" name={`Power ${current?.powerDrawWattage}w`} stroke="yellow" color="yellow" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />}
                                 <Area yAxisId="left" unit="°C" type="monotone" dataKey="packageTemperature" name={`Temperature ${current?.packageTemperature}°C`} stroke="white" color="white" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -93,7 +93,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                 <>
                     <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 30 }}>
                         <ItemOne color="#3182bd" title="Utilisation" value={`${current?.totalCoreUsagePercentage}%`} />
-                        <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />
+                        {current?.powerDrawWattage && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />}
                         <ItemOne color="white" title="Package Temp" value={`${current?.packageTemperature}°C`} />
                         {highestCoreClockMhz && <ItemOne color="white" title="Speed" value={`${highestCoreClockMhz} mhz`} />}
                     </div>
