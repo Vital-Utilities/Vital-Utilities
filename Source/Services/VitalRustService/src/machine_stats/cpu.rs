@@ -1,7 +1,9 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, process::Command};
 
+use sysinfo::Cpu;
 use systemstat::Platform;
 use vital_service_api::models::CpuUsage;
+use std::str;
 
 pub async fn get_cpu_util(
     sysinfo: &sysinfo::System,
@@ -21,7 +23,7 @@ pub async fn get_cpu_util(
     }
     let info = sysinfo.global_cpu_info();
     Box::new(CpuUsage {
-        name: info.name().to_string(),
+        name: get_name(&info),
         cpu_cache: None,
         brand: Some(info.brand().to_string()),
         vendor_id: Some(info.vendor_id().to_string()),
@@ -32,7 +34,24 @@ pub async fn get_cpu_util(
         temperature_readings: temperature_readings.clone(),
     })
 }
+#[cfg(target_os = "macos")]
+fn get_name(_info: &Cpu) -> String {
+    use log::info;
 
+    let output = Command::new("sysctl")
+        .arg("-n")
+        .arg("machdep.cpu.brand_string")
+        .output()
+        .expect("Failed to execute command");
+
+    let cpu_name = str::from_utf8(&output.stdout).expect("Output was not valid UTF-8");
+    return cpu_name.trim().to_string();
+}
+
+#[cfg(target_os = "windows")]
+fn get_name(info: &Cpu) -> String {
+    info.name().to_string()
+}
 fn truncate_two_precision(num: f32) -> f32 {
     f32::trunc(num * 100.0) / 100.0
 }

@@ -22,7 +22,7 @@ namespace VitalService.Services.PerformanceServices
         {
             if (cpuDataFromRust is null)
                 return;
-
+            MachineStaticData.Cpu.Name = cpuDataFromRust.Name;
             cpuUsageData = cpuDataFromRust;
         }
 
