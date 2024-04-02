@@ -14,6 +14,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const threads = staticState?.cpu?.threadCount ?? 0;
+    const cores = staticState?.cpu?.numberOfCores ?? 0;
     const graphWindowRef = useRef(null);
     const graphWindowSize = useSize(graphWindowRef);
     React.useEffect(() => {
@@ -47,7 +48,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
             case "Logical": {
                 const cellHeight = graphWindowSize?.height ? graphWindowSize?.height / 4 - 7 * 4 : 0;
                 return (
-                    <div ref={graphWindowRef} style={{ display: "grid", width: "100%", gridTemplateColumns: `repeat(${threads / 4}, minmax(50px, 1fr))`, gap: 5, overflow: "hidden" }}>
+                    <div ref={graphWindowRef} style={{ display: "grid", width: "100%", gridTemplateColumns: `repeat(${Math.round((cores + threads) / 4)}, minmax(50px, 1fr))`, gap: 5, overflow: "hidden" }}>
                         {dynamicState?.cpuUsageData?.corePercentages?.map((e, i) => {
                             return (
                                 graphWindowSize && (
