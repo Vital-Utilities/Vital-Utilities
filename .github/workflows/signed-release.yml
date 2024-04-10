@@ -176,6 +176,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
         include-prerelease: false
+    - name: setup tools
+      run:  sudo -H pip install setuptools  
     - name: install Rust stable
       uses: actions-rs/toolchain@v1
       with:
