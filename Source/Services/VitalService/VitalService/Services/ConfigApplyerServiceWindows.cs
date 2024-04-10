@@ -5,6 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using VitalService.Data.App;
@@ -13,11 +14,12 @@ using VitalService.Utilities;
 
 namespace VitalService.Services
 {
-    public class ConfigApplyerService : IHostedService
+    [SupportedOSPlatform("windows")]
+    public class ConfigApplyerServiceWindows : IHostedService
     {
         private ProfileStore Store { get; }
         private Timer ApplyerTimer { get; set; }
-        public ConfigApplyerService(ProfileStore store)
+        public ConfigApplyerServiceWindows(ProfileStore store)
         {
             Store = store ?? throw new ArgumentNullException(nameof(store));
             ApplyerTimer = new Timer((_) => ApplyConfig(), null, Timeout.Infinite, Timeout.Infinite);
@@ -57,11 +59,11 @@ namespace VitalService.Services
                             }
                             catch (Win32Exception exception) when (exception.Message == "Access is denied.")
                             {
-                                Log.ForContext<ConfigApplyerService>().Warning(exception, $"Could not set affinity for {process.ProcessName} | pid: {process.Id}. This is probably due to {AppDomain.CurrentDomain.FriendlyName} not having administrator priviledges.");
+                                Log.ForContext<ConfigApplyerServiceWindows>().Warning(exception, $"Could not set affinity for {process.ProcessName} | pid: {process.Id}. This is probably due to {AppDomain.CurrentDomain.FriendlyName} not having administrator priviledges.");
                             }
                             catch (Exception e)
                             {
-                                Log.ForContext<ConfigApplyerService>().Error(e, "Something went wrong");
+                                Log.ForContext<ConfigApplyerServiceWindows>().Error(e, "Something went wrong");
                             }
                         }
 

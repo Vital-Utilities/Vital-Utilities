@@ -40,7 +40,6 @@ Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issu
 
 [Discord Server](https://discord.gg/ghQ8nQK2ma)
 
-
 ## License
 
 [Vital License v1.0](./LICENSE)

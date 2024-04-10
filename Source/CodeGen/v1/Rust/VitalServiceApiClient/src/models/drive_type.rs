@@ -23,7 +23,7 @@ pub enum DriveType {
     #[serde(rename = "Network")]
     Network,
     #[serde(rename = "CDRom")]
-    CDRom,
+    CdRom,
     #[serde(rename = "Ram")]
     Ram,
 
@@ -37,7 +37,7 @@ impl ToString for DriveType {
             Self::Removable => String::from("Removable"),
             Self::Fixed => String::from("Fixed"),
             Self::Network => String::from("Network"),
-            Self::CDRom => String::from("CDRom"),
+            Self::CdRom => String::from("CDRom"),
             Self::Ram => String::from("Ram"),
         }
     }

@@ -50,7 +50,10 @@ const ManagedHubSignalR: React.FunctionComponent = () => {
             console.assert(connection.state === HubConnectionState.Reconnecting);
             setIsConnected(false);
             console.error(`Connection lost due to error "${error}". Reconnecting.`);
-            notification.error({ duration: 5, message: `Connection lost due to error "${error}". Reconnecting.` });
+            notification.error({
+                duration: 5,
+                message: `Connection lost due to error "${error}". Reconnecting.`
+            });
             console.log("SignalR Reconnecting");
         });
         connection.onreconnected(connectionId => {

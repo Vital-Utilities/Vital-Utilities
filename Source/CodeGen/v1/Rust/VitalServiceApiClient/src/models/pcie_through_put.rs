@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct PcieThroughPut {
     #[serde(rename = "pcIe_RxBytesPerSecond", skip_serializing_if = "Option::is_none")]
     pub pc_ie_rx_bytes_per_second: Option<i64>,

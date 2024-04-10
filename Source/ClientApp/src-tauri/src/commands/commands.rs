@@ -1,28 +1,41 @@
-use std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex};
+use std::{io::Error, path::PathBuf};
 
-use crate::file::get_process_path;
 use crate::APP_HANDLE;
 use log::{debug, error, info};
-use sysinfo::{Pid, ProcessExt, System, SystemExt};
+use sysinfo::{Pid, System};
 use tauri::{api::path::document_dir, AppHandle, Manager};
 use vital_service_api::models::{ClientSettings, LaunchSettings, SettingsDto};
 
-use winapi::um::processthreadsapi::OpenProcess;
-use winapi::um::winnt::PROCESS_ALL_ACCESS;
+use super::vital_service::start_vital_service;
 
-#[tauri::command]
-pub fn get_client_settings() -> Result<ClientSettings, String> {
+#[cfg(target_os = "windows")]
+use {
+    crate::file::get_process_path,
+    std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex},
+    winapi::um::processthreadsapi::OpenProcess,
+    winapi::um::winnt::PROCESS_ALL_ACCESS,
+};
+
+fn client_settings_path() -> Result<PathBuf, Error> {
     let document_dir = document_dir();
     if document_dir.is_none() {
         let msg = "failed to get document dir".to_string();
         error!("{}", msg);
-        return Err(msg);
+        return Err(Error::new(std::io::ErrorKind::Other, msg));
     }
-    let file_path = &document_dir
+    let path = &document_dir
         .unwrap()
-        .join(r#"Vital Utilities\ClientSettings.json"#);
+        .join(r#"Vital Utilities"#)
+        .join(r#"ClientSettings.json"#);
+    Ok(path.to_owned())
+}
 
-    let settings_file = std::fs::read_to_string(file_path);
+#[tauri::command]
+pub fn get_client_settings() -> Result<ClientSettings, String> {
+    let file_path = client_settings_path().expect("Failed to get documentDir");
+
+    info!("{}", file_path.display());
+    let settings_file = std::fs::read_to_string(&file_path);
     if settings_file.is_err() {
         error!("Failed to read ClientSettings file, Creating new ClientSettings File");
         let settings = ClientSettings {
@@ -33,7 +46,7 @@ pub fn get_client_settings() -> Result<ClientSettings, String> {
             error!("failed to serialize new ClientSettings");
             return Err("failed to serialize new ClientSettings".to_string());
         }
-        match std::fs::write(file_path, content.unwrap()) {
+        match std::fs::write(&file_path, content.unwrap()) {
             Ok(_) => {
                 info!("Created new ClientSettings file");
                 return Ok(settings);
@@ -60,37 +73,27 @@ pub fn get_client_settings() -> Result<ClientSettings, String> {
 
 #[tauri::command]
 pub fn update_client_settings(client_settings: ClientSettings) -> Result<String, String> {
-    match document_dir() {
-        Some(dir) => {
-            let file_path = dir.join(r#"Vital Utilities\ClientSettings.json"#);
+    let file_path = client_settings_path().expect("Failed to get documentDir");
+    let result = std::fs::write(&file_path, serde_json::to_string(&client_settings).unwrap());
+    match result {
+        Ok(_) => {
+            let msg = "Successfully updated client settings file";
 
-            let result =
-                std::fs::write(&file_path, serde_json::to_string(&client_settings).unwrap());
-            match result {
-                Ok(_) => {
-                    let msg = "Successfully updated client settings file";
-
-                    info!("{}", msg);
-                    let handle = APP_HANDLE.get();
-                    if handle.is_none() {
-                        error!("Failed to get app handle, app must restart to apply new settings");
-                        return Err(msg.to_string());
-                    }
-
-                    let guard = handle.unwrap().lock().unwrap();
-                    let _ = set_always_on_top(&guard, client_settings.always_on_top);
-                    std::mem::drop(guard);
-                    return Ok(msg.to_string());
-                }
-                Err(e) => {
-                    let msg = format!("Failed to update client settings file. {}", e);
-                    error!("{}", msg);
-                    return Err(msg);
-                }
+            info!("{}", msg);
+            let handle = APP_HANDLE.get();
+            if handle.is_none() {
+                let msg = "Failed to get app handle, app must restart to apply new settings";
+                error!("{}", msg);
+                return Err(msg.to_string());
             }
+
+            let guard = handle.unwrap().lock().unwrap();
+            let _ = set_always_on_top(&guard, client_settings.always_on_top);
+            std::mem::drop(guard);
+            return Ok(msg.to_string());
         }
-        None => {
-            let msg = "failed to get document directory".to_string();
+        Err(e) => {
+            let msg = format!("Failed to update client settings file. {}", e);
             error!("{}", msg);
             return Err(msg);
         }
@@ -106,7 +109,8 @@ pub fn get_backend_settings() -> Result<SettingsDto, String> {
     }
     let file_path = document_dir
         .unwrap()
-        .join(r#"Vital Utilities\Settings.json"#);
+        .join(r#"Vital Utilities"#)
+        .join(r#"Settings.json"#);
 
     let settings_file = std::fs::read_to_string(file_path);
     if settings_file.is_err() {
@@ -171,43 +175,31 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
         return Err(msg);
     }
 
-    let document_dir = document_dir();
-    match document_dir {
-        Some(dir) => {
-            let file_path = dir.join(r#"Vital Utilities\Settings.json"#);
+    let file_path = client_settings_path().expect("Failed to get documentDir");
+    let settings_file = std::fs::read_to_string(&file_path);
+    match settings_file {
+        Ok(settings_str) => {
+            let settings = serde_json::from_str::<SettingsDto>(&settings_str);
+            match settings {
+                Ok(mut settings) => {
+                    settings.launch.vital_service_http_port = port_number as i32;
 
-            let settings_file = std::fs::read_to_string(&file_path);
-            match settings_file {
-                Ok(settings_str) => {
-                    let settings = serde_json::from_str::<SettingsDto>(&settings_str);
-                    match settings {
-                        Ok(mut settings) => {
-                            settings.launch.vital_service_http_port = port_number as i32;
-
-                            let result = std::fs::write(
-                                &file_path,
-                                serde_json::to_string(&settings).unwrap(),
+                    let result =
+                        std::fs::write(&file_path, serde_json::to_string(&settings).unwrap());
+                    match result {
+                        Ok(_) => {
+                            let msg = format!(
+                                "Successfully updated vital service port to {}",
+                                port_number
                             );
-                            match result {
-                                Ok(_) => {
-                                    let msg = format!(
-                                        "Successfully updated vital service port to {}",
-                                        port_number
-                                    );
 
-                                    info!("{}", msg);
-                                    return Ok(msg);
-                                }
-                                Err(e) => {
-                                    let msg = format!("Failed to update vital service port. {}", e);
-                                    error!("{}", msg);
-                                    return Err(msg);
-                                }
-                            }
+                            info!("{}", msg);
+                            return Ok(msg);
                         }
                         Err(e) => {
-                            error!("{}", e);
-                            return Err(format!("{}", e));
+                            let msg = format!("Failed to update vital service port. {}", e);
+                            error!("{}", msg);
+                            return Err(msg);
                         }
                     }
                 }
@@ -217,12 +209,18 @@ pub fn update_vital_service_port(port_number: f64) -> Result<String, String> {
                 }
             }
         }
-        None => {
-            let msg = "failed to get document directory".to_string();
-            error!("{}", msg);
-            return Err(msg);
+        Err(e) => {
+            error!("{}", e);
+            return Err(format!("{}", e));
         }
     }
+}
+
+#[tauri::command]
+pub fn get_os() -> Result<String, String> {
+    let os = std::env::consts::OS;
+    debug!("{}", os.to_string());
+    return Ok(os.to_string());
 }
 
 pub fn set_always_on_top(app: &AppHandle, value: bool) -> Result<(), String> {
@@ -279,43 +277,6 @@ pub fn end_process(pid: Pid) -> Result<(), String> {
         }
     }
 }
-#[cfg(target_os = "windows")]
-pub fn start_vital_service(service_name: ServiceName) -> Result<String, String> {
-    if !cfg!(feature = "release") {
-        info!("Debug mode: backend will not be started");
-        return Ok("Debug mode: backend will not be started".to_string());
-    }
-
-    info!("Starting {}", service_name.as_str());
-    let result;
-    const CREATE_NO_WINDOW: u32 = 0x08000000;
-    match service_name {
-        ServiceName::VitalService => {
-            result = Command::new("cmd")
-                .args(&["/C", "start", "./bin/VitalService/VitalService.exe"])
-                .creation_flags(CREATE_NO_WINDOW)
-                .spawn();
-        }
-        ServiceName::VitalRustService => {
-            result = Command::new("cmd")
-                .args(&["/C", "start", "./bin/VitalRustService/VitalRustService.exe"])
-                .creation_flags(CREATE_NO_WINDOW)
-                .spawn();
-        }
-    }
-
-    match result {
-        Ok(_) => {
-            info!("Vital Service started");
-            return Ok("Vital Service started".to_string());
-        }
-        Err(err) => {
-            error!("Failed to start Vital Service: {:?}", err);
-            return Err(format!("Failed to start Vital Service: {:?}", err));
-        }
-    }
-}
-
 pub fn is_vital_service_running(service_name: ServiceName) -> bool {
     let s = System::new_all();
     for _process in s.processes_by_exact_name(service_name.as_str()) {

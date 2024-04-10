@@ -1,4 +1,6 @@
-﻿namespace VitalService.Dtos.Data.Metrics
+﻿using VitalService.Interfaces;
+
+namespace VitalService.Dtos.Data.Metrics
 {
     public class RamUsageMetricModel : HardwareMetricModel
     {

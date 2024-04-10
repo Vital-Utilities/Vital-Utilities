@@ -13,6 +13,7 @@ import * as Sentry from "@sentry/react";
 import notification from "antd/lib/notification";
 import packageJson from "../package.json";
 import reportWebVitals from "./reportWebVitals";
+
 if (process.env.NODE_ENV === "production") {
     Sentry.init({
         dsn: "REPLACE_WITH_SENTRYIO_REACT_DSN",

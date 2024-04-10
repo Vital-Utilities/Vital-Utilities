@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct CpuUsageMetricModel {
     #[serde(rename = "totalCoreUsagePercentage", skip_serializing_if = "Option::is_none")]
     pub total_core_usage_percentage: Option<f32>,

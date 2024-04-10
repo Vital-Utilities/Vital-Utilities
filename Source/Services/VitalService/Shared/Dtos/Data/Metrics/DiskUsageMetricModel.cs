@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VitalService.Interfaces;
 
 namespace VitalService.Dtos.Data.Metrics
 {
@@ -15,6 +16,7 @@ namespace VitalService.Dtos.Data.Metrics
         public float? UsedSpacePercentage { get; set; }
 
         public long? UsedSpaceBytes { get; set; }
+        public long? TotalSpaceBytes { get; set; }
 
         public float? WriteActivityPercentage { get; set; }
 
@@ -44,7 +46,10 @@ namespace VitalService.Dtos.Data.Metrics
             float? totalActivityPercentage,
             float? writeActivityPercentage,
             float? usedSpacePercentage,
-            Dictionary<string, float>? temperatures, long? usedSpaceBytes, string? serial) : base(uniqueIdentifier)
+            Dictionary<string, float>? temperatures, 
+            long? usedSpaceBytes,
+            long? totalSpaceBytes,
+            string? serial) : base(uniqueIdentifier)
         {
             Name = name;
             DriveLetter = driveLetter;
@@ -57,7 +62,9 @@ namespace VitalService.Dtos.Data.Metrics
             UsedSpacePercentage = usedSpacePercentage;
             Temperatures = temperatures;
             UsedSpaceBytes = usedSpaceBytes;
+            TotalSpaceBytes = totalSpaceBytes;
             Serial = serial;
         }
+
     }
 }

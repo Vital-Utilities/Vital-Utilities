@@ -5,6 +5,7 @@ Cargo.toml
 README.md
 docs/AddProccessRequest.md
 docs/ClientSettings.md
+docs/CpuCache.md
 docs/CpuData.md
 docs/CpuUsage.md
 docs/CpuUsageMetricModel.md
@@ -77,6 +78,7 @@ src/apis/system_api.rs
 src/lib.rs
 src/models/add_proccess_request.rs
 src/models/client_settings.rs
+src/models/cpu_cache.rs
 src/models/cpu_data.rs
 src/models/cpu_usage.rs
 src/models/cpu_usage_metric_model.rs

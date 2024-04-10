@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct SystemUsage {
     #[serde(rename = "cpuUsage")]
     pub cpu_usage: Box<crate::models::CpuUsage>,

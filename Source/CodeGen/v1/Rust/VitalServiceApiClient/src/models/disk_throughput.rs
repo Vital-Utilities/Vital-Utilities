@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct DiskThroughput {
     #[serde(rename = "readRateBytesPerSecond", skip_serializing_if = "Option::is_none")]
     pub read_rate_bytes_per_second: Option<i64>,

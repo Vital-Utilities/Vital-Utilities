@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct GetManagedResponse {
     #[serde(rename = "affinityModels")]
     pub affinity_models: Vec<crate::models::ManagedModelDto>,

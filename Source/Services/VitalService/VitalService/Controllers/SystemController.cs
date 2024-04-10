@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using VitalService.Dtos.Coms;
+using VitalService.Dtos.Coms.Machine;
 using VitalService.Services.PerformanceServices;
 using VitalService.Stores;
 

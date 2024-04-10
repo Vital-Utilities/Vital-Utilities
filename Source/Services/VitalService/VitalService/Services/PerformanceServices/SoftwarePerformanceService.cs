@@ -12,8 +12,6 @@ namespace VitalService.Services.PerformanceServices
 {
     public class SoftwarePerformanceService : IHostedService
     {
-        private ManagedProcessStore AffinityStore { get; }
-
         /// <summary>
         /// pid, obj
         /// </summary>
@@ -40,9 +38,8 @@ namespace VitalService.Services.PerformanceServices
         readonly TimeSpan throttleAfter = TimeSpan.FromSeconds(10);
 
 
-        public SoftwarePerformanceService(ManagedProcessStore affinityStore)
+        public SoftwarePerformanceService()
         {
-            AffinityStore = affinityStore;
             AutoThrottlerTimer = new Timer((_) => AutoThrottle(), null, Timeout.Infinite, Timeout.Infinite);
             UpdateRunningProcessesTimer = new Timer((_) =>
             {
@@ -97,7 +94,7 @@ namespace VitalService.Services.PerformanceServices
                 {
                     try
                     {
-                        string description = null;
+                        string? description = null;
                         if (data.ExecutablePath is not null)
                         {
                             var des = FileVersionInfo.GetVersionInfo(data.ExecutablePath).FileDescription;

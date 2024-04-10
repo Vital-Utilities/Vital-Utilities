@@ -18,6 +18,7 @@ codegen-units = 1
 lto = true
 incremental = false
 opt-level = "s"
+strip = true        # Remove debug symbols
 
 [profile.release.package.wry]
 debug = false
@@ -46,8 +47,8 @@ log = { version = "0.4", features = [
     "release_max_level_warn",
 ] }
 fern = "0.6"
-sentry = "0.31"
-sysinfo = "0.29"
+sentry = "0.32"
+sysinfo = "0.30"
 regex = "1"
 chrono = "0.4"
 webbrowser = "0.8"
@@ -56,7 +57,7 @@ vital_service_api = { path = "../../CodeGen/v1/Rust/VitalServiceApiClient" }
 
 
 [dependencies.windows]
-version = "0.51"
+version = "0.54"
 features = [
     "Data_Xml_Dom",
     "Win32_Security",

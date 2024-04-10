@@ -53,7 +53,7 @@ export const Profiles: React.FunctionComponent = () => {
     }
 
     function sortDirectionRender() {
-        return sortBy.descending ? <CaretDownOutlined /> : <CaretUpOutlined />;
+        return sortBy.descending ? <CaretDownOutlined rev={""} /> : <CaretUpOutlined rev={""} />;
     }
 
     function setSort(e: SortByEnum) {

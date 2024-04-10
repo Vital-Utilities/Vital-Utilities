@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct LoadData {
     #[serde(rename = "corePercentage", skip_serializing_if = "Option::is_none")]
     pub core_percentage: Option<f32>,

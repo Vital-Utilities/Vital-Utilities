@@ -11,7 +11,7 @@
 
 
 
-#[derive(Clone, Debug, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TimeSeriesMachineMetricsResponse {
     #[serde(rename = "requestRange")]
     pub request_range: Box<crate::models::DateRange>,

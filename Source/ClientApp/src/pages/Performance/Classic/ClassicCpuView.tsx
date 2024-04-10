@@ -14,6 +14,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const threads = staticState?.cpu?.threadCount ?? 0;
+    const cores = staticState?.cpu?.numberOfCores ?? 0;
     const graphWindowRef = useRef(null);
     const graphWindowSize = useSize(graphWindowRef);
     React.useEffect(() => {
@@ -38,7 +39,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                 <Tooltip content={<ClassicTooltip />} />
                                 <Legend />
                                 <Area yAxisId="left" unit="%" type="monotone" dataKey="totalCoreUsagePercentage" name={`Utilisation ${current?.totalCoreUsagePercentage}%`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />
-                                <Area yAxisId="right" unit="w" type="monotone" dataKey="powerDrawWattage" name={`Power ${current?.powerDrawWattage}w`} stroke="yellow" color="yellow" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
+                                {current?.powerDrawWattage && <Area yAxisId="right" unit="w" type="monotone" dataKey="powerDrawWattage" name={`Power ${current?.powerDrawWattage}w`} stroke="yellow" color="yellow" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />}
                                 <Area yAxisId="left" unit="°C" type="monotone" dataKey="packageTemperature" name={`Temperature ${current?.packageTemperature}°C`} stroke="white" color="white" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -47,7 +48,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
             case "Logical": {
                 const cellHeight = graphWindowSize?.height ? graphWindowSize?.height / 4 - 7 * 4 : 0;
                 return (
-                    <div ref={graphWindowRef} style={{ display: "grid", width: "100%", gridTemplateColumns: `repeat(${threads / 4}, minmax(50px, 1fr))`, gap: 5, overflow: "hidden" }}>
+                    <div ref={graphWindowRef} style={{ display: "grid", width: "100%", gridTemplateColumns: `repeat(${Math.round((cores + threads) / 4)}, minmax(50px, 1fr))`, gap: 5, overflow: "hidden" }}>
                         {dynamicState?.cpuUsageData?.corePercentages?.map((e, i) => {
                             return (
                                 graphWindowSize && (
@@ -93,7 +94,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                 <>
                     <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 30 }}>
                         <ItemOne color="#3182bd" title="Utilisation" value={`${current?.totalCoreUsagePercentage}%`} />
-                        <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />
+                        {current?.powerDrawWattage && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />}
                         <ItemOne color="white" title="Package Temp" value={`${current?.packageTemperature}°C`} />
                         {highestCoreClockMhz && <ItemOne color="white" title="Speed" value={`${highestCoreClockMhz} mhz`} />}
                     </div>

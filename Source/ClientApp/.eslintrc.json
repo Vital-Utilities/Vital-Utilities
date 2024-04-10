@@ -82,7 +82,6 @@
     "react/display-name": 0,
     "react-hooks/exhaustive-deps": 0,
     "security/detect-object-injection": 0,
-
     "prettier/prettier": [
       "warn",
       {
