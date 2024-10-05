@@ -6,7 +6,6 @@
 <a href="https://github.com/Vital-Utilities/Vital-Utilities/releases">
 <img src="https://img.shields.io/github/v/release/Vital-Utilities/Vital-Utilities?style=flat-square"/>
 </a>
-<a href="https://discord.gg/ghQ8nQK2ma"><img src="https://img.shields.io/discord/753338394481787070?label=Discord"/></a>
 <br/>
 </p>
 <p align="center">
@@ -37,8 +36,6 @@
 Feature requests and questions >> [Discussion](https://github.com/Vital-Utilities/Vital-Utilities/discussions)
 
 Report a bug >> [Issues](https://github.com/Vital-Utilities/Vital-Utilities/issues)
-
-[Discord Server](https://discord.gg/ghQ8nQK2ma)
 
 
 ## License
