@@ -8,7 +8,6 @@ import { Plug } from "lucide-react";
 export const ClassicPowerView: React.FunctionComponent = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number>(0);
-    const particlesRef = useRef<Particle[]>([]);
     const powerHistoryRef = useRef<number[]>([]);
 
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
@@ -47,25 +46,18 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         // Clear canvas
         ctx.clearRect(0, 0, width, height);
 
-        // Get current values (cap health at 100% for display)
+        // Get current values
         const batteryPercent = powerData?.batteryPercentage ?? 0;
         const systemPower = powerData?.systemPowerWatts ?? 0;
         const isCharging = powerData?.externalConnected && !powerData?.fullyCharged;
         const isPluggedIn = powerData?.externalConnected ?? false;
-        const batteryHealth = Math.min(powerData?.batteryHealth ?? 100, 100);
-        const rawHealth = powerData?.batteryHealth ?? 100;
+        const adapterWatts = powerData?.adapterWatts ?? 0;
 
-        // Draw battery visualization
-        drawBattery(ctx, width, height, batteryPercent, isCharging ?? false, batteryHealth, rawHealth);
-
-        // Draw power flow visualization
-        drawPowerFlow(ctx, width, height, systemPower, isPluggedIn, isCharging ?? false);
+        // Draw unified battery visualization with integrated power flow
+        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn);
 
         // Draw power graph at bottom
         drawPowerGraph(ctx, width, height, powerHistoryRef.current);
-
-        // Update particles
-        updateParticles(ctx, width, height, isCharging ?? false, isPluggedIn);
 
         animationRef.current = requestAnimationFrame(draw);
     }, [powerData]);
@@ -131,78 +123,202 @@ export const ClassicPowerView: React.FunctionComponent = () => {
     );
 };
 
+// Particle system for energy flow
 interface Particle {
     x: number;
     y: number;
-    vx: number;
-    vy: number;
-    life: number;
-    maxLife: number;
+    targetX: number;
+    targetY: number;
+    progress: number;
+    speed: number;
     size: number;
     color: string;
+    type: "input" | "output";
 }
 
-function drawBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, isCharging: boolean, health: number, rawHealth: number) {
+let particles: Particle[] = [];
+
+function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean) {
     const centerX = width / 2;
-    const centerY = height * 0.32;
+    const centerY = height * 0.38;
     const time = Date.now();
 
-    // Battery dimensions - larger for liquid glass effect
-    const batteryWidth = Math.min(width * 0.4, 200);
-    const batteryHeight = batteryWidth * 0.55;
-    const cornerRadius = 12;
-    const tipWidth = 10;
-    const tipHeight = batteryHeight * 0.35;
+    // Battery dimensions
+    const batteryWidth = Math.min(width * 0.45, 220);
+    const batteryHeight = batteryWidth * 0.5;
+    const cornerRadius = 14;
+    const tipWidth = 12;
+    const tipHeight = batteryHeight * 0.32;
 
     const batteryX = centerX - batteryWidth / 2;
     const batteryY = centerY - batteryHeight / 2;
 
+    // === AC INPUT (Left side) ===
+    if (isPluggedIn) {
+        const inputX = batteryX - 80;
+        const inputY = centerY;
+
+        // Draw input connector/line to battery
+        ctx.save();
+        ctx.strokeStyle = "#22c55e";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([]);
+
+        // Curved line from AC to battery
+        ctx.beginPath();
+        ctx.moveTo(inputX + 25, inputY);
+        ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+        ctx.stroke();
+        ctx.restore();
+
+        // AC power indicator circle
+        ctx.save();
+        ctx.shadowColor = "rgba(34, 197, 94, 0.6)";
+        ctx.shadowBlur = 15;
+        ctx.beginPath();
+        ctx.arc(inputX, inputY, 22, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+        ctx.fill();
+        ctx.strokeStyle = "#22c55e";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+
+        // AC icon (plug symbol)
+        ctx.font = "bold 14px system-ui";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = "#22c55e";
+        ctx.fillText("⚡", inputX, inputY);
+
+        // Adapter wattage label
+        ctx.font = "bold 11px system-ui";
+        ctx.fillStyle = "#22c55e";
+        ctx.fillText(`${adapterWatts}W`, inputX, inputY + 35);
+        ctx.font = "10px system-ui";
+        ctx.fillStyle = "#64748b";
+        ctx.fillText("AC IN", inputX, inputY + 48);
+
+        // Add input particles
+        if (Math.random() < 0.15) {
+            particles.push({
+                x: inputX + 25,
+                y: inputY,
+                targetX: batteryX,
+                targetY: inputY,
+                progress: 0,
+                speed: 0.02 + Math.random() * 0.01,
+                size: 4 + Math.random() * 2,
+                color: "#22c55e",
+                type: "input"
+            });
+        }
+    }
+
+    // === SYSTEM OUTPUT (Right side) ===
+    const outputX = batteryX + batteryWidth + tipWidth + 80;
+    const outputY = centerY;
+
+    // Draw output connector/line from battery
+    ctx.save();
+    ctx.strokeStyle = "#3b82f6";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([]);
+
+    // Curved line from battery tip to system
+    ctx.beginPath();
+    ctx.moveTo(batteryX + batteryWidth + tipWidth, outputY);
+    ctx.quadraticCurveTo(outputX - 45, outputY, outputX - 25, outputY);
+    ctx.stroke();
+    ctx.restore();
+
+    // System power indicator circle
+    ctx.save();
+    ctx.shadowColor = "rgba(59, 130, 246, 0.6)";
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.arc(outputX, outputY, 22, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+    ctx.fill();
+    ctx.strokeStyle = "#3b82f6";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+
+    // System power value
+    ctx.font = "bold 12px system-ui";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#3b82f6";
+    ctx.fillText(`${systemPower.toFixed(1)}W`, outputX, outputY);
+
+    // System label
+    ctx.font = "10px system-ui";
+    ctx.fillStyle = "#64748b";
+    ctx.fillText("SYSTEM", outputX, outputY + 35);
+
+    // Add output particles
+    if (Math.random() < 0.12) {
+        particles.push({
+            x: batteryX + batteryWidth + tipWidth,
+            y: outputY,
+            targetX: outputX - 25,
+            targetY: outputY,
+            progress: 0,
+            speed: 0.025 + Math.random() * 0.015,
+            size: 3 + Math.random() * 2,
+            color: "#3b82f6",
+            type: "output"
+        });
+    }
+
+    // === BATTERY BODY ===
     // Outer glow based on state
     ctx.save();
     if (isCharging) {
-        ctx.shadowColor = "rgba(34, 197, 94, 0.6)";
-        ctx.shadowBlur = 30;
+        ctx.shadowColor = "rgba(34, 197, 94, 0.5)";
+        ctx.shadowBlur = 25;
     } else if (percent < 20) {
-        ctx.shadowColor = "rgba(239, 68, 68, 0.6)";
-        ctx.shadowBlur = 20 + Math.sin(time / 200) * 8;
+        ctx.shadowColor = "rgba(239, 68, 68, 0.5)";
+        ctx.shadowBlur = 18 + Math.sin(time / 200) * 6;
     } else {
-        ctx.shadowColor = "rgba(59, 130, 246, 0.3)";
-        ctx.shadowBlur = 15;
+        ctx.shadowColor = "rgba(59, 130, 246, 0.25)";
+        ctx.shadowBlur = 12;
     }
 
-    // Glass outer shell - dark tinted glass
+    // Glass outer shell
     ctx.beginPath();
     ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, cornerRadius);
     const shellGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight);
-    shellGradient.addColorStop(0, "rgba(40, 40, 55, 0.9)");
-    shellGradient.addColorStop(0.5, "rgba(25, 25, 35, 0.95)");
-    shellGradient.addColorStop(1, "rgba(35, 35, 50, 0.9)");
+    shellGradient.addColorStop(0, "rgba(45, 45, 60, 0.92)");
+    shellGradient.addColorStop(0.5, "rgba(28, 28, 38, 0.95)");
+    shellGradient.addColorStop(1, "rgba(38, 38, 52, 0.92)");
     ctx.fillStyle = shellGradient;
     ctx.fill();
     ctx.restore();
 
-    // Glass border with subtle highlight
+    // Glass border
     ctx.beginPath();
     ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, cornerRadius);
     const borderGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight);
-    borderGradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
-    borderGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.1)");
-    borderGradient.addColorStop(1, "rgba(255, 255, 255, 0.15)");
+    borderGradient.addColorStop(0, "rgba(255, 255, 255, 0.28)");
+    borderGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.08)");
+    borderGradient.addColorStop(1, "rgba(255, 255, 255, 0.12)");
     ctx.strokeStyle = borderGradient;
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Battery tip with glass effect
+    // Battery tip
     ctx.beginPath();
     ctx.roundRect(batteryX + batteryWidth - 1, centerY - tipHeight / 2, tipWidth, tipHeight, [0, 6, 6, 0]);
     const tipGradient = ctx.createLinearGradient(batteryX + batteryWidth, centerY - tipHeight / 2, batteryX + batteryWidth, centerY + tipHeight / 2);
-    tipGradient.addColorStop(0, "rgba(80, 80, 100, 0.9)");
-    tipGradient.addColorStop(0.5, "rgba(50, 50, 70, 0.9)");
-    tipGradient.addColorStop(1, "rgba(70, 70, 90, 0.9)");
+    tipGradient.addColorStop(0, "rgba(85, 85, 105, 0.9)");
+    tipGradient.addColorStop(0.5, "rgba(55, 55, 75, 0.9)");
+    tipGradient.addColorStop(1, "rgba(75, 75, 95, 0.9)");
     ctx.fillStyle = tipGradient;
     ctx.fill();
 
-    // Liquid fill area
+    // === LIQUID FILL ===
     const fillPadding = 6;
     const maxFillWidth = batteryWidth - fillPadding * 2;
     const fillWidth = maxFillWidth * (percent / 100);
@@ -216,78 +332,68 @@ function drawBattery(ctx: CanvasRenderingContext2D, width: number, height: numbe
         ctx.roundRect(fillX, fillY, maxFillWidth, fillHeight, cornerRadius - 4);
         ctx.clip();
 
-        // Animated liquid wave surface
+        // Animated liquid wave
         const waveAmplitude = isCharging ? 4 : 2;
-        const waveFrequency = 0.03;
-        const waveSpeed = isCharging ? 0.003 : 0.001;
+        const waveFrequency = 0.025;
+        const waveSpeed = isCharging ? 0.004 : 0.0015;
 
         ctx.beginPath();
         ctx.moveTo(fillX, fillY + fillHeight);
 
-        // Draw wavy top edge of liquid
         for (let x = 0; x <= fillWidth; x += 2) {
             const waveY = Math.sin(x * waveFrequency + time * waveSpeed) * waveAmplitude;
-            const waveY2 = Math.sin(x * waveFrequency * 1.5 + time * waveSpeed * 1.3) * (waveAmplitude * 0.5);
+            const waveY2 = Math.sin(x * waveFrequency * 1.5 + time * waveSpeed * 1.2) * (waveAmplitude * 0.6);
             ctx.lineTo(fillX + x, fillY + waveY + waveY2);
         }
 
         ctx.lineTo(fillX + fillWidth, fillY + fillHeight);
         ctx.closePath();
 
-        // Liquid gradient based on charge level
+        // Liquid gradient
         const liquidGradient = ctx.createLinearGradient(fillX, fillY, fillX, fillY + fillHeight);
         if (percent < 20) {
-            liquidGradient.addColorStop(0, "rgba(239, 68, 68, 0.95)");
-            liquidGradient.addColorStop(0.3, "rgba(220, 38, 38, 0.9)");
-            liquidGradient.addColorStop(0.7, "rgba(185, 28, 28, 0.85)");
-            liquidGradient.addColorStop(1, "rgba(153, 27, 27, 0.9)");
+            liquidGradient.addColorStop(0, "rgba(248, 113, 113, 0.95)");
+            liquidGradient.addColorStop(0.4, "rgba(239, 68, 68, 0.9)");
+            liquidGradient.addColorStop(1, "rgba(185, 28, 28, 0.88)");
         } else if (percent < 50) {
-            liquidGradient.addColorStop(0, "rgba(251, 191, 36, 0.95)");
-            liquidGradient.addColorStop(0.3, "rgba(245, 158, 11, 0.9)");
-            liquidGradient.addColorStop(0.7, "rgba(217, 119, 6, 0.85)");
-            liquidGradient.addColorStop(1, "rgba(180, 83, 9, 0.9)");
+            liquidGradient.addColorStop(0, "rgba(253, 224, 71, 0.95)");
+            liquidGradient.addColorStop(0.4, "rgba(250, 204, 21, 0.9)");
+            liquidGradient.addColorStop(1, "rgba(202, 138, 4, 0.88)");
         } else {
-            liquidGradient.addColorStop(0, "rgba(74, 222, 128, 0.95)");
-            liquidGradient.addColorStop(0.3, "rgba(34, 197, 94, 0.9)");
-            liquidGradient.addColorStop(0.7, "rgba(22, 163, 74, 0.85)");
-            liquidGradient.addColorStop(1, "rgba(21, 128, 61, 0.9)");
+            liquidGradient.addColorStop(0, "rgba(134, 239, 172, 0.95)");
+            liquidGradient.addColorStop(0.4, "rgba(74, 222, 128, 0.9)");
+            liquidGradient.addColorStop(1, "rgba(22, 163, 74, 0.88)");
         }
         ctx.fillStyle = liquidGradient;
         ctx.fill();
 
-        // Liquid surface shine/reflection
+        // Surface shine
         ctx.beginPath();
         for (let x = 0; x <= fillWidth; x += 2) {
             const waveY = Math.sin(x * waveFrequency + time * waveSpeed) * waveAmplitude;
-            const waveY2 = Math.sin(x * waveFrequency * 1.5 + time * waveSpeed * 1.3) * (waveAmplitude * 0.5);
+            const waveY2 = Math.sin(x * waveFrequency * 1.5 + time * waveSpeed * 1.2) * (waveAmplitude * 0.6);
             if (x === 0) {
                 ctx.moveTo(fillX + x, fillY + waveY + waveY2);
             } else {
                 ctx.lineTo(fillX + x, fillY + waveY + waveY2);
             }
         }
-        const shineGradient = ctx.createLinearGradient(fillX, fillY, fillX + fillWidth, fillY);
-        shineGradient.addColorStop(0, "rgba(255, 255, 255, 0.4)");
-        shineGradient.addColorStop(0.3, "rgba(255, 255, 255, 0.1)");
-        shineGradient.addColorStop(0.7, "rgba(255, 255, 255, 0.2)");
-        shineGradient.addColorStop(1, "rgba(255, 255, 255, 0.3)");
-        ctx.strokeStyle = shineGradient;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Animated bubbles when charging
+        // Bubbles when charging
         if (isCharging) {
-            const bubbleCount = 5;
-            for (let i = 0; i < bubbleCount; i++) {
-                const bubbleX = fillX + 20 + (i * (fillWidth - 40)) / bubbleCount;
-                const bubblePhase = (time / 1000 + i * 0.7) % 2;
-                const bubbleY = fillY + fillHeight - bubblePhase * fillHeight * 0.8;
-                const bubbleSize = 3 + Math.sin(time / 300 + i) * 1.5;
-                const bubbleAlpha = Math.max(0, 1 - bubblePhase * 0.8);
+            for (let i = 0; i < 6; i++) {
+                const bubbleX = fillX + 15 + (i * (fillWidth - 30)) / 5;
+                const bubblePhase = (time / 900 + i * 0.6) % 2;
+                const bubbleY = fillY + fillHeight - bubblePhase * fillHeight * 0.85;
+                const bubbleSize = 2.5 + Math.sin(time / 250 + i) * 1.2;
+                const bubbleAlpha = Math.max(0, 1 - bubblePhase * 0.7);
 
                 ctx.beginPath();
-                ctx.arc(bubbleX + Math.sin(time / 500 + i) * 5, bubbleY, bubbleSize, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${bubbleAlpha * 0.5})`;
+                ctx.arc(bubbleX + Math.sin(time / 400 + i) * 4, bubbleY, bubbleSize, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${bubbleAlpha * 0.45})`;
                 ctx.fill();
             }
         }
@@ -295,154 +401,81 @@ function drawBattery(ctx: CanvasRenderingContext2D, width: number, height: numbe
         ctx.restore();
     }
 
-    // Glass reflection overlay on top of battery
+    // Glass reflection overlay
     ctx.save();
     ctx.beginPath();
-    ctx.roundRect(batteryX + 4, batteryY + 4, batteryWidth - 8, batteryHeight * 0.4, [cornerRadius - 2, cornerRadius - 2, 0, 0]);
-    const reflectionGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight * 0.5);
-    reflectionGradient.addColorStop(0, "rgba(255, 255, 255, 0.15)");
-    reflectionGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.05)");
+    ctx.roundRect(batteryX + 5, batteryY + 5, batteryWidth - 10, batteryHeight * 0.38, [cornerRadius - 3, cornerRadius - 3, 0, 0]);
+    const reflectionGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight * 0.45);
+    reflectionGradient.addColorStop(0, "rgba(255, 255, 255, 0.12)");
+    reflectionGradient.addColorStop(0.6, "rgba(255, 255, 255, 0.03)");
     reflectionGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
     ctx.fillStyle = reflectionGradient;
     ctx.fill();
     ctx.restore();
 
-    // Percentage text with shadow for depth
+    // === PERCENTAGE TEXT ===
     ctx.save();
-    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
     ctx.shadowBlur = 4;
     ctx.shadowOffsetY = 2;
-    ctx.font = `bold ${batteryHeight * 0.38}px system-ui`;
+    ctx.font = `bold ${batteryHeight * 0.36}px system-ui`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "#ffffff";
     ctx.fillText(`${Math.round(percent)}%`, centerX, centerY);
     ctx.restore();
 
-    // Charging bolt icon with glow
+    // Charging bolt
     if (isCharging) {
-        const boltSize = batteryHeight * 0.22;
-        const boltX = centerX + batteryWidth * 0.28;
+        const boltSize = batteryHeight * 0.2;
+        const boltX = centerX + batteryWidth * 0.26;
         const boltY = centerY;
 
         ctx.save();
         ctx.shadowColor = "#fbbf24";
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 12;
         ctx.translate(boltX, boltY);
         ctx.beginPath();
         ctx.moveTo(0, -boltSize);
-        ctx.lineTo(-boltSize * 0.6, boltSize * 0.1);
+        ctx.lineTo(-boltSize * 0.55, boltSize * 0.1);
         ctx.lineTo(-boltSize * 0.1, boltSize * 0.1);
-        ctx.lineTo(-boltSize * 0.2, boltSize);
-        ctx.lineTo(boltSize * 0.4, -boltSize * 0.1);
-        ctx.lineTo(-boltSize * 0.1, -boltSize * 0.1);
+        ctx.lineTo(-boltSize * 0.18, boltSize);
+        ctx.lineTo(boltSize * 0.38, -boltSize * 0.1);
+        ctx.lineTo(-boltSize * 0.08, -boltSize * 0.1);
         ctx.closePath();
         ctx.fillStyle = "#fbbf24";
         ctx.fill();
         ctx.restore();
     }
-}
 
-function drawPowerFlow(ctx: CanvasRenderingContext2D, width: number, height: number, systemPower: number, isPluggedIn: boolean, isCharging: boolean) {
-    const flowY = height * 0.62;
-    const nodeRadius = 22;
-    const flowWidth = Math.min(width * 0.75, 400);
-    const startX = (width - flowWidth) / 2;
+    // === UPDATE AND DRAW PARTICLES ===
+    particles = particles.filter(p => {
+        p.progress += p.speed;
 
-    // Node positions
-    const adapterX = startX;
-    const batteryX = startX + flowWidth / 2;
-    const systemX = startX + flowWidth;
+        if (p.progress >= 1) return false;
 
-    // Draw connection lines
-    ctx.strokeStyle = "#334155";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([]);
+        // Interpolate position along path
+        const t = p.progress;
+        const x = p.x + (p.targetX - p.x) * t;
+        const y = p.y + (p.targetY - p.y) * t;
 
-    // Adapter to Battery line
-    if (isPluggedIn) {
-        const gradient = ctx.createLinearGradient(adapterX, 0, batteryX, 0);
-        gradient.addColorStop(0, "#22c55e");
-        gradient.addColorStop(1, isCharging ? "#22c55e" : "#334155");
-        ctx.strokeStyle = gradient;
+        // Slight vertical wobble
+        const wobble = Math.sin(time / 100 + p.progress * 10) * 3;
+
         ctx.beginPath();
-        ctx.moveTo(adapterX + nodeRadius, flowY);
-        ctx.lineTo(batteryX - nodeRadius, flowY);
-        ctx.stroke();
-    }
-
-    // Battery to System line
-    const sysGradient = ctx.createLinearGradient(batteryX, 0, systemX, 0);
-    sysGradient.addColorStop(0, "#3b82f6");
-    sysGradient.addColorStop(1, "#3b82f6");
-    ctx.strokeStyle = sysGradient;
-    ctx.beginPath();
-    ctx.moveTo(batteryX + nodeRadius, flowY);
-    ctx.lineTo(systemX - nodeRadius, flowY);
-    ctx.stroke();
-
-    // Draw nodes
-    // Adapter node
-    if (isPluggedIn) {
-        ctx.beginPath();
-        ctx.arc(adapterX, flowY, nodeRadius, 0, Math.PI * 2);
-        ctx.fillStyle = "#0f172a";
+        ctx.arc(x, y + wobble, p.size * (1 - p.progress * 0.5), 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = 0.8 * (1 - p.progress * 0.6);
         ctx.fill();
-        ctx.strokeStyle = "#22c55e";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.globalAlpha = 1;
 
-        // Plug icon
-        ctx.font = "16px system-ui";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "#22c55e";
-        ctx.fillText("\u26A1", adapterX, flowY);
+        return true;
+    });
 
-        ctx.font = "10px system-ui";
-        ctx.fillStyle = "#94a3b8";
-        ctx.fillText("AC", adapterX, flowY + nodeRadius + 12);
+    // Limit particles
+    if (particles.length > 40) {
+        particles = particles.slice(-40);
     }
-
-    // Battery node
-    ctx.beginPath();
-    ctx.arc(batteryX, flowY, nodeRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0f172a";
-    ctx.fill();
-    ctx.strokeStyle = isCharging ? "#22c55e" : "#64748b";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Battery icon
-    ctx.font = "14px system-ui";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "#64748b";
-    ctx.fillText("\u{1F50B}", batteryX, flowY);
-
-    ctx.font = "10px system-ui";
-    ctx.fillStyle = "#94a3b8";
-    ctx.fillText("Battery", batteryX, flowY + nodeRadius + 12);
-
-    // System node
-    ctx.beginPath();
-    ctx.arc(systemX, flowY, nodeRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0f172a";
-    ctx.fill();
-    ctx.strokeStyle = "#3b82f6";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // System icon and power value
-    ctx.font = "bold 12px system-ui";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "#3b82f6";
-    ctx.fillText(`${systemPower.toFixed(1)}W`, systemX, flowY);
-
-    ctx.font = "10px system-ui";
-    ctx.fillStyle = "#94a3b8";
-    ctx.fillText("System", systemX, flowY + nodeRadius + 12);
 }
 
 function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: number, history: number[]) {
@@ -453,18 +486,17 @@ function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: nu
     const graphWidth = width * 0.85;
     const graphX = (width - graphWidth) / 2;
 
-    // Find min/max for scaling with some padding
     const minPower = Math.min(...history) * 0.9;
     const maxPower = Math.max(...history, 10) * 1.1;
     const range = maxPower - minPower || 1;
 
-    // Draw graph background
+    // Background
     ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
     ctx.beginPath();
     ctx.roundRect(graphX - 15, graphY - graphHeight - 10, graphWidth + 30, graphHeight + 25, 8);
     ctx.fill();
 
-    // Draw subtle grid lines
+    // Grid lines
     ctx.strokeStyle = "rgba(100, 116, 139, 0.2)";
     ctx.lineWidth = 1;
     for (let i = 0; i <= 3; i++) {
@@ -475,7 +507,7 @@ function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: nu
         ctx.stroke();
     }
 
-    // Draw graph line with smooth curve
+    // Graph line
     ctx.beginPath();
     ctx.moveTo(graphX, graphY - ((history[0] - minPower) / range) * graphHeight);
 
@@ -491,7 +523,7 @@ function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.lineJoin = "round";
     ctx.stroke();
 
-    // Fill under the line with gradient
+    // Fill
     const lastX = graphX + graphWidth;
     const gradient = ctx.createLinearGradient(0, graphY - graphHeight, 0, graphY);
     gradient.addColorStop(0, "rgba(59, 130, 246, 0.4)");
@@ -503,7 +535,7 @@ function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    // Current value indicator (dot at end)
+    // Current value dot
     const currentY = graphY - ((history[history.length - 1] - minPower) / range) * graphHeight;
     ctx.beginPath();
     ctx.arc(lastX, currentY, 4, 0, Math.PI * 2);
@@ -520,67 +552,8 @@ function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: nu
     ctx.fillText(`${maxPower.toFixed(0)}W`, graphX - 12, graphY - graphHeight + 4);
     ctx.fillText(`${minPower.toFixed(0)}W`, graphX - 12, graphY + 4);
 
-    // Title on right
     ctx.textAlign = "right";
     ctx.fillText("Power (60s)", graphX + graphWidth + 12, graphY - graphHeight + 4);
-}
-
-let particles: Particle[] = [];
-
-function updateParticles(ctx: CanvasRenderingContext2D, width: number, height: number, isCharging: boolean, isPluggedIn: boolean) {
-    const flowY = height * 0.62;
-    const flowWidth = Math.min(width * 0.75, 400);
-    const startX = (width - flowWidth) / 2;
-
-    // Add new particles
-    if (isPluggedIn && Math.random() < 0.3) {
-        particles.push({
-            x: startX,
-            y: flowY + (Math.random() - 0.5) * 10,
-            vx: 2 + Math.random() * 2,
-            vy: 0,
-            life: 1,
-            maxLife: 1,
-            size: 3 + Math.random() * 2,
-            color: isCharging ? "#22c55e" : "#3b82f6"
-        });
-    }
-
-    // Always have particles flowing to system
-    if (Math.random() < 0.2) {
-        particles.push({
-            x: startX + flowWidth / 2 + 30,
-            y: flowY + (Math.random() - 0.5) * 10,
-            vx: 2 + Math.random() * 2,
-            vy: 0,
-            life: 1,
-            maxLife: 1,
-            size: 3 + Math.random() * 2,
-            color: "#3b82f6"
-        });
-    }
-
-    // Update and draw particles
-    particles = particles.filter(p => {
-        p.x += p.vx;
-        p.life -= 0.02;
-
-        if (p.life <= 0 || p.x > startX + flowWidth + 30) return false;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.life * 0.8;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-
-        return true;
-    });
-
-    // Limit particles
-    if (particles.length > 50) {
-        particles = particles.slice(-50);
-    }
 }
 
 function formatTimeRemaining(minutes: number): string {
