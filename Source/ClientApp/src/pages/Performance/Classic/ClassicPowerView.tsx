@@ -111,6 +111,7 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         const systemPower = powerData?.systemPowerWatts ?? 0;
         const isCharging = powerData?.externalConnected && !powerData?.fullyCharged;
         const isPluggedIn = powerData?.externalConnected ?? false;
+        const isPassthrough = isPluggedIn && powerData?.fullyCharged === true;
         const adapterWatts = powerData?.adapterWatts ?? 0;
 
         // Update AC transition
@@ -126,7 +127,7 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         }
 
         // Draw unified battery visualization with integrated power flow
-        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, transition);
+        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, isPassthrough, transition);
 
         // Draw power graph at bottom
         drawPowerGraph(ctx, width, height, powerHistoryRef.current);
@@ -172,9 +173,6 @@ export const ClassicPowerView: React.FunctionComponent = () => {
                         {/* Battery Flow - positive = charging, negative = discharging */}
                         {powerData.batteryAmperage !== undefined && <ItemOne color={powerData.batteryAmperage > 0 ? "#22c55e" : powerData.batteryAmperage < 0 ? "#f97316" : "#94a3b8"} title="Battery Flow" value={`${powerData.batteryAmperage > 0 ? "+" : ""}${powerData.batteryAmperage} mA`} />}
 
-                        {/* Adapter info */}
-                        {powerData.externalConnected && powerData.adapterWatts && <ItemOne color="#22c55e" title="Adapter" value={`${powerData.adapterWatts}W ${powerData.adapterDescription ?? ""}`} />}
-
                         {/* Battery Health */}
                         {powerData.batteryHealth !== undefined && <ItemOne color={healthColor} title="Battery Health" value={`${powerData.batteryHealth.toFixed(1)}%`} />}
 
@@ -208,10 +206,18 @@ interface Particle {
     speed: number;
     size: number;
     color: string;
-    type: "input" | "output";
+    type: "input" | "output" | "passthrough";
+    // For bezier curve particles
+    controlY?: number;
 }
 
 let particles: Particle[] = [];
+
+// Cubic bezier interpolation for passthrough particles
+function bezierPoint(t: number, p0: number, p1: number, p2: number, p3: number): number {
+    const mt = 1 - t;
+    return mt * mt * mt * p0 + 3 * mt * mt * t * p1 + 3 * mt * t * t * p2 + t * t * t * p3;
+}
 
 // Easing function for smooth animations
 function easeOutElastic(x: number): number {
@@ -227,7 +233,7 @@ function easeInCubic(x: number): number {
     return x * x * x;
 }
 
-function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, transition: ACTransitionState) {
+function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, isPassthrough: boolean, transition: ACTransitionState) {
     const centerX = width / 2;
     const centerY = height * 0.38;
     const time = Date.now();
@@ -244,6 +250,8 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
 
     const inputX = batteryX - 80;
     const inputY = centerY;
+    const outputX = batteryX + batteryWidth + tipWidth + 80;
+    const outputY = centerY;
 
     // Calculate transition visibility
     let acOpacity = 1;
@@ -276,7 +284,7 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
         ctx.scale(acScale, acScale);
         ctx.translate(-inputX, -inputY);
 
-        // Draw input connector/line to battery with animated dash during connect
+        // Draw input connector/line - either to battery or passthrough to system
         ctx.save();
         if (transition.active && transition.direction === "connect") {
             const lineProgress = Math.min(transition.progress * 1.5, 1);
@@ -304,6 +312,36 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
             ctx.beginPath();
             ctx.moveTo(inputX + 25, inputY);
             ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+            ctx.stroke();
+        } else if (isPassthrough) {
+            // Passthrough mode: draw angular line that goes around battery
+            const bypassY = centerY - batteryHeight * 0.75;
+
+            // Dim the line to battery
+            ctx.strokeStyle = "rgba(34, 197, 94, 0.15)";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(inputX + 25, inputY);
+            ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw passthrough line with angular path around battery (blue, 0.2 opacity)
+            ctx.strokeStyle = "rgba(59, 130, 246, 0.2)";
+            ctx.lineWidth = 3;
+            ctx.lineJoin = "round";
+            ctx.lineCap = "round";
+            ctx.beginPath();
+            ctx.moveTo(inputX + 25, inputY);
+            // Go straight then up
+            ctx.lineTo(batteryX - 15, inputY);
+            ctx.lineTo(batteryX - 15, bypassY);
+            // Go across the top
+            ctx.lineTo(batteryX + batteryWidth + tipWidth + 15, bypassY);
+            // Go down to system
+            ctx.lineTo(batteryX + batteryWidth + tipWidth + 15, outputY);
+            ctx.lineTo(outputX - 25, outputY);
             ctx.stroke();
         } else {
             ctx.strokeStyle = "#22c55e";
@@ -389,8 +427,8 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
             }
         }
 
-        // Add input particles (only when stable connection)
-        if (!transition.active && isPluggedIn && Math.random() < 0.15) {
+        // Add input particles (only when stable connection and charging)
+        if (!transition.active && isPluggedIn && !isPassthrough && Math.random() < 0.15) {
             particles.push({
                 x: inputX + 25,
                 y: inputY,
@@ -403,23 +441,43 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
                 type: "input"
             });
         }
+
+        // Add passthrough particles that go around the battery
+        if (!transition.active && isPassthrough && Math.random() < 0.1) {
+            const bypassY = centerY - batteryHeight * 0.75;
+            particles.push({
+                x: inputX + 25,
+                y: inputY,
+                targetX: outputX - 25,
+                targetY: outputY,
+                progress: 0,
+                speed: 0.008 + Math.random() * 0.004,
+                size: 4 + Math.random() * 2,
+                color: "#3b82f6",
+                type: "passthrough",
+                controlY: bypassY
+            });
+        }
     }
 
     // === SYSTEM OUTPUT (Right side) ===
-    const outputX = batteryX + batteryWidth + tipWidth + 80;
-    const outputY = centerY;
 
-    // Draw output connector/line from battery
+    // Draw output connector/line from battery (dim it in passthrough mode)
     ctx.save();
-    ctx.strokeStyle = "#3b82f6";
+    if (isPassthrough) {
+        ctx.strokeStyle = "rgba(59, 130, 246, 0.2)";
+        ctx.setLineDash([4, 4]);
+    } else {
+        ctx.strokeStyle = "#3b82f6";
+    }
     ctx.lineWidth = 3;
-    ctx.setLineDash([]);
 
     // Curved line from battery tip to system
     ctx.beginPath();
     ctx.moveTo(batteryX + batteryWidth + tipWidth, outputY);
     ctx.quadraticCurveTo(outputX - 45, outputY, outputX - 25, outputY);
     ctx.stroke();
+    ctx.setLineDash([]);
     ctx.restore();
 
     // System power indicator circle
@@ -447,8 +505,8 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
     ctx.fillStyle = "#64748b";
     ctx.fillText("SYSTEM", outputX, outputY + 35);
 
-    // Add output particles
-    if (Math.random() < 0.12) {
+    // Add output particles (only when not in passthrough mode - battery supplies power)
+    if (!isPassthrough && Math.random() < 0.12) {
         particles.push({
             x: batteryX + batteryWidth + tipWidth,
             y: outputY,
@@ -639,21 +697,48 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
     }
 
     // === UPDATE AND DRAW PARTICLES ===
+    // Define path waypoints for passthrough
+    const bypassY = centerY - batteryHeight * 0.75;
+    const pathPoints = [
+        { x: inputX + 25, y: inputY },
+        { x: batteryX - 15, y: inputY },
+        { x: batteryX - 15, y: bypassY },
+        { x: batteryX + batteryWidth + tipWidth + 15, y: bypassY },
+        { x: batteryX + batteryWidth + tipWidth + 15, y: outputY },
+        { x: outputX - 25, y: outputY }
+    ];
+
     particles = particles.filter(p => {
         p.progress += p.speed;
 
         if (p.progress >= 1) return false;
 
-        // Interpolate position along path
-        const t = p.progress;
-        const x = p.x + (p.targetX - p.x) * t;
-        const y = p.y + (p.targetY - p.y) * t;
+        let x: number, y: number;
 
-        // Slight vertical wobble
-        const wobble = Math.sin(time / 100 + p.progress * 10) * 3;
+        if (p.type === "passthrough") {
+            // Follow the angular path around battery
+            const totalSegments = pathPoints.length - 1;
+            const segmentProgress = p.progress * totalSegments;
+            const currentSegment = Math.min(Math.floor(segmentProgress), totalSegments - 1);
+            const segmentT = segmentProgress - currentSegment;
+
+            const p1 = pathPoints[currentSegment];
+            const p2 = pathPoints[currentSegment + 1];
+
+            x = p1.x + (p2.x - p1.x) * segmentT;
+            y = p1.y + (p2.y - p1.y) * segmentT;
+        } else {
+            // Linear interpolation for regular particles
+            const t = p.progress;
+            x = p.x + (p.targetX - p.x) * t;
+            y = p.y + (p.targetY - p.y) * t;
+
+            // Slight vertical wobble for non-passthrough
+            y += Math.sin(time / 100 + p.progress * 10) * 3;
+        }
 
         ctx.beginPath();
-        ctx.arc(x, y + wobble, p.size * (1 - p.progress * 0.5), 0, Math.PI * 2);
+        ctx.arc(x, y, p.size * (1 - p.progress * 0.5), 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.globalAlpha = 0.8 * (1 - p.progress * 0.6);
         ctx.fill();
