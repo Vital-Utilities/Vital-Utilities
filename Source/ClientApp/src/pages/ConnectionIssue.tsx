@@ -1,5 +1,5 @@
 import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/core";
 import { Button, Input, message } from "antd";
 import React from "react";
 import { BsDiscord, BsGithub } from "react-icons/bs";

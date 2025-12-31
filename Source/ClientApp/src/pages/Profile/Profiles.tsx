@@ -10,7 +10,7 @@ import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { ProfileDto } from "@vital/vitalservice";
-import { profileApi } from "../../Redux/actions/api";
+import { profileApi } from "../../Redux/actions/tauriApi";
 
 enum SortByEnum {
     Name = "Name"
@@ -73,9 +73,9 @@ export const Profiles: React.FunctionComponent = () => {
                             title="Are you sure you want to delete this profile?"
                             onConfirm={() => {
                                 profileApi
-                                    .apiProfileIdDelete(e.id)
-                                    .then(response => {
-                                        if (response.status === 200) dispatch(recieveDeleteProfileAction(e.id));
+                                    .delete(e.id)
+                                    .then(() => {
+                                        dispatch(recieveDeleteProfileAction(e.id));
                                     })
                                     .catch(result => console.error(result));
                             }}

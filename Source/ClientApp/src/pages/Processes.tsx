@@ -12,7 +12,7 @@ import { getProcessCPUPercentColor } from "../components/PerfBadge";
 import { getReadableBytesPerSecondString, getReadableBytesString } from "../components/FormatUtils";
 import { Table } from "../components/Table";
 import { ParentChildModelDto, GetMachineDynamicDataResponse, ProcessViewDto } from "@vital/vitalservice";
-import { processApi } from "../Redux/actions/api";
+import { processApi } from "../Redux/actions/tauriApi";
 import { openUrl } from "../Utilities/TauriCommands";
 
 enum SortByEnum {
@@ -150,11 +150,11 @@ export const Processes: React.FunctionComponent = () => {
 
     function killProcess(id: number) {
         processApi
-            .apiProcessKillIdPost(id)
+            .kill(id)
             .then(() => dispatch(recieveDeleteProcessViewAction(id)))
             .catch(result => {
                 console.error(result);
-                notification.error({ message: result, duration: 2000 });
+                notification.error({ message: String(result), duration: 2000 });
             });
     }
     function valueOrZero(value: undefined | never | number): number {
@@ -380,15 +380,13 @@ export const Processes: React.FunctionComponent = () => {
 };
 
 function openProcessPath(id: number) {
-    processApi.apiProcessOpenpathIdPost(id).catch(result => {
+    processApi.openPath(id).catch(result => {
         console.error(result);
-        notification.error({ message: result, duration: 2000 });
+        notification.error({ message: String(result), duration: 2000 });
     });
 }
 
-function openProcessProperties(id: number) {
-    processApi.apiProcessOpenpropertiesIdPost(id).catch(result => {
-        console.error(result);
-        notification.error({ message: result, duration: 2000 });
-    });
+function openProcessProperties(_id: number) {
+    // Process properties is not available in the embedded backend
+    notification.info({ message: "Process properties not available", duration: 2000 });
 }

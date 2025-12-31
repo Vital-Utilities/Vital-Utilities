@@ -1,6 +1,7 @@
 {
   "name": "VitalService",
   "version": "0.0.1",
+  "type": "module",
   "description": "OpenAPI client for VitalService",
   "author": "OpenAPI-Generator Contributors",
   "repository": {
@@ -16,7 +17,15 @@
   ],
   "license": "Unlicense",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc ",
     "prepare": "npm run build"

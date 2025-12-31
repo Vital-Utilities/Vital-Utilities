@@ -2,25 +2,46 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
+
 mod commands;
 mod file;
+
+// Backend modules (embedded VitalRustService)
+mod db;
+mod machine_stats;
+mod models;
+mod nvidia;
+mod platform;
+mod services;
+mod software;
+mod stores;
+
+use crate::commands::api_commands;
 use crate::commands::commands::{
-    get_client_settings, get_os, get_vital_service_ports, open_url, restart_vital_service,
-    update_client_settings, update_vital_service_port, ServiceName,
+    get_client_settings, get_os, get_vital_service_ports, open_url, update_client_settings,
+    update_vital_service_port,
 };
-use commands::commands::is_vital_service_running;
-use commands::vital_service::start_vital_service;
-use log::{debug, error, info, trace, warn};
+use crate::db::{get_app_db_path, get_metrics_db_path, AppDb, MetricsDb};
+use crate::platform::{create_process_manager, create_startup_manager, ProcessManager, StartupManager};
+use crate::services::MetricsStorageService;
+use crate::stores::{MachineDataStore, SettingsStore};
+
+use log::{debug, error, info, warn};
+use nvml_wrapper::Nvml;
 use once_cell::sync::OnceCell;
 use sentry::IntoDsn;
 use std::io;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
 
-use tauri::{AppHandle, Manager};
 use tauri::{
-    CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
-    SystemTraySubmenu,
+    async_runtime,
+    menu::{Menu, MenuItem},
+    tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent},
+    AppHandle, Manager, RunEvent,
 };
+use tauri_plugin_autostart::MacosLauncher;
+use tokio::join;
 
 static APP_HANDLE: OnceCell<Mutex<AppHandle>> = OnceCell::new();
 
@@ -41,7 +62,6 @@ fn main() {
 
     let _guard;
     if cfg!(feature = "release") {
-        // here `"quit".to_string()` defines the menu item id, and the second parameter is the menu item label.
         let dsn = "REPLACE_WITH_SENTRYIO_RUST_DSN".into_dsn();
         match dsn {
             Ok(dsn) => match dsn {
@@ -72,21 +92,28 @@ fn main() {
         }
     }
 
-    if cfg!(feature = "release") && !is_vital_service_running(ServiceName::VitalService) {
-        let _ = start_vital_service(ServiceName::VitalService);
-    }
-
-    tauri::Builder::default()
+    // Build the Tauri app
+    let app = tauri::Builder::default()
+        // Add autostart plugin for run at login
+        .plugin(tauri_plugin_autostart::init(
+            MacosLauncher::LaunchAgent,
+            Some(vec!["--minimized"]),
+        ))
+        // Add shell plugin
+        .plugin(tauri_plugin_shell::init())
         .setup(|app| {
-            let set_handle = APP_HANDLE.set(Mutex::new(app.handle()));
+            let handle = app.handle().clone();
+            let set_handle = APP_HANDLE.set(Mutex::new(handle.clone()));
             if set_handle.is_err() {
                 error!("Failed to set app handle in once cell");
             }
-            let window = app.get_window("main");
+
+            let window = app.get_webview_window("main");
             if window.is_none() {
                 error!("Failed to get window");
                 panic!("Failed to get window");
             }
+
             let always_on_top = match get_client_settings() {
                 Ok(settings) => settings.always_on_top,
                 Err(e) => {
@@ -94,6 +121,7 @@ fn main() {
                     true
                 }
             };
+
             let result = window.unwrap().set_always_on_top(always_on_top);
             match result {
                 Ok(_) => {
@@ -103,110 +131,365 @@ fn main() {
                     error!("Failed to set always on top: {}", e);
                 }
             }
+
+            // Set up system tray
+            setup_tray(app)?;
+
+            // Initialize backend services and state
+            info!("Initializing backend services...");
+
+            // Use async_runtime to initialize async resources
+            let handle_clone = handle.clone();
+            async_runtime::spawn(async move {
+                initialize_backend(handle_clone).await;
+            });
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            // Client settings commands
             get_client_settings,
             update_client_settings,
             get_vital_service_ports,
-            restart_vital_service,
             update_vital_service_port,
             open_url,
-            get_os
+            get_os,
+            // API commands (replaces Rocket HTTP endpoints)
+            api_commands::api_hello,
+            api_commands::get_system_static,
+            api_commands::get_system_dynamic,
+            api_commands::get_system_timeseries,
+            api_commands::get_processes,
+            api_commands::get_managed_processes,
+            api_commands::get_running_processes,
+            api_commands::get_processes_to_add,
+            api_commands::kill_process,
+            api_commands::open_process_path,
+            api_commands::get_all_profiles,
+            api_commands::get_profile,
+            api_commands::create_profile,
+            api_commands::update_profile,
+            api_commands::delete_profile,
+            api_commands::add_process_config,
+            api_commands::update_process_config,
+            api_commands::delete_process_config,
+            api_commands::get_settings,
+            api_commands::update_settings,
+            api_commands::set_run_at_startup,
         ])
-        .system_tray(system_tray_setup())
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::LeftClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                debug!("system tray received a left click");
+        // Handle window close event to minimize to tray instead of closing
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                // Prevent window from closing, hide to tray instead
+                let _ = window.hide();
+                api.prevent_close();
             }
-            SystemTrayEvent::RightClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                debug!("system tray received a right click");
+        })
+        .build(tauri::generate_context!())
+        .expect("error while building tauri application");
+
+    // Run the app with custom event handling
+    app.run(|_app_handle, event| {
+        if let RunEvent::ExitRequested { api, .. } = event {
+            // Prevent app from exiting when all windows are closed
+            // This allows the app to continue running in the background
+            api.prevent_exit();
+        }
+    });
+}
+
+/// Initialize backend services and manage state
+async fn initialize_backend(handle: AppHandle) {
+    info!("Starting embedded backend service...");
+
+    // Initialize settings store
+    let settings_store = Arc::new(SettingsStore::new());
+
+    // Initialize databases
+    let app_db = match AppDb::connect(&get_app_db_path()).await {
+        Ok(db) => Arc::new(db),
+        Err(e) => {
+            error!("Failed to connect to app database: {:?}", e);
+            panic!("Database connection failed");
+        }
+    };
+
+    let metrics_db = match MetricsDb::connect(&get_metrics_db_path()).await {
+        Ok(db) => Arc::new(db),
+        Err(e) => {
+            error!("Failed to connect to metrics database: {:?}", e);
+            panic!("Database connection failed");
+        }
+    };
+
+    // Initialize machine data store
+    let machine_store = Arc::new(MachineDataStore::new(Some(metrics_db.clone())));
+
+    // Initialize platform managers
+    let process_manager: Arc<dyn ProcessManager> = Arc::from(create_process_manager());
+    let startup_manager: Arc<dyn StartupManager> = Arc::from(create_startup_manager());
+
+    // Register state with Tauri
+    handle.manage(app_db.clone());
+    handle.manage(machine_store.clone());
+    handle.manage(settings_store.clone());
+    handle.manage(process_manager.clone());
+    handle.manage(startup_manager.clone());
+
+    // Start background services
+    let metrics_service = MetricsStorageService::new(
+        metrics_db.clone(),
+        machine_store.clone(),
+        settings_store.clone(),
+    );
+    tokio::spawn(async move {
+        metrics_service.run().await;
+    });
+
+    // Start config applyer (applies process affinity/priority) - Windows only
+    #[cfg(target_os = "windows")]
+    {
+        use crate::services::ConfigApplyerService;
+        let config_applyer = ConfigApplyerService::new(app_db.clone(), process_manager.clone());
+        tokio::spawn(async move {
+            config_applyer.run().await;
+        });
+    }
+
+    // Run the main metrics collection loop
+    run_collector(machine_store).await;
+}
+
+/// Main metrics collection loop
+/// Collects hardware and software metrics and updates the machine data store
+async fn run_collector(machine_store: Arc<MachineDataStore>) {
+    use crate::machine_stats::{cpu, disk, gpu, memory, net};
+    use systemstat::Platform; // Import Platform trait for System::new()
+
+    static SECOND: Duration = Duration::from_millis(1000);
+
+    // Initialize NVML for GPU monitoring
+    let nvml = match Nvml::init() {
+        Ok(nvml) => Some(nvml),
+        Err(e) => {
+            warn!(
+                "NVML initialization failed (GPU monitoring disabled): {}",
+                e
+            );
+            None
+        }
+    };
+
+    let sys_stat = systemstat::System::new();
+    let mut sys_info = sysinfo::System::new_all();
+    sys_info.refresh_all();
+    std::thread::sleep(SECOND);
+
+    info!("Metrics collection started");
+
+    loop {
+        let start = std::time::SystemTime::now();
+
+        sys_info.refresh_all();
+        let time = chrono::Utc::now();
+
+        // Collect all metrics in parallel
+        let (cpu_util, mem_util, _net_util, _disk_usage, gpu_usage) = join!(
+            cpu::get_cpu_util(&sys_info, &sys_stat),
+            memory::get_mem_util(&sys_info),
+            net::get_net_adapters(),
+            disk::get_disk_util(&sys_info),
+            gpu::get_gpu_util(&nvml),
+        );
+
+        // Convert to our DTO types and update store
+        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, &sys_info, &nvml, time);
+
+        // Log timing info
+        if let Ok(elapsed) = start.elapsed() {
+            log::debug!("Metrics collection took: {:?}", elapsed);
+
+            // Sleep for remaining time to maintain ~1-second interval
+            if elapsed.as_millis() < SECOND.as_millis() {
+                std::thread::sleep(Duration::from_millis(
+                    (SECOND.as_millis() - elapsed.as_millis()) as u64,
+                ));
             }
-            SystemTrayEvent::DoubleClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                debug!("system tray received a double click");
+        }
+    }
+}
+
+/// Update the machine data store with collected metrics
+fn update_machine_store(
+    store: &MachineDataStore,
+    cpu_util: Box<vital_service_api::models::CpuUsage>,
+    mem_util: vital_service_api::models::MemoryUsage,
+    gpu_usage: Vec<vital_service_api::models::GpuUsage>,
+    _sys_info: &sysinfo::System,
+    _nvml: &Option<Nvml>,
+    _time: chrono::DateTime<chrono::Utc>,
+) {
+    use crate::models;
+
+    // Convert CPU usage
+    let cpu = models::CpuUsage {
+        name: cpu_util.name.clone(),
+        brand: cpu_util.brand.clone(),
+        vendor_id: cpu_util.vendor_id.clone(),
+        core_clocks_mhz: cpu_util.core_clocks_mhz.iter().map(|&v| v as i32).collect(),
+        total_core_percentage: cpu_util.total_core_percentage,
+        power_draw_wattage: cpu_util.power_draw_wattage,
+        core_percentages: cpu_util.core_percentages.clone(),
+        cpu_cache: None,
+        temperature_readings: cpu_util.temperature_readings.clone().into_iter().collect(),
+    };
+    store.update_cpu(cpu);
+
+    // Convert memory usage
+    let memory = models::MemoryUsage {
+        used_memory_bytes: mem_util.used_memory_bytes,
+        total_visible_memory_bytes: mem_util.total_visible_memory_bytes,
+        swap_percentage: mem_util.swap_percentage,
+        swap_used_bytes: mem_util.swap_used_bytes,
+        swap_total_bytes: mem_util.swap_total_bytes,
+    };
+    store.update_memory(memory);
+
+    // Convert GPU usage
+    let gpus: Vec<models::GpuUsage> = gpu_usage
+        .iter()
+        .map(|g| models::GpuUsage {
+            name: g.name.clone(),
+            temperature_readings: g.temperature_readings.clone().into_iter().collect(),
+            device_index: g.device_index,
+            part_number: g.part_number.clone(),
+            total_memory_bytes: g.total_memory_bytes,
+            memory_used_bytes: g.memory_used_bytes,
+            clock_speeds: g.clock_speeds.as_ref().map(|cs| models::GpuClockSpeeds {
+                memory_clock_mhz: cs.memory_clock_mhz,
+                compute_clock_mhz: cs.compute_clock_mhz,
+                graphics_clock_mhz: cs.graphics_clock_mhz,
+                video_clock_mhz: cs.video_clock_mhz,
+            }),
+            fan_percentage: g.fan_percentage.clone().map(|f| f.into_iter().collect()),
+            power_draw_watt: g.power_draw_watt,
+            load: g.load.as_ref().map(|l| models::GpuLoadData {
+                core_percentage: l.core_percentage,
+                frame_buffer_percentage: l.frame_buffer_percentage,
+                video_engine_percentage: l.video_engine_percentage,
+                bus_interface_percentage: l.bus_interface_percentage,
+                memory_used_percentage: l.memory_used_percentage,
+                memory_controller_percentage: l.memory_controller_percentage,
+                cuda_percentage: l.cuda_percentage,
+                three_d_percentage: l.three_d_percentage,
+            }),
+            pcie: None,
+        })
+        .collect();
+    store.update_gpu(gpus);
+}
+
+fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
+    // Create menu items
+    let show_i = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;
+    let hide_i = MenuItem::with_id(app, "hide", "Hide", true, None::<&str>)?;
+    let always_on_top_enable_i =
+        MenuItem::with_id(app, "alwaysOnTop_enable", "Enable Always On Top", true, None::<&str>)?;
+    let always_on_top_disable_i = MenuItem::with_id(
+        app,
+        "alwaysOnTop_disable",
+        "Disable Always On Top",
+        true,
+        None::<&str>,
+    )?;
+    let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
+
+    let menu = Menu::with_items(
+        app,
+        &[
+            &show_i,
+            &hide_i,
+            &always_on_top_enable_i,
+            &always_on_top_disable_i,
+            &quit_i,
+        ],
+    )?;
+
+    let _tray = TrayIconBuilder::new()
+        .menu(&menu)
+        .show_menu_on_left_click(false)
+        .on_menu_event(move |app, event| match event.id.as_ref() {
+            "quit" => {
+                app.exit(0);
             }
-            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                "quit" => {
-                    app.exit(0);
+            "show" => {
+                if let Some(window) = app.get_webview_window("main") {
+                    let _ = window.unminimize();
+                    let _ = window.show();
+                    let _ = window.set_focus();
                 }
-                "restartBackend" => {
-                    let _ = restart_vital_service();
+            }
+            "hide" => {
+                if let Some(window) = app.get_webview_window("main") {
+                    let _ = window.hide();
                 }
-                "alwaysOnTop_enable" => match get_client_settings() {
-                    Ok(settings) => {
-                        let mut settings = settings;
-                        settings.always_on_top = true;
-                        let _ = update_client_settings(settings);
+            }
+            "alwaysOnTop_enable" => match get_client_settings() {
+                Ok(settings) => {
+                    let mut settings = settings;
+                    settings.always_on_top = true;
+                    let _ = update_client_settings(settings);
+                    if let Some(window) = app.get_webview_window("main") {
+                        let _ = window.set_always_on_top(true);
                     }
-                    Err(e) => {
-                        error!("Failed to get client settings: {}", e);
+                }
+                Err(e) => {
+                    error!("Failed to get client settings: {}", e);
+                }
+            },
+            "alwaysOnTop_disable" => match get_client_settings() {
+                Ok(settings) => {
+                    let mut settings = settings;
+                    settings.always_on_top = false;
+                    let _ = update_client_settings(settings);
+                    if let Some(window) = app.get_webview_window("main") {
+                        let _ = window.set_always_on_top(false);
                     }
-                },
-                "alwaysOnTop_disable" => match get_client_settings() {
-                    Ok(settings) => {
-                        let mut settings = settings;
-                        settings.always_on_top = false;
-                        let _ = update_client_settings(settings);
-                    }
-                    Err(e) => {
-                        error!("Failed to get client settings: {}", e);
-                    }
-                },
-                _ => {}
+                }
+                Err(e) => {
+                    error!("Failed to get client settings: {}", e);
+                }
             },
             _ => {}
         })
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
-}
+        .on_tray_icon_event(|tray, event| {
+            if let TrayIconEvent::Click {
+                button: MouseButton::Left,
+                button_state: MouseButtonState::Up,
+                ..
+            } = event
+            {
+                // Show window on left click
+                let app = tray.app_handle();
+                if let Some(window) = app.get_webview_window("main") {
+                    let _ = window.unminimize();
+                    let _ = window.show();
+                    let _ = window.set_focus();
+                }
+            }
+        })
+        .build(app)?;
 
-fn system_tray_setup() -> SystemTray {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let always_on_top_menu = SystemTrayMenu::new()
-        .add_item(CustomMenuItem::new(
-            "alwaysOnTop_enable".to_string(),
-            "enable",
-        ))
-        .add_item(CustomMenuItem::new(
-            "alwaysOnTop_disable".to_string(),
-            "disable",
-        ));
-    let always_on_top = SystemTraySubmenu::new("alwaysOnTop".to_string(), always_on_top_menu);
-
-    let mut _restart_backend = CustomMenuItem::new("restartBackend".to_string(), "Restart Backend");
-    _restart_backend.enabled = cfg!(feature = "release");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(_restart_backend)
-        .add_submenu(always_on_top)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(quit);
-    return SystemTray::new().with_menu(tray_menu);
+    Ok(())
 }
 
 fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
     let mut base_config = fern::Dispatch::new();
 
     base_config = match verbosity {
-        0 => {
-            // Let's say we depend on something which whose "info" level messages are too
-            // verbose to include in end-user output. If we don't need them,
-            // let's not include them.
-            base_config
-                .level(log::LevelFilter::Info)
-                .level_for("overly-verbose-target", log::LevelFilter::Warn)
-        }
+        0 => base_config
+            .level(log::LevelFilter::Info)
+            .level_for("overly-verbose-target", log::LevelFilter::Warn),
         1 => base_config
             .level(log::LevelFilter::Debug)
             .level_for("overly-verbose-target", log::LevelFilter::Info),
@@ -229,7 +512,6 @@ fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
 
     let stdout_config = fern::Dispatch::new()
         .format(|out, message, record| {
-            // special format for debug messages coming from our own crate.
             if record.level() > log::LevelFilter::Info && record.target() == "cmd_program" {
                 out.finish(format_args!(
                     "---\nDEBUG: {}: {}\n---",

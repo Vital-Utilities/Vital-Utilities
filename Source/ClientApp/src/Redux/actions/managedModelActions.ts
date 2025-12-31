@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { AnyAction } from "@reduxjs/toolkit";
 import { ManagedModelDto } from "@vital/vitalservice";
-import { processApi } from "./api";
+import { processApi } from "./tauriApi";
 
 export type ManagedActionTypes = FetchAllManagedAction | AddManagedAction | UpdateManagedAction | DeleteManagedAction;
 
@@ -46,18 +46,8 @@ function recieveDeleteManaged(id: number) {
     return { type: DELETE_MANAGED, id: id };
 }
 
-async function sendFetchManagedProcessesRequest() {
-    return processApi
-        .apiProcessManagedGet()
-        .then(response => response.data)
-        .catch(e => {
-            console.error(e);
-            return Promise.reject(e);
-        });
-}
-
 async function fetchManagedProcesses() {
-    const result = await sendFetchManagedProcessesRequest();
+    const result = await processApi.getManaged();
     return result.affinityModels;
 }
 

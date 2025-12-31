@@ -1,8 +1,6 @@
 {
   "scripts": {
     "build:release": "node --no-warnings --loader ts-node/esm build.ts",
-    "pack:dotnetservice": "node --no-warnings --loader ts-node/esm pack-dotnetservice.ts",
-    "pack:rustservice": "node --no-warnings --loader ts-node/esm pack-rustservice.ts",
     "pack:web": "node --no-warnings --loader ts-node/esm pack-web.ts",
     "tauri": "tauri",
     "GenerateCode": "node --no-warnings --loader ts-node/esm ./GenerateCode.ts",
@@ -13,7 +11,7 @@
   "devDependencies": {
     "@octokit/rest": "^19.0.13",
     "@openapitools/openapi-generator-cli": "^2.7.0",
-    "@tauri-apps/cli": "^1.4.0",
+    "@tauri-apps/cli": "^2.0.0",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.18.8",
     "axios": "1.4.0",

@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMachineTimeSeriesRequest, TimeSeriesMachineMetricsResponse } from "@vital/vitalservice";
-import { systemApi } from "./api";
+import { systemApi } from "./tauriApi";
 export type MachineActionTypes = UpdateMachineDynamicDataAction | UpdateMachineStaticDataAction | UpdateMachineTimeSeriesDataAction;
 
 const UPDATE_MACHINE_DYNAMIC_DATA = "UPDATE_MACHINE_DYNAMIC_DATA";
@@ -30,38 +30,12 @@ function recieveMachineDynamicData(message: GetMachineDynamicDataResponse) {
 function recieveMachineStaticData(message: GetMachineStaticDataResponse) {
     return { type: UPDATE_MACHINE_STATIC_DATA, message: message };
 }
-async function sendGetMachineStaticRequest() {
-    return systemApi
-        .apiSystemStaticGet()
-        .then(response => response)
-        .catch(e => {
-            console.error(e);
-            return Promise.reject(e);
-        });
-}
-function sendGetMachineDynamicRequest() {
-    return systemApi
-        .apiSystemDynamicGet()
-        .then(response => response)
-        .catch(e => {
-            console.error(e);
-            return Promise.reject(e);
-        });
-}
 
-function sendGetMachineTimeSeriesRequest(message: GetMachineTimeSeriesRequest) {
-    return systemApi
-        .apiSystemTimeseriesPost(message)
-        .then(response => response.data)
-        .catch(e => {
-            console.error(e);
-            return Promise.reject(e);
-        });
-}
 export function fetchMachineTimeSeriesDataAction(message: GetMachineTimeSeriesRequest): AnyAction {
     //@ts-ignore
     return function (dispatch) {
-        return sendGetMachineTimeSeriesRequest(message)
+        return systemApi
+            .getTimeseries(message)
             .then(result => dispatch(recieveMachineTimeSeriesData(result)))
             .catch(e => console.error(e));
     };
@@ -69,8 +43,9 @@ export function fetchMachineTimeSeriesDataAction(message: GetMachineTimeSeriesRe
 export function fetchMachineStaticDataAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
-        return sendGetMachineStaticRequest()
-            .then(result => dispatch(recieveMachineStaticData(result.data)))
+        return systemApi
+            .getStatic()
+            .then(result => dispatch(recieveMachineStaticData(result)))
             .catch(e => console.error(e));
     };
 }
@@ -78,8 +53,9 @@ export function fetchMachineStaticDataAction(): AnyAction {
 export function fetchMachineDynamicDataAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
-        return sendGetMachineDynamicRequest()
-            .then(result => dispatch(recieveMachineDynamicData(result.data)))
+        return systemApi
+            .getDynamic()
+            .then(result => dispatch(recieveMachineDynamicData(result)))
             .catch(e => console.error(e));
     };
 }

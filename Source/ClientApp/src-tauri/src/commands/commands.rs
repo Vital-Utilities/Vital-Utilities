@@ -3,18 +3,13 @@ use std::{io::Error, path::PathBuf};
 use crate::APP_HANDLE;
 use log::{debug, error, info};
 use sysinfo::{Pid, System};
-use tauri::{api::path::document_dir, AppHandle, Manager};
+use tauri::{AppHandle, Manager};
 use vital_service_api::models::{ClientSettings, LaunchSettings, SettingsDto};
 
-use super::vital_service::start_vital_service;
-
-#[cfg(target_os = "windows")]
-use {
-    crate::file::get_process_path,
-    std::{convert::TryInto, os::windows::process::CommandExt, process::Command, sync::Mutex},
-    winapi::um::processthreadsapi::OpenProcess,
-    winapi::um::winnt::PROCESS_ALL_ACCESS,
-};
+/// Get the document directory using the dirs crate (cross-platform)
+fn document_dir() -> Option<PathBuf> {
+    dirs::document_dir()
+}
 
 fn client_settings_path() -> Result<PathBuf, Error> {
     let document_dir = document_dir();
@@ -46,6 +41,12 @@ pub fn get_client_settings() -> Result<ClientSettings, String> {
             error!("failed to serialize new ClientSettings");
             return Err("failed to serialize new ClientSettings".to_string());
         }
+
+        // Ensure the parent directory exists
+        if let Some(parent) = file_path.parent() {
+            let _ = std::fs::create_dir_all(parent);
+        }
+
         match std::fs::write(&file_path, content.unwrap()) {
             Ok(_) => {
                 info!("Created new ClientSettings file");
@@ -132,28 +133,6 @@ pub fn get_backend_settings() -> Result<SettingsDto, String> {
 }
 
 #[tauri::command]
-pub fn restart_vital_service() -> Result<String, String> {
-    if !cfg!(feature = "release") {
-        let msg = "Debug mode: backend will not be restarted".to_string();
-        info!("{}", msg);
-        return Err(msg);
-    }
-
-    match get_running_vital_service_pid(ServiceName::VitalService) {
-        Some(pid) => {
-            info!("Found an existing Vital Service instance running, killing it");
-            let end_process_result = end_process(pid);
-
-            if end_process_result.is_err() {
-                return Err(end_process_result.unwrap_err());
-            }
-        }
-        None => {}
-    }
-    return start_vital_service(ServiceName::VitalService);
-}
-
-#[tauri::command]
 pub fn get_vital_service_ports() -> Result<LaunchSettings, String> {
     let settings_file = get_backend_settings();
     match settings_file {
@@ -224,7 +203,8 @@ pub fn get_os() -> Result<String, String> {
 }
 
 pub fn set_always_on_top(app: &AppHandle, value: bool) -> Result<(), String> {
-    let window = app.get_window("main").unwrap();
+    // In Tauri v2, get_window is renamed to get_webview_window
+    let window = app.get_webview_window("main").unwrap();
     match window.set_always_on_top(value) {
         Ok(_) => {
             debug!("Set always on top to: {}", value);
@@ -274,35 +254,6 @@ pub fn end_process(pid: Pid) -> Result<(), String> {
         None => {
             info!("process not found. {:?}", pid);
             return Err("process not found".to_string());
-        }
-    }
-}
-pub fn is_vital_service_running(service_name: ServiceName) -> bool {
-    let s = System::new_all();
-    for _process in s.processes_by_exact_name(service_name.as_str()) {
-        return true;
-    }
-    return false;
-}
-
-pub fn get_running_vital_service_pid(service_name: ServiceName) -> Option<Pid> {
-    let s = System::new_all();
-    for _process in s.processes_by_exact_name(service_name.as_str()) {
-        return Some(_process.pid());
-    }
-    return None;
-}
-
-pub enum ServiceName {
-    VitalService,
-    VitalRustService,
-}
-
-impl ServiceName {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            ServiceName::VitalService => "VitalService",
-            ServiceName::VitalRustService => "VitalRustService",
         }
     }
 }

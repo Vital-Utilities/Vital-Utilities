@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { ProfileDto } from "@vital/vitalservice";
-import { profileApi } from "./api";
+import { profileApi } from "./tauriApi";
 
 export type ProfileActionTypes = FetchAllProfilesAction | AddProfileAction | UpdateProfileAction | DeleteProfileAction;
 // Profile
@@ -44,12 +44,7 @@ function recieveDeleteProfile(message: number) {
 }
 
 export async function fetchProfiles() {
-    return profileApi
-        .apiProfileGetAllGet()
-        .then(response => response)
-        .catch(e => {
-            return Promise.reject(e);
-        });
+    return profileApi.getAll();
 }
 
 export function recieveDeleteProfileAction(id: number): AnyAction {
@@ -63,7 +58,7 @@ export function fetchProfilesAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
         fetchProfiles()
-            .then(result => dispatch(recieveAllProfiles(result.data)))
+            .then(result => dispatch(recieveAllProfiles(result)))
             .catch(e => console.error(e));
     };
 }

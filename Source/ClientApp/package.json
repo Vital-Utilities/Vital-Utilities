@@ -11,7 +11,7 @@
         "vite-tauri": "vite-tauri",
         "tauri:dev": "set RUST_DEBUG=1 && tauri dev",
         "tauri:build": "tauri build",
-        "GenerateCode": "cd .. && pnpm i --frozen-lockfile && pnpm run GenerateCode && cd ./ClientApp && pnpm i --force",
+        "GenerateCode": "cd .. && npm ci && npm run GenerateCode && cd ./ClientApp && npm i --force",
         "clean": "npx rimraf node_modules"
     },
     "dependencies": {
@@ -21,8 +21,10 @@
         "@sentry/react": "^7.90.0",
         "@sentry/tracing": "^7.90.0",
         "@tanstack/react-query": "^4.24.10",
-        "@tauri-apps/api": "1.5.3",
-        "@tauri-apps/plugin-os": "2.0.0-alpha.6",
+        "@tauri-apps/api": "^2.0.0",
+        "@tauri-apps/plugin-autostart": "^2.0.0",
+        "@tauri-apps/plugin-os": "^2.0.0",
+        "@tauri-apps/plugin-shell": "^2.0.0",
         "@vital/vitalservice": "file:../CodeGen/v1/TypeScript/VitalServiceApiClient",
         "ahooks": "^3.7.4",
         "antd": "^4.24.7",
@@ -44,7 +46,7 @@
     },
     "devDependencies": {
         "@reduxjs/toolkit": "^1.7.2",
-        "@tauri-apps/cli": "^1.5.6",
+        "@tauri-apps/cli": "^2.0.0",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^12.1.5",
         "@types/jest": "^28.1.8",
@@ -82,7 +84,7 @@
         "vite": "^4.5.0",
         "vite-plugin-eslint": "^1.8.1",
         "vite-plugin-progress": "^0.0.7",
-        "vite-plugin-tauri": "^3.3.0"
+        "vite-plugin-tauri": "^4.0.0"
     },
     "eslintConfig": {
         "extends": [

@@ -1,6 +1,6 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { SettingsDto } from "@vital/vitalservice";
-import { settingsApi } from "./api";
+import { settingsApi } from "./tauriApi";
 
 export type SettingsActionTypes = GetSettingsAction;
 
@@ -15,20 +15,11 @@ interface GetSettingsAction {
     message: SettingsDto;
 }
 
-function sendGetSettingsRequest() {
-    return settingsApi
-        .apiSettingsGet()
-        .then(response => response.data)
-        .catch(e => {
-            console.error(e);
-            return Promise.reject(e);
-        });
-}
-
 export function fetchSettingsAction(): AnyAction {
     //@ts-ignore
     return function (dispatch) {
-        return sendGetSettingsRequest()
+        return settingsApi
+            .get()
             .then(result => dispatch(recieveSettings(result)))
             .catch(e => console.error(e));
     };

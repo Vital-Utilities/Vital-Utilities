@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api/core";
 import { LaunchSettings } from "@vital/vitalservice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

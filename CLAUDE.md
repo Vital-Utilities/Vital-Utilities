@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Vital Utilities is a modern Windows Task Manager alternative with process affinity/priority profiles, system monitoring, and persistent performance metrics. Built with a multi-service architecture: React/Tauri frontend, ASP.NET Core backend (VitalService), and Rust backend (VitalRustService).
+Vital Utilities is a modern cross-platform Task Manager alternative with process affinity/priority profiles, system monitoring, and persistent performance metrics. Built with a React/Tauri frontend and a unified Rust backend (VitalRustService).
 
 ## Build Commands
 
@@ -17,15 +17,6 @@ npm run build           # Production build
 npm test                # Run Jest tests
 npm run tauri:dev       # Desktop app dev mode (requires Rust)
 npm run tauri:build     # Desktop app production build
-```
-
-### Backend - VitalService (.NET)
-```bash
-cd Source/Services/VitalService
-dotnet restore
-dotnet build
-dotnet test
-dotnet run --project VitalService
 ```
 
 ### Backend - VitalRustService
@@ -54,42 +45,51 @@ npm run build:release
 ```
 Tauri Desktop App (React/TypeScript)
     ↓ HTTP API calls
-VitalService (ASP.NET Core, port 5000)
-    ↓ HTTP API calls
-VitalRustService (Rocket, port 8000)
+VitalRustService (Rocket, port 5000)
+    - System metrics collection
+    - Profile management
+    - Process management
+    - Settings storage
 ```
 
 ### Key Directories
 - `Source/ClientApp/` - React frontend with Tauri desktop wrapper
 - `Source/ClientApp/src-tauri/` - Tauri Rust layer for desktop features
-- `Source/Services/VitalService/VitalService/` - Main .NET backend with controllers, EF Core, SQLite
-- `Source/Services/VitalRustService/` - Rust backend for system metrics and GPU data
+- `Source/Services/VitalRustService/` - Unified Rust backend
+  - `src/api/` - Rocket HTTP endpoints
+  - `src/db/` - SQLx database layer (SQLite)
+  - `src/models/` - DTOs and data models
+  - `src/stores/` - In-memory data stores with caching
+  - `src/platform/` - Cross-platform abstractions (Windows, macOS, Linux)
+  - `src/services/` - Background services
+  - `src/machine_stats/` - Hardware metrics collectors
 - `Source/CodeGen/v1/` - Auto-generated API clients (TypeScript and Rust)
 
 ### Generated Files (Do Not Edit)
-- `Source/ClientApp/src/Dtos/Dto.ts` - Generated on VitalService build
+- `Source/ClientApp/src/Dtos/Dto.ts` - Generated from API spec
 - `Source/ClientApp/src-tauri/src/backend_types.rs` - Generated via code generation scripts
 
-### API Controllers (VitalService)
-- `ProcessController.cs` - Process management (kill, affinity, priority)
-- `ProfileController.cs` - Affinity/priority profile CRUD
-- `SettingsController.cs` - App settings
-- `SystemController.cs` - System metrics
-- `IngestController.cs` - Data ingestion from Rust service
+### API Endpoints (VitalRustService)
+- `/api/process` - Process management (kill, affinity, priority, list)
+- `/api/profile` - Affinity/priority profile CRUD
+- `/api/settings` - App settings
+- `/api/system` - System metrics (static, dynamic, timeseries)
+- `/api/hello` - Health check
 
 ## Development Notes
 
-- VitalService requires admin privileges for full functionality (LibreHardwareMonitor, audiodg affinity)
-- To disable admin prompt during dev, comment out `requestedExecutionLevel` in `app.manifest`
-- If production VitalService is running, stop it before debugging (auto-exits on duplicate detection)
-- Platform targets: Windows 11 primary, Linux/macOS support in progress
-- Database: SQLite with EF Core migrations in `VitalService/Data/Migrations/`
+- VitalRustService uses SQLx with SQLite for persistence
+- Metrics are cached in-memory using DashMap for fast access
+- Background services: MetricsStorageService (2s persist), ConfigApplyerService (10s poll, Windows only)
+- Platform targets: Windows 11, macOS, Linux
+- Database files stored in user's Documents/Vital Utilities/ folder
 
 ## Testing
 
-- Frontend: Jest with React Testing Library (`pnpm test` in ClientApp)
-- .NET: `dotnet test` in VitalService directory
+- Frontend: Jest with React Testing Library (`npm test` in ClientApp)
 - Rust: `cargo test` in VitalRustService directory
+  - `tests/system_data_tests.rs` - System data retrieval tests
+  - `tests/store_tests.rs` - Store and DTO unit tests
 
 ## Linting
 

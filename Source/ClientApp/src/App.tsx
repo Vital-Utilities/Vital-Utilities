@@ -17,13 +17,13 @@ import { InfoPage } from "./pages/Info";
 import { fetchMachineDynamicDataAction, fetchMachineStaticDataAction, fetchMachineTimeSeriesDataAction } from "./Redux/actions/machineActions";
 import { useEffect } from "react";
 import { fetchManagedProcessesAction } from "./Redux/actions/managedModelActions";
-import { updateAppReadyAction } from "./Redux/actions/appActions";
+import { updateAppReadyAction, updateHttpConnectedAction } from "./Redux/actions/appActions";
 import { PerformancePage, relativeTimeOptions, relativeTypeStringOptions } from "./pages/Performance/Performance";
 import moment from "moment";
-import * as vitalservice from "@vital/vitalservice";
 import { SplashScreen } from "./pages/SpashScreen";
 import { useOs } from "./Utilities/TauriCommands";
-export const config = new vitalservice.Configuration();
+import { helloApi } from "./Redux/actions/tauriApi";
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const App: React.FunctionComponent = () => {
     const dispatch = useDispatch();
@@ -33,6 +33,20 @@ const App: React.FunctionComponent = () => {
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
     const [initializedTime] = React.useState(moment());
     const os = useOs();
+
+    // Check backend connection via Tauri invoke
+    useEffect(() => {
+        helloApi
+            .hello()
+            .then(() => {
+                dispatch(updateHttpConnectedAction(true));
+            })
+            .catch(e => {
+                console.error("Backend connection failed:", e);
+                dispatch(updateHttpConnectedAction(false));
+            });
+    }, [dispatch]);
+
     useInterval(
         () => {
             if (appState.httpConnected && appState.signalRConnected) {
@@ -53,10 +67,6 @@ const App: React.FunctionComponent = () => {
         2000,
         { immediate: true }
     );
-
-    useEffect(() => {
-        config.basePath = `http://localhost:${appState.vitalServicePort}`;
-    }, [appState.vitalServicePort]);
 
     async function getData() {
         let relativeTimeOption = window.localStorage.getItem("relativeTimeOption") ?? "Last 1 minute";

@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { VitalState, MachineState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { ProfileDto, ManagedModelDto, ProcessToAddDto } from "@vital/vitalservice";
-import { processApi } from "../../Redux/actions/api";
+import { processApi } from "../../Redux/actions/tauriApi";
 
 enum Pages {
     Select,
@@ -59,9 +59,9 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
     function getUnmanagedProcesses() {
         setIsFetching(true);
         processApi
-            .apiProcessProcessesToAddGet()
+            .getProcessesToAdd()
             .then(response => {
-                setUnManagedProcesses(response.data.processes);
+                setUnManagedProcesses(response.processes);
             })
             .finally(() => setIsFetching(false));
     }

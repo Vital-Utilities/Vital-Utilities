@@ -2,7 +2,7 @@ import { ManagedModelDto, UpdateManagedRequest } from "@vital/vitalservice";
 import { Input, Button, Form, message } from "antd";
 import React from "react";
 import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
-import { profileApi } from "../../Redux/actions/api";
+import { profileApi } from "../../Redux/actions/tauriApi";
 import { ProcessPriority } from "./ProcessPriority";
 
 interface UpdateProcessViewProps {
@@ -17,9 +17,9 @@ export const UpdateProcessView: React.FunctionComponent<UpdateProcessViewProps> 
     async function SendRequest() {
         const request: UpdateManagedRequest = { managedModelDto: model };
         profileApi
-            .apiProfileUpdateProcessConfigPut(request)
-            .then(result => {
-                if (result.status === 200) onSubmit();
+            .updateProcessConfig(request)
+            .then(() => {
+                onSubmit();
             })
             .catch(e => message.error(e));
     }

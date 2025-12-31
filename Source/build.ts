@@ -39,21 +39,14 @@ const version = fs
 	.trim()
 	.replace(/\r?\n|\r/g, "");
 const vitalTauriDir = "ClientApp/src-tauri";
-const binFolder = "./ClientApp/src-tauri/bin";
 
-setupBuildDir();
 buildInstaller();
-
-function setupBuildDir() {
-	if (!fs.existsSync(binFolder)) {
-		fs.mkdirSync(binFolder);
-	}
-}
 
 function buildInstaller() {
 	const filePath = `${vitalTauriDir}/tauri.conf.json`;
 	const tauriConf = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-	tauriConf.package.version = version;
+	// Tauri v2 uses root-level version instead of package.version
+	tauriConf.version = version;
 	executeInherit(
 		`cd ${vitalTauriDir} && tauri build --features "release" --target ${
 			args.platform

@@ -1,88 +1,70 @@
 {
-    "package": {
-        "productName": "Vital Utilities",
-        "version": "0.0.1"
+  "productName": "Vital Utilities",
+  "version": "0.0.1",
+  "identifier": "com.vital-utilities.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm start",
+    "beforeBuildCommand": ""
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "security": {
+      "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
     },
-    "build": {
-        "distDir": "../dist",
-        "devPath": "http://localhost:5173",
-        "beforeDevCommand": "pnpm start",
-        "beforeBuildCommand": "",
-        "withGlobalTauri": true
-    },
-    "tauri": {
-        "bundle": {
-            "active": true,
-            "targets": [
-                "msi",
-                "app",
-                "updater"
-            ],
-            "identifier": "Vital-Utilities",
-            "icon": [
-                "icons/32x32.png",
-                "icons/128x128.png",
-                "icons/128x128@2x.png",
-                "icons/icon.icns",
-                "icons/icon.ico"
-            ],
-            "resources": [
-                "bin"
-            ],
-            "copyright": "Copyright © 2022 Snazzie, Aaron Cooper. All rights reserved.",
-            "category": "Utility",
-            "shortDescription": "The ultimate system utility",
-            "longDescription": "The ultimate system utility",
-            "windows": {
-                "certificateThumbprint": null,
-                "digestAlgorithm": "sha256",
-                "timestampUrl": ""
-            }
-        },
-        "updater": {
-            "active": true,
-            "windows": {
-                "installMode": "passive"
-            },
-            "endpoints": [
-                "https://raw.githubusercontent.com/Vital-Utilities/Vital-Utilities/master/latest_update_meta.json"
-            ],
-            "dialog": true,
-            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERDQjE1OEUxQTUxRkY4QTUKUldTbCtCK2w0Vml4M0ZkN1NVK21GbW94aU9OL0FjdStvcFBsS0pTY29ZcDI4RVNaWWh5Wk1MYysK"
-        },
-        "systemTray": {
-            "iconPath": "icons/icon.ico"
-        },
-        "allowlist": {
-            "all": true,
-            "http": {
-                "all": true,
-                "request": true
-            },
-            "shell": {
-                "all": true
-            },
-            "fs": {
-                "all": true
-            },
-            "notification": {
-                "all": true
-            }
-        },
-        "windows": [
-            {
-                "title": "Vital Utilities",
-                "width": 1200,
-                "height": 800,
-                "minWidth": 1200,
-                "minHeight": 800,
-                "resizable": true,
-                "fullscreen": false,
-                "alwaysOnTop": true
-            }
-        ],
-        "security": {
-            "csp": "default-src blob: data: filesystem: ws: wss: http: https: tauri: 'unsafe-eval' 'unsafe-inline' 'self' img-src: 'self'"
-        }
+    "windows": [
+      {
+        "label": "main",
+        "title": "Vital Utilities",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 1200,
+        "minHeight": 800,
+        "resizable": true,
+        "fullscreen": false,
+        "alwaysOnTop": true
+      }
+    ],
+    "trayIcon": {
+      "iconPath": "icons/32x32.png",
+      "iconAsTemplate": true
     }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi", "app", "dmg"],
+    "createUpdaterArtifacts": "v1Compatible",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [],
+    "copyright": "Copyright 2022 Snazzie, Aaron Cooper. All rights reserved.",
+    "category": "Utility",
+    "shortDescription": "The ultimate system utility",
+    "longDescription": "The ultimate system utility",
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": ""
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://raw.githubusercontent.com/Vital-Utilities/Vital-Utilities/master/latest_update_meta.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERDQjE1OEUxQTUxRkY4QTUKUldTbCtCK2w0Vml4M0ZkN1NVK21GbW94aU9OL0FjdStvcFBsS0pTY29ZcDI4RVNaWWh5Wk1MYysK",
+      "windows": {
+        "installMode": "passive"
+      }
+    },
+    "shell": {
+      "open": true
+    }
+  }
 }

@@ -6,13 +6,12 @@ authors = ["Snazzie", "Aaron Cooper"]
 license = ""
 repository = ""
 default-run = "vital_utilities"
-edition = "2018"
+edition = "2021"
 build = "src/build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [profile.release]
-release = true
 panic = "abort"
 codegen-units = 1
 lto = true
@@ -29,18 +28,15 @@ debug = true
 debug-assertions = true
 
 [build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde_derive = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.5", features = [
-    "api-all",
-    "devtools",
-    "system-tray",
-    "updater",
-] }
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-autostart = "2"
+tauri-plugin-shell = "2"
 winapi = { version = "0.3", features = ["winuser"] }
 log = { version = "0.4", features = [
     "max_level_debug",
@@ -50,10 +46,26 @@ fern = "0.6"
 sentry = "0.32"
 sysinfo = "0.30"
 regex = "1"
-chrono = "0.4"
+chrono = { version = "0.4.38", features = ["serde"] }
+time = "0.3.36"
 webbrowser = "0.8"
 once_cell = "1.18"
 vital_service_api = { path = "../../CodeGen/v1/Rust/VitalServiceApiClient" }
+
+# VitalRustService dependencies (embedded backend)
+systemstat = "0.2"
+nvml-wrapper = "0.10"
+sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite", "chrono"] }
+tokio = { version = "1.33.0", features = ["full"] }
+reqwest = { version = "0.12", features = ["json"] }
+directories = "5.0.1"
+dirs = "5.0"
+default-net = "0.22"
+dashmap = "5.5"
+async-trait = "0.1"
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 
 [dependencies.windows]
@@ -70,6 +82,9 @@ features = [
     "Win32_System_LibraryLoader",
     "Win32_Foundation",
 ]
+
+[target.'cfg(windows)'.dependencies]
+winproc = "0.6"
 
 [features]
 default = ["custom-protocol"]
