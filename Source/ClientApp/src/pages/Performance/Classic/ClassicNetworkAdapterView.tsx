@@ -30,7 +30,7 @@ export const ClassicNetworkAdapterView: React.FunctionComponent<{ macAddress: st
     function getGraphView() {
         return (
             <>
-                <ResponsiveContainer width="100%">
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={ordered}>
                         <XAxis dataKey="dateTimeOffset" hide tickFormatter={e => formatXAxis(e)} />
                         <YAxis hide tickFormatter={e => getReadableBitsPerSecondString(e)} />

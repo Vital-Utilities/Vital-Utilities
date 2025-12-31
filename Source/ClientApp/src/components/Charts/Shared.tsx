@@ -81,13 +81,13 @@ export const ClassicTooltip: React.FunctionComponent<TooltipProps<any, any>> = p
 
 export const ClassicLayout: React.FunctionComponent<{ header: { title: string; deviceName?: string }; graph: React.ReactNode; showRange?: boolean; bottomItems: React.ReactNode }> = props => {
     return (
-        <>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
             <div className="header" style={{ display: "flex", marginBottom: "0.5em", justifyContent: "space-between" }}>
                 <h1>{props.header.title}</h1>
                 <div style={{ fontSize: 16, alignSelf: "center", textOverflow: "scale" }}>{props.header.deviceName}</div>
                 {/* {props.showExpand && <ArrowsAltOutlined style={{ float: "right", justifySelf: "right", cursor: "pointer" }} />} */}
             </div>
-            {props.graph}
+            <div style={{ flex: "1 1 auto", minHeight: "15vh" }}>{props.graph}</div>
             <div style={{ display: "flex", marginBottom: "0.5em", justifyContent: "space-between", height: 50 }}>
                 {props.showRange && (
                     <>
@@ -96,8 +96,8 @@ export const ClassicLayout: React.FunctionComponent<{ header: { title: string; d
                     </>
                 )}
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "auto 400px", paddingRight: 50 }}>{props.bottomItems}</div>
-        </>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr minmax(200px, 400px)", gap: "1rem", paddingRight: "2rem" }}>{props.bottomItems}</div>
+        </div>
     );
 };
 export const ItemOne: React.FunctionComponent<{ color?: string; title: string; value?: string | number }> = props => {

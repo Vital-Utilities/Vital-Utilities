@@ -23,7 +23,7 @@ export const ClassicRamView: React.FunctionComponent<ChartData> = props => {
     function getGraphView() {
         return (
             <>
-                <ResponsiveContainer width="100%">
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={ordered}>
                         <XAxis hide dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} />
                         <YAxis hide yAxisId="left" domain={[0, current?.totalVisibleMemoryBytes ?? 0]} tickFormatter={e => getReadableBytesString(e)} />

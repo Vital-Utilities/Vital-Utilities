@@ -18,7 +18,7 @@ export const ClassicDiskView: React.FunctionComponent<{ driveLetter: string } & 
     function getGraphView() {
         return (
             <>
-                <ResponsiveContainer width="100%">
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={ordered}>
                         <XAxis dataKey="dateTimeOffset" hide tickFormatter={e => formatXAxis(e)} />
                         <YAxis yAxisId="left" domain={[0, 100]} hide />

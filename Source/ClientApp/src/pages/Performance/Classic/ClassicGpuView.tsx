@@ -28,7 +28,7 @@ export const ClassicGpuView: React.FunctionComponent<{ gpuNumber: number } & Cha
     function getGraphView() {
         return (
             <>
-                <ResponsiveContainer width="100%">
+                <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={ordered}>
                         <XAxis hide dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} />
                         <YAxis hide yAxisId="left" />

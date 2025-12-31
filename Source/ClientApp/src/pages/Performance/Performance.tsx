@@ -164,45 +164,28 @@ export const PerformancePage: React.FunctionComponent = props => {
 
     function topControlBar() {
         return (
-            <div style={{ display: "grid", padding: 20 }}>
-                <div style={{ display: "flex", gap: "20px", justifySelf: "right" }}>
-                    {view === viewOptions.TimeSeries && (
-                        <>
-                            <div style={{ alignSelf: "center" }}>Update rate: {updateRate}ms</div>
-                            {/*                             <div style={{ fontSize: 14, border: "1px solid white", background: "#333", padding: "4px 10px 4px 7px", userSelect: "none", cursor: "pointer" }} onClick={() => setPauseTime(!pauseTime)}>
-                                {pauseTime ? (
-                                    <div style={{ color: "white", display: "flex", flexWrap: "nowrap", alignItems: "center" }}>
-                                        <PlayCircleOutlined key={"1"} /> Resume
-                                    </div>
-                                ) : (
-                                    <div style={{ color: "white", display: "flex", flexWrap: "nowrap", alignItems: "center" }}>
-                                        <PauseOutlined key={"2"} /> Pause
-                                    </div>
-                                )}
-                            </div> */}
-
-                            <div className="flex items-center gap-2" style={{ width: "200px" }}>
-                                <Label>Time</Label>
-                                <Select onValueChange={e => setRelativeTimeOption(e as relativeTypeStringOptions)} value={relativeTimeOption}>
-                                    <SelectTrigger>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {Object.keys(relativeTimeOptions).map(key => (
-                                            <SelectItem key={key} value={key}>
-                                                {key}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </>
-                    )}
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", padding: "1rem 1.25rem", height: "4rem", flexShrink: 0 }}>
+                <div style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
+                    <div className="flex items-center gap-2" style={{ width: "200px", visibility: view === viewOptions.TimeSeries ? "visible" : "hidden" }}>
+                        <Label>Time</Label>
+                        <Select onValueChange={e => setRelativeTimeOption(e as relativeTypeStringOptions)} value={relativeTimeOption}>
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {Object.keys(relativeTimeOptions).map(key => (
+                                    <SelectItem key={key} value={key}>
+                                        {key}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
                     <div className="flex items-center gap-2">
                         <Checkbox id="hideVirtual" onCheckedChange={() => setHideVirtualAdapters(!hideVirtualAdapters)} checked={hideVirtualAdapters ?? false} />
                         <Label htmlFor="hideVirtual">Hide Virtual Adapters</Label>
                     </div>
-                    <div className="flex items-center gap-2" style={{ width: "300px" }}>
+                    <div className="flex items-center gap-2">
                         <Label>View</Label>
                         <RadioGroup value={view} onValueChange={(value: viewOptions) => setView(value)} className="flex gap-1">
                             {Object.keys(viewOptions).map(option => (
@@ -224,7 +207,7 @@ export const PerformancePage: React.FunctionComponent = props => {
         return (
             <>
                 {topControlBar()}
-                <div className="container traditional" style={{ display: "grid", overflow: "hidden", gridTemplateColumns: "300px auto", height: "100%", width: "100%" }}>
+                <div className="container traditional" style={{ display: "grid", overflow: "hidden", gridTemplateColumns: "minmax(250px, 20%) 1fr", height: "100%", width: "100%" }}>
                     <div style={{ display: "flex", flexDirection: "column", overflowY: "scroll" }}>
                         {staticState?.cpu && (
                             <ClassicNavItem
@@ -325,7 +308,7 @@ export const PerformancePage: React.FunctionComponent = props => {
         const showCpuContextMenu = classicViewProps.selectedKey === "CPU";
 
         const content = (
-            <div style={{ display: "grid", gridTemplateRows: "60px auto 50px 250px", overflowY: "scroll", paddingBottom: 50, paddingLeft: 10, width: "100%" }}>
+            <div style={{ display: "flex", flexDirection: "column", overflowY: "auto", paddingBottom: "2rem", paddingLeft: "0.5rem", width: "100%", height: "100%" }}>
                 {classicViewProps.selectedKey === "CPU" ? (
                     <ClassicCpuChartView {...chartable} graphView={classicCpuGraphView} />
                 ) : classicViewProps.selectedKey.includes("GPU") ? (
@@ -643,7 +626,7 @@ export const PerformancePage: React.FunctionComponent = props => {
 type InterfaceDetailsProps = "cpu" | "gpu" | "memory" | "network" | "disk";
 
 const InterfaceDetails: React.FunctionComponent<{ children?: React.ReactNode }> = props => {
-    return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))", gap: 20, marginBottom: 20 }}>{props.children}</div>;
+    return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "1.25rem", marginBottom: "1.25rem" }}>{props.children}</div>;
 };
 
 const ClassicNavItem: React.FunctionComponent<{ selectedKey: string; Key: string; type: InterfaceDetailsProps; title: string; detail?: string; stat?: React.ReactNode; onClick?: () => void }> = props => {

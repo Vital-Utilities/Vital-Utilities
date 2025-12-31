@@ -30,7 +30,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
             case "Overall":
                 return (
                     <>
-                        <ResponsiveContainer width="100%">
+                        <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={ordered} className="hide-legend" style={{ border: "-5px white solid" } as CSSProperties}>
                                 <XAxis dataKey="dateTimeOffset" hide tickFormatter={e => e} />
                                 <YAxis yAxisId="left" hide />

@@ -9,6 +9,8 @@
 
 .container {
     will-change: transform;
+    width: 100%;
+    max-width: 100%;
 
     &.scrollY {
         overflow-y: scroll;
@@ -16,22 +18,24 @@
 }
 
 .custom {
+    width: 100%;
+    max-width: 100%;
+
     .category {
         color: white;
-        padding: 20px;
+        padding: 1.25rem;
         display: grid;
-        gap: 15px;
-        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
     }
 
     .category-flex {
         color: white;
-        padding: 20px;
+        padding: 1.25rem;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        gap: 15px;
-        //grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 1rem;
     }
 }
 
@@ -47,8 +51,8 @@
 }
 
 .traditional {
-
-    width: 100vw;
+    width: 100%;
+    max-width: 100%;
 
     .ant-dropdown-trigger:hover {
         background: none !important;
@@ -61,8 +65,8 @@
         background: $background-1;
         display: grid;
         gap: 0;
-        grid-template-columns: 10% auto;
-        padding: 10px 10px 10px 0px;
+        grid-template-columns: 2rem 1fr;
+        padding: 0.625rem 0.625rem 0.625rem 0;
 
         &:hover {
             background: $background-2;
