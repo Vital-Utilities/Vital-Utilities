@@ -1,6 +1,6 @@
 use std::{collections::HashMap, process::Command};
 
-use sysinfo::Cpu;
+use sysinfo::{Cpu, Components};
 use systemstat::Platform;
 use vital_service_api::models::CpuUsage;
 use std::str;
@@ -18,13 +18,50 @@ pub async fn get_cpu_util(
     }
 
     let mut temperature_readings = HashMap::new();
+
+    // Try systemstat first (works well on Windows/Linux)
     if let Ok(temp) = sysstat.cpu_temp() {
         temperature_readings.insert("CPU Package".to_string(), temp as f32);
     }
 
-    // Get CPU load breakdown (system/user/idle) on macOS
+    // On macOS, use sysinfo Components for temperature sensors
     #[cfg(target_os = "macos")]
     {
+        // Only try sysinfo components if systemstat didn't get temperature
+        if temperature_readings.is_empty() {
+            let components = Components::new_with_refreshed_list();
+
+            // Log all available components for debugging
+            for component in &components {
+                log::debug!("Found component: '{}' = {}°C", component.label(), component.temperature());
+            }
+
+            for component in &components {
+                let label = component.label().to_lowercase();
+                // Look for CPU-related temperature sensors
+                if label.contains("cpu") || label.contains("core") || label.contains("die") || label.contains("peci") || label.contains("soc") {
+                    let temp = component.temperature();
+                    if !temp.is_nan() {
+                        temperature_readings.insert(component.label().to_string(), temp);
+                    }
+                }
+            }
+
+            // If still no temperature found, try to use any available temperature sensor
+            if temperature_readings.is_empty() {
+                for component in &components {
+                    let temp = component.temperature();
+                    if !temp.is_nan() {
+                        // Use the first valid temperature as CPU Package
+                        temperature_readings.insert("CPU Package".to_string(), temp);
+                        log::debug!("Using '{}' as CPU temperature: {}°C", component.label(), temp);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Also get CPU load breakdown (system/user/idle)
         if let Some((system, user, idle)) = get_cpu_load_breakdown() {
             temperature_readings.insert("System".to_string(), system);
             temperature_readings.insert("User".to_string(), user);

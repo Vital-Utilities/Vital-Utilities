@@ -45,10 +45,6 @@ pub fn get_system_timeseries(
         .with_timezone(&chrono::Utc);
 
     let result = machine_store.get_metrics(earliest, latest);
-    log::info!("get_system_timeseries: returning {} metrics", result.metrics.len());
-    if let Some(first) = result.metrics.first() {
-        log::info!("  first metric cpu_usage_data: {:?}", first.cpu_usage_data.as_ref().map(|v| v.len()));
-    }
     Ok(result)
 }
 

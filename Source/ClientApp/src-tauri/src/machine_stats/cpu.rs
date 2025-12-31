@@ -1,6 +1,6 @@
 use std::{collections::HashMap, process::Command};
 
-use sysinfo::Cpu;
+use sysinfo::{Cpu, Components};
 use systemstat::Platform;
 use vital_service_api::models::CpuUsage;
 use std::str;
@@ -18,9 +18,60 @@ pub async fn get_cpu_util(
     }
 
     let mut temperature_readings = HashMap::new();
+
+    // Try systemstat first (works well on Windows/Linux)
     if let Ok(temp) = sysstat.cpu_temp() {
         temperature_readings.insert("CPU Package".to_string(), temp as f32);
+        log::info!("CPU temp from systemstat: {}°C", temp);
     }
+
+    // On macOS, use sysinfo Components for temperature sensors
+    #[cfg(target_os = "macos")]
+    {
+        if temperature_readings.is_empty() {
+            let components = Components::new_with_refreshed_list();
+
+            // Log all available components
+            log::info!("Available temperature sensors:");
+            for component in &components {
+                if let Some(temp) = component.temperature() {
+                    log::info!("  '{}' = {}°C", component.label(), temp);
+                } else {
+                    log::info!("  '{}' = N/A", component.label());
+                }
+            }
+
+            for component in &components {
+                let label = component.label().to_lowercase();
+                if label.contains("cpu") || label.contains("core") || label.contains("die") || label.contains("peci") || label.contains("soc") {
+                    if let Some(temp) = component.temperature() {
+                        if !temp.is_nan() {
+                            temperature_readings.insert(component.label().to_string(), temp);
+                            log::info!("Found CPU temp '{}': {}°C", component.label(), temp);
+                        }
+                    }
+                }
+            }
+
+            // If still no temperature found, use any available sensor
+            if temperature_readings.is_empty() {
+                for component in &components {
+                    if let Some(temp) = component.temperature() {
+                        if !temp.is_nan() {
+                            temperature_readings.insert("CPU Package".to_string(), temp);
+                            log::info!("Using '{}' as CPU temp: {}°C", component.label(), temp);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if temperature_readings.is_empty() {
+                log::warn!("No CPU temperature sensors found on macOS");
+            }
+        }
+    }
+
     // In sysinfo 0.37+, global_cpu_info() was removed. Use global_cpu_usage() for total usage
     // and get CPU info from the first core
     let first_cpu = sysinfo.cpus().first();

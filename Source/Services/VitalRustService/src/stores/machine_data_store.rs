@@ -302,7 +302,20 @@ impl MachineDataStore {
                 id: None,
                 unique_identifier: Some("cpu0".to_string()),
                 total_core_usage_percentage: Some(cpu.total_core_percentage),
-                package_temperature: cpu.temperature_readings.get("Package").copied(),
+                package_temperature: cpu.temperature_readings.get("CPU Package")
+                    .or_else(|| cpu.temperature_readings.get("Package"))
+                    .or_else(|| cpu.temperature_readings.get("CPU die"))
+                    .or_else(|| cpu.temperature_readings.get("CPU"))
+                    .or_else(|| {
+                        // Find any temperature reading that looks like a CPU temp
+                        cpu.temperature_readings.iter()
+                            .find(|(k, _)| {
+                                let lower = k.to_lowercase();
+                                lower.contains("cpu") || lower.contains("die") || lower.contains("core")
+                            })
+                            .map(|(_, v)| v)
+                    })
+                    .copied(),
                 power_draw_wattage: cpu.power_draw_wattage,
                 core_clocks_mhz: Some(
                     cpu.core_clocks_mhz

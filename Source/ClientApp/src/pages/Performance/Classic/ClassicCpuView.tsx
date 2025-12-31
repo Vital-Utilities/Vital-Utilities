@@ -8,6 +8,12 @@ import { CpuMetricsModel } from "../../../components/Charts/CpuChartTimeSeries";
 import { ChartData, ClassicLayout, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { VitalState } from "../../../Redux/States";
 
+/** Truncate a number to 2 decimal places (no rounding) */
+const truncate2 = (num: number | undefined): string => {
+    if (num === undefined || num === null) return "—";
+    return (Math.trunc(num * 100) / 100).toFixed(2);
+};
+
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {
     const [ordered, setOrdered] = React.useState<CpuMetricsModel[]>();
     const [hasAnimated, setHasAnimated] = React.useState(false);
@@ -48,13 +54,25 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                 <Legend />
                                 <Area yAxisId="left" unit="%" type="monotone" dataKey="totalCoreUsagePercentage" name={`Utilisation ${current?.totalCoreUsagePercentage}%`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />
                                 {current?.powerDrawWattage && <Area yAxisId="right" unit="w" type="monotone" dataKey="powerDrawWattage" name={`Power ${current?.powerDrawWattage}w`} stroke="yellow" color="yellow" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />}
-                                <Area yAxisId="left" unit="°C" type="monotone" dataKey="packageTemperature" name={`Temperature ${current?.packageTemperature}°C`} stroke="white" color="white" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
+                                <Area yAxisId="left" unit="°C" type="monotone" dataKey="packageTemperature" name={`Temperature ${truncate2(current?.packageTemperature)}°C`} stroke="white" color="white" fillOpacity={0.1} activeDot={{ r: 4 }} fill="transparent" isAnimationActive={false} />
                             </AreaChart>
                         </ResponsiveContainer>
                     </>
                 );
             case "Logical": {
                 const corePercentages = dynamicState?.cpuUsageData?.corePercentages;
+                const tempReadings = dynamicState?.cpuUsageData?.temperatureReadings;
+
+                // Get die temperatures sorted by name (PMU tdie1, PMU tdie2, etc.)
+                const dieTemps: { name: string; temp: number }[] = [];
+                if (tempReadings) {
+                    Object.entries(tempReadings)
+                        .filter(([key]) => key.toLowerCase().includes("die"))
+                        .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+                        .forEach(([name, temp]) => {
+                            dieTemps.push({ name, temp });
+                        });
+                }
 
                 // Calculate per-core average across last 10 data points
                 const coreAverages: number[] = [];
@@ -67,12 +85,19 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                     }
                 }
 
+                // Try to map die temps to cores (approximate - dies don't map 1:1 to logical cores)
+                // For Apple Silicon: typically multiple cores share a die
+                const coresPerDie = corePercentages && dieTemps.length > 0 ? Math.ceil(corePercentages.length / dieTemps.length) : 0;
+
                 return (
                     <div className="flex h-full w-full px-3 py-3 overflow-x-auto">
                         {corePercentages && corePercentages.length > 0 ? (
                             <div className="flex gap-2 h-full w-full items-end">
                                 {corePercentages.map((percentage, i) => {
                                     const coreAvg = coreAverages[i] ?? 0;
+                                    // Get die temp for this core (approximate mapping)
+                                    const dieIdx = coresPerDie > 0 ? Math.floor(i / coresPerDie) : -1;
+                                    const coreTemp = dieIdx >= 0 && dieIdx < dieTemps.length ? dieTemps[dieIdx].temp : undefined;
 
                                     return (
                                         <div key={i} className="flex flex-col items-center h-full flex-1 min-w-[24px]">
@@ -96,6 +121,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                             </div>
                                             <div className="text-[10px] text-muted-foreground mt-1.5 font-medium">{i}</div>
                                             <div className="text-[10px] text-foreground/70 font-mono">{percentage.toFixed(0)}%</div>
+                                            {coreTemp !== undefined && <div className="text-[9px] text-orange-400/80 font-mono">{truncate2(coreTemp)}°</div>}
                                         </div>
                                     );
                                 })}
@@ -121,7 +147,7 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                     <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 30 }}>
                         <ItemOne color="#3182bd" title="Utilisation" value={`${current?.totalCoreUsagePercentage}%`} />
                         {current?.powerDrawWattage && <ItemOne color="yellow" title="Power" value={`${current?.powerDrawWattage}w`} />}
-                        <ItemOne color="white" title="Package Temp" value={`${current?.packageTemperature}°C`} />
+                        <ItemOne color="white" title="Package Temp" value={`${truncate2(current?.packageTemperature)}°C`} />
                         {highestCoreClockMhz && <ItemOne color="white" title="Speed" value={`${highestCoreClockMhz} mhz`} />}
                     </div>
                     <div>

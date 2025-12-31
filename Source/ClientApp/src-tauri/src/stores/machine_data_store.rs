@@ -331,17 +331,7 @@ impl MachineDataStore {
         earliest: DateTime<Utc>,
         latest: DateTime<Utc>,
     ) -> TimeSeriesMachineMetricsResponse {
-        log::info!("get_metrics: requested range {} to {}", earliest, latest);
-        log::info!("get_metrics: cache has {} entries", self.metrics_cache.len());
-
-        // Debug: show what timestamps are in the cache
-        if self.metrics_cache.len() > 0 {
-            let timestamps: Vec<_> = self.metrics_cache.iter().take(3).map(|r| r.key().to_string()).collect();
-            log::info!("get_metrics: sample cache timestamps: {:?}", timestamps);
-        }
-
         let mut metrics = self.get_metrics_from_cache(earliest, latest);
-        log::info!("get_metrics: found {} matching metrics", metrics.len());
 
         // Sort by timestamp
         metrics.sort_by(|a, b| a.date_time_offset.cmp(&b.date_time_offset));
@@ -357,16 +347,26 @@ impl MachineDataStore {
 
     /// Create current metrics snapshot for storage
     pub fn create_current_snapshot(&self) -> TimeSeriesMachineMetricsModel {
-        let cpu_ref = self.cpu_usage.get("default");
-        log::info!("create_current_snapshot: cpu_usage.get('default') = {:?}", cpu_ref.is_some());
-
-        let cpu_data = cpu_ref.map(|cpu| {
-            log::info!("  CPU data: total_core_percentage={}", cpu.total_core_percentage);
+        let cpu_data = self.cpu_usage.get("default").map(|cpu| {
             vec![CpuUsageMetricModel {
                 id: None,
                 unique_identifier: Some("cpu0".to_string()),
                 total_core_usage_percentage: Some(cpu.total_core_percentage),
-                package_temperature: cpu.temperature_readings.get("Package").copied(),
+                package_temperature: cpu.temperature_readings.get("CPU Package")
+                    .or_else(|| cpu.temperature_readings.get("Package"))
+                    .or_else(|| cpu.temperature_readings.get("CPU die"))
+                    .or_else(|| cpu.temperature_readings.get("CPU"))
+                    .or_else(|| {
+                        // Find any temperature reading that looks like a CPU temp (tdie = die temperature)
+                        cpu.temperature_readings.iter()
+                            .filter(|(k, _)| {
+                                let lower = k.to_lowercase();
+                                lower.contains("cpu") || lower.contains("die") || lower.contains("core")
+                            })
+                            .map(|(_, v)| v)
+                            .max_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
+                    })
+                    .copied(),
                 power_draw_wattage: cpu.power_draw_wattage,
                 core_clocks_mhz: Some(
                     cpu.core_clocks_mhz
@@ -384,7 +384,6 @@ impl MachineDataStore {
                 ),
             }]
         });
-        log::info!("  cpu_data result: {:?}", cpu_data.as_ref().map(|v| v.len()));
 
         let ram_data = self.memory_usage.get("default").map(|mem| RamUsageMetricModel {
             id: None,

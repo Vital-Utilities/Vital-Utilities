@@ -321,11 +321,8 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         // Convert to our DTO types and update store
         update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, disk_usage, &sys_info, time);
 
-        // Log timing info
+        // Sleep for remaining time to maintain ~1-second interval
         if let Ok(elapsed) = start.elapsed() {
-            log::debug!("Metrics collection took: {:?}", elapsed);
-
-            // Sleep for remaining time to maintain ~1-second interval
             // Use tokio::time::sleep instead of std::thread::sleep to avoid blocking the async runtime
             if elapsed.as_millis() < SECOND.as_millis() {
                 tokio::time::sleep(Duration::from_millis(
@@ -361,7 +358,6 @@ fn update_machine_store(
         cpu_cache: None,
         temperature_readings: cpu_util.temperature_readings.clone().into_iter().collect(),
     };
-    log::info!("CPU update: total_core_percentage={}, core_count={}", cpu.total_core_percentage, cpu.core_percentages.len());
     store.update_cpu(cpu);
 
     // Convert memory usage
@@ -563,6 +559,15 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
 
 fn setup_logging(verbosity: u64) -> Result<(), fern::InitError> {
     let mut base_config = fern::Dispatch::new();
+
+    // Filter out noisy modules
+    base_config = base_config
+        .level_for("sqlx", log::LevelFilter::Warn)
+        .level_for("sqlx::query", log::LevelFilter::Warn)
+        .level_for("hyper", log::LevelFilter::Warn)
+        .level_for("tao", log::LevelFilter::Warn)
+        .level_for("wry", log::LevelFilter::Warn)
+        .level_for("tracing", log::LevelFilter::Warn);
 
     base_config = match verbosity {
         0 => base_config

@@ -125,11 +125,6 @@ export const PerformancePage: React.FunctionComponent = props => {
     }
     useEffect(() => {
         if (timeSeriesMetrics?.metrics && timeSeriesMetrics.requestRange) {
-            console.log("Performance.tsx: Processing timeSeriesMetrics, count:", timeSeriesMetrics.metrics.length);
-            if (timeSeriesMetrics.metrics[0]) {
-                console.log("  First metric cpuUsageData:", timeSeriesMetrics.metrics[0].cpuUsageData);
-                console.log("  First metric cpuUsageData type:", typeof timeSeriesMetrics.metrics[0].cpuUsageData);
-            }
             const f = timeSeriesMetrics?.metrics?.map(e => {
                 return {
                     cpuMetrics: (e.cpuUsageData ?? []).map(d => {

@@ -47,9 +47,9 @@ static SECOND: core::time::Duration = Duration::from_millis(1000);
 
 #[rocket::main]
 async fn main() {
-    let _ = log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info));
+    let _ = log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Warn));
 
-    info!("Starting VitalRustService...");
+    warn!("Starting VitalRustService...");
 
     // Initialize settings store
     let settings_store = Arc::new(SettingsStore::new());
@@ -187,8 +187,6 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
     sys_info.refresh_all();
     thread::sleep(SECOND);
 
-    info!("Metrics collection started");
-
     loop {
         let start = SystemTime::now();
 
@@ -217,11 +215,8 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
             time,
         );
 
-        // Log timing info
+        // Sleep for remaining time to maintain 1-second interval
         if let Ok(elapsed) = start.elapsed() {
-            info!("Metrics collection took: {:?}", elapsed);
-
-            // Sleep for remaining time to maintain 1-second interval
             if elapsed.as_millis() < SECOND.as_millis() {
                 thread::sleep(Duration::from_millis(
                     (SECOND.as_millis() - elapsed.as_millis()) as u64,
@@ -373,6 +368,16 @@ struct SimpleLogger;
 
 impl log::Log for SimpleLogger {
     fn enabled(&self, metadata: &Metadata) -> bool {
+        // Filter out noisy modules
+        let target = metadata.target();
+        if target.starts_with("sqlx")
+            || target.starts_with("rocket")
+            || target.starts_with("hyper")
+            || target.starts_with("_")
+            || target.starts_with("tracing")
+        {
+            return metadata.level() <= Level::Warn;
+        }
         metadata.level() <= Level::Info
     }
 
