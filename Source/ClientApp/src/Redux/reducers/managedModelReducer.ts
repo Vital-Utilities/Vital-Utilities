@@ -1,6 +1,6 @@
 import { ManagedActionTypes } from "../actions/managedModelActions";
 import { InitialState, ManagedState } from "../States";
-import { message } from "antd";
+import toast from "react-hot-toast";
 
 export function ManagedReducer(state = InitialState.managedState, action: ManagedActionTypes): ManagedState {
     switch (action.type) {
@@ -12,12 +12,12 @@ export function ManagedReducer(state = InitialState.managedState, action: Manage
         case "ADD_MANAGED": {
             const newState = { ...state };
             newState.managed.push(action.message);
-            message.info(`${action.message.processName} config was added`);
+            toast.success(`${action.message.processName} config was added`);
             return newState;
         }
         case "DELETE_MANAGED": {
             const managed = state.managed.find(e => e.id === action.id);
-            message.info(`${managed?.processName} config was removed`);
+            toast.success(`${managed?.processName} config was removed`);
             return { ...state, managed: state.managed.filter(e => e.id !== action.id) };
         }
         case "UPDATE_MANAGED": {
@@ -25,7 +25,7 @@ export function ManagedReducer(state = InitialState.managedState, action: Manage
             const index = newState.managed.findIndex(e => e.id === action.message.id);
             // eslint-disable-next-line security/detect-object-injection
             newState.managed[index] = action.message;
-            message.info(`${action.message.processName} config was updated`);
+            toast.success(`${action.message.processName} config was updated`);
 
             return newState;
         }

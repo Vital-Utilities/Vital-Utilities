@@ -1,7 +1,7 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import "./Table.scss";
 
-export const Table: React.FunctionComponent = props => {
+export const Table: React.FunctionComponent<PropsWithChildren> = props => {
     return (
         <div className="custom-table">
             <table id="table">{props.children}</table>

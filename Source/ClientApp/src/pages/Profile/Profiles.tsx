@@ -1,16 +1,18 @@
-import { Button, Input, Popconfirm } from "antd";
-import Modal from "antd/lib/modal/Modal";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CreateProfile } from "./AddProfile";
 import { fetchProfilesAction, recieveDeleteProfileAction } from "../../Redux/actions/profileActions";
 import { VitalState, ProfileState } from "../../Redux/States";
 import { Table } from "../../components/Table";
-import { CaretDownOutlined, CaretUpOutlined } from "@ant-design/icons";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { BsPencilFill, BsTrashFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link } from "@tanstack/react-router";
 import { ProfileDto } from "@vital/vitalservice";
 import { profileApi } from "../../Redux/actions/tauriApi";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 enum SortByEnum {
     Name = "Name"
@@ -53,7 +55,7 @@ export const Profiles: React.FunctionComponent = () => {
     }
 
     function sortDirectionRender() {
-        return sortBy.descending ? <CaretDownOutlined rev={""} /> : <CaretUpOutlined rev={""} />;
+        return sortBy.descending ? <ChevronDown className="h-4 w-4 inline" /> : <ChevronUp className="h-4 w-4 inline" />;
     }
 
     function setSort(e: SortByEnum) {
@@ -66,24 +68,35 @@ export const Profiles: React.FunctionComponent = () => {
                 <td>
                     <span style={{ paddingRight: 20 }}>{e.name}</span>
                     <div className="actions">
-                        <Link to={`profiles/${e.id}`}>
+                        <Link to="/profiles/$profileId" params={{ profileId: String(e.id) }}>
                             <BsPencilFill style={{ cursor: "pointer" }}></BsPencilFill>
                         </Link>
-                        <Popconfirm
-                            title="Are you sure you want to delete this profile?"
-                            onConfirm={() => {
-                                profileApi
-                                    .delete(e.id)
-                                    .then(() => {
-                                        dispatch(recieveDeleteProfileAction(e.id));
-                                    })
-                                    .catch(result => console.error(result));
-                            }}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <BsTrashFill className="danger" style={{ cursor: "pointer" }} />
-                        </Popconfirm>
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <BsTrashFill className="danger" style={{ cursor: "pointer" }} />
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Delete Profile</AlertDialogTitle>
+                                    <AlertDialogDescription>Are you sure you want to delete this profile?</AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>No</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        onClick={() => {
+                                            profileApi
+                                                .delete(e.id)
+                                                .then(() => {
+                                                    dispatch(recieveDeleteProfileAction(e.id));
+                                                })
+                                                .catch(result => console.error(result));
+                                        }}
+                                    >
+                                        Yes
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </div>
                 </td>
                 <td style={{ textAlign: "center" }}>{e.enabled ? "Enabled" : "Disabled"}</td>
@@ -95,16 +108,17 @@ export const Profiles: React.FunctionComponent = () => {
 
     return (
         <>
-            {showAddModal && (
-                <Modal width={600} visible={true} title="Add New Process" closable onCancel={() => setShowAddModal(false)} maskClosable={false} afterClose={onModalSubmit} footer={null}>
+            <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
+                <DialogContent className="sm:max-w-[600px]">
+                    <DialogHeader>
+                        <DialogTitle>Add New Profile</DialogTitle>
+                    </DialogHeader>
                     <CreateProfile onCancel={() => setShowAddModal(false)} onSubmit={onModalSubmit} />
-                </Modal>
-            )}
+                </DialogContent>
+            </Dialog>
             <div className="view-header" style={{ gap: 20, display: "flex" }}>
                 <Input placeholder="Search" style={{ width: 200 }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
-                <Button type="primary" onClick={() => setShowAddModal(true)}>
-                    New Profile
-                </Button>
+                <Button onClick={() => setShowAddModal(true)}>New Profile</Button>
             </div>
             <Table>
                 <thead>

@@ -1,4 +1,3 @@
-import { Form, Input, Button } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
 import type { VitalState } from "../../Redux/States";
@@ -6,6 +5,9 @@ import { AffinityEditor } from "../../components/Affinity/AffinityEditor";
 import { ProcessPriority } from "./ProcessPriority";
 import { type AddProccessRequest, ProcessPriorityEnum } from "@vital/vitalservice";
 import { profileApi } from "../../Redux/actions/tauriApi";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface AddProcessViewProps {
     name: string;
@@ -48,10 +50,15 @@ export const AddProcessView: React.FunctionComponent<AddProcessViewProps> = prop
 
     return (
         <div style={{ height: "100%" }}>
-            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
-                <Form.Item label="Process Name">{props.name}</Form.Item>
-                <Form.Item label="Alias">
+            <div className="space-y-4">
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                    <Label>Process Name</Label>
+                    <span>{props.name}</span>
+                </div>
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                    <Label htmlFor="alias">Alias</Label>
                     <Input
+                        id="alias"
                         value={addProcessRequest.alias}
                         onChange={e =>
                             setAddProcessRequest({
@@ -61,18 +68,19 @@ export const AddProcessView: React.FunctionComponent<AddProcessViewProps> = prop
                         }
                         placeholder="Give this an alias if the name is not friendly"
                     />
-                </Form.Item>
-                <ProcessPriority value={addProcessRequest.processPriority} onChange={e => setAddProcessRequest({ ...addProcessRequest, processPriority: e })} />
-                <Form.Item label="Affinity">
-                    <AffinityEditor affinity={addProcessRequest.affinity} onChange={e => setAddProcessRequest({ ...addProcessRequest, affinity: e })} />
-                </Form.Item>
-                <div className="ant-modal-footer">
-                    <Button onClick={props.onBack}>Back</Button>
-                    <Button type="primary" onClick={SendRequest}>
-                        Add process to managed
-                    </Button>
                 </div>
-            </Form>
+                <ProcessPriority value={addProcessRequest.processPriority} onChange={e => setAddProcessRequest({ ...addProcessRequest, processPriority: e })} />
+                <div className="grid grid-cols-[120px_1fr] items-start gap-4">
+                    <Label>Affinity</Label>
+                    <AffinityEditor affinity={addProcessRequest.affinity} onChange={e => setAddProcessRequest({ ...addProcessRequest, affinity: e })} />
+                </div>
+                <div className="flex justify-end gap-2 pt-4">
+                    <Button variant="secondary" onClick={props.onBack}>
+                        Back
+                    </Button>
+                    <Button onClick={SendRequest}>Add process to managed</Button>
+                </div>
+            </div>
         </div>
     );
 };

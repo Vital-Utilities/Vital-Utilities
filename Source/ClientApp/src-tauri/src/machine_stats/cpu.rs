@@ -21,23 +21,25 @@ pub async fn get_cpu_util(
     if let Ok(temp) = sysstat.cpu_temp() {
         temperature_readings.insert("CPU Package".to_string(), temp as f32);
     }
-    let info = sysinfo.global_cpu_info();
+    // In sysinfo 0.37+, global_cpu_info() was removed. Use global_cpu_usage() for total usage
+    // and get CPU info from the first core
+    let first_cpu = sysinfo.cpus().first();
+    let total_usage = sysinfo.global_cpu_usage();
+
     Box::new(CpuUsage {
-        name: get_name(&info),
+        name: get_name(first_cpu),
         cpu_cache: None,
-        brand: Some(info.brand().to_string()),
-        vendor_id: Some(info.vendor_id().to_string()),
+        brand: first_cpu.map(|c| c.brand().to_string()),
+        vendor_id: first_cpu.map(|c| c.vendor_id().to_string()),
         core_clocks_mhz,
-        total_core_percentage: truncate_two_precision(info.cpu_usage()),
+        total_core_percentage: truncate_two_precision(total_usage),
         power_draw_wattage: None,
         core_percentages,
         temperature_readings: temperature_readings.clone(),
     })
 }
 #[cfg(target_os = "macos")]
-fn get_name(_info: &Cpu) -> String {
-    use log::info;
-
+fn get_name(_info: Option<&Cpu>) -> String {
     let output = Command::new("sysctl")
         .arg("-n")
         .arg("machdep.cpu.brand_string")
@@ -45,12 +47,12 @@ fn get_name(_info: &Cpu) -> String {
         .expect("Failed to execute command");
 
     let cpu_name = str::from_utf8(&output.stdout).expect("Output was not valid UTF-8");
-    return cpu_name.trim().to_string();
+    cpu_name.trim().to_string()
 }
 
 #[cfg(target_os = "windows")]
-fn get_name(info: &Cpu) -> String {
-    info.name().to_string()
+fn get_name(info: Option<&Cpu>) -> String {
+    info.map(|c| c.name().to_string()).unwrap_or_else(|| "Unknown CPU".to_string())
 }
 fn truncate_two_precision(num: f32) -> f32 {
     f32::trunc(num * 100.0) / 100.0

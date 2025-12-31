@@ -1,6 +1,6 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-export const ShowOnHover: React.FunctionComponent = props => {
+export const ShowOnHover: React.FunctionComponent<PropsWithChildren> = props => {
     const [show, setShow] = React.useState<boolean>();
 
     function OverlayBehaviour(): React.CSSProperties | undefined {

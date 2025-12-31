@@ -1,10 +1,8 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Checkbox, Dropdown, Input, Menu, notification } from "antd";
 import { useEffect } from "react";
 import "./home.scss";
 import _ from "lodash";
-import { CaretRightOutlined, CaretUpOutlined, CaretDownOutlined } from "@ant-design/icons";
 import { ProcessViewState, ProfileState, VitalState } from "../Redux/States";
 import { fetchRunningProcessesAction, recieveDeleteProcessViewAction } from "../Redux/actions/processViewActions";
 import { useInterval } from "ahooks";
@@ -14,6 +12,12 @@ import { Table } from "../components/Table";
 import { ParentChildModelDto, GetMachineDynamicDataResponse, ProcessViewDto } from "@vital/vitalservice";
 import { processApi } from "../Redux/actions/tauriApi";
 import { openUrl } from "../Utilities/TauriCommands";
+import { ChevronRight, ChevronUp, ChevronDown } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import toast from "react-hot-toast";
 
 enum SortByEnum {
     "Description" = "Description",
@@ -154,35 +158,29 @@ export const Processes: React.FunctionComponent = () => {
             .then(() => dispatch(recieveDeleteProcessViewAction(id)))
             .catch(result => {
                 console.error(result);
-                notification.error({ message: String(result), duration: 2000 });
+                toast.error(String(result));
             });
     }
     function valueOrZero(value: undefined | never | number): number {
         return value || 0;
     }
 
-    const contextMenu = (process: ProcessViewDto) => {
+    const ProcessContextMenu: React.FC<{ process: ProcessViewDto; children: React.ReactNode }> = ({ process, children }) => {
         return (
-            <Menu>
-                <Menu.Item key="1" onClick={() => killProcess(process.id)}>
-                    End Task
-                </Menu.Item>
-                <Menu.Item key="2" onClick={() => openProcessPath(process.id)}>
-                    Open Process Location
-                </Menu.Item>
-                <Menu.Item key="3" onClick={() => openProcessProperties(process.id)}>
-                    Open Properties
-                </Menu.Item>
-                <Menu.Item key="4" title="opens a web browser with search result" onClick={() => whatIs(process.processName)}>
-                    What is {process.processName}?
-                </Menu.Item>
-                {process.description && (
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    <Menu.Item key="5" title="opens a web browser with search result" onClick={() => whatIs(process.description!)}>
-                        What is {process.description}?
-                    </Menu.Item>
-                )}
-            </Menu>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <div className="contents" onContextMenu={e => e.preventDefault()}>
+                        {children}
+                    </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => killProcess(process.id)}>End Task</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openProcessPath(process.id)}>Open Process Location</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openProcessProperties(process.id)}>Open Properties</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => whatIs(process.processName)}>What is {process.processName}?</DropdownMenuItem>
+                    {process.description && <DropdownMenuItem onClick={() => whatIs(process.description ?? "")}>What is {process.description}?</DropdownMenuItem>}
+                </DropdownMenuContent>
+            </DropdownMenu>
         );
     };
     function whatIs(str: string) {
@@ -198,7 +196,7 @@ export const Processes: React.FunctionComponent = () => {
         return returnValue;
         function noChildrenRender() {
             returnValue.push(
-                <Dropdown key={`dropdown - ${e.parent.id}`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
+                <ProcessContextMenu key={`dropdown - ${e.parent.id}`} process={e.parent}>
                     <tr className="process">
                         <td
                             style={childrenLength === 0 ? { paddingLeft: 40 } : { cursor: "pointer" }}
@@ -228,7 +226,7 @@ export const Processes: React.FunctionComponent = () => {
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processBytesPerSecActivity && getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
                     </tr>
-                </Dropdown>
+                </ProcessContextMenu>
             );
         }
 
@@ -240,7 +238,7 @@ export const Processes: React.FunctionComponent = () => {
             const gpuActivity = valueOrZero(processGpuPercentage?.[e.parent.id]) + values.map(e => valueOrZero(processGpuPercentage?.[e.id])).reduce((a, b) => a + b, 0);
 
             returnValue.push(
-                <Dropdown key={`dropdown - ${e.parent.id}`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
+                <ProcessContextMenu key={`dropdown - ${e.parent.id}`} process={e.parent}>
                     <tr className="process">
                         <td
                             style={{ cursor: "pointer" }}
@@ -255,7 +253,7 @@ export const Processes: React.FunctionComponent = () => {
                             }}
                         >
                             <div>
-                                <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <CaretRightOutlined rev={""} /> : <CaretDownOutlined rev={""} />}</span>
+                                <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <ChevronRight className="h-4 w-4 inline" /> : <ChevronDown className="h-4 w-4 inline" />}</span>
                                 <span>
                                     {e.parent.description ?? e.parent.processTitle ?? e.parent.processName} {`(+${childrenLength})`}
                                 </span>
@@ -273,14 +271,14 @@ export const Processes: React.FunctionComponent = () => {
                         <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(diskBytesPerSecActivity, 1)}</td>
                         <td style={{ textAlign: "right" }}>{gpuActivity && gpuActivity}%</td>
                     </tr>
-                </Dropdown>
+                </ProcessContextMenu>
             );
 
             if (expandedIds.find(f => f === e.parent.id) !== undefined) {
                 const cpuPercentage = valueOrZero(processCpuPercentage?.[e.parent.id]);
 
                 returnValue.push(
-                    <Dropdown key={`dropdown - ${e.parent.id} child`} overlay={contextMenu(e.parent)} trigger={["contextMenu"]}>
+                    <ProcessContextMenu key={`dropdown - ${e.parent.id} child`} process={e.parent}>
                         <tr className="child process">
                             <td style={{ paddingLeft: 40, maxWidth: 250 }}>
                                 <div>
@@ -299,13 +297,13 @@ export const Processes: React.FunctionComponent = () => {
                             <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
                             <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
                         </tr>
-                    </Dropdown>
+                    </ProcessContextMenu>
                 );
                 returnValue.push(
                     values.map(c => {
                         const cpuPercentage = valueOrZero(processCpuPercentage?.[c.id]);
                         return (
-                            <Dropdown key={`dropdown - ${c.id}`} overlay={contextMenu(c)} trigger={["contextMenu"]}>
+                            <ProcessContextMenu key={`dropdown - ${c.id}`} process={c}>
                                 <tr key={c.id} className="child process">
                                     <td style={{ paddingLeft: 70, maxWidth: 200 }}>{c.description || c.processName}</td>
                                     <td title={c.processTitle ?? c.processName} style={{ maxWidth: 250 }}>
@@ -320,7 +318,7 @@ export const Processes: React.FunctionComponent = () => {
                                     <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[c.id], 1)}</td>
                                     <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[c.id]}%</td>
                                 </tr>
-                            </Dropdown>
+                            </ProcessContextMenu>
                         );
                     })
                 );
@@ -328,7 +326,7 @@ export const Processes: React.FunctionComponent = () => {
         }
     }
     function sortDirectionRender() {
-        return sortBy.descending ? <CaretDownOutlined rev={""} /> : <CaretUpOutlined rev={""} />;
+        return sortBy.descending ? <ChevronDown className="h-4 w-4 inline" /> : <ChevronUp className="h-4 w-4 inline" />;
     }
 
     function setSort(e: SortByEnum) {
@@ -340,9 +338,10 @@ export const Processes: React.FunctionComponent = () => {
         <>
             <div id="view-header" className="view-header">
                 <Input placeholder="Search" style={{ width: 200, marginRight: 20 }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
-                <Checkbox checked={showAllProcess} onChange={() => setShowAllProcess(!showAllProcess)}>
-                    Show all Processes
-                </Checkbox>
+                <div className="flex items-center gap-2">
+                    <Checkbox id="show-all-processes" checked={showAllProcess} onCheckedChange={() => setShowAllProcess(!showAllProcess)} />
+                    <Label htmlFor="show-all-processes">Show all Processes</Label>
+                </div>
             </div>
             <Table>
                 <thead>
@@ -382,11 +381,11 @@ export const Processes: React.FunctionComponent = () => {
 function openProcessPath(id: number) {
     processApi.openPath(id).catch(result => {
         console.error(result);
-        notification.error({ message: String(result), duration: 2000 });
+        toast.error(String(result));
     });
 }
 
 function openProcessProperties(_id: number) {
     // Process properties is not available in the embedded backend
-    notification.info({ message: "Process properties not available", duration: 2000 });
+    toast("Process properties not available");
 }

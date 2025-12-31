@@ -1,9 +1,10 @@
-import { Button } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
 import { VitalState } from "../../Redux/States";
 import "./affinity.scss";
 import { AffinityRenderer } from "./AffinityRenderer";
+import { Button } from "@/components/ui/button";
+
 interface Props {
     affinity: number[];
     onChange: (value: number[]) => void;
@@ -35,17 +36,15 @@ export const AffinityEditor: React.FunctionComponent<Props> = ({ affinity, onCha
 
     return (
         <>
-            <div className="button-row">
-                <Button onClick={() => toggleAll()}>Toggle All</Button>
-                <Button onClick={() => invertAffinity()}>Invert selections</Button>
+            <div className="flex gap-2 mb-2">
+                <Button variant="secondary" onClick={() => toggleAll()}>
+                    Toggle All
+                </Button>
+                <Button variant="secondary" onClick={() => invertAffinity()}>
+                    Invert selections
+                </Button>
             </div>
-            <div
-                style={{
-                    width: "50%",
-                    display: "grid",
-                    gridTemplateColumns: "auto auto auto auto auto auto"
-                }}
-            >
+            <div className="w-1/2 grid grid-cols-6">
                 <AffinityRenderer affinity={affinity} onChange={e => onChange(e)} />
             </div>
         </>

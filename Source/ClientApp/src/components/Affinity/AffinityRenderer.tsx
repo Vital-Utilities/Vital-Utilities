@@ -1,8 +1,9 @@
-import { Checkbox } from "antd";
 import React, { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { VitalState, MachineState } from "../../Redux/States";
 import "./affinity.scss";
+import { Checkbox } from "@/components/ui/checkbox";
+
 interface props {
     affinity: number[];
     onChange?: (value: number[]) => void;
@@ -24,11 +25,9 @@ export const AffinityRenderer: React.FunctionComponent<props> = ({ affinity, onC
         for (let i = 0; i < (machineState.static?.cpu.threadCount ?? 0); i++) {
             const included = affinity.includes(i);
             returnElements.push(
-                <div key={i} style={{ width: 60 }}>
-                    <div style={{ float: "right" }}>
-                        {`${i}: `}
-                        <Checkbox checked={affinity.includes(i)} onChange={() => updateAffinity(i, !included)} />
-                    </div>
+                <div key={i} className="w-15 flex items-center justify-end gap-1">
+                    <span>{`${i}:`}</span>
+                    <Checkbox checked={affinity.includes(i)} onCheckedChange={() => updateAffinity(i, !included)} />
                 </div>
             );
         }
@@ -49,7 +48,7 @@ export const MiniAffinityRenderer: React.FunctionComponent<{ affinity: number[] 
         for (let i = 0; i < (machineState.static?.cpu.threadCount ?? 0); i++) {
             const included = affinity.includes(i);
             returnElements.push(
-                <div key={i} style={{ width: 10 }}>
+                <div key={i} className="w-2.5">
                     <div className={included ? "activeAffinity" : "inactiveAffinity"} />
                 </div>
             );

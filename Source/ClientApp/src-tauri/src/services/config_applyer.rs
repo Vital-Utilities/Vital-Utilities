@@ -3,7 +3,7 @@
 //! This service runs only on Windows and applies configured profiles to running processes.
 
 use std::sync::Arc;
-use sysinfo::{System, Pid};
+use sysinfo::{System, Pid, ProcessesToUpdate};
 use tokio::time::{interval, Duration};
 
 use crate::db::AppDb;
@@ -48,15 +48,17 @@ impl ConfigApplyerService {
         }
 
         // Get current running processes
+        // In sysinfo 0.37+, refresh_processes requires arguments
         let mut sys = System::new();
-        sys.refresh_processes();
+        sys.refresh_processes(ProcessesToUpdate::All, true);
 
         // For each enabled profile, apply its configurations
         for (_profile, managed_processes) in profiles {
             for managed in managed_processes {
                 // Find matching processes by name
                 for (pid, process) in sys.processes() {
-                    let process_name = process.name().to_str().unwrap_or_default().to_lowercase();
+                    // In sysinfo 0.37+, process.name() returns &OsStr
+                    let process_name = process.name().to_string_lossy().to_lowercase();
                     let managed_name = managed.process_name.to_lowercase();
 
                     // Match by process name (with or without .exe)

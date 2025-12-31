@@ -1,5 +1,5 @@
-import React from "react";
-export const OverlayContentOnHover: React.FunctionComponent<{ show?: boolean; blur?: boolean; content: React.ReactNode }> = props => {
+import React, { PropsWithChildren } from "react";
+export const OverlayContentOnHover: React.FunctionComponent<PropsWithChildren<{ show?: boolean; blur?: boolean; content: React.ReactNode }>> = props => {
     const [show, setShow] = React.useState<boolean>(props.show ?? false);
 
     function OverlayBehaviour(): React.CSSProperties | undefined {
@@ -24,7 +24,7 @@ export const OverlayContentOnHover: React.FunctionComponent<{ show?: boolean; bl
     );
 };
 
-export const OverlayContent: React.FunctionComponent<{ show?: boolean; blur?: boolean; content: React.ReactNode }> = props => {
+export const OverlayContent: React.FunctionComponent<PropsWithChildren<{ show?: boolean; blur?: boolean; content: React.ReactNode }>> = props => {
     function OverlayBehaviour(): React.CSSProperties | undefined {
         if (props.show) return { opacity: "1" };
         else return { opacity: "0" };

@@ -129,7 +129,8 @@ pub fn get_process_util(
                 Err(_) => None,
             };
         };
-        let cores = sysinfo.physical_core_count();
+        // In sysinfo 0.37+, physical_core_count() is now a static method
+        let cores = sysinfo::System::physical_core_count();
 
         let gpu_util = process_gpu_utilization_samples
             .iter()
@@ -143,13 +144,15 @@ pub fn get_process_util(
                 })
             });
 
+        // In sysinfo 0.37+, process.name() returns &OsStr, convert to String
+        let process_name = process.name().to_string_lossy().to_string();
         list.push(ProcessData {
             pid: pid as i32,
             parent_pid: process.parent().map(|pid| pid.as_u32() as i32),
             executable_path: path,
             description,
-            main_window_title: Some(process.name().to_owned()),
-            name: process.name().to_owned(),
+            main_window_title: Some(process_name.clone()),
+            name: process_name,
             time_stamp: time_stamp.to_rfc3339(),
             cpu_percentage: (process.cpu_usage() / cores.unwrap() as f32) as f32,
             memory_bytes: process.memory() as i64,

@@ -37,10 +37,11 @@ impl ProcessManager for MacOSProcessManager {
     }
 
     async fn open_process_location(&self, pid: u32) -> Result<(), String> {
-        use sysinfo::{Pid, System};
+        use sysinfo::{Pid, System, ProcessesToUpdate};
 
         let mut sys = System::new();
-        sys.refresh_processes();
+        // In sysinfo 0.37+, refresh_processes requires arguments
+        sys.refresh_processes(ProcessesToUpdate::All, true);
 
         if let Some(process) = sys.process(Pid::from_u32(pid)) {
             if let Some(path) = process.exe() {

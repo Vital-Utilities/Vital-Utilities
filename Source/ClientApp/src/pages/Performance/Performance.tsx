@@ -1,7 +1,5 @@
-import { CaretUpOutlined, CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
 import { GetMachineStaticDataResponse, GetMachineDynamicDataResponse, TimeSeriesMachineMetricsResponse, TimeSeriesMachineMetricsModel } from "@vital/vitalservice";
 import { useLocalStorageState } from "ahooks";
-import { Form, Select, Checkbox, Radio, Menu, Dropdown } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { CpuMetricsModel, CpuChartTimeSeries } from "../../components/Charts/CpuChartTimeSeries";
@@ -21,7 +19,12 @@ import { ClassicGpuView } from "./Classic/ClassicGpuView";
 import { ClassicNetworkAdapterView } from "./Classic/ClassicNetworkAdapterView";
 import { ClassicRamView } from "./Classic/ClassicRamView";
 import "./performance.scss";
-const { Option } = Select;
+import { ChevronUp, ChevronDown, ChevronRight } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 enum viewOptions {
     "Classic" = "Classic",
@@ -178,25 +181,40 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 )}
                             </div> */}
 
-                            <Form.Item label="Time" style={{ marginBottom: "0", width: "200px" }}>
-                                <Select onChange={e => setRelativeTimeOption(e)} value={relativeTimeOption}>
-                                    {Object.keys(relativeTimeOptions).map(key => {
-                                        return (
-                                            <Option key={key} value={key}>
+                            <div className="flex items-center gap-2" style={{ width: "200px" }}>
+                                <Label>Time</Label>
+                                <Select onValueChange={e => setRelativeTimeOption(e as relativeTypeStringOptions)} value={relativeTimeOption}>
+                                    <SelectTrigger>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {Object.keys(relativeTimeOptions).map(key => (
+                                            <SelectItem key={key} value={key}>
                                                 {key}
-                                            </Option>
-                                        );
-                                    })}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
                                 </Select>
-                            </Form.Item>
+                            </div>
                         </>
                     )}
-                    <Form.Item label="Hide Virtual Adapters" style={{ marginBottom: "0" }}>
-                        <Checkbox onChange={() => setHideVirtualAdapters(!hideVirtualAdapters)} checked={hideVirtualAdapters} />
-                    </Form.Item>
-                    <Form.Item label="View" style={{ marginBottom: "0", width: "300px" }}>
-                        <Radio.Group options={Object.keys(viewOptions)} onChange={e => setView(e.target.value)} value={view} optionType="button" />
-                    </Form.Item>
+                    <div className="flex items-center gap-2">
+                        <Checkbox id="hideVirtual" onCheckedChange={() => setHideVirtualAdapters(!hideVirtualAdapters)} checked={hideVirtualAdapters ?? false} />
+                        <Label htmlFor="hideVirtual">Hide Virtual Adapters</Label>
+                    </div>
+                    <div className="flex items-center gap-2" style={{ width: "300px" }}>
+                        <Label>View</Label>
+                        <RadioGroup value={view} onValueChange={(value: viewOptions) => setView(value)} className="flex gap-1">
+                            {Object.keys(viewOptions).map(option => (
+                                <div key={option} className="flex items-center">
+                                    <RadioGroupItem value={option} id={`view-${option}`} className="peer sr-only" />
+                                    <Label htmlFor={`view-${option}`} className="px-3 py-1.5 rounded-md cursor-pointer border border-border bg-secondary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground text-sm">
+                                        {option}
+                                    </Label>
+                                </div>
+                            ))}
+                        </RadioGroup>
+                    </div>
                 </div>
             </div>
         );
@@ -287,7 +305,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                             }}
                                             stat={
                                                 <>
-                                                    <CaretDownOutlined rev={""} /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <CaretUpOutlined rev={""} /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
+                                                    <ChevronDown className="inline h-4 w-4" /> {getReadableBitsPerSecondString(value[1].usage?.recieveBps ?? 0)} <ChevronUp className="inline h-4 w-4" /> {getReadableBitsPerSecondString(value[1].usage?.sendBps ?? 0)}
                                                 </>
                                             }
                                             type="network"
@@ -302,44 +320,46 @@ export const PerformancePage: React.FunctionComponent = props => {
         );
     }
 
-    function cpuActivityMenu() {
-        return (
-            <Menu>
-                <Menu.ItemGroup title="Change graph to">
-                    <Menu.Item key={"overall"} onClick={() => setClassicCpuGraphView("Overall")}>
-                        Overall utilization
-                    </Menu.Item>
-                    <Menu.Item key={"logical"} onClick={() => setClassicCpuGraphView("Logical")}>
-                        Logical processors
-                    </Menu.Item>
-                </Menu.ItemGroup>
-            </Menu>
-        );
-    }
     function getClassicContent() {
         if (!chartable) return;
-        const contextMenu = classicViewProps.selectedKey === "CPU" ? cpuActivityMenu() : null;
-        return (
-            <Dropdown key={"dropdown"} overlay={contextMenu ? contextMenu : <></>} trigger={contextMenu ? ["contextMenu"] : undefined}>
-                <div style={{ display: "grid", gridTemplateRows: "60px auto 50px 250px", overflowY: "scroll", paddingBottom: 50, paddingLeft: 10, width: "100%" }}>
-                    {classicViewProps.selectedKey === "CPU" ? (
-                        <ClassicCpuChartView {...chartable} graphView={classicCpuGraphView} />
-                    ) : classicViewProps.selectedKey.includes("GPU") ? (
-                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        <ClassicGpuView {...chartable} gpuNumber={classicViewProps.gpuNumber!} />
-                    ) : classicViewProps.selectedKey.includes("Memory") ? (
-                        <ClassicRamView {...chartable} />
-                    ) : classicViewProps.selectedKey.includes("Disk") ? (
-                        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                        <ClassicDiskView {...chartable} driveLetter={classicViewProps.driveLetter!} />
-                    ) : classicViewProps.selectedKey.includes("NetAdapter") && classicViewProps.macAddress ? (
-                        <ClassicNetworkAdapterView {...chartable} macAddress={classicViewProps.macAddress} />
-                    ) : (
-                        <></>
-                    )}
-                </div>
-            </Dropdown>
+        const showCpuContextMenu = classicViewProps.selectedKey === "CPU";
+
+        const content = (
+            <div style={{ display: "grid", gridTemplateRows: "60px auto 50px 250px", overflowY: "scroll", paddingBottom: 50, paddingLeft: 10, width: "100%" }}>
+                {classicViewProps.selectedKey === "CPU" ? (
+                    <ClassicCpuChartView {...chartable} graphView={classicCpuGraphView} />
+                ) : classicViewProps.selectedKey.includes("GPU") ? (
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    <ClassicGpuView {...chartable} gpuNumber={classicViewProps.gpuNumber!} />
+                ) : classicViewProps.selectedKey.includes("Memory") ? (
+                    <ClassicRamView {...chartable} />
+                ) : classicViewProps.selectedKey.includes("Disk") ? (
+                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                    <ClassicDiskView {...chartable} driveLetter={classicViewProps.driveLetter!} />
+                ) : classicViewProps.selectedKey.includes("NetAdapter") && classicViewProps.macAddress ? (
+                    <ClassicNetworkAdapterView {...chartable} macAddress={classicViewProps.macAddress} />
+                ) : (
+                    <></>
+                )}
+            </div>
         );
+
+        if (showCpuContextMenu) {
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <div className="cursor-context-menu">{content}</div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuLabel>Change graph to</DropdownMenuLabel>
+                        <DropdownMenuItem onClick={() => setClassicCpuGraphView("Overall")}>Overall utilization</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setClassicCpuGraphView("Logical")}>Logical processors</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
+        }
+
+        return content;
     }
 
     function customView() {
@@ -355,9 +375,18 @@ export const PerformancePage: React.FunctionComponent = props => {
                             <Card
                                 title="CPU"
                                 subTitle={
-                                    <div style={{ display: "flex", flexDirection: "row", gap: 20 }}>
+                                    <div style={{ display: "flex", flexDirection: "row", gap: 20, alignItems: "center" }}>
                                         <div>{staticState?.cpu.name}</div>
-                                        <Radio.Group options={Object.keys(cpuMetricViewOptions)} onChange={e => setCpuMetricView(e.target.value)} value={cpuMetricView} />
+                                        <RadioGroup value={cpuMetricView} onValueChange={(value: cpuMetricViewOptions) => setCpuMetricView(value)} className="flex gap-1">
+                                            {Object.keys(cpuMetricViewOptions).map(option => (
+                                                <div key={option} className="flex items-center">
+                                                    <RadioGroupItem value={option} id={`cpu-${option}`} className="peer sr-only" />
+                                                    <Label htmlFor={`cpu-${option}`} className="px-2 py-1 rounded-md cursor-pointer border border-border bg-secondary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground text-xs">
+                                                        {option}
+                                                    </Label>
+                                                </div>
+                                            ))}
+                                        </RadioGroup>
                                     </div>
                                 }
                                 showExpand
@@ -613,7 +642,7 @@ export const PerformancePage: React.FunctionComponent = props => {
 
 type InterfaceDetailsProps = "cpu" | "gpu" | "memory" | "network" | "disk";
 
-const InterfaceDetails: React.FunctionComponent = props => {
+const InterfaceDetails: React.FunctionComponent<{ children?: React.ReactNode }> = props => {
     return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))", gap: 20, marginBottom: 20 }}>{props.children}</div>;
 };
 
@@ -658,7 +687,7 @@ const ClassicNavItem: React.FunctionComponent<{ selectedKey: string; Key: string
     return (
         <div className={`category${props.selectedKey === props.Key ? " selected" : ""}`} onClick={props.onClick}>
             <div style={{ display: "grid", placeContent: "center" }}>
-                <CaretRightOutlined rev={""} key={"1"} style={{ color: getColor() }} />
+                <ChevronRight key={"1"} style={{ color: getColor() }} className="h-4 w-4" />
             </div>
             {getRender()}
         </div>
@@ -670,6 +699,7 @@ interface CardProps {
     title?: string;
     subTitle?: string | React.ReactNode;
     showExpand: boolean;
+    children?: React.ReactNode;
 }
 const Card: React.FunctionComponent<CardProps> = props => {
     return (

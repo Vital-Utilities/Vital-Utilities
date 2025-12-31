@@ -1,18 +1,20 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
+import "./index.css";
 import "./custom.scss";
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider } from "@tanstack/react-router";
 import configureStore from "./Redux/store/configureStore";
 import ManagedHubSignalR from "./Services/SignalR";
-import App from "./App";
 import { ServiceLiveMonitor } from "./Services/ServiceLiveMonitor";
 
 import { ApiPortHandler } from "./Services/ApiPortHandler";
 import * as Sentry from "@sentry/react";
-import notification from "antd/lib/notification";
 import packageJson from "../package.json";
 import reportWebVitals from "./reportWebVitals";
+import { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
+import { router } from "./router";
 
 if (process.env.NODE_ENV === "production") {
     Sentry.init({
@@ -25,18 +27,28 @@ const store = configureStore();
 // @ts-ignore
 const tauri_globals = window?.__TAURI__?.app;
 console.log(`Webapp instance is in: ${tauri_globals ? "Tauri Client" : "Web browser"}`);
-if (!tauri_globals) notification.warning({ duration: 3, message: "Webapp instance is in: Web browser, expect some missing functionalities." });
-ReactDOM.render(
+if (!tauri_globals) toast("Webapp instance is in: Web browser, expect some missing functionalities.", { icon: "⚠️", duration: 3000 });
+
+const container = document.getElementById("root");
+if (!container) throw new Error("Root element not found");
+const root = createRoot(container);
+root.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <Provider store={store}>
-                <ApiPortHandler />
-                <ServiceLiveMonitor />
-                <ManagedHubSignalR />
-                <App />
-            </Provider>
-        </BrowserRouter>
-    </React.StrictMode>,
-    document.getElementById("root")
+        <Provider store={store}>
+            <Toaster
+                position="top-right"
+                toastOptions={{
+                    style: {
+                        background: "#333",
+                        color: "#fff"
+                    }
+                }}
+            />
+            <ApiPortHandler />
+            <ServiceLiveMonitor />
+            <ManagedHubSignalR />
+            <RouterProvider router={router} />
+        </Provider>
+    </React.StrictMode>
 );
 reportWebVitals();

@@ -66,10 +66,9 @@ impl MachineDataStore {
 
     /// Initialize static CPU data from sysinfo
     pub fn init_static_cpu(&self, sys: &sysinfo::System) {
-        use sysinfo::CpuRefreshKind;
-
         let cpus = sys.cpus();
-        let physical_core_count = sys.physical_core_count().unwrap_or(cpus.len()) as i32;
+        // In sysinfo 0.37+, physical_core_count() is now a static method
+        let physical_core_count = sysinfo::System::physical_core_count().unwrap_or(cpus.len()) as i32;
         let logical_core_count = cpus.len() as i32;
 
         // Get CPU name from first core

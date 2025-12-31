@@ -2,14 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Breadcrumb, Button, Input, notification, Popconfirm } from "antd";
 import { useEffect } from "react";
 import { EditProcess } from "./EditProcess";
 import "../home.scss";
 import { AffinityRenderer } from "../../components/Affinity/AffinityRenderer";
-import Checkbox from "antd/lib/checkbox/Checkbox";
-import { ProfileFilled } from "@ant-design/icons";
-import { Link, useParams } from "react-router-dom";
+import { User, ChevronRight } from "lucide-react";
+import { Link, useParams } from "@tanstack/react-router";
 import { AddProcess } from "./AddProcess";
 import { VitalState, ManagedState, MachineState } from "../../Redux/States";
 import { recieveDeleteManagedProcessAction as recieveDeleteManagedProcessAction } from "../../Redux/actions/managedModelActions";
@@ -17,10 +15,16 @@ import { Table } from "../../components/Table";
 import { ProfileDto, ManagedModelDto, ProcessPriorityEnum, UpdateProfileRequest } from "@vital/vitalservice";
 import { profileApi } from "../../Redux/actions/tauriApi";
 import { OverlayContentOnHover } from "../../components/OverlayContent";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import toast from "react-hot-toast";
 
 export const EditProfilePage: React.FunctionComponent = () => {
-    // @ts-ignore
-    const { profileId } = useParams();
+    const { profileId } = useParams({ from: "/profiles/$profileId" });
 
     const [profile, setProfile] = React.useState<ProfileDto>();
     const dispatch = useDispatch();
@@ -78,25 +82,38 @@ export const EditProfilePage: React.FunctionComponent = () => {
                         blur
                         content={
                             <div className="button-row center">
-                                <Button onClick={() => updateProcessModel(e)}>Edit Affinity</Button>
-                                <Popconfirm
-                                    title="Are you sure you want to delete this configuration?"
-                                    onConfirm={() => {
-                                        profileApi
-                                            .deleteProcessConfig(e.id)
-                                            .then(() => {
-                                                dispatch(recieveDeleteManagedProcessAction(e.id));
-                                            })
-                                            .catch(result => {
-                                                notification.error({ duration: null, message: String(result) });
-                                                console.error(result);
-                                            });
-                                    }}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button danger>Delete</Button>
-                                </Popconfirm>
+                                <Button variant="secondary" onClick={() => updateProcessModel(e)}>
+                                    Edit Affinity
+                                </Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="destructive">Delete</Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Delete Configuration</AlertDialogTitle>
+                                            <AlertDialogDescription>Are you sure you want to delete this configuration?</AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>No</AlertDialogCancel>
+                                            <AlertDialogAction
+                                                onClick={() => {
+                                                    profileApi
+                                                        .deleteProcessConfig(e.id)
+                                                        .then(() => {
+                                                            dispatch(recieveDeleteManagedProcessAction(e.id));
+                                                        })
+                                                        .catch(result => {
+                                                            toast.error(String(result));
+                                                            console.error(result);
+                                                        });
+                                                }}
+                                            >
+                                                Yes
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         }
                     >
@@ -122,33 +139,41 @@ export const EditProfilePage: React.FunctionComponent = () => {
     } else
         return (
             <>
-                <Breadcrumb separator=">" style={{ padding: 15 }}>
-                    <Breadcrumb.Item>
-                        <Link to="/profiles">
-                            <ProfileFilled rev={""} />
-                            <span>Profiles</span>
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <span>
-                            <Input style={{ width: 150, marginRight: 10, color: "white" }} disabled bordered={false} value={profileNameInput} onChange={e => setProfileNameInput(e.target.value)} />
-                            {profileNameInput !== profile.name && (
-                                <Button
-                                    onClick={() => {
-                                        const data: UpdateProfileRequest = { profile: { ...profile, name: profileNameInput! } };
-                                        profileApi
-                                            .update(data)
-                                            .then(() => {
-                                                GetProfile();
-                                            })
-                                            .catch(error => console.error(error));
-                                    }}
-                                >
-                                    Apply Rename
-                                </Button>
-                            )}
-                        </span>
-                    </Breadcrumb.Item>
+                <Breadcrumb className="p-4">
+                    <BreadcrumbList>
+                        <BreadcrumbItem>
+                            <BreadcrumbLink asChild>
+                                <Link to="/profiles" className="flex items-center gap-1">
+                                    <User className="h-4 w-4" />
+                                    <span>Profiles</span>
+                                </Link>
+                            </BreadcrumbLink>
+                        </BreadcrumbItem>
+                        <BreadcrumbSeparator>
+                            <ChevronRight className="h-4 w-4" />
+                        </BreadcrumbSeparator>
+                        <BreadcrumbItem>
+                            <span className="flex items-center gap-2">
+                                <Input style={{ width: 150 }} className="text-white" disabled value={profileNameInput} onChange={e => setProfileNameInput(e.target.value)} />
+                                {profileNameInput !== profile.name && (
+                                    <Button
+                                        variant="secondary"
+                                        onClick={() => {
+                                            const data: UpdateProfileRequest = { profile: { ...profile, name: profileNameInput! } };
+                                            profileApi
+                                                .update(data)
+                                                .then(() => {
+                                                    GetProfile();
+                                                })
+                                                .catch(error => console.error(error));
+                                        }}
+                                    >
+                                        Apply Rename
+                                    </Button>
+                                )}
+                            </span>
+                        </BreadcrumbItem>
+                    </BreadcrumbList>
                 </Breadcrumb>
 
                 {showAddModal && (
@@ -182,20 +207,20 @@ export const EditProfilePage: React.FunctionComponent = () => {
                 <div className="view-header" style={{ display: "flex", gap: 20, alignItems: "center" }}>
                     <Input placeholder="Filter name" style={{ width: 200 }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
                     {/* <Checkbox style={{ float: "right" }}>Lock threads to specified apps</Checkbox> */}
-                    <Button type="primary" onClick={() => setShowAddModal(true)}>
-                        Add
-                    </Button>
-                    <Checkbox
-                        checked={profile.enabled}
-                        onChange={() => {
-                            profileApi
-                                .update({ profile: { ...profile, enabled: !profile.enabled } } as UpdateProfileRequest)
-                                .then(() => GetProfile())
-                                .catch(error => console.error(error));
-                        }}
-                    >
-                        Enabled
-                    </Checkbox>
+                    <Button onClick={() => setShowAddModal(true)}>Add</Button>
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="profile-enabled"
+                            checked={profile.enabled}
+                            onCheckedChange={() => {
+                                profileApi
+                                    .update({ profile: { ...profile, enabled: !profile.enabled } } as UpdateProfileRequest)
+                                    .then(() => GetProfile())
+                                    .catch(error => console.error(error));
+                            }}
+                        />
+                        <Label htmlFor="profile-enabled">Enabled</Label>
+                    </div>
                     <div>
                         <div style={{ gap: 10 }}></div>
                     </div>

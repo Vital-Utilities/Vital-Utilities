@@ -1,13 +1,13 @@
 import { invoke } from "@tauri-apps/api/core";
 import { ClientSettings } from "@vital/vitalservice";
 import { useRequest } from "ahooks";
-import { notification } from "antd";
+import toast from "react-hot-toast";
 
 export function openUrl(url: string) {
     invoke<string>("open_url", { url: url })
         .then(() => null)
         .catch(error => {
-            notification.error(error);
+            toast.error(String(error));
             console.error(error);
         });
 }
@@ -21,7 +21,7 @@ export function getOs() {
     return invoke<string>("get_os")
         .then(response => response)
         .catch(error => {
-            notification.error(error);
+            toast.error(String(error));
             console.error(error);
             return undefined;
         });

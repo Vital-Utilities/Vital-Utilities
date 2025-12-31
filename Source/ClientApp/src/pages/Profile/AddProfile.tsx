@@ -1,9 +1,12 @@
 import { CreateProfileRequest } from "@vital/vitalservice";
-import { Input, Button, Form, notification } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { profileApi } from "../../Redux/actions/tauriApi";
 import { recieveProfileAddedAction } from "../../Redux/actions/profileActions";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
 interface CreateProfileInterface {
     onCancel: () => void;
@@ -25,16 +28,18 @@ export const CreateProfile: React.FunctionComponent<CreateProfileInterface> = ({
             })
             .catch(error => {
                 console.error(error);
-                notification.error({ duration: null, message: error });
+                toast.error(String(error));
                 setSending(false);
             });
     }
 
     return (
         <div style={{ height: "100%" }}>
-            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }} layout="horizontal">
-                <Form.Item label="Profile Name">
+            <div className="space-y-4">
+                <div className="grid grid-cols-[100px_1fr] items-center gap-4">
+                    <Label htmlFor="profile-name">Profile Name</Label>
                     <Input
+                        id="profile-name"
                         value={createProfileRequest.name}
                         onChange={e =>
                             setCreateProfileRequest({
@@ -43,14 +48,14 @@ export const CreateProfile: React.FunctionComponent<CreateProfileInterface> = ({
                             })
                         }
                     />
-                </Form.Item>
-                <div className="ant-modal-footer">
-                    <Button onClick={onCancel}>Cancel</Button>
-                    <Button type="primary" onClick={Post}>
-                        Add
-                    </Button>
                 </div>
-            </Form>
+                <div className="flex justify-end gap-2 pt-4">
+                    <Button variant="secondary" onClick={onCancel}>
+                        Cancel
+                    </Button>
+                    <Button onClick={Post}>Add</Button>
+                </div>
+            </div>
         </div>
     );
 };

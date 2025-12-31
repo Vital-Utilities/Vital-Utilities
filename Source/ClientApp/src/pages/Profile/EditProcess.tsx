@@ -1,7 +1,7 @@
 import { ManagedModelDto } from "@vital/vitalservice";
-import { Modal } from "antd";
 import React from "react";
 import { UpdateProcessView } from "./UpdateProcessView";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface EditProcessModelProps {
     model: ManagedModelDto;
@@ -11,10 +11,13 @@ interface EditProcessModelProps {
 
 export const EditProcess: React.FunctionComponent<EditProcessModelProps> = ({ model, onCancel, onSubmit }) => {
     return (
-        <>
-            <Modal width={1000} visible title="Update Configuration" closable onCancel={onCancel} maskClosable={false} afterClose={onCancel} footer={null}>
+        <Dialog open={true} onOpenChange={open => !open && onCancel()}>
+            <DialogContent className="sm:max-w-[1000px]">
+                <DialogHeader>
+                    <DialogTitle>Update Configuration</DialogTitle>
+                </DialogHeader>
                 <UpdateProcessView managedModel={model} onCancel={onCancel} onSubmit={onSubmit}></UpdateProcessView>
-            </Modal>
-        </>
+            </DialogContent>
+        </Dialog>
     );
 };

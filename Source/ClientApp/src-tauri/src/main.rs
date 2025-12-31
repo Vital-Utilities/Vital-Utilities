@@ -448,7 +448,8 @@ fn update_machine_store(
 
     for (pid, process) in sys_info.processes() {
         let pid_i32 = pid.as_u32() as i32;
-        let process_name = process.name().to_string();
+        // In sysinfo 0.37+, process.name() returns &OsStr, convert to String
+        let process_name = process.name().to_string_lossy().to_string();
         let process_view = models::ProcessViewDto {
             process_name: process_name.clone(),
             // Set process_title so it shows up when "Show all Processes" is unchecked

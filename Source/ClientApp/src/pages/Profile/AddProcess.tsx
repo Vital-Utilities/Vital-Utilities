@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from "react";
 import React from "react";
-import { Button, Input, Modal } from "antd";
 import _ from "lodash";
 import { AddProcessView } from "./AddProcessView";
 import { useSelector } from "react-redux";
@@ -9,6 +8,9 @@ import { VitalState, MachineState } from "../../Redux/States";
 import { Table } from "../../components/Table";
 import { ProfileDto, ManagedModelDto, ProcessToAddDto } from "@vital/vitalservice";
 import { processApi } from "../../Redux/actions/tauriApi";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 enum Pages {
     Select,
@@ -84,20 +86,24 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
             <div style={{ height: "100%", width: "100%" }}>
                 <div className="header" style={{ gap: 10 }}>
                     <Input placeholder="Search" style={{ width: 200 }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
-                    <Button onClick={() => getUnmanagedProcesses()}>Refresh</Button>
+                    <Button variant="secondary" onClick={() => getUnmanagedProcesses()}>
+                        Refresh
+                    </Button>
                 </div>
                 <div style={{ height: 400 }}>
                     <Table>
                         <thead>
-                            <th style={{ width: 70 }}>Process Name</th>
-                            <th style={{ width: 120 }}>Title</th>
-                            <th style={{ width: 400 }}>Pids</th>
-                            <th style={{ width: 120 }}>Action</th>
+                            <tr>
+                                <th style={{ width: 70 }}>Process Name</th>
+                                <th style={{ width: 120 }}>Title</th>
+                                <th style={{ width: 400 }}>Pids</th>
+                                <th style={{ width: 120 }}>Action</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data.map(e => {
                                 return (
-                                    <tr>
+                                    <tr key={e.key}>
                                         <td>{e.values[0].processName}</td>
                                         <td>{e.values[0].mainWindowTitle}</td>
                                         <td style={{ width: 100 }}>
@@ -121,7 +127,13 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
                         </tbody>
                     </Table>
                 </div>
-                <div className="ant-modal-footer">{currentPage === Pages.Select && <Button onClick={props.onClose}>Cancel</Button>}</div>
+                <div className="flex justify-end gap-2 pt-4">
+                    {currentPage === Pages.Select && (
+                        <Button variant="secondary" onClick={props.onClose}>
+                            Cancel
+                        </Button>
+                    )}
+                </div>
             </div>
         );
     }
@@ -134,10 +146,15 @@ export const AddProcess: React.FunctionComponent<AddProcessProps> = props => {
     }
 
     return (
-        <Modal width={"80%"} visible={true} title="Add New Process" closable onCancel={props.onClose} maskClosable={false} afterClose={props.onClose} footer={null}>
-            {currentPage === Pages.Select && selectView()}
-            {currentPage === Pages.Add && addView()}
-        </Modal>
+        <Dialog open={true} onOpenChange={open => !open && props.onClose()}>
+            <DialogContent className="sm:max-w-[80%]">
+                <DialogHeader>
+                    <DialogTitle>Add New Process</DialogTitle>
+                </DialogHeader>
+                {currentPage === Pages.Select && selectView()}
+                {currentPage === Pages.Add && addView()}
+            </DialogContent>
+        </Dialog>
     );
 };
 

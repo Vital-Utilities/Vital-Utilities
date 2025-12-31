@@ -3,8 +3,17 @@ import react from "@vitejs/plugin-react";
 import progress from "vite-plugin-progress";
 import eslint from "vite-plugin-eslint";
 import vis from "rollup-plugin-visualizer";
+import path from "path";
+import tailwindcss from "@tailwindcss/vite";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+
 export default defineConfig({
-    plugins: [react({ fastRefresh: true }), progress(), eslint({ cache: true, fix: true }), vis()],
+    plugins: [TanStackRouterVite({ routesDirectory: "./src/routes", generatedRouteTree: "./src/routeTree.gen.ts" }), react(), tailwindcss(), progress(), eslint({ cache: true, fix: true }), vis()],
+    resolve: {
+        alias: {
+            "@": path.resolve(__dirname, "./src")
+        }
+    },
     define: {
         __APP_VERSION__: JSON.stringify(process.env.npm_package_version)
     },
