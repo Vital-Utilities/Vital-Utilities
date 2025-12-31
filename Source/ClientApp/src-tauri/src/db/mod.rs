@@ -1,8 +1,6 @@
 pub mod app;
-pub mod metrics;
 
 pub use app::AppDb;
-pub use metrics::MetricsDb;
 
 use directories::UserDirs;
 use std::path::PathBuf;
@@ -17,9 +15,4 @@ pub fn get_data_dir() -> PathBuf {
 /// Get the path to the app database
 pub fn get_app_db_path() -> PathBuf {
     get_data_dir().join("app.db")
-}
-
-/// Get the path to the metrics database
-pub fn get_metrics_db_path() -> PathBuf {
-    get_data_dir().join("metric.db")
 }

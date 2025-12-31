@@ -32,9 +32,9 @@ pub fn get_system_dynamic(
 }
 
 #[tauri::command]
-pub async fn get_system_timeseries(
+pub fn get_system_timeseries(
     request: GetMachineTimeSeriesRequest,
-    machine_store: State<'_, Arc<MachineDataStore>>,
+    machine_store: State<Arc<MachineDataStore>>,
 ) -> Result<crate::models::TimeSeriesMachineMetricsResponse, String> {
     // Parse datetime strings to DateTime<Utc>
     let earliest = chrono::DateTime::parse_from_rfc3339(&request.earliest)
@@ -44,7 +44,7 @@ pub async fn get_system_timeseries(
         .map_err(|e| format!("Invalid latest datetime: {}", e))?
         .with_timezone(&chrono::Utc);
 
-    Ok(machine_store.get_metrics(earliest, latest).await)
+    Ok(machine_store.get_metrics(earliest, latest))
 }
 
 // ============================================================================

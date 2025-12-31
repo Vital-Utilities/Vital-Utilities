@@ -21,7 +21,7 @@ use crate::commands::commands::{
     get_client_settings, get_os, get_vital_service_ports, open_url, update_client_settings,
     update_vital_service_port,
 };
-use crate::db::{get_app_db_path, get_metrics_db_path, AppDb, MetricsDb};
+use crate::db::{get_app_db_path, AppDb};
 use crate::platform::{create_process_manager, create_startup_manager, ProcessManager, StartupManager};
 use crate::services::MetricsStorageService;
 use crate::stores::{MachineDataStore, SettingsStore};
@@ -118,7 +118,7 @@ fn main() {
                 Ok(settings) => settings.always_on_top,
                 Err(e) => {
                     error!("Failed to get client settings: {}", e);
-                    true
+                    false
                 }
             };
 
@@ -205,7 +205,7 @@ async fn initialize_backend(handle: AppHandle) {
     // Initialize settings store
     let settings_store = Arc::new(SettingsStore::new());
 
-    // Initialize databases
+    // Initialize app database (for profiles only)
     let app_db = match AppDb::connect(&get_app_db_path()).await {
         Ok(db) => Arc::new(db),
         Err(e) => {
@@ -214,16 +214,8 @@ async fn initialize_backend(handle: AppHandle) {
         }
     };
 
-    let metrics_db = match MetricsDb::connect(&get_metrics_db_path()).await {
-        Ok(db) => Arc::new(db),
-        Err(e) => {
-            error!("Failed to connect to metrics database: {:?}", e);
-            panic!("Database connection failed");
-        }
-    };
-
-    // Initialize machine data store
-    let machine_store = Arc::new(MachineDataStore::new(Some(metrics_db.clone())));
+    // Initialize machine data store (in-memory only, no database)
+    let machine_store = Arc::new(MachineDataStore::new());
 
     // Initialize platform managers
     let process_manager: Arc<dyn ProcessManager> = Arc::from(create_process_manager());
@@ -236,9 +228,8 @@ async fn initialize_backend(handle: AppHandle) {
     handle.manage(process_manager.clone());
     handle.manage(startup_manager.clone());
 
-    // Start background services
+    // Start background services (in-memory metrics storage only)
     let metrics_service = MetricsStorageService::new(
-        metrics_db.clone(),
         machine_store.clone(),
         settings_store.clone(),
     );
@@ -285,6 +276,46 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
     sys_info.refresh_all();
     std::thread::sleep(SECOND);
 
+    // Initialize static CPU data (only needs to be done once)
+    machine_store.init_static_cpu(&sys_info);
+
+    // Get initial GPU data to populate static GPU info
+    let initial_gpu_usage = gpu::get_gpu_util(&nvml).await;
+    let initial_gpus: Vec<crate::models::GpuUsage> = initial_gpu_usage
+        .iter()
+        .map(|g| crate::models::GpuUsage {
+            name: g.name.clone(),
+            temperature_readings: g.temperature_readings.clone().into_iter().collect(),
+            device_index: g.device_index,
+            part_number: g.part_number.clone(),
+            total_memory_bytes: g.total_memory_bytes,
+            memory_used_bytes: g.memory_used_bytes,
+            clock_speeds: g.clock_speeds.as_ref().map(|cs| crate::models::GpuClockSpeeds {
+                memory_clock_mhz: cs.memory_clock_mhz,
+                compute_clock_mhz: cs.compute_clock_mhz,
+                graphics_clock_mhz: cs.graphics_clock_mhz,
+                video_clock_mhz: cs.video_clock_mhz,
+            }),
+            fan_percentage: g.fan_percentage.clone().map(|f| f.into_iter().collect()),
+            power_draw_watt: g.power_draw_watt,
+            load: g.load.as_ref().map(|l| crate::models::GpuLoadData {
+                core_percentage: l.core_percentage,
+                frame_buffer_percentage: l.frame_buffer_percentage,
+                video_engine_percentage: l.video_engine_percentage,
+                bus_interface_percentage: l.bus_interface_percentage,
+                memory_used_percentage: l.memory_used_percentage,
+                memory_controller_percentage: l.memory_controller_percentage,
+                cuda_percentage: l.cuda_percentage,
+                three_d_percentage: l.three_d_percentage,
+            }),
+            pcie: None,
+        })
+        .collect();
+    machine_store.init_static_gpu(&initial_gpus);
+
+    // Initialize static RAM data
+    machine_store.init_static_ram(&sys_info);
+
     info!("Metrics collection started");
 
     loop {
@@ -303,7 +334,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         );
 
         // Convert to our DTO types and update store
-        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, &sys_info, &nvml, time);
+        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, &sys_info, time);
 
         // Log timing info
         if let Ok(elapsed) = start.elapsed() {
@@ -325,11 +356,11 @@ fn update_machine_store(
     cpu_util: Box<vital_service_api::models::CpuUsage>,
     mem_util: vital_service_api::models::MemoryUsage,
     gpu_usage: Vec<vital_service_api::models::GpuUsage>,
-    _sys_info: &sysinfo::System,
-    _nvml: &Option<Nvml>,
+    sys_info: &sysinfo::System,
     _time: chrono::DateTime<chrono::Utc>,
 ) {
     use crate::models;
+    use std::collections::HashMap;
 
     // Convert CPU usage
     let cpu = models::CpuUsage {
@@ -387,6 +418,67 @@ fn update_machine_store(
         })
         .collect();
     store.update_gpu(gpus);
+
+    // Collect and update running processes
+    // Build a map of all processes first
+    let mut all_processes: HashMap<i32, models::ProcessViewDto> = HashMap::new();
+    let mut parent_map: HashMap<i32, i32> = HashMap::new(); // child_pid -> parent_pid
+
+    for (pid, process) in sys_info.processes() {
+        let pid_i32 = pid.as_u32() as i32;
+        let process_name = process.name().to_string();
+        let process_view = models::ProcessViewDto {
+            process_name: process_name.clone(),
+            // Set process_title so it shows up when "Show all Processes" is unchecked
+            process_title: Some(process_name),
+            description: None,
+            id: pid_i32,
+        };
+        all_processes.insert(pid_i32, process_view);
+
+        if let Some(parent_pid) = process.parent() {
+            let parent_pid_i32 = parent_pid.as_u32() as i32;
+            // Only track parent relationship if parent exists in our process list
+            // and is not a system process (pid 0 or 1)
+            if parent_pid_i32 > 1 {
+                parent_map.insert(pid_i32, parent_pid_i32);
+            }
+        }
+    }
+
+    // Build the result - only include top-level processes (those without parents in our list)
+    let mut running_processes: HashMap<i32, models::ParentChildModelDto> = HashMap::new();
+
+    // Collect children for each potential parent
+    let mut children_map: HashMap<i32, HashMap<i32, models::ProcessViewDto>> = HashMap::new();
+    for (child_pid, parent_pid) in &parent_map {
+        if all_processes.contains_key(parent_pid) {
+            if let Some(child_view) = all_processes.get(child_pid) {
+                children_map
+                    .entry(*parent_pid)
+                    .or_insert_with(HashMap::new)
+                    .insert(*child_pid, child_view.clone());
+            }
+        }
+    }
+
+    // Create entries for top-level parents only
+    for (pid, process_view) in &all_processes {
+        // A process is top-level if it has no parent in our process list
+        let has_parent_in_list = parent_map.get(pid)
+            .map(|ppid| all_processes.contains_key(ppid))
+            .unwrap_or(false);
+
+        if !has_parent_in_list {
+            let children = children_map.remove(pid).unwrap_or_default();
+            running_processes.insert(*pid, models::ParentChildModelDto {
+                parent: process_view.clone(),
+                children,
+            });
+        }
+    }
+
+    store.update_running_processes(running_processes);
 }
 
 fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {

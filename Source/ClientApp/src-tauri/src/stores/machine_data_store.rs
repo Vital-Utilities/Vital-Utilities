@@ -3,13 +3,11 @@
 use chrono::{DateTime, Duration, Utc};
 use dashmap::DashMap;
 use std::collections::HashMap;
-use std::sync::Arc;
 
-use crate::db::MetricsDb;
 use crate::models::{
-    CpuUsage, CpuUsageMetricModel, DiskUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
-    GetMachineStaticDataResponse, GpuUsage, GpuUsageMetricModel, MemoryUsage,
-    NetworkAdapterUsages, NetworkUsageMetricModel, ParentChildModelDto, ProcessViewDto,
+    CpuData, CpuUsage, CpuUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
+    GetMachineStaticDataResponse, GpuData, GpuUsage, GpuUsageMetricModel, MemoryUsage,
+    NetworkAdapterUsages, ParentChildModelDto, RamData,
     RamUsageMetricModel, TimeSeriesMachineMetricsModel, TimeSeriesMachineMetricsResponse, DateRange,
 };
 
@@ -35,15 +33,19 @@ pub struct MachineDataStore {
     pub process_gpu_usage: DashMap<i32, f32>,
     /// Running processes with parent-child hierarchy
     pub running_processes: DashMap<i32, ParentChildModelDto>,
-    /// Metrics cache for recent data
+    /// Metrics cache for recent data (in-memory only)
     pub metrics_cache: DashMap<DateTime<Utc>, TimeSeriesMachineMetricsModel>,
-    /// Reference to metrics database
-    metrics_db: Option<Arc<MetricsDb>>,
+    /// Static CPU data (populated once at startup)
+    static_cpu: DashMap<String, CpuData>,
+    /// Static GPU data (populated once at startup)
+    static_gpu: DashMap<i32, GpuData>,
+    /// Static RAM data (populated once at startup)
+    static_ram: DashMap<i32, RamData>,
 }
 
 impl MachineDataStore {
     /// Create a new machine data store
-    pub fn new(metrics_db: Option<Arc<MetricsDb>>) -> Self {
+    pub fn new() -> Self {
         Self {
             cpu_usage: DashMap::new(),
             memory_usage: DashMap::new(),
@@ -56,8 +58,70 @@ impl MachineDataStore {
             process_gpu_usage: DashMap::new(),
             running_processes: DashMap::new(),
             metrics_cache: DashMap::new(),
-            metrics_db,
+            static_cpu: DashMap::new(),
+            static_gpu: DashMap::new(),
+            static_ram: DashMap::new(),
         }
+    }
+
+    /// Initialize static CPU data from sysinfo
+    pub fn init_static_cpu(&self, sys: &sysinfo::System) {
+        use sysinfo::CpuRefreshKind;
+
+        let cpus = sys.cpus();
+        let physical_core_count = sys.physical_core_count().unwrap_or(cpus.len()) as i32;
+        let logical_core_count = cpus.len() as i32;
+
+        // Get CPU name from first core
+        let cpu_name = if let Some(cpu) = cpus.first() {
+            cpu.brand().to_string()
+        } else {
+            "Unknown CPU".to_string()
+        };
+
+        let cpu_data = CpuData {
+            name: cpu_name,
+            number_of_enabled_core: physical_core_count,
+            number_of_cores: physical_core_count,
+            thread_count: logical_core_count,
+            virtualization_firmware_enabled: false,
+            l1_cache_size: 0,
+            l2_cache_size: 0,
+            l3_cache_size: 0,
+        };
+
+        self.static_cpu.insert("default".to_string(), cpu_data);
+    }
+
+    /// Initialize static GPU data
+    pub fn init_static_gpu(&self, gpus: &[GpuUsage]) {
+        for gpu in gpus {
+            let gpu_data = GpuData {
+                name: gpu.name.clone().unwrap_or_else(|| "Unknown GPU".to_string()),
+                memory_total_bytes: gpu.total_memory_bytes.map(|v| v as i64),
+            };
+            self.static_gpu.insert(gpu.device_index, gpu_data);
+        }
+    }
+
+    /// Initialize static RAM data from sysinfo
+    pub fn init_static_ram(&self, sys: &sysinfo::System) {
+        let total_memory = sys.total_memory();
+
+        // Create a single RAM entry with total system memory
+        // On macOS/Linux we don't have detailed DIMM info from sysinfo
+        let ram_data = RamData {
+            name: Some("System Memory".to_string()),
+            part_number: None,
+            ram_type: None,
+            speed_mhz: None,
+            slot_number: Some(0),
+            slot_channel: None,
+            configured_clock_speed_mhz: None,
+            capacity: Some(total_memory as f64),
+        };
+
+        self.static_ram.insert(0, ram_data);
     }
 
     /// Update CPU usage data
@@ -218,13 +282,15 @@ impl MachineDataStore {
 
     /// Get static machine data for API response
     pub fn get_static_data(&self) -> GetMachineStaticDataResponse {
-        // This would typically be gathered once at startup
-        // For now, return a basic response
+        let cpu = self.static_cpu.get("default").map(|r| r.value().clone());
+        let gpu: Vec<GpuData> = self.static_gpu.iter().map(|r| r.value().clone()).collect();
+        let ram: Vec<RamData> = self.static_ram.iter().map(|r| r.value().clone()).collect();
+
         GetMachineStaticDataResponse {
             direct_x_version: None,
-            cpu: None, // Would be populated from system info
-            ram: None,
-            gpu: None,
+            cpu,
+            ram: if ram.is_empty() { None } else { Some(ram) },
+            gpu: if gpu.is_empty() { None } else { Some(gpu) },
         }
     }
 
@@ -260,28 +326,13 @@ impl MachineDataStore {
             .collect()
     }
 
-    /// Get metrics for a time range (from cache and/or database)
-    pub async fn get_metrics(
+    /// Get metrics for a time range (from in-memory cache only)
+    pub fn get_metrics(
         &self,
         earliest: DateTime<Utc>,
         latest: DateTime<Utc>,
     ) -> TimeSeriesMachineMetricsResponse {
-        // First check cache
         let mut metrics = self.get_metrics_from_cache(earliest, latest);
-
-        // If we have a database and cache doesn't cover the full range, query DB
-        if let Some(db) = &self.metrics_db {
-            if let Ok(db_metrics) = db.get_metrics_range(earliest, latest).await {
-                // Merge with cache results, avoiding duplicates
-                let cache_ids: std::collections::HashSet<_> =
-                    metrics.iter().map(|m| m.id).collect();
-                for m in db_metrics {
-                    if !cache_ids.contains(&m.id) {
-                        metrics.push(m);
-                    }
-                }
-            }
-        }
 
         // Sort by timestamp
         metrics.sort_by(|a, b| a.date_time_offset.cmp(&b.date_time_offset));
@@ -364,6 +415,6 @@ impl MachineDataStore {
 
 impl Default for MachineDataStore {
     fn default() -> Self {
-        Self::new(None)
+        Self::new()
     }
 }
