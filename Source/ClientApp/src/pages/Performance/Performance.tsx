@@ -127,7 +127,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                 console.log("  First metric cpuUsageData:", timeSeriesMetrics.metrics[0].cpuUsageData);
                 console.log("  First metric cpuUsageData type:", typeof timeSeriesMetrics.metrics[0].cpuUsageData);
             }
-            const f = timeSeriesMetrics?.metrics.map(e => {
+            const f = timeSeriesMetrics?.metrics?.map(e => {
                 return {
                     cpuMetrics: (e.cpuUsageData ?? []).map(d => {
                         return { ...d, dateTimeOffset: new Date(e.dateTimeOffset) };
@@ -267,11 +267,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                                 setClassicViewProps({ ...classicViewProps, selectedKey: `Disk ${index}`, driveLetter: value[1].letter });
                                             }}
                                             detail={`${value[0]}`}
-                                            stat={
-                                                <>
-                                                    <CaretDownOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].readRateBytesPerSecond ?? 0, 0)} <CaretUpOutlined rev={""} /> {getReadableBytesPerSecondString(otherData?.[1].writeRateBytesPerSecond ?? 0, 0)} ({otherData?.[1].totalActivityPercentage?.toFixed(1)}%)
-                                                </>
-                                            }
+                                            stat={`${getReadableBytesString(otherData?.[1].usedSpaceBytes ?? 0)} / ${getReadableBytesString(otherData?.[1].totalSpaceBytes ?? 0)} (${otherData?.[1].usedSpacePercentage?.toFixed(1) ?? 0}%)`}
                                         />
                                     );
                                 })}
@@ -402,7 +398,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 )}
                             </Card>
 
-                            {staticState?.gpu.map((gpu, index) => {
+                            {staticState?.gpu?.map((gpu, index) => {
                                 return (
                                     <Card key={`gpu${gpu}`} title="GPU" subTitle={gpu.name} showExpand>
                                         {view === viewOptions.Info ? (
@@ -474,7 +470,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                     <InterfaceDetails>
                                         <div>
                                             <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 30 }}>
-                                                {staticState?.ram.map(e => {
+                                                {staticState?.ram?.map(e => {
                                                     return (
                                                         <div key={`${e.slotNumber} ${e.slotChannel} `}>
                                                             <h4 style={{ borderBottom: "1px solid" }}>DIMM: {e.slotNumber}</h4>
@@ -497,7 +493,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                         <InterfaceDetails>
                             <div>
                                 <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 30 }}>
-                                    {staticState?.ram.map(e => {
+                                    {staticState?.ram?.map(e => {
                                         return (
                                             <div key={`${e.slotNumber} ${e.slotChannel} `}>
                                                 <div>DIMM: {e.slotNumber}</div>

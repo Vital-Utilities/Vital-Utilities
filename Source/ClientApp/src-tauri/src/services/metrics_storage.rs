@@ -59,9 +59,9 @@ impl MetricsStorageService {
             self.machine_store.metrics_cache.len());
     }
 
-    /// Trim data older than 2 days from cache
+    /// Trim data older than 12 hours from cache
     fn trim_old_data(&self) {
-        // Trim in-memory cache (keep last 2 days)
-        self.machine_store.trim_cache(Duration::days(2));
+        // Trim in-memory cache (keep last 12 hours)
+        self.machine_store.trim_cache(Duration::hours(12));
     }
 }

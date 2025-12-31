@@ -310,7 +310,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         let time = chrono::Utc::now();
 
         // Collect all metrics in parallel
-        let (cpu_util, mem_util, _net_util, _disk_usage, gpu_usage) = join!(
+        let (cpu_util, mem_util, _net_util, disk_usage, gpu_usage) = join!(
             cpu::get_cpu_util(&sys_info, &sys_stat),
             memory::get_mem_util(&sys_info),
             net::get_net_adapters(),
@@ -319,7 +319,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         );
 
         // Convert to our DTO types and update store
-        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, &sys_info, time);
+        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, disk_usage, &sys_info, time);
 
         // Log timing info
         if let Ok(elapsed) = start.elapsed() {
@@ -342,6 +342,7 @@ fn update_machine_store(
     cpu_util: Box<vital_service_api::models::CpuUsage>,
     mem_util: vital_service_api::models::MemoryUsage,
     gpu_usage: Vec<vital_service_api::models::GpuUsage>,
+    disk_usage: Box<std::collections::HashMap<String, vital_service_api::models::DiskUsage>>,
     sys_info: &sysinfo::System,
     _time: chrono::DateTime<chrono::Utc>,
 ) {
@@ -405,6 +406,40 @@ fn update_machine_store(
         })
         .collect();
     store.update_gpu(gpus);
+
+    // Convert disk usage - use the nested structure matching our DiskUsage DTO
+    let disks: HashMap<String, models::DiskUsage> = disk_usage
+        .iter()
+        .map(|(mount_point, d)| {
+            let disk = models::DiskUsage {
+                name: d.name.clone(),
+                serial: d.serial.clone(),
+                unique_identifier: d.unique_identifier.clone(),
+                drive_type: Some(format!("{:?}", d.drive_type)),
+                disk_type: Some(format!("{:?}", d.disk_type)),
+                throughput: d.throughput.as_ref().map(|t| models::DiskThroughput {
+                    read_rate_bytes_per_second: t.read_rate_bytes_per_second,
+                    write_rate_bytes_per_second: t.write_rate_bytes_per_second,
+                }),
+                load: Some(models::DiskLoad {
+                    used_space_percentage: d.load.used_space_percentage,
+                    used_space_bytes: d.load.used_space_bytes,
+                    total_space_bytes: d.load.total_space_bytes,
+                    write_activity_percentage: d.load.write_activity_percentage,
+                    total_activity_percentage: d.load.total_activity_percentage,
+                }),
+                temperatures: Some(d.temperatures.clone()),
+                disk_health: d.disk_health.as_ref().map(|h| models::DiskHealth {
+                    total_bytes_read: h.total_bytes_read.map(|v| v as u64),
+                    total_bytes_written: h.total_bytes_written.map(|v| v as u64),
+                }),
+                volume_label: d.volume_label.clone(),
+                letter: d.letter.clone(),
+            };
+            (mount_point.clone(), disk)
+        })
+        .collect();
+    store.update_disks(models::DiskUsages { disks });
 
     // Collect and update running processes
     // Build a map of all processes first

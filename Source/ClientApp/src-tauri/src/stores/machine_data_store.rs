@@ -5,7 +5,7 @@ use dashmap::DashMap;
 use std::collections::HashMap;
 
 use crate::models::{
-    CpuData, CpuUsage, CpuUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
+    CpuData, CpuUsage, CpuUsageMetricModel, DiskUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
     GetMachineStaticDataResponse, GpuData, GpuUsage, GpuUsageMetricModel, MemoryUsage,
     NetworkAdapterUsages, ParentChildModelDto, RamData,
     RamUsageMetricModel, TimeSeriesMachineMetricsModel, TimeSeriesMachineMetricsResponse, DateRange,
@@ -412,6 +412,34 @@ impl MachineDataStore {
             })
             .collect();
 
+        // Collect disk usage data
+        let disk_data: Vec<DiskUsageMetricModel> = self
+            .disk_usage
+            .get("default")
+            .map(|disk_usages| {
+                disk_usages.disks
+                    .iter()
+                    .map(|(mount_point, disk)| DiskUsageMetricModel {
+                        id: None,
+                        unique_identifier: Some(mount_point.clone()),
+                        serial: disk.serial.clone(),
+                        name: Some(disk.name.clone()),
+                        drive_letter: disk.letter.clone(),
+                        used_space_percentage: disk.load.as_ref().and_then(|l| l.used_space_percentage),
+                        used_space_bytes: disk.load.as_ref().and_then(|l| l.used_space_bytes),
+                        total_space_bytes: disk.load.as_ref().and_then(|l| l.total_space_bytes),
+                        write_activity_percentage: disk.load.as_ref().and_then(|l| l.write_activity_percentage),
+                        total_activity_percentage: disk.load.as_ref().and_then(|l| l.total_activity_percentage),
+                        read_rate_bytes_per_second: disk.throughput.as_ref().and_then(|t| t.read_rate_bytes_per_second.map(|v| v as f64)),
+                        write_rate_bytes_per_second: disk.throughput.as_ref().and_then(|t| t.write_rate_bytes_per_second.map(|v| v as f64)),
+                        data_read_bytes: disk.disk_health.as_ref().and_then(|h| h.total_bytes_read.map(|v| v as f64)),
+                        data_written_bytes: disk.disk_health.as_ref().and_then(|h| h.total_bytes_written.map(|v| v as f64)),
+                        temperatures: disk.temperatures.clone(),
+                    })
+                    .collect()
+            })
+            .unwrap_or_default();
+
         TimeSeriesMachineMetricsModel {
             id: 0, // Will be set by database
             date_time_offset: Utc::now(),
@@ -423,7 +451,11 @@ impl MachineDataStore {
             },
             ram_usage_data: ram_data,
             network_usage_data: None, // TODO: implement
-            disk_usage_data: None,    // TODO: implement
+            disk_usage_data: if disk_data.is_empty() {
+                None
+            } else {
+                Some(disk_data)
+            },
         }
     }
 }
