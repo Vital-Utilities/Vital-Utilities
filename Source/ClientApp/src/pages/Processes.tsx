@@ -166,21 +166,34 @@ export const Processes: React.FunctionComponent = () => {
     }
 
     const ProcessContextMenu: React.FC<{ process: ProcessViewDto; children: React.ReactNode }> = ({ process, children }) => {
+        const [open, setOpen] = React.useState(false);
+        const [position, setPosition] = React.useState({ x: 0, y: 0 });
+
         return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <div className="contents" onContextMenu={e => e.preventDefault()}>
-                        {children}
-                    </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => killProcess(process.id)}>End Task</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => openProcessPath(process.id)}>Open Process Location</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => openProcessProperties(process.id)}>Open Properties</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => whatIs(process.processName)}>What is {process.processName}?</DropdownMenuItem>
-                    {process.description && <DropdownMenuItem onClick={() => whatIs(process.description ?? "")}>What is {process.description}?</DropdownMenuItem>}
-                </DropdownMenuContent>
-            </DropdownMenu>
+            <>
+                <div
+                    className="contents"
+                    onContextMenu={e => {
+                        e.preventDefault();
+                        setPosition({ x: e.clientX, y: e.clientY });
+                        setOpen(true);
+                    }}
+                >
+                    {children}
+                </div>
+                <DropdownMenu open={open} onOpenChange={setOpen}>
+                    <DropdownMenuTrigger asChild>
+                        <div style={{ position: "fixed", left: position.x, top: position.y, width: 0, height: 0 }} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => killProcess(process.id)}>End Task</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openProcessPath(process.id)}>Open Process Location</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => openProcessProperties(process.id)}>Open Properties</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => whatIs(process.processName)}>What is {process.processName}?</DropdownMenuItem>
+                        {process.description && <DropdownMenuItem onClick={() => whatIs(process.description ?? "")}>What is {process.description}?</DropdownMenuItem>}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </>
         );
     };
     function whatIs(str: string) {
