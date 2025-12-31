@@ -5,10 +5,37 @@ import { ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shar
 import { VitalState } from "../../../Redux/States";
 import { Plug } from "lucide-react";
 
+// AC transition animation state
+interface ACTransitionState {
+    active: boolean;
+    direction: "connect" | "disconnect";
+    progress: number; // 0 to 1
+    startTime: number;
+    surgeParticles: SurgeParticle[];
+}
+
+interface SurgeParticle {
+    x: number;
+    y: number;
+    angle: number;
+    speed: number;
+    size: number;
+    life: number;
+    maxLife: number;
+}
+
 export const ClassicPowerView: React.FunctionComponent = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number>(0);
     const powerHistoryRef = useRef<number[]>([]);
+    const wasPluggedInRef = useRef<boolean | null>(null);
+    const acTransitionRef = useRef<ACTransitionState>({
+        active: false,
+        direction: "connect",
+        progress: 0,
+        startTime: 0,
+        surgeParticles: []
+    });
 
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const powerData = dynamicState?.powerUsageData;
@@ -22,6 +49,39 @@ export const ClassicPowerView: React.FunctionComponent = () => {
             }
         }
     }, [powerData?.systemPowerWatts]);
+
+    // Detect AC state changes and trigger transition
+    useEffect(() => {
+        const isPluggedIn = powerData?.externalConnected ?? false;
+        const wasPluggedIn = wasPluggedInRef.current;
+
+        if (wasPluggedIn !== null && wasPluggedIn !== isPluggedIn) {
+            // State changed - trigger transition animation
+            const transition = acTransitionRef.current;
+            transition.active = true;
+            transition.direction = isPluggedIn ? "connect" : "disconnect";
+            transition.progress = 0;
+            transition.startTime = Date.now();
+            transition.surgeParticles = [];
+
+            // Create surge particles for connect animation
+            if (isPluggedIn) {
+                for (let i = 0; i < 20; i++) {
+                    transition.surgeParticles.push({
+                        x: 0,
+                        y: 0,
+                        angle: (Math.PI * 2 * i) / 20 + Math.random() * 0.3,
+                        speed: 2 + Math.random() * 3,
+                        size: 3 + Math.random() * 4,
+                        life: 1,
+                        maxLife: 0.8 + Math.random() * 0.4
+                    });
+                }
+            }
+        }
+
+        wasPluggedInRef.current = isPluggedIn;
+    }, [powerData?.externalConnected]);
 
     const draw = useCallback(() => {
         const canvas = canvasRef.current;
@@ -53,8 +113,20 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         const isPluggedIn = powerData?.externalConnected ?? false;
         const adapterWatts = powerData?.adapterWatts ?? 0;
 
+        // Update AC transition
+        const transition = acTransitionRef.current;
+        if (transition.active) {
+            const elapsed = (Date.now() - transition.startTime) / 1000;
+            const duration = transition.direction === "connect" ? 1.2 : 0.8;
+            transition.progress = Math.min(elapsed / duration, 1);
+
+            if (transition.progress >= 1) {
+                transition.active = false;
+            }
+        }
+
         // Draw unified battery visualization with integrated power flow
-        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn);
+        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, transition);
 
         // Draw power graph at bottom
         drawPowerGraph(ctx, width, height, powerHistoryRef.current);
@@ -97,6 +169,9 @@ export const ClassicPowerView: React.FunctionComponent = () => {
                         {/* Power consumption */}
                         {powerData.systemPowerWatts !== undefined && <ItemOne color="#3b82f6" title="System Power" value={`${powerData.systemPowerWatts.toFixed(1)}W`} />}
 
+                        {/* Battery Flow - positive = charging, negative = discharging */}
+                        {powerData.batteryAmperage !== undefined && <ItemOne color={powerData.batteryAmperage > 0 ? "#22c55e" : powerData.batteryAmperage < 0 ? "#f97316" : "#94a3b8"} title="Battery Flow" value={`${powerData.batteryAmperage > 0 ? "+" : ""}${powerData.batteryAmperage} mA`} />}
+
                         {/* Adapter info */}
                         {powerData.externalConnected && powerData.adapterWatts && <ItemOne color="#22c55e" title="Adapter" value={`${powerData.adapterWatts}W ${powerData.adapterDescription ?? ""}`} />}
 
@@ -138,7 +213,21 @@ interface Particle {
 
 let particles: Particle[] = [];
 
-function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean) {
+// Easing function for smooth animations
+function easeOutElastic(x: number): number {
+    const c4 = (2 * Math.PI) / 3;
+    return x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1;
+}
+
+function easeOutCubic(x: number): number {
+    return 1 - Math.pow(1 - x, 3);
+}
+
+function easeInCubic(x: number): number {
+    return x * x * x;
+}
+
+function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, transition: ACTransitionState) {
     const centerX = width / 2;
     const centerY = height * 0.38;
     const time = Date.now();
@@ -153,28 +242,90 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
     const batteryX = centerX - batteryWidth / 2;
     const batteryY = centerY - batteryHeight / 2;
 
+    const inputX = batteryX - 80;
+    const inputY = centerY;
+
+    // Calculate transition visibility
+    let acOpacity = 1;
+    let acScale = 1;
+    let showAC = isPluggedIn;
+
+    if (transition.active) {
+        if (transition.direction === "connect") {
+            // Connect animation: slide in from left with scale up
+            const easedProgress = easeOutElastic(transition.progress);
+            acOpacity = Math.min(transition.progress * 2, 1);
+            acScale = 0.3 + easedProgress * 0.7;
+            showAC = true;
+        } else {
+            // Disconnect animation: fade out and shrink
+            const easedProgress = easeInCubic(transition.progress);
+            acOpacity = 1 - easedProgress;
+            acScale = 1 - easedProgress * 0.5;
+            showAC = true;
+        }
+    }
+
     // === AC INPUT (Left side) ===
-    if (isPluggedIn) {
-        const inputX = batteryX - 80;
-        const inputY = centerY;
-
-        // Draw input connector/line to battery
+    if (showAC) {
         ctx.save();
-        ctx.strokeStyle = "#22c55e";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([]);
+        ctx.globalAlpha = acOpacity;
 
-        // Curved line from AC to battery
-        ctx.beginPath();
-        ctx.moveTo(inputX + 25, inputY);
-        ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
-        ctx.stroke();
+        // Transform for scale animation
+        ctx.translate(inputX, inputY);
+        ctx.scale(acScale, acScale);
+        ctx.translate(-inputX, -inputY);
+
+        // Draw input connector/line to battery with animated dash during connect
+        ctx.save();
+        if (transition.active && transition.direction === "connect") {
+            const lineProgress = Math.min(transition.progress * 1.5, 1);
+            const lineEndX = inputX + 25 + (batteryX - inputX - 25) * easeOutCubic(lineProgress);
+
+            // Glow effect during connection
+            ctx.shadowColor = "rgba(34, 197, 94, 0.8)";
+            ctx.shadowBlur = 20 + Math.sin(time / 50) * 10;
+
+            ctx.strokeStyle = "#22c55e";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(inputX + 25, inputY);
+            if (lineProgress < 1) {
+                ctx.lineTo(lineEndX, inputY);
+            } else {
+                ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+            }
+            ctx.stroke();
+        } else if (transition.active && transition.direction === "disconnect") {
+            // Fade out line with flicker effect
+            const flicker = Math.random() > 0.3 ? 1 : 0.5;
+            ctx.strokeStyle = `rgba(34, 197, 94, ${acOpacity * flicker})`;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(inputX + 25, inputY);
+            ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+            ctx.stroke();
+        } else {
+            ctx.strokeStyle = "#22c55e";
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(inputX + 25, inputY);
+            ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+            ctx.stroke();
+        }
         ctx.restore();
 
         // AC power indicator circle
         ctx.save();
-        ctx.shadowColor = "rgba(34, 197, 94, 0.6)";
-        ctx.shadowBlur = 15;
+        if (transition.active && transition.direction === "connect") {
+            // Pulsing glow during connect
+            const pulseIntensity = 0.6 + Math.sin(time / 80) * 0.4;
+            ctx.shadowColor = `rgba(34, 197, 94, ${pulseIntensity})`;
+            ctx.shadowBlur = 25 + Math.sin(time / 60) * 15;
+        } else {
+            ctx.shadowColor = "rgba(34, 197, 94, 0.6)";
+            ctx.shadowBlur = 15;
+        }
         ctx.beginPath();
         ctx.arc(inputX, inputY, 22, 0, Math.PI * 2);
         ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
@@ -199,8 +350,47 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
         ctx.fillStyle = "#64748b";
         ctx.fillText("AC IN", inputX, inputY + 48);
 
-        // Add input particles
-        if (Math.random() < 0.15) {
+        ctx.restore(); // Restore from globalAlpha and scale
+
+        // Draw surge particles during connect animation
+        if (transition.active && transition.direction === "connect") {
+            const surgeX = inputX;
+            const surgeY = inputY;
+
+            for (const particle of transition.surgeParticles) {
+                const age = 1 - particle.life / particle.maxLife;
+                const distance = age * 60 * particle.speed;
+                const px = surgeX + Math.cos(particle.angle) * distance;
+                const py = surgeY + Math.sin(particle.angle) * distance;
+                const alpha = particle.life * 0.8;
+                const size = particle.size * particle.life;
+
+                ctx.beginPath();
+                ctx.arc(px, py, size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(34, 197, 94, ${alpha})`;
+                ctx.fill();
+
+                particle.life -= 0.025;
+            }
+
+            // Remove dead particles
+            transition.surgeParticles = transition.surgeParticles.filter(p => p.life > 0);
+
+            // Draw expanding ring effect
+            const ringProgress = easeOutCubic(Math.min(transition.progress * 2, 1));
+            if (ringProgress < 1) {
+                const ringRadius = 22 + ringProgress * 80;
+                const ringAlpha = (1 - ringProgress) * 0.6;
+                ctx.beginPath();
+                ctx.arc(inputX, inputY, ringRadius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(34, 197, 94, ${ringAlpha})`;
+                ctx.lineWidth = 3 * (1 - ringProgress);
+                ctx.stroke();
+            }
+        }
+
+        // Add input particles (only when stable connection)
+        if (!transition.active && isPluggedIn && Math.random() < 0.15) {
             particles.push({
                 x: inputX + 25,
                 y: inputY,
