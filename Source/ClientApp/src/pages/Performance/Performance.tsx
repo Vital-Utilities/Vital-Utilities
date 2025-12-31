@@ -325,7 +325,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     <ClassicGpuView {...chartable} gpuNumber={classicViewProps.gpuNumber!} />
                 ) : classicViewProps.selectedKey.includes("Memory") ? (
-                    <ClassicRamView {...chartable} />
+                    <ClassicRamView />
                 ) : classicViewProps.selectedKey.includes("Disk") ? (
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     <ClassicDiskView {...chartable} driveLetter={classicViewProps.driveLetter!} />

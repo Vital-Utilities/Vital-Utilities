@@ -1162,35 +1162,65 @@ export interface ManagedModelDto {
  */
 export interface MemoryUsage {
     /**
-     * 
+     *
      * @type {number}
      * @memberof MemoryUsage
      */
     'usedMemoryBytes': number;
     /**
-     * 
+     *
      * @type {number}
      * @memberof MemoryUsage
      */
     'totalVisibleMemoryBytes': number;
     /**
-     * 
+     *
      * @type {number}
      * @memberof MemoryUsage
      */
     'swapPercentage': number;
     /**
-     * 
+     *
      * @type {number}
      * @memberof MemoryUsage
      */
     'swapUsedBytes': number;
     /**
-     * 
+     *
      * @type {number}
      * @memberof MemoryUsage
      */
     'swapTotalBytes': number;
+    /**
+     * Memory actively used by applications (macOS: app memory)
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    'appMemoryBytes'?: number;
+    /**
+     * Memory that cannot be paged out (macOS: wired memory)
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    'wiredMemoryBytes'?: number;
+    /**
+     * Memory that has been compressed to save space (macOS)
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    'compressedMemoryBytes'?: number;
+    /**
+     * Memory used for file system cache
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    'cachedFilesBytes'?: number;
+    /**
+     * Memory pressure level (0-100, macOS specific)
+     * @type {number}
+     * @memberof MemoryUsage
+     */
+    'memoryPressure'?: number;
 }
 /**
  * 

@@ -220,6 +220,16 @@ pub struct MemoryUsage {
     pub swap_percentage: f32,
     pub swap_used_bytes: i64,
     pub swap_total_bytes: i64,
+    /// Memory actively used by applications (macOS: app memory)
+    pub app_memory_bytes: Option<i64>,
+    /// Memory that cannot be paged out (macOS: wired memory)
+    pub wired_memory_bytes: Option<i64>,
+    /// Memory that has been compressed to save space (macOS)
+    pub compressed_memory_bytes: Option<i64>,
+    /// Memory used for file system cache
+    pub cached_files_bytes: Option<i64>,
+    /// Memory pressure level (0-100, macOS specific)
+    pub memory_pressure: Option<f32>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

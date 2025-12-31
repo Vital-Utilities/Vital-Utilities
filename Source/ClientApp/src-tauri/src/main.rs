@@ -338,7 +338,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
 fn update_machine_store(
     store: &MachineDataStore,
     cpu_util: Box<vital_service_api::models::CpuUsage>,
-    mem_util: vital_service_api::models::MemoryUsage,
+    mem_util: crate::machine_stats::memory::ExtendedMemoryUsage,
     gpu_usage: Vec<vital_service_api::models::GpuUsage>,
     disk_usage: Box<std::collections::HashMap<String, vital_service_api::models::DiskUsage>>,
     power_info: crate::machine_stats::power::PowerUsage,
@@ -362,13 +362,18 @@ fn update_machine_store(
     };
     store.update_cpu(cpu);
 
-    // Convert memory usage
+    // Convert memory usage with extended macOS stats
     let memory = models::MemoryUsage {
         used_memory_bytes: mem_util.used_memory_bytes,
-        total_visible_memory_bytes: mem_util.total_visible_memory_bytes,
+        total_visible_memory_bytes: mem_util.total_memory_bytes,
         swap_percentage: mem_util.swap_percentage,
         swap_used_bytes: mem_util.swap_used_bytes,
         swap_total_bytes: mem_util.swap_total_bytes,
+        app_memory_bytes: mem_util.app_memory_bytes,
+        wired_memory_bytes: mem_util.wired_memory_bytes,
+        compressed_memory_bytes: mem_util.compressed_memory_bytes,
+        cached_files_bytes: mem_util.cached_files_bytes,
+        memory_pressure: mem_util.memory_pressure,
     };
     store.update_memory(memory);
 
