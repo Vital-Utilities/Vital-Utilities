@@ -665,11 +665,17 @@ export interface GetMachineDynamicDataResponse {
      */
     'diskUsages'?: DiskUsages;
     /**
-     * 
+     *
      * @type {NetworkAdapterUsages}
      * @memberof GetMachineDynamicDataResponse
      */
     'networkUsageData'?: NetworkAdapterUsages;
+    /**
+     * Network history for chart display (keyed by MAC address)
+     * @type {{ [key: string]: NetworkAdapterHistory; }}
+     * @memberof GetMachineDynamicDataResponse
+     */
+    'networkHistory'?: { [key: string]: NetworkAdapterHistory; };
     /**
      *
      * @type {PowerUsage}
@@ -1342,7 +1348,45 @@ export interface NetworkAdapterUsages {
     'adapters': { [key: string]: NetworkAdapterUsage; };
 }
 /**
- * 
+ * History entry for network traffic over time
+ * @export
+ * @interface NetworkHistoryEntry
+ */
+export interface NetworkHistoryEntry {
+    /**
+     * Download speed in bits per second
+     * @type {number}
+     * @memberof NetworkHistoryEntry
+     */
+    'downloadBps': number;
+    /**
+     * Upload speed in bits per second
+     * @type {number}
+     * @memberof NetworkHistoryEntry
+     */
+    'uploadBps': number;
+}
+/**
+ * Network adapter history for chart display
+ * @export
+ * @interface NetworkAdapterHistory
+ */
+export interface NetworkAdapterHistory {
+    /**
+     * History of network traffic (last 60 samples)
+     * @type {Array<NetworkHistoryEntry>}
+     * @memberof NetworkAdapterHistory
+     */
+    'history': Array<NetworkHistoryEntry>;
+    /**
+     * Maximum speed seen in history for auto-scaling
+     * @type {number}
+     * @memberof NetworkAdapterHistory
+     */
+    'maxSpeedBps': number;
+}
+/**
+ *
  * @export
  * @interface NetworkUsageMetricModel
  */

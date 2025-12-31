@@ -79,13 +79,13 @@ export const ClassicTooltip: React.FunctionComponent<TooltipProps<any, any>> = p
     );
 };
 
-export const ClassicLayout: React.FunctionComponent<{ header: { title: string; deviceName?: string }; graph: React.ReactNode; showRange?: boolean; bottomItems: React.ReactNode }> = props => {
+export const ClassicLayout: React.FunctionComponent<{ header: { title: string; deviceName?: string; rightContent?: React.ReactNode }; graph: React.ReactNode; showRange?: boolean; bottomItems: React.ReactNode }> = props => {
     return (
         <div style={{ display: "grid", gridTemplateRows: "1fr 180px", height: "100%", padding: "0.5rem 1rem", overflow: "hidden" }}>
             <div style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
-                <div className="header" style={{ display: "flex", marginBottom: "0.75rem", justifyContent: "space-between", alignItems: "center" }}>
+                <div className="header" style={{ display: "flex", marginBottom: "0.75rem", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
                     <h1 style={{ margin: 0 }}>{props.header.title}</h1>
-                    <div style={{ fontSize: 14, color: "var(--muted-foreground)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{props.header.deviceName}</div>
+                    {props.header.rightContent ?? <div style={{ fontSize: 14, color: "var(--muted-foreground)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{props.header.deviceName}</div>}
                 </div>
                 <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
                     {props.graph}

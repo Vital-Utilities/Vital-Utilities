@@ -331,6 +331,24 @@ pub struct NetworkAdapterUsages {
     pub adapters: HashMap<String, NetworkAdapterUsage>,
 }
 
+/// History entry for network traffic over time
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NetworkHistoryEntry {
+    pub download_bps: i64,
+    pub upload_bps: i64,
+}
+
+/// Network adapter with history data
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NetworkAdapterHistory {
+    /// History of network traffic (last 60 samples)
+    pub history: Vec<NetworkHistoryEntry>,
+    /// Maximum speed seen in history for auto-scaling
+    pub max_speed_bps: i64,
+}
+
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NetworkAdapterUsage {
@@ -463,6 +481,8 @@ pub struct GetMachineDynamicDataResponse {
     pub gpu_usage_data: Option<Vec<GpuUsage>>,
     pub disk_usages: Option<DiskUsages>,
     pub network_usage_data: Option<NetworkAdapterUsages>,
+    /// Network history for chart display (keyed by MAC address)
+    pub network_history: Option<HashMap<String, NetworkAdapterHistory>>,
     pub power_usage_data: Option<PowerUsage>,
     pub process_cpu_usage: Option<HashMap<i32, f32>>,
     pub process_cpu_threads_usage: Option<HashMap<i32, f32>>,

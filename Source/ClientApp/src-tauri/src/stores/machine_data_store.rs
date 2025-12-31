@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use crate::models::{
     CpuData, CpuUsage, CpuUsageMetricModel, DiskUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
     GetMachineStaticDataResponse, GpuData, GpuUsage, GpuUsageMetricModel, MemoryUsage,
-    NetworkAdapterUsages, ParentChildModelDto, PowerUsage, RamData,
+    NetworkAdapterUsages, NetworkAdapterHistory, NetworkHistoryEntry, ParentChildModelDto, PowerUsage, RamData,
     RamUsageMetricModel, TimeSeriesMachineMetricsModel, TimeSeriesMachineMetricsResponse, DateRange,
 };
 
@@ -23,6 +23,8 @@ pub struct MachineDataStore {
     pub disk_usage: DashMap<String, DiskUsages>,
     /// Current network usage data
     pub network_usage: DashMap<String, NetworkAdapterUsages>,
+    /// Network history for charts (keyed by MAC address)
+    pub network_history: DashMap<String, NetworkAdapterHistory>,
     /// Current power/battery usage data
     pub power_usage: DashMap<String, PowerUsage>,
     /// Process CPU usage (PID -> percentage)
@@ -54,6 +56,7 @@ impl MachineDataStore {
             gpu_usage: DashMap::new(),
             disk_usage: DashMap::new(),
             network_usage: DashMap::new(),
+            network_history: DashMap::new(),
             power_usage: DashMap::new(),
             process_cpu_usage: DashMap::new(),
             process_ram_usage: DashMap::new(),
@@ -152,8 +155,47 @@ impl MachineDataStore {
         self.disk_usage.insert("default".to_string(), disks);
     }
 
-    /// Update network usage data
+    /// Update network usage data and history
     pub fn update_network(&self, network: NetworkAdapterUsages) {
+        // Update history for each adapter
+        for (mac, adapter) in &network.adapters {
+            if let Some(usage) = &adapter.usage {
+                let mut history = self.network_history
+                    .entry(mac.clone())
+                    .or_insert_with(|| NetworkAdapterHistory {
+                        history: Vec::with_capacity(60),
+                        max_speed_bps: 1_000_000, // 1 Mbps default
+                    });
+
+                // Add new entry
+                history.history.push(NetworkHistoryEntry {
+                    download_bps: usage.recieve_bps,
+                    upload_bps: usage.send_bps,
+                });
+
+                // Keep only last 60 entries
+                if history.history.len() > 60 {
+                    history.history.remove(0);
+                }
+
+                // Update max speed with headroom
+                let current_max = usage.recieve_bps.max(usage.send_bps);
+                let history_max = history.history.iter()
+                    .map(|h| h.download_bps.max(h.upload_bps))
+                    .max()
+                    .unwrap_or(0);
+                let observed_max = current_max.max(history_max);
+                let headroom = (observed_max as f64 * 1.2) as i64;
+
+                if headroom > history.max_speed_bps {
+                    history.max_speed_bps = headroom;
+                } else if headroom < history.max_speed_bps / 2 && history.max_speed_bps > 1_000_000 {
+                    // Slowly decrease if speeds are much lower
+                    history.max_speed_bps = (history.max_speed_bps as f64 * 0.95).max(1_000_000.0) as i64;
+                }
+            }
+        }
+
         self.network_usage.insert("default".to_string(), network);
     }
 
@@ -225,6 +267,12 @@ impl MachineDataStore {
             .get("default")
             .map(|r| r.value().clone());
 
+        let network_history: HashMap<String, NetworkAdapterHistory> = self
+            .network_history
+            .iter()
+            .map(|r| (r.key().clone(), r.value().clone()))
+            .collect();
+
         let power_usage_data = self
             .power_usage
             .get("default")
@@ -269,6 +317,11 @@ impl MachineDataStore {
             },
             disk_usages,
             network_usage_data,
+            network_history: if network_history.is_empty() {
+                None
+            } else {
+                Some(network_history)
+            },
             power_usage_data,
             process_cpu_usage: if process_cpu_usage.is_empty() {
                 None

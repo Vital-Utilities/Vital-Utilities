@@ -315,11 +315,6 @@ function drawMemoryBar(ctx: CanvasRenderingContext2D, width: number, height: num
     const segments: { color: string; label: string; bytes: number; width: number; startX: number }[] = [];
     let segmentX = barX + 2; // Start after the bar padding
 
-    if (data.app > 0) {
-        const width = (data.app / data.total) * barWidth;
-        segments.push({ color: COLORS.app, label: "App", bytes: data.app, width, startX: segmentX });
-        segmentX += width;
-    }
     if (data.wired > 0) {
         const width = (data.wired / data.total) * barWidth;
         segments.push({ color: COLORS.wired, label: "Wired", bytes: data.wired, width, startX: segmentX });
@@ -328,6 +323,11 @@ function drawMemoryBar(ctx: CanvasRenderingContext2D, width: number, height: num
     if (data.compressed > 0) {
         const width = (data.compressed / data.total) * barWidth;
         segments.push({ color: COLORS.compressed, label: "Compressed", bytes: data.compressed, width, startX: segmentX });
+        segmentX += width;
+    }
+    if (data.app > 0) {
+        const width = (data.app / data.total) * barWidth;
+        segments.push({ color: COLORS.app, label: "App", bytes: data.app, width, startX: segmentX });
         segmentX += width;
     }
     if (data.cached > 0) {

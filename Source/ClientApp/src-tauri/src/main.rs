@@ -310,7 +310,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         let time = chrono::Utc::now();
 
         // Collect all metrics in parallel
-        let (cpu_util, mem_util, _net_util, disk_usage, gpu_usage, power_info) = join!(
+        let (cpu_util, mem_util, net_util, disk_usage, gpu_usage, power_info) = join!(
             cpu::get_cpu_util(&sys_info, &sys_stat),
             memory::get_mem_util(&sys_info),
             net::get_net_adapters(),
@@ -320,7 +320,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         );
 
         // Convert to our DTO types and update store
-        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, disk_usage, power_info, &sys_info, time);
+        update_machine_store(&machine_store, cpu_util, mem_util, net_util, gpu_usage, disk_usage, power_info, &sys_info, time);
 
         // Sleep for remaining time to maintain ~1-second interval
         if let Ok(elapsed) = start.elapsed() {
@@ -339,6 +339,7 @@ fn update_machine_store(
     store: &MachineDataStore,
     cpu_util: Box<vital_service_api::models::CpuUsage>,
     mem_util: crate::machine_stats::memory::ExtendedMemoryUsage,
+    net_util: Vec<vital_service_api::models::NetworkAdapterUsage>,
     gpu_usage: Vec<vital_service_api::models::GpuUsage>,
     disk_usage: Box<std::collections::HashMap<String, vital_service_api::models::DiskUsage>>,
     power_info: crate::machine_stats::power::PowerUsage,
@@ -376,6 +377,36 @@ fn update_machine_store(
         memory_pressure: mem_util.memory_pressure,
     };
     store.update_memory(memory);
+
+    // Convert network usage - use MAC address as key for adapters
+    let network_adapters: HashMap<String, models::NetworkAdapterUsage> = net_util
+        .into_iter()
+        .filter_map(|adapter| {
+            let mac = adapter.properties.mac_address.clone()?;
+            let usage = adapter.usage.as_ref().map(|u| models::NetAdapterUsage {
+                send_bps: u.send_bps,
+                recieve_bps: u.recieve_bps,
+                usage_percentage: u.usage_percentage,
+            });
+            let ip_props = adapter.properties.ip_interface_properties.as_ref();
+            let properties = models::NetworkAdapterProperties {
+                ip_interface_properties: models::IpInterfaceProperties {
+                    ipv4_address: ip_props.and_then(|p| p.i_pv4_address.clone()),
+                    ipv6_address: ip_props.and_then(|p| p.i_pv6_address.clone()),
+                    dns_suffix: ip_props.and_then(|p| p.dns_suffix.clone()),
+                    is_dns_enabled: ip_props.and_then(|p| p.is_dns_enabled),
+                },
+                is_up: adapter.properties.is_up,
+                name: adapter.properties.name.clone(),
+                description: adapter.properties.description.clone(),
+                mac_address: adapter.properties.mac_address.clone(),
+                speed_bps: adapter.properties.speed_bps,
+                connection_type: adapter.properties.connection_type.clone(),
+            };
+            Some((mac, models::NetworkAdapterUsage { usage, properties }))
+        })
+        .collect();
+    store.update_network(models::NetworkAdapterUsages { adapters: network_adapters });
 
     // Convert GPU usage
     let gpus: Vec<models::GpuUsage> = gpu_usage
