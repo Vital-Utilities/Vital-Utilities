@@ -47,15 +47,16 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         // Clear canvas
         ctx.clearRect(0, 0, width, height);
 
-        // Get current values
+        // Get current values (cap health at 100% for display)
         const batteryPercent = powerData?.batteryPercentage ?? 0;
         const systemPower = powerData?.systemPowerWatts ?? 0;
         const isCharging = powerData?.externalConnected && !powerData?.fullyCharged;
         const isPluggedIn = powerData?.externalConnected ?? false;
-        const batteryHealth = powerData?.batteryHealth ?? 100;
+        const batteryHealth = Math.min(powerData?.batteryHealth ?? 100, 100);
+        const rawHealth = powerData?.batteryHealth ?? 100;
 
         // Draw battery visualization
-        drawBattery(ctx, width, height, batteryPercent, isCharging ?? false, batteryHealth);
+        drawBattery(ctx, width, height, batteryPercent, isCharging ?? false, batteryHealth, rawHealth);
 
         // Draw power flow visualization
         drawPowerFlow(ctx, width, height, systemPower, isPluggedIn, isCharging ?? false);
@@ -89,6 +90,8 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         );
     }
 
+    const healthColor = (powerData.batteryHealth ?? 100) >= 80 ? "#22c55e" : (powerData.batteryHealth ?? 100) >= 50 ? "#eab308" : "#ef4444";
+
     return (
         <ClassicLayout
             header={{
@@ -96,7 +99,6 @@ export const ClassicPowerView: React.FunctionComponent = () => {
                 deviceName: powerData.externalConnected ? "Plugged In" : "On Battery"
             }}
             graph={<canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />}
-            showRange
             bottomItems={
                 <>
                     <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 15, overflowY: "auto" }}>
@@ -107,7 +109,7 @@ export const ClassicPowerView: React.FunctionComponent = () => {
                         {powerData.externalConnected && powerData.adapterWatts && <ItemOne color="#22c55e" title="Adapter" value={`${powerData.adapterWatts}W ${powerData.adapterDescription ?? ""}`} />}
 
                         {/* Battery Health */}
-                        {powerData.batteryHealth !== undefined && <ItemOne color={powerData.batteryHealth >= 90 ? "#22c55e" : powerData.batteryHealth >= 70 ? "#eab308" : "#ef4444"} title="Battery Health" value={`${powerData.batteryHealth.toFixed(1)}%`} />}
+                        {powerData.batteryHealth !== undefined && <ItemOne color={healthColor} title="Battery Health" value={`${powerData.batteryHealth.toFixed(1)}%`} />}
 
                         {/* Cycle Count */}
                         {powerData.cycleCount !== undefined && <ItemOne color="#94a3b8" title="Cycle Count" value={`${powerData.cycleCount}`} />}
@@ -140,106 +142,192 @@ interface Particle {
     color: string;
 }
 
-function drawBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, isCharging: boolean, health: number) {
+function drawBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, isCharging: boolean, health: number, rawHealth: number) {
     const centerX = width / 2;
-    const centerY = height * 0.35;
+    const centerY = height * 0.32;
+    const time = Date.now();
 
-    // Battery dimensions
-    const batteryWidth = Math.min(width * 0.35, 180);
-    const batteryHeight = batteryWidth * 0.5;
-    const cornerRadius = 8;
-    const tipWidth = 8;
-    const tipHeight = batteryHeight * 0.4;
+    // Battery dimensions - larger for liquid glass effect
+    const batteryWidth = Math.min(width * 0.4, 200);
+    const batteryHeight = batteryWidth * 0.55;
+    const cornerRadius = 12;
+    const tipWidth = 10;
+    const tipHeight = batteryHeight * 0.35;
 
     const batteryX = centerX - batteryWidth / 2;
     const batteryY = centerY - batteryHeight / 2;
 
-    // Battery outline with glow
+    // Outer glow based on state
     ctx.save();
     if (isCharging) {
-        ctx.shadowColor = "#22c55e";
-        ctx.shadowBlur = 20;
+        ctx.shadowColor = "rgba(34, 197, 94, 0.6)";
+        ctx.shadowBlur = 30;
     } else if (percent < 20) {
-        ctx.shadowColor = "#ef4444";
-        ctx.shadowBlur = 15 + Math.sin(Date.now() / 200) * 5;
+        ctx.shadowColor = "rgba(239, 68, 68, 0.6)";
+        ctx.shadowBlur = 20 + Math.sin(time / 200) * 8;
+    } else {
+        ctx.shadowColor = "rgba(59, 130, 246, 0.3)";
+        ctx.shadowBlur = 15;
     }
 
-    // Main battery body outline
+    // Glass outer shell - dark tinted glass
     ctx.beginPath();
     ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, cornerRadius);
-    ctx.strokeStyle = percent < 20 ? "#ef4444" : isCharging ? "#22c55e" : "#64748b";
-    ctx.lineWidth = 3;
-    ctx.stroke();
+    const shellGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight);
+    shellGradient.addColorStop(0, "rgba(40, 40, 55, 0.9)");
+    shellGradient.addColorStop(0.5, "rgba(25, 25, 35, 0.95)");
+    shellGradient.addColorStop(1, "rgba(35, 35, 50, 0.9)");
+    ctx.fillStyle = shellGradient;
+    ctx.fill();
     ctx.restore();
 
-    // Battery tip (positive terminal)
+    // Glass border with subtle highlight
     ctx.beginPath();
-    ctx.roundRect(batteryX + batteryWidth, centerY - tipHeight / 2, tipWidth, tipHeight, [0, 4, 4, 0]);
-    ctx.fillStyle = "#64748b";
+    ctx.roundRect(batteryX, batteryY, batteryWidth, batteryHeight, cornerRadius);
+    const borderGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight);
+    borderGradient.addColorStop(0, "rgba(255, 255, 255, 0.3)");
+    borderGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.1)");
+    borderGradient.addColorStop(1, "rgba(255, 255, 255, 0.15)");
+    ctx.strokeStyle = borderGradient;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Battery tip with glass effect
+    ctx.beginPath();
+    ctx.roundRect(batteryX + batteryWidth - 1, centerY - tipHeight / 2, tipWidth, tipHeight, [0, 6, 6, 0]);
+    const tipGradient = ctx.createLinearGradient(batteryX + batteryWidth, centerY - tipHeight / 2, batteryX + batteryWidth, centerY + tipHeight / 2);
+    tipGradient.addColorStop(0, "rgba(80, 80, 100, 0.9)");
+    tipGradient.addColorStop(0.5, "rgba(50, 50, 70, 0.9)");
+    tipGradient.addColorStop(1, "rgba(70, 70, 90, 0.9)");
+    ctx.fillStyle = tipGradient;
     ctx.fill();
 
-    // Fill level with gradient
-    const fillPadding = 4;
-    const fillWidth = (batteryWidth - fillPadding * 2) * (percent / 100);
+    // Liquid fill area
+    const fillPadding = 6;
+    const maxFillWidth = batteryWidth - fillPadding * 2;
+    const fillWidth = maxFillWidth * (percent / 100);
     const fillHeight = batteryHeight - fillPadding * 2;
+    const fillX = batteryX + fillPadding;
+    const fillY = batteryY + fillPadding;
 
     if (percent > 0) {
-        const gradient = ctx.createLinearGradient(batteryX + fillPadding, 0, batteryX + fillPadding + fillWidth, 0);
+        ctx.save();
+        ctx.beginPath();
+        ctx.roundRect(fillX, fillY, maxFillWidth, fillHeight, cornerRadius - 4);
+        ctx.clip();
 
-        if (percent < 20) {
-            gradient.addColorStop(0, "#dc2626");
-            gradient.addColorStop(1, "#ef4444");
-        } else if (percent < 50) {
-            gradient.addColorStop(0, "#d97706");
-            gradient.addColorStop(1, "#f59e0b");
-        } else {
-            gradient.addColorStop(0, "#16a34a");
-            gradient.addColorStop(1, "#22c55e");
-        }
+        // Animated liquid wave surface
+        const waveAmplitude = isCharging ? 4 : 2;
+        const waveFrequency = 0.03;
+        const waveSpeed = isCharging ? 0.003 : 0.001;
 
         ctx.beginPath();
-        ctx.roundRect(batteryX + fillPadding, batteryY + fillPadding, fillWidth, fillHeight, cornerRadius - 2);
-        ctx.fillStyle = gradient;
+        ctx.moveTo(fillX, fillY + fillHeight);
+
+        // Draw wavy top edge of liquid
+        for (let x = 0; x <= fillWidth; x += 2) {
+            const waveY = Math.sin(x * waveFrequency + time * waveSpeed) * waveAmplitude;
+            const waveY2 = Math.sin(x * waveFrequency * 1.5 + time * waveSpeed * 1.3) * (waveAmplitude * 0.5);
+            ctx.lineTo(fillX + x, fillY + waveY + waveY2);
+        }
+
+        ctx.lineTo(fillX + fillWidth, fillY + fillHeight);
+        ctx.closePath();
+
+        // Liquid gradient based on charge level
+        const liquidGradient = ctx.createLinearGradient(fillX, fillY, fillX, fillY + fillHeight);
+        if (percent < 20) {
+            liquidGradient.addColorStop(0, "rgba(239, 68, 68, 0.95)");
+            liquidGradient.addColorStop(0.3, "rgba(220, 38, 38, 0.9)");
+            liquidGradient.addColorStop(0.7, "rgba(185, 28, 28, 0.85)");
+            liquidGradient.addColorStop(1, "rgba(153, 27, 27, 0.9)");
+        } else if (percent < 50) {
+            liquidGradient.addColorStop(0, "rgba(251, 191, 36, 0.95)");
+            liquidGradient.addColorStop(0.3, "rgba(245, 158, 11, 0.9)");
+            liquidGradient.addColorStop(0.7, "rgba(217, 119, 6, 0.85)");
+            liquidGradient.addColorStop(1, "rgba(180, 83, 9, 0.9)");
+        } else {
+            liquidGradient.addColorStop(0, "rgba(74, 222, 128, 0.95)");
+            liquidGradient.addColorStop(0.3, "rgba(34, 197, 94, 0.9)");
+            liquidGradient.addColorStop(0.7, "rgba(22, 163, 74, 0.85)");
+            liquidGradient.addColorStop(1, "rgba(21, 128, 61, 0.9)");
+        }
+        ctx.fillStyle = liquidGradient;
         ctx.fill();
 
-        // Animated wave effect when charging
-        if (isCharging) {
-            const waveOffset = (Date.now() / 50) % (batteryWidth * 2);
-            ctx.save();
-            ctx.beginPath();
-            ctx.roundRect(batteryX + fillPadding, batteryY + fillPadding, fillWidth, fillHeight, cornerRadius - 2);
-            ctx.clip();
+        // Liquid surface shine/reflection
+        ctx.beginPath();
+        for (let x = 0; x <= fillWidth; x += 2) {
+            const waveY = Math.sin(x * waveFrequency + time * waveSpeed) * waveAmplitude;
+            const waveY2 = Math.sin(x * waveFrequency * 1.5 + time * waveSpeed * 1.3) * (waveAmplitude * 0.5);
+            if (x === 0) {
+                ctx.moveTo(fillX + x, fillY + waveY + waveY2);
+            } else {
+                ctx.lineTo(fillX + x, fillY + waveY + waveY2);
+            }
+        }
+        const shineGradient = ctx.createLinearGradient(fillX, fillY, fillX + fillWidth, fillY);
+        shineGradient.addColorStop(0, "rgba(255, 255, 255, 0.4)");
+        shineGradient.addColorStop(0.3, "rgba(255, 255, 255, 0.1)");
+        shineGradient.addColorStop(0.7, "rgba(255, 255, 255, 0.2)");
+        shineGradient.addColorStop(1, "rgba(255, 255, 255, 0.3)");
+        ctx.strokeStyle = shineGradient;
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-            ctx.globalAlpha = 0.3;
-            for (let i = -1; i < 3; i++) {
-                const x = batteryX + fillPadding + waveOffset + i * 40 - 80;
+        // Animated bubbles when charging
+        if (isCharging) {
+            const bubbleCount = 5;
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubbleX = fillX + 20 + (i * (fillWidth - 40)) / bubbleCount;
+                const bubblePhase = (time / 1000 + i * 0.7) % 2;
+                const bubbleY = fillY + fillHeight - bubblePhase * fillHeight * 0.8;
+                const bubbleSize = 3 + Math.sin(time / 300 + i) * 1.5;
+                const bubbleAlpha = Math.max(0, 1 - bubblePhase * 0.8);
+
                 ctx.beginPath();
-                ctx.moveTo(x, batteryY);
-                ctx.lineTo(x + 20, batteryY + batteryHeight);
-                ctx.lineTo(x + 30, batteryY + batteryHeight);
-                ctx.lineTo(x + 10, batteryY);
-                ctx.closePath();
-                ctx.fillStyle = "#ffffff";
+                ctx.arc(bubbleX + Math.sin(time / 500 + i) * 5, bubbleY, bubbleSize, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${bubbleAlpha * 0.5})`;
                 ctx.fill();
             }
-            ctx.restore();
         }
+
+        ctx.restore();
     }
 
-    // Percentage text
-    ctx.font = `bold ${batteryHeight * 0.4}px system-ui`;
+    // Glass reflection overlay on top of battery
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(batteryX + 4, batteryY + 4, batteryWidth - 8, batteryHeight * 0.4, [cornerRadius - 2, cornerRadius - 2, 0, 0]);
+    const reflectionGradient = ctx.createLinearGradient(batteryX, batteryY, batteryX, batteryY + batteryHeight * 0.5);
+    reflectionGradient.addColorStop(0, "rgba(255, 255, 255, 0.15)");
+    reflectionGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.05)");
+    reflectionGradient.addColorStop(1, "rgba(255, 255, 255, 0)");
+    ctx.fillStyle = reflectionGradient;
+    ctx.fill();
+    ctx.restore();
+
+    // Percentage text with shadow for depth
+    ctx.save();
+    ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetY = 2;
+    ctx.font = `bold ${batteryHeight * 0.38}px system-ui`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillStyle = percent > 50 ? "#ffffff" : percent < 20 ? "#ef4444" : "#f8fafc";
+    ctx.fillStyle = "#ffffff";
     ctx.fillText(`${Math.round(percent)}%`, centerX, centerY);
+    ctx.restore();
 
-    // Charging bolt icon
+    // Charging bolt icon with glow
     if (isCharging) {
-        const boltSize = batteryHeight * 0.25;
-        const boltX = centerX + batteryWidth * 0.25;
+        const boltSize = batteryHeight * 0.22;
+        const boltX = centerX + batteryWidth * 0.28;
         const boltY = centerY;
 
         ctx.save();
+        ctx.shadowColor = "#fbbf24";
+        ctx.shadowBlur = 15;
         ctx.translate(boltX, boltY);
         ctx.beginPath();
         ctx.moveTo(0, -boltSize);
@@ -250,46 +338,15 @@ function drawBattery(ctx: CanvasRenderingContext2D, width: number, height: numbe
         ctx.lineTo(-boltSize * 0.1, -boltSize * 0.1);
         ctx.closePath();
         ctx.fillStyle = "#fbbf24";
-        ctx.shadowColor = "#fbbf24";
-        ctx.shadowBlur = 10;
         ctx.fill();
         ctx.restore();
     }
-
-    // Health indicator arc
-    const arcRadius = batteryWidth * 0.45;
-    const arcWidth = 4;
-    const startAngle = Math.PI * 0.8;
-    const endAngle = Math.PI * 2.2;
-    const healthAngle = startAngle + (endAngle - startAngle) * (health / 100);
-
-    // Background arc
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, arcRadius, startAngle, endAngle);
-    ctx.strokeStyle = "#1e293b";
-    ctx.lineWidth = arcWidth;
-    ctx.lineCap = "round";
-    ctx.stroke();
-
-    // Health arc
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, arcRadius, startAngle, healthAngle);
-    ctx.strokeStyle = health >= 90 ? "#22c55e" : health >= 70 ? "#eab308" : "#ef4444";
-    ctx.lineWidth = arcWidth;
-    ctx.lineCap = "round";
-    ctx.stroke();
-
-    // Health label
-    ctx.font = "11px system-ui";
-    ctx.fillStyle = "#94a3b8";
-    ctx.textAlign = "center";
-    ctx.fillText(`Health: ${health.toFixed(0)}%`, centerX, centerY + arcRadius + 15);
 }
 
 function drawPowerFlow(ctx: CanvasRenderingContext2D, width: number, height: number, systemPower: number, isPluggedIn: boolean, isCharging: boolean) {
-    const flowY = height * 0.7;
-    const nodeRadius = 24;
-    const flowWidth = Math.min(width * 0.7, 350);
+    const flowY = height * 0.62;
+    const nodeRadius = 22;
+    const flowWidth = Math.min(width * 0.75, 400);
     const startX = (width - flowWidth) / 2;
 
     // Node positions
@@ -391,53 +448,88 @@ function drawPowerFlow(ctx: CanvasRenderingContext2D, width: number, height: num
 function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: number, history: number[]) {
     if (history.length < 2) return;
 
-    const graphHeight = height * 0.12;
-    const graphY = height * 0.88;
-    const graphWidth = width * 0.8;
+    const graphHeight = height * 0.18;
+    const graphY = height * 0.92;
+    const graphWidth = width * 0.85;
     const graphX = (width - graphWidth) / 2;
 
-    // Find max for scaling
-    const maxPower = Math.max(...history, 20);
+    // Find min/max for scaling with some padding
+    const minPower = Math.min(...history) * 0.9;
+    const maxPower = Math.max(...history, 10) * 1.1;
+    const range = maxPower - minPower || 1;
 
     // Draw graph background
-    ctx.fillStyle = "rgba(15, 23, 42, 0.5)";
+    ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
     ctx.beginPath();
-    ctx.roundRect(graphX - 10, graphY - graphHeight - 5, graphWidth + 20, graphHeight + 15, 6);
+    ctx.roundRect(graphX - 15, graphY - graphHeight - 10, graphWidth + 30, graphHeight + 25, 8);
     ctx.fill();
 
-    // Draw graph line
+    // Draw subtle grid lines
+    ctx.strokeStyle = "rgba(100, 116, 139, 0.2)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 3; i++) {
+        const y = graphY - (i / 3) * graphHeight;
+        ctx.beginPath();
+        ctx.moveTo(graphX, y);
+        ctx.lineTo(graphX + graphWidth, y);
+        ctx.stroke();
+    }
+
+    // Draw graph line with smooth curve
     ctx.beginPath();
-    ctx.moveTo(graphX, graphY - (history[0] / maxPower) * graphHeight);
+    ctx.moveTo(graphX, graphY - ((history[0] - minPower) / range) * graphHeight);
 
     for (let i = 1; i < history.length; i++) {
         const x = graphX + (i / (history.length - 1)) * graphWidth;
-        const y = graphY - (history[i] / maxPower) * graphHeight;
+        const y = graphY - ((history[i] - minPower) / range) * graphHeight;
         ctx.lineTo(x, y);
     }
 
     ctx.strokeStyle = "#3b82f6";
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+
+    // Fill under the line with gradient
+    const lastX = graphX + graphWidth;
+    const gradient = ctx.createLinearGradient(0, graphY - graphHeight, 0, graphY);
+    gradient.addColorStop(0, "rgba(59, 130, 246, 0.4)");
+    gradient.addColorStop(1, "rgba(59, 130, 246, 0.05)");
+
+    ctx.lineTo(lastX, graphY);
+    ctx.lineTo(graphX, graphY);
+    ctx.closePath();
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    // Current value indicator (dot at end)
+    const currentY = graphY - ((history[history.length - 1] - minPower) / range) * graphHeight;
+    ctx.beginPath();
+    ctx.arc(lastX, currentY, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "#3b82f6";
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Fill under the line
-    ctx.lineTo(graphX + graphWidth, graphY);
-    ctx.lineTo(graphX, graphY);
-    ctx.closePath();
-    ctx.fillStyle = "rgba(59, 130, 246, 0.2)";
-    ctx.fill();
-
-    // Label
+    // Labels
     ctx.font = "10px system-ui";
     ctx.fillStyle = "#64748b";
     ctx.textAlign = "left";
-    ctx.fillText("Power (1 min)", graphX, graphY + 12);
+    ctx.fillText(`${maxPower.toFixed(0)}W`, graphX - 12, graphY - graphHeight + 4);
+    ctx.fillText(`${minPower.toFixed(0)}W`, graphX - 12, graphY + 4);
+
+    // Title on right
+    ctx.textAlign = "right";
+    ctx.fillText("Power (60s)", graphX + graphWidth + 12, graphY - graphHeight + 4);
 }
 
 let particles: Particle[] = [];
 
 function updateParticles(ctx: CanvasRenderingContext2D, width: number, height: number, isCharging: boolean, isPluggedIn: boolean) {
-    const flowY = height * 0.7;
-    const flowWidth = Math.min(width * 0.7, 350);
+    const flowY = height * 0.62;
+    const flowWidth = Math.min(width * 0.75, 400);
     const startX = (width - flowWidth) / 2;
 
     // Add new particles
