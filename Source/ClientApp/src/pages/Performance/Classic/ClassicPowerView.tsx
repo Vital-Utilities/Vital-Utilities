@@ -29,6 +29,13 @@ export const ClassicPowerView: React.FunctionComponent = () => {
     const animationRef = useRef<number>(0);
     const powerHistoryRef = useRef<number[]>([]);
     const wasPluggedInRef = useRef<boolean | null>(null);
+    const wasPassthroughRef = useRef<boolean | null>(null);
+    const passthroughTransitionRef = useRef<{ active: boolean; direction: "enter" | "exit"; progress: number; startTime: number }>({
+        active: false,
+        direction: "enter",
+        progress: 0,
+        startTime: 0
+    });
     const acTransitionRef = useRef<ACTransitionState>({
         active: false,
         direction: "connect",
@@ -83,6 +90,24 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         wasPluggedInRef.current = isPluggedIn;
     }, [powerData?.externalConnected]);
 
+    // Detect passthrough state changes and trigger transition
+    useEffect(() => {
+        const isPluggedIn = powerData?.externalConnected ?? false;
+        const isPassthrough = isPluggedIn && powerData?.fullyCharged === true;
+        const wasPassthrough = wasPassthroughRef.current;
+
+        if (wasPassthrough !== null && wasPassthrough !== isPassthrough) {
+            // State changed - trigger animation
+            const transition = passthroughTransitionRef.current;
+            transition.active = true;
+            transition.direction = isPassthrough ? "enter" : "exit";
+            transition.progress = 0;
+            transition.startTime = Date.now();
+        }
+
+        wasPassthroughRef.current = isPassthrough;
+    }, [powerData?.externalConnected, powerData?.fullyCharged]);
+
     const draw = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -126,8 +151,40 @@ export const ClassicPowerView: React.FunctionComponent = () => {
             }
         }
 
+        // Update passthrough transition
+        // Enter: delay phase then line draw animation
+        // Exit: fade out animation (no delay)
+        const passthroughTransition = passthroughTransitionRef.current;
+        if (passthroughTransition.active) {
+            const elapsed = (Date.now() - passthroughTransition.startTime) / 1000;
+
+            if (passthroughTransition.direction === "enter") {
+                const delay = 0.3; // 300ms delay before line starts drawing
+                const drawDuration = 0.6; // 600ms for line animation
+                const totalDuration = delay + drawDuration;
+
+                if (elapsed < delay) {
+                    passthroughTransition.progress = 0;
+                } else {
+                    passthroughTransition.progress = Math.min((elapsed - delay) / drawDuration, 1);
+                }
+
+                if (elapsed >= totalDuration) {
+                    passthroughTransition.active = false;
+                }
+            } else {
+                // Exit animation - simple fade out over 400ms
+                const fadeOutDuration = 0.4;
+                passthroughTransition.progress = Math.min(elapsed / fadeOutDuration, 1);
+
+                if (passthroughTransition.progress >= 1) {
+                    passthroughTransition.active = false;
+                }
+            }
+        }
+
         // Draw unified battery visualization with integrated power flow
-        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, isPassthrough, transition);
+        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, isPassthrough, transition, passthroughTransition);
 
         // Draw power graph at bottom
         drawPowerGraph(ctx, width, height, powerHistoryRef.current);
@@ -233,7 +290,7 @@ function easeInCubic(x: number): number {
     return x * x * x;
 }
 
-function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, isPassthrough: boolean, transition: ACTransitionState) {
+function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, isPassthrough: boolean, transition: ACTransitionState, passthroughTransition: { active: boolean; direction: "enter" | "exit"; progress: number; startTime: number }) {
     const centerX = width / 2;
     const centerY = height * 0.38;
     const time = Date.now();
@@ -313,36 +370,91 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
             ctx.moveTo(inputX + 25, inputY);
             ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
             ctx.stroke();
-        } else if (isPassthrough) {
-            // Passthrough mode: draw angular line that goes around battery
+        } else if (isPassthrough || (passthroughTransition.active && passthroughTransition.direction === "exit")) {
+            // Passthrough mode OR exiting passthrough (fade out animation)
             const bypassY = centerY - batteryHeight * 0.75;
+            const isExiting = passthroughTransition.active && passthroughTransition.direction === "exit";
+            const isEntering = passthroughTransition.active && passthroughTransition.direction === "enter";
 
-            // Dim the line to battery
-            ctx.strokeStyle = "rgba(34, 197, 94, 0.15)";
-            ctx.lineWidth = 2;
-            ctx.setLineDash([4, 4]);
-            ctx.beginPath();
-            ctx.moveTo(inputX + 25, inputY);
-            ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
-            ctx.stroke();
-            ctx.setLineDash([]);
+            // Check if we're still in the delay phase (before line drawing starts) - only for entering
+            const elapsed = passthroughTransition.active ? (Date.now() - passthroughTransition.startTime) / 1000 : 1;
+            const delayPhase = 0.3;
+            const inDelayPhase = isEntering && elapsed < delayPhase;
 
-            // Draw passthrough line with angular path around battery (blue, 0.2 opacity)
-            ctx.strokeStyle = "rgba(59, 130, 246, 0.2)";
-            ctx.lineWidth = 3;
-            ctx.lineJoin = "round";
-            ctx.lineCap = "round";
-            ctx.beginPath();
-            ctx.moveTo(inputX + 25, inputY);
-            // Go straight then up
-            ctx.lineTo(batteryX - 15, inputY);
-            ctx.lineTo(batteryX - 15, bypassY);
-            // Go across the top
-            ctx.lineTo(batteryX + batteryWidth + tipWidth + 15, bypassY);
-            // Go down to system
-            ctx.lineTo(batteryX + batteryWidth + tipWidth + 15, outputY);
-            ctx.lineTo(outputX - 25, outputY);
-            ctx.stroke();
+            // During enter delay phase, don't draw any lines - wait
+            if (!inDelayPhase) {
+                // Calculate opacity for exit fade
+                const exitOpacity = isExiting ? 1 - easeOutCubic(passthroughTransition.progress) : 1;
+
+                // Dim the line to battery (dashed) - only if in passthrough, not during exit
+                if (!isExiting) {
+                    ctx.strokeStyle = "rgba(34, 197, 94, 0.15)";
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([4, 4]);
+                    ctx.beginPath();
+                    ctx.moveTo(inputX + 25, inputY);
+                    ctx.quadraticCurveTo(batteryX - 20, inputY, batteryX, inputY);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // Draw passthrough line with angular path around battery
+                // For enter: animate line drawing. For exit: fade out. For stable: full line.
+                let lineDrawProgress = 1;
+                if (isEntering) {
+                    lineDrawProgress = easeOutCubic(passthroughTransition.progress);
+                }
+
+                // Define the path segments
+                const pathSegments = [
+                    { x1: inputX + 25, y1: inputY, x2: batteryX - 15, y2: inputY },
+                    { x1: batteryX - 15, y1: inputY, x2: batteryX - 15, y2: bypassY },
+                    { x1: batteryX - 15, y1: bypassY, x2: batteryX + batteryWidth + tipWidth + 15, y2: bypassY },
+                    { x1: batteryX + batteryWidth + tipWidth + 15, y1: bypassY, x2: batteryX + batteryWidth + tipWidth + 15, y2: outputY },
+                    { x1: batteryX + batteryWidth + tipWidth + 15, y1: outputY, x2: outputX - 25, y2: outputY }
+                ];
+
+                // Calculate total path length
+                let totalLength = 0;
+                const segmentLengths: number[] = [];
+                for (const seg of pathSegments) {
+                    const len = Math.sqrt(Math.pow(seg.x2 - seg.x1, 2) + Math.pow(seg.y2 - seg.y1, 2));
+                    segmentLengths.push(len);
+                    totalLength += len;
+                }
+
+                // Draw the path up to the current animation progress
+                const targetLength = totalLength * lineDrawProgress;
+                let drawnLength = 0;
+
+                // Apply exit fade opacity
+                const baseOpacity = 0.2 * exitOpacity;
+                ctx.strokeStyle = `rgba(59, 130, 246, ${baseOpacity})`;
+                ctx.lineWidth = 3;
+                ctx.lineJoin = "round";
+                ctx.lineCap = "round";
+                ctx.beginPath();
+                ctx.moveTo(inputX + 25, inputY);
+
+                for (let i = 0; i < pathSegments.length && drawnLength < targetLength; i++) {
+                    const seg = pathSegments[i];
+                    const segLen = segmentLengths[i];
+                    const remainingLength = targetLength - drawnLength;
+
+                    if (remainingLength >= segLen) {
+                        ctx.lineTo(seg.x2, seg.y2);
+                        drawnLength += segLen;
+                    } else {
+                        const t = remainingLength / segLen;
+                        const partialX = seg.x1 + (seg.x2 - seg.x1) * t;
+                        const partialY = seg.y1 + (seg.y2 - seg.y1) * t;
+                        ctx.lineTo(partialX, partialY);
+                        drawnLength += remainingLength;
+                    }
+                }
+
+                ctx.stroke();
+            }
         } else {
             ctx.strokeStyle = "#22c55e";
             ctx.lineWidth = 3;
@@ -521,11 +633,20 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
     }
 
     // === BATTERY BODY ===
+    // Dim the battery when in passthrough mode (power bypasses battery)
+    ctx.save();
+    if (isPassthrough) {
+        ctx.globalAlpha = 0.4;
+    }
+
     // Outer glow based on state
     ctx.save();
     if (isCharging) {
         ctx.shadowColor = "rgba(34, 197, 94, 0.5)";
         ctx.shadowBlur = 25;
+    } else if (isPassthrough) {
+        ctx.shadowColor = "rgba(59, 130, 246, 0.15)";
+        ctx.shadowBlur = 8;
     } else if (percent < 20) {
         ctx.shadowColor = "rgba(239, 68, 68, 0.5)";
         ctx.shadowBlur = 18 + Math.sin(time / 200) * 6;
@@ -695,6 +816,9 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
         ctx.fill();
         ctx.restore();
     }
+
+    // Restore from passthrough dimming
+    ctx.restore();
 
     // === UPDATE AND DRAW PARTICLES ===
     // Define path waypoints for passthrough
