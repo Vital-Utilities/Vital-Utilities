@@ -99,6 +99,49 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                     const dieIdx = coresPerDie > 0 ? Math.floor(i / coresPerDie) : -1;
                                     const coreTemp = dieIdx >= 0 && dieIdx < dieTemps.length ? dieTemps[dieIdx].temp : undefined;
 
+                                    // Calculate temperature-based bar gradient colors
+                                    // Cool (30°C): blue/cyan, Warm (60°C): yellow/orange, Hot (90°C): orange/red
+                                    const getBarGradient = (temp: number | undefined) => {
+                                        if (temp === undefined) {
+                                            return "linear-gradient(to top, rgb(59, 130, 246), rgb(6, 182, 212))"; // default blue
+                                        }
+                                        const normalized = Math.min(Math.max((temp - 30) / 60, 0), 1);
+                                        if (normalized < 0.33) {
+                                            // Cool: blue to cyan
+                                            return "linear-gradient(to top, rgb(59, 130, 246), rgb(6, 182, 212))";
+                                        } else if (normalized < 0.66) {
+                                            // Warm: cyan to orange
+                                            return "linear-gradient(to top, rgb(6, 182, 212), rgb(251, 146, 60))";
+                                        } else {
+                                            // Hot: orange to red
+                                            return "linear-gradient(to top, rgb(251, 146, 60), rgb(239, 68, 68))";
+                                        }
+                                    };
+
+                                    const getBarGlow = (temp: number | undefined) => {
+                                        if (temp === undefined) return "0 0 12px rgba(59, 130, 246, 0.4)";
+                                        const normalized = Math.min(Math.max((temp - 30) / 60, 0), 1);
+                                        if (normalized < 0.33) {
+                                            return "0 0 12px rgba(59, 130, 246, 0.4)";
+                                        } else if (normalized < 0.66) {
+                                            return "0 0 12px rgba(251, 146, 60, 0.4)";
+                                        } else {
+                                            return "0 0 12px rgba(239, 68, 68, 0.5)";
+                                        }
+                                    };
+
+                                    const getTempTextColor = (temp: number | undefined) => {
+                                        if (temp === undefined) return "rgb(148, 163, 184)";
+                                        const normalized = Math.min(Math.max((temp - 30) / 60, 0), 1);
+                                        if (normalized < 0.33) {
+                                            return "rgb(6, 182, 212)"; // cyan
+                                        } else if (normalized < 0.66) {
+                                            return "rgb(251, 146, 60)"; // orange
+                                        } else {
+                                            return "rgb(239, 68, 68)"; // red
+                                        }
+                                    };
+
                                     return (
                                         <div key={i} className="flex flex-col items-center h-full flex-1 min-w-[24px]">
                                             <div className="flex-1 w-full rounded-lg overflow-hidden flex flex-col justify-end bg-secondary/20 relative">
@@ -111,17 +154,22 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                                     }}
                                                 />
                                                 <div
-                                                    className="w-full transition-all duration-500 ease-out bg-gradient-to-t from-primary to-accent"
+                                                    className="w-full transition-all duration-500 ease-out"
                                                     style={{
                                                         height: hasAnimated ? `${percentage}%` : "0%",
-                                                        boxShadow: "0 0 12px rgba(59, 130, 246, 0.4)",
+                                                        background: getBarGradient(coreTemp),
+                                                        boxShadow: getBarGlow(coreTemp),
                                                         borderRadius: percentage === 100 ? "0.5rem" : "0 0 0.5rem 0.5rem"
                                                     }}
                                                 />
                                             </div>
                                             <div className="text-[10px] text-muted-foreground mt-1.5 font-medium">{i}</div>
                                             <div className="text-[10px] text-foreground/70 font-mono">{percentage.toFixed(0)}%</div>
-                                            {coreTemp !== undefined && <div className="text-[9px] text-orange-400/80 font-mono">{truncate2(coreTemp)}°</div>}
+                                            {coreTemp !== undefined && (
+                                                <div className="text-[9px] font-mono" style={{ color: getTempTextColor(coreTemp) }}>
+                                                    {Math.round(coreTemp)}°
+                                                </div>
+                                            )}
                                         </div>
                                     );
                                 })}

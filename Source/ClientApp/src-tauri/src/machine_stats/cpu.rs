@@ -22,7 +22,6 @@ pub async fn get_cpu_util(
     // Try systemstat first (works well on Windows/Linux)
     if let Ok(temp) = sysstat.cpu_temp() {
         temperature_readings.insert("CPU Package".to_string(), temp as f32);
-        log::info!("CPU temp from systemstat: {}°C", temp);
     }
 
     // On macOS, use sysinfo Components for temperature sensors
@@ -31,23 +30,12 @@ pub async fn get_cpu_util(
         if temperature_readings.is_empty() {
             let components = Components::new_with_refreshed_list();
 
-            // Log all available components
-            log::info!("Available temperature sensors:");
-            for component in &components {
-                if let Some(temp) = component.temperature() {
-                    log::info!("  '{}' = {}°C", component.label(), temp);
-                } else {
-                    log::info!("  '{}' = N/A", component.label());
-                }
-            }
-
             for component in &components {
                 let label = component.label().to_lowercase();
                 if label.contains("cpu") || label.contains("core") || label.contains("die") || label.contains("peci") || label.contains("soc") {
                     if let Some(temp) = component.temperature() {
                         if !temp.is_nan() {
                             temperature_readings.insert(component.label().to_string(), temp);
-                            log::info!("Found CPU temp '{}': {}°C", component.label(), temp);
                         }
                     }
                 }
@@ -59,15 +47,10 @@ pub async fn get_cpu_util(
                     if let Some(temp) = component.temperature() {
                         if !temp.is_nan() {
                             temperature_readings.insert("CPU Package".to_string(), temp);
-                            log::info!("Using '{}' as CPU temp: {}°C", component.label(), temp);
                             break;
                         }
                     }
                 }
-            }
-
-            if temperature_readings.is_empty() {
-                log::warn!("No CPU temperature sensors found on macOS");
             }
         }
     }
@@ -77,6 +60,12 @@ pub async fn get_cpu_util(
     let first_cpu = sysinfo.cpus().first();
     let total_usage = sysinfo.global_cpu_usage();
 
+    // Get system power consumption on macOS
+    #[cfg(target_os = "macos")]
+    let power_draw_wattage = get_system_power_watts();
+    #[cfg(not(target_os = "macos"))]
+    let power_draw_wattage: Option<f32> = None;
+
     Box::new(CpuUsage {
         name: get_name(first_cpu),
         cpu_cache: None,
@@ -84,7 +73,7 @@ pub async fn get_cpu_util(
         vendor_id: first_cpu.map(|c| c.vendor_id().to_string()),
         core_clocks_mhz,
         total_core_percentage: truncate_two_precision(total_usage),
-        power_draw_wattage: None,
+        power_draw_wattage,
         core_percentages,
         temperature_readings: temperature_readings.clone(),
     })
@@ -99,6 +88,42 @@ fn get_name(_info: Option<&Cpu>) -> String {
 
     let cpu_name = str::from_utf8(&output.stdout).expect("Output was not valid UTF-8");
     cpu_name.trim().to_string()
+}
+
+/// Get system power consumption in watts from macOS ioreg
+/// Returns SystemPowerIn from PowerTelemetryData (in milliwatts, converted to watts)
+#[cfg(target_os = "macos")]
+fn get_system_power_watts() -> Option<f32> {
+    let output = Command::new("ioreg")
+        .args(["-r", "-c", "AppleSmartBattery", "-d", "1"])
+        .output()
+        .ok()?;
+
+    if !output.status.success() {
+        return None;
+    }
+
+    let output_str = str::from_utf8(&output.stdout).ok()?;
+
+    // First, find PowerTelemetryData section which contains SystemPowerIn
+    // Format is: "PowerTelemetryData" = {...,"SystemPowerIn"=10631,...}
+    if let Some(telemetry_start) = output_str.find("\"PowerTelemetryData\"") {
+        let telemetry_section = &output_str[telemetry_start..];
+
+        // Look for "SystemPowerIn"=<number> within PowerTelemetryData
+        if let Some(power_start) = telemetry_section.find("\"SystemPowerIn\"=") {
+            let after_key = &telemetry_section[power_start + 16..]; // Skip past "SystemPowerIn"=
+            // Find where the number ends (comma or closing brace)
+            let end = after_key.find(|c: char| c == ',' || c == '}').unwrap_or(after_key.len());
+            let value_str = &after_key[..end];
+            if let Ok(milliwatts) = value_str.parse::<f32>() {
+                // Convert milliwatts to watts, round to 1 decimal
+                return Some((milliwatts / 100.0).round() / 10.0);
+            }
+        }
+    }
+
+    None
 }
 
 #[cfg(target_os = "windows")]

@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use crate::models::{
     CpuData, CpuUsage, CpuUsageMetricModel, DiskUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
     GetMachineStaticDataResponse, GpuData, GpuUsage, GpuUsageMetricModel, MemoryUsage,
-    NetworkAdapterUsages, ParentChildModelDto, RamData,
+    NetworkAdapterUsages, ParentChildModelDto, PowerUsage, RamData,
     RamUsageMetricModel, TimeSeriesMachineMetricsModel, TimeSeriesMachineMetricsResponse, DateRange,
 };
 
@@ -23,6 +23,8 @@ pub struct MachineDataStore {
     pub disk_usage: DashMap<String, DiskUsages>,
     /// Current network usage data
     pub network_usage: DashMap<String, NetworkAdapterUsages>,
+    /// Current power/battery usage data
+    pub power_usage: DashMap<String, PowerUsage>,
     /// Process CPU usage (PID -> percentage)
     pub process_cpu_usage: DashMap<i32, f32>,
     /// Process RAM usage in bytes (PID -> bytes)
@@ -52,6 +54,7 @@ impl MachineDataStore {
             gpu_usage: DashMap::new(),
             disk_usage: DashMap::new(),
             network_usage: DashMap::new(),
+            power_usage: DashMap::new(),
             process_cpu_usage: DashMap::new(),
             process_ram_usage: DashMap::new(),
             process_disk_activity: DashMap::new(),
@@ -78,15 +81,18 @@ impl MachineDataStore {
             "Unknown CPU".to_string()
         };
 
+        // Get cache sizes (platform-specific)
+        let (l1_cache_size, l2_cache_size, l3_cache_size) = get_cpu_cache_sizes();
+
         let cpu_data = CpuData {
             name: cpu_name,
             number_of_enabled_core: physical_core_count,
             number_of_cores: physical_core_count,
             thread_count: logical_core_count,
             virtualization_firmware_enabled: false,
-            l1_cache_size: 0,
-            l2_cache_size: 0,
-            l3_cache_size: 0,
+            l1_cache_size,
+            l2_cache_size,
+            l3_cache_size,
         };
 
         self.static_cpu.insert("default".to_string(), cpu_data);
@@ -149,6 +155,11 @@ impl MachineDataStore {
     /// Update network usage data
     pub fn update_network(&self, network: NetworkAdapterUsages) {
         self.network_usage.insert("default".to_string(), network);
+    }
+
+    /// Update power/battery usage data
+    pub fn update_power(&self, power: PowerUsage) {
+        self.power_usage.insert("default".to_string(), power);
     }
 
     /// Update process metrics
@@ -214,6 +225,11 @@ impl MachineDataStore {
             .get("default")
             .map(|r| r.value().clone());
 
+        let power_usage_data = self
+            .power_usage
+            .get("default")
+            .map(|r| r.value().clone());
+
         let process_cpu_usage: HashMap<i32, f32> = self
             .process_cpu_usage
             .iter()
@@ -253,6 +269,7 @@ impl MachineDataStore {
             },
             disk_usages,
             network_usage_data,
+            power_usage_data,
             process_cpu_usage: if process_cpu_usage.is_empty() {
                 None
             } else {
@@ -462,4 +479,54 @@ impl Default for MachineDataStore {
     fn default() -> Self {
         Self::new()
     }
+}
+
+/// Get CPU cache sizes (L1, L2, L3) in KB
+/// Returns (l1_kb, l2_kb, l3_kb)
+fn get_cpu_cache_sizes() -> (u64, u64, u64) {
+    #[cfg(target_os = "macos")]
+    {
+        get_cpu_cache_sizes_macos()
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        (0, 0, 0)
+    }
+}
+
+#[cfg(target_os = "macos")]
+fn get_cpu_cache_sizes_macos() -> (u64, u64, u64) {
+    use std::process::Command;
+
+    fn get_sysctl_value(key: &str) -> Option<u64> {
+        let output = Command::new("sysctl")
+            .arg("-n")
+            .arg(key)
+            .output()
+            .ok()?;
+
+        if output.status.success() {
+            let value_str = std::str::from_utf8(&output.stdout).ok()?.trim();
+            value_str.parse::<u64>().ok()
+        } else {
+            None
+        }
+    }
+
+    // Apple Silicon uses different sysctl keys than Intel
+    // Try Apple Silicon keys first, then Intel keys
+
+    // L1 instruction + data cache (Apple Silicon reports per-core, we want total per core)
+    let l1_size = get_sysctl_value("hw.l1icachesize")
+        .or_else(|| get_sysctl_value("hw.l1dcachesize"))
+        .unwrap_or(0);
+
+    // L2 cache
+    let l2_size = get_sysctl_value("hw.l2cachesize").unwrap_or(0);
+
+    // L3 cache (may not exist on all Apple Silicon chips)
+    let l3_size = get_sysctl_value("hw.l3cachesize").unwrap_or(0);
+
+    // Convert bytes to KB
+    (l1_size / 1024, l2_size / 1024, l3_size / 1024)
 }

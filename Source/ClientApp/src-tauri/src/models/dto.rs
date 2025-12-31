@@ -350,6 +350,43 @@ pub struct NetworkAdapterProperties {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct PowerUsage {
+    /// Whether a battery is installed
+    pub battery_installed: bool,
+    /// Current battery charge percentage (0-100)
+    pub battery_percentage: Option<f32>,
+    /// Whether the battery is fully charged
+    pub fully_charged: bool,
+    /// Whether external power is connected
+    pub external_connected: bool,
+    /// Current system power consumption in watts
+    pub system_power_watts: Option<f32>,
+    /// Current battery power in/out in watts (positive = charging, negative = discharging)
+    pub battery_power_watts: Option<f32>,
+    /// Battery voltage in volts
+    pub battery_voltage: Option<f32>,
+    /// Battery current in milliamps (positive = charging, negative = discharging)
+    pub battery_amperage: Option<i32>,
+    /// Battery cycle count
+    pub cycle_count: Option<i32>,
+    /// Design capacity in mAh
+    pub design_capacity_mah: Option<i32>,
+    /// Current max capacity in mAh
+    pub max_capacity_mah: Option<i32>,
+    /// Battery health percentage (max_capacity / design_capacity * 100)
+    pub battery_health: Option<f32>,
+    /// Time remaining in minutes (-1 = calculating, 0 = unlimited/charging)
+    pub time_remaining_minutes: Option<i32>,
+    /// Adapter wattage
+    pub adapter_watts: Option<i32>,
+    /// Adapter voltage in volts
+    pub adapter_voltage: Option<f32>,
+    /// Adapter description (e.g., "pd charger")
+    pub adapter_description: Option<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct IpInterfaceProperties {
     #[serde(rename = "iPv4Address")]
     pub ipv4_address: Option<String>,
@@ -416,6 +453,7 @@ pub struct GetMachineDynamicDataResponse {
     pub gpu_usage_data: Option<Vec<GpuUsage>>,
     pub disk_usages: Option<DiskUsages>,
     pub network_usage_data: Option<NetworkAdapterUsages>,
+    pub power_usage_data: Option<PowerUsage>,
     pub process_cpu_usage: Option<HashMap<i32, f32>>,
     pub process_cpu_threads_usage: Option<HashMap<i32, f32>>,
     pub process_thread_count: Option<HashMap<i32, f32>>,

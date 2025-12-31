@@ -671,7 +671,13 @@ export interface GetMachineDynamicDataResponse {
      */
     'networkUsageData'?: NetworkAdapterUsages;
     /**
-     * 
+     *
+     * @type {PowerUsage}
+     * @memberof GetMachineDynamicDataResponse
+     */
+    'powerUsageData'?: PowerUsage;
+    /**
+     *
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
@@ -1504,7 +1510,110 @@ export interface ProcessGpuUtil {
     'gpuDecodingPercentage'?: number;
 }
 /**
- * 
+ * Power and battery usage data
+ * @export
+ * @interface PowerUsage
+ */
+export interface PowerUsage {
+    /**
+     * Whether a battery is installed
+     * @type {boolean}
+     * @memberof PowerUsage
+     */
+    'batteryInstalled': boolean;
+    /**
+     * Current battery charge percentage (0-100)
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'batteryPercentage'?: number;
+    /**
+     * Whether the battery is fully charged
+     * @type {boolean}
+     * @memberof PowerUsage
+     */
+    'fullyCharged': boolean;
+    /**
+     * Whether external power is connected
+     * @type {boolean}
+     * @memberof PowerUsage
+     */
+    'externalConnected': boolean;
+    /**
+     * Current system power consumption in watts
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'systemPowerWatts'?: number;
+    /**
+     * Current battery power in/out in watts
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'batteryPowerWatts'?: number;
+    /**
+     * Battery voltage in volts
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'batteryVoltage'?: number;
+    /**
+     * Battery current in milliamps
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'batteryAmperage'?: number;
+    /**
+     * Battery cycle count
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'cycleCount'?: number;
+    /**
+     * Design capacity in mAh
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'designCapacityMah'?: number;
+    /**
+     * Current max capacity in mAh
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'maxCapacityMah'?: number;
+    /**
+     * Battery health percentage
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'batteryHealth'?: number;
+    /**
+     * Time remaining in minutes
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'timeRemainingMinutes'?: number;
+    /**
+     * Adapter wattage
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'adapterWatts'?: number;
+    /**
+     * Adapter voltage in volts
+     * @type {number}
+     * @memberof PowerUsage
+     */
+    'adapterVoltage'?: number;
+    /**
+     * Adapter description
+     * @type {string}
+     * @memberof PowerUsage
+     */
+    'adapterDescription'?: string;
+}
+/**
+ *
  * @export
  * @enum {string}
  */

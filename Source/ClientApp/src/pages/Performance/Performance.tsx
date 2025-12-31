@@ -17,6 +17,7 @@ import { ClassicCpuChartView } from "./Classic/ClassicCpuView";
 import { ClassicDiskView } from "./Classic/ClassicDiskView";
 import { ClassicGpuView } from "./Classic/ClassicGpuView";
 import { ClassicNetworkAdapterView } from "./Classic/ClassicNetworkAdapterView";
+import { ClassicPowerView } from "./Classic/ClassicPowerView";
 import { ClassicRamView } from "./Classic/ClassicRamView";
 import "./performance.scss";
 import { ChevronUp, ChevronDown } from "lucide-react";
@@ -290,6 +291,20 @@ export const PerformancePage: React.FunctionComponent = props => {
                                         />
                                     );
                                 })}
+                        {/* Power/Battery - only show on devices with battery */}
+                        {dynamicState?.powerUsageData?.batteryInstalled && (
+                            <ClassicNavItem
+                                key="Power"
+                                Key="Power"
+                                title="Power"
+                                selectedKey={classicViewProps.selectedKey}
+                                onClick={() => {
+                                    setClassicViewProps({ ...classicViewProps, selectedKey: "Power" });
+                                }}
+                                stat={dynamicState?.powerUsageData?.systemPowerWatts ? `${dynamicState.powerUsageData.systemPowerWatts.toFixed(1)}W ${dynamicState.powerUsageData.batteryPercentage?.toFixed(0) ?? "--"}%` : `${dynamicState?.powerUsageData?.batteryPercentage?.toFixed(0) ?? "--"}%`}
+                                type="power"
+                            />
+                        )}
                     </div>
 
                     {getClassicContent()}
@@ -316,6 +331,8 @@ export const PerformancePage: React.FunctionComponent = props => {
                     <ClassicDiskView {...chartable} driveLetter={classicViewProps.driveLetter!} />
                 ) : classicViewProps.selectedKey.includes("NetAdapter") && classicViewProps.macAddress ? (
                     <ClassicNetworkAdapterView {...chartable} macAddress={classicViewProps.macAddress} />
+                ) : classicViewProps.selectedKey === "Power" ? (
+                    <ClassicPowerView />
                 ) : (
                     <></>
                 )}
@@ -618,7 +635,7 @@ export const PerformancePage: React.FunctionComponent = props => {
     }
 };
 
-type InterfaceDetailsProps = "cpu" | "gpu" | "memory" | "network" | "disk";
+type InterfaceDetailsProps = "cpu" | "gpu" | "memory" | "network" | "disk" | "power";
 
 const InterfaceDetails: React.FunctionComponent<{ children?: React.ReactNode }> = props => {
     return <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "1.25rem", marginBottom: "1.25rem" }}>{props.children}</div>;
@@ -637,6 +654,8 @@ const ClassicNavItem: React.FunctionComponent<{ selectedKey: string; Key: string
                 return "#22c55e"; // green-500
             case "network":
                 return "#f97316"; // orange-500
+            case "power":
+                return "#eab308"; // yellow-500
             default:
                 return "#6b7280";
         }

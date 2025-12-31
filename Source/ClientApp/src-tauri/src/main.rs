@@ -239,7 +239,7 @@ async fn initialize_backend(handle: AppHandle) {
 /// Main metrics collection loop
 /// Collects hardware and software metrics and updates the machine data store
 async fn run_collector(machine_store: Arc<MachineDataStore>) {
-    use crate::machine_stats::{cpu, disk, gpu, memory, net};
+    use crate::machine_stats::{cpu, disk, gpu, memory, net, power};
     use systemstat::Platform; // Import Platform trait for System::new()
 
     static SECOND: Duration = Duration::from_millis(1000);
@@ -310,16 +310,17 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
         let time = chrono::Utc::now();
 
         // Collect all metrics in parallel
-        let (cpu_util, mem_util, _net_util, disk_usage, gpu_usage) = join!(
+        let (cpu_util, mem_util, _net_util, disk_usage, gpu_usage, power_info) = join!(
             cpu::get_cpu_util(&sys_info, &sys_stat),
             memory::get_mem_util(&sys_info),
             net::get_net_adapters(),
             disk::get_disk_util(&sys_info),
             gpu::get_gpu_util(&nvml),
+            power::get_power_info(),
         );
 
         // Convert to our DTO types and update store
-        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, disk_usage, &sys_info, time);
+        update_machine_store(&machine_store, cpu_util, mem_util, gpu_usage, disk_usage, power_info, &sys_info, time);
 
         // Sleep for remaining time to maintain ~1-second interval
         if let Ok(elapsed) = start.elapsed() {
@@ -340,6 +341,7 @@ fn update_machine_store(
     mem_util: vital_service_api::models::MemoryUsage,
     gpu_usage: Vec<vital_service_api::models::GpuUsage>,
     disk_usage: Box<std::collections::HashMap<String, vital_service_api::models::DiskUsage>>,
+    power_info: crate::machine_stats::power::PowerUsage,
     sys_info: &sysinfo::System,
     _time: chrono::DateTime<chrono::Utc>,
 ) {
@@ -436,6 +438,27 @@ fn update_machine_store(
         })
         .collect();
     store.update_disks(models::DiskUsages { disks });
+
+    // Convert power/battery data
+    let power = models::PowerUsage {
+        battery_installed: power_info.battery_installed,
+        battery_percentage: power_info.battery_percentage,
+        fully_charged: power_info.fully_charged,
+        external_connected: power_info.external_connected,
+        system_power_watts: power_info.system_power_watts,
+        battery_power_watts: power_info.battery_power_watts,
+        battery_voltage: power_info.battery_voltage,
+        battery_amperage: power_info.battery_amperage,
+        cycle_count: power_info.cycle_count,
+        design_capacity_mah: power_info.design_capacity_mah,
+        max_capacity_mah: power_info.max_capacity_mah,
+        battery_health: power_info.battery_health,
+        time_remaining_minutes: power_info.time_remaining_minutes,
+        adapter_watts: power_info.adapter_watts,
+        adapter_voltage: power_info.adapter_voltage,
+        adapter_description: power_info.adapter_description,
+    };
+    store.update_power(power);
 
     // Collect and update running processes
     // Build a map of all processes first
