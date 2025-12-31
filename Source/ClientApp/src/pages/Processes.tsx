@@ -336,8 +336,8 @@ export const Processes: React.FunctionComponent = () => {
     }
     return (
         <>
-            <div id="view-header" className="view-header">
-                <Input placeholder="Search" style={{ width: 200, marginRight: 20 }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
+            <div id="view-header" className="view-header" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", padding: "1rem 1.25rem", height: "4rem", flexShrink: 0 }}>
+                <Input placeholder="Search" style={{ width: 200, marginRight: "1.25rem" }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
                 <div className="flex items-center gap-2">
                     <Checkbox id="show-all-processes" checked={showAllProcess} onCheckedChange={() => setShowAllProcess(!showAllProcess)} />
                     <Label htmlFor="show-all-processes">Show all Processes</Label>
