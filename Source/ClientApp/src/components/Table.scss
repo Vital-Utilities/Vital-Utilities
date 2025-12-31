@@ -30,6 +30,11 @@
             color: var(--foreground);
             padding: 12px 16px;
             user-select: none;
+            font-size: 0.8125rem;
+        }
+
+        td {
+            font-family: var(--font-mono);
         }
 
         th {

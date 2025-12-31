@@ -19,7 +19,7 @@ import { ClassicGpuView } from "./Classic/ClassicGpuView";
 import { ClassicNetworkAdapterView } from "./Classic/ClassicNetworkAdapterView";
 import { ClassicRamView } from "./Classic/ClassicRamView";
 import "./performance.scss";
-import { ChevronUp, ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -76,7 +76,7 @@ export const PerformancePage: React.FunctionComponent = props => {
     const [pauseTime, setPauseTime] = React.useState(false);
     const [updateRate, setUpdateRate] = React.useState<number>(0);
     const [chartable, setChartable] = React.useState<ChartData>();
-    const [classicCpuGraphView, setClassicCpuGraphView] = useLocalStorageState<"Overall" | "Logical">("classicCpuGraphView", { defaultValue: "Overall" });
+    const [classicCpuGraphView, setClassicCpuGraphView] = useLocalStorageState<"Overall" | "Logical">("classicCpuGraphView", { defaultValue: "Logical" });
     const [classicViewProps, setClassicViewProps] = React.useState<{ selectedKey: string; driveLetter?: string; macAddress?: string; gpuNumber?: number }>({ selectedKey: "CPU" });
 
     useEffect(() => {
@@ -630,49 +630,33 @@ const InterfaceDetails: React.FunctionComponent<{ children?: React.ReactNode }> 
 };
 
 const ClassicNavItem: React.FunctionComponent<{ selectedKey: string; Key: string; type: InterfaceDetailsProps; title: string; detail?: string; stat?: React.ReactNode; onClick?: () => void }> = props => {
-    function getRender() {
-        switch (props.type) {
-            case "cpu":
-            case "memory":
-            case "gpu":
-            case "disk":
-            case "network":
-                return (
-                    <>
-                        <div>
-                            <h4>{props.title}</h4>
-                            {props.detail && <div style={{ fontSize: "90%" }}>{props.detail}</div>}
-                            {props.stat && <div style={{ fontSize: "90%" }}>{props.stat}</div>}
-                        </div>
-                    </>
-                );
-            default:
-                return null;
-        }
-    }
     function getColor() {
         switch (props.type) {
             case "gpu":
-                return "#bf82d3";
+                return "#a855f7"; // purple-500
             case "cpu":
-                return "lightBlue";
+                return "#3b82f6"; // blue-500
             case "memory":
-                return "pink";
+                return "#ec4899"; // pink-500
             case "disk":
-                return "green";
+                return "#22c55e"; // green-500
             case "network":
-                return "orange";
+                return "#f97316"; // orange-500
             default:
-                return "black";
+                return "#6b7280";
         }
     }
-    <div style={{ width: "20%" }}></div>;
+
+    const isSelected = props.selectedKey === props.Key;
+
     return (
-        <div className={`category${props.selectedKey === props.Key ? " selected" : ""}`} onClick={props.onClick}>
-            <div style={{ display: "grid", placeContent: "center" }}>
-                <ChevronRight key={"1"} style={{ color: getColor() }} className="h-4 w-4" />
+        <div className={`nav-item${isSelected ? " selected" : ""}`} onClick={props.onClick}>
+            <div className="nav-item-header">
+                <div className="nav-item-icon" style={{ backgroundColor: getColor() }} />
+                <span className="nav-item-title">{props.title}</span>
             </div>
-            {getRender()}
+            {props.detail && <div className="nav-item-detail">{props.detail}</div>}
+            {props.stat && <div className="nav-item-stat">{props.stat}</div>}
         </div>
     );
 };

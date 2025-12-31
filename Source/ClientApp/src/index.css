@@ -62,6 +62,9 @@ code {
 :root {
   --radius: 0.625rem;
 
+  /* Typography */
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
   /* Backgrounds - neutral dark grays */
   --background: #0c0c0c;
   --foreground: #fafafa;

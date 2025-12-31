@@ -81,38 +81,39 @@ export const ClassicTooltip: React.FunctionComponent<TooltipProps<any, any>> = p
 
 export const ClassicLayout: React.FunctionComponent<{ header: { title: string; deviceName?: string }; graph: React.ReactNode; showRange?: boolean; bottomItems: React.ReactNode }> = props => {
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-            <div className="header" style={{ display: "flex", marginBottom: "0.5em", justifyContent: "space-between" }}>
-                <h1>{props.header.title}</h1>
-                <div style={{ fontSize: 16, alignSelf: "center", textOverflow: "scale" }}>{props.header.deviceName}</div>
-                {/* {props.showExpand && <ArrowsAltOutlined style={{ float: "right", justifySelf: "right", cursor: "pointer" }} />} */}
+        <div style={{ display: "grid", gridTemplateRows: "1fr 180px", height: "100%", padding: "0.5rem 1rem", overflow: "hidden" }}>
+            <div style={{ display: "flex", flexDirection: "column", minHeight: 0 }}>
+                <div className="header" style={{ display: "flex", marginBottom: "0.75rem", justifyContent: "space-between", alignItems: "center" }}>
+                    <h1 style={{ margin: 0 }}>{props.header.title}</h1>
+                    <div style={{ fontSize: 14, color: "var(--muted-foreground)", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>{props.header.deviceName}</div>
+                </div>
+                <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
+                    {props.graph}
+                    {props.showRange && (
+                        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--muted-foreground)", padding: "0 0.25rem" }}>
+                            <div>60s</div>
+                            <div>0</div>
+                        </div>
+                    )}
+                </div>
             </div>
-            <div style={{ flex: "1 1 auto", minHeight: "15vh" }}>{props.graph}</div>
-            <div style={{ display: "flex", marginBottom: "0.5em", justifyContent: "space-between", height: 50 }}>
-                {props.showRange && (
-                    <>
-                        <div>60s</div>
-                        <div>0</div>
-                    </>
-                )}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr minmax(200px, 400px)", gap: "1rem", paddingRight: "2rem" }}>{props.bottomItems}</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr minmax(200px, 400px)", gap: "1rem", paddingRight: "2rem", paddingTop: "1rem", overflowY: "auto" }}>{props.bottomItems}</div>
         </div>
     );
 };
 export const ItemOne: React.FunctionComponent<{ color?: string; title: string; value?: string | number }> = props => {
     return (
-        <div style={{ color: props.color, minWidth: 100 }}>
-            <h4 style={{ color: "inherit" }}>{props.title}</h4>
-            <h2 style={{ color: "inherit" }}>{props.value}</h2>
+        <div style={{ minWidth: 100 }}>
+            <div style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", marginBottom: "0.25rem" }}>{props.title}</div>
+            <div style={{ fontSize: "1.25rem", fontWeight: 500, color: props.color ?? "var(--foreground)", fontFamily: "var(--font-mono)" }}>{props.value}</div>
         </div>
     );
 };
 export const ItemTwo: React.FunctionComponent<{ title: string; value: string | number | undefined }> = props => {
     return (
-        <div style={{ display: "grid", gridTemplateColumns: "50% 50%" }}>
-            <div>{props.title}</div>
-            <div>{props.value}</div>
+        <div style={{ display: "grid", gridTemplateColumns: "50% 50%", fontSize: "0.75rem", padding: "0.125rem 0" }}>
+            <div style={{ color: "var(--muted-foreground)" }}>{props.title}</div>
+            <div style={{ color: "var(--foreground)", fontFamily: "var(--font-mono)" }}>{props.value}</div>
         </div>
     );
 };

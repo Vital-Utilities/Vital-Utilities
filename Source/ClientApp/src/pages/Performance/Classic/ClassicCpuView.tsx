@@ -10,6 +10,7 @@ import { VitalState } from "../../../Redux/States";
 
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {
     const [ordered, setOrdered] = React.useState<CpuMetricsModel[]>();
+    const [hasAnimated, setHasAnimated] = React.useState(false);
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const threads = staticState?.cpu?.threadCount ?? 0;
@@ -21,6 +22,14 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
         const f = props.metrics.map(e => e.cpuMetrics[0]);
         setOrdered(f ?? []);
     }, [props.metrics]);
+
+    // Trigger animation after first render
+    React.useEffect(() => {
+        if (props.graphView === "Logical" && !hasAnimated) {
+            const timer = setTimeout(() => setHasAnimated(true), 50);
+            return () => clearTimeout(timer);
+        }
+    }, [props.graphView, hasAnimated]);
 
     const current = ordered?.[ordered.length - 1];
 
@@ -72,15 +81,16 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                                                 <div
                                                     className="absolute w-full h-[2px] bg-white/60 z-10 transition-all duration-500 ease-out"
                                                     style={{
-                                                        bottom: `${coreAvg}%`,
-                                                        opacity: coreAvg > 0 ? 1 : 0
+                                                        bottom: hasAnimated ? `${coreAvg}%` : "0%",
+                                                        opacity: hasAnimated && coreAvg > 0 ? 1 : 0
                                                     }}
                                                 />
                                                 <div
-                                                    className="w-full rounded-lg transition-all duration-500 ease-out bg-gradient-to-t from-primary to-accent"
+                                                    className="w-full transition-all duration-500 ease-out bg-gradient-to-t from-primary to-accent"
                                                     style={{
-                                                        height: `${percentage}%`,
-                                                        boxShadow: "0 0 12px rgba(59, 130, 246, 0.4)"
+                                                        height: hasAnimated ? `${percentage}%` : "0%",
+                                                        boxShadow: "0 0 12px rgba(59, 130, 246, 0.4)",
+                                                        borderRadius: percentage === 100 ? "0.5rem" : "0 0 0.5rem 0.5rem"
                                                     }}
                                                 />
                                             </div>
