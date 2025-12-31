@@ -332,7 +332,17 @@ impl MachineDataStore {
         earliest: DateTime<Utc>,
         latest: DateTime<Utc>,
     ) -> TimeSeriesMachineMetricsResponse {
+        log::info!("get_metrics: requested range {} to {}", earliest, latest);
+        log::info!("get_metrics: cache has {} entries", self.metrics_cache.len());
+
+        // Debug: show what timestamps are in the cache
+        if self.metrics_cache.len() > 0 {
+            let timestamps: Vec<_> = self.metrics_cache.iter().take(3).map(|r| r.key().to_string()).collect();
+            log::info!("get_metrics: sample cache timestamps: {:?}", timestamps);
+        }
+
         let mut metrics = self.get_metrics_from_cache(earliest, latest);
+        log::info!("get_metrics: found {} matching metrics", metrics.len());
 
         // Sort by timestamp
         metrics.sort_by(|a, b| a.date_time_offset.cmp(&b.date_time_offset));
@@ -348,7 +358,11 @@ impl MachineDataStore {
 
     /// Create current metrics snapshot for storage
     pub fn create_current_snapshot(&self) -> TimeSeriesMachineMetricsModel {
-        let cpu_data = self.cpu_usage.get("default").map(|cpu| {
+        let cpu_ref = self.cpu_usage.get("default");
+        log::info!("create_current_snapshot: cpu_usage.get('default') = {:?}", cpu_ref.is_some());
+
+        let cpu_data = cpu_ref.map(|cpu| {
+            log::info!("  CPU data: total_core_percentage={}", cpu.total_core_percentage);
             vec![CpuUsageMetricModel {
                 id: None,
                 unique_identifier: Some("cpu0".to_string()),
@@ -371,6 +385,7 @@ impl MachineDataStore {
                 ),
             }]
         });
+        log::info!("  cpu_data result: {:?}", cpu_data.as_ref().map(|v| v.len()));
 
         let ram_data = self.memory_usage.get("default").map(|mem| RamUsageMetricModel {
             id: None,

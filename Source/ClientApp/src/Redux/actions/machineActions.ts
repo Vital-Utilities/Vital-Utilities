@@ -36,7 +36,14 @@ export function fetchMachineTimeSeriesDataAction(message: GetMachineTimeSeriesRe
     return function (dispatch) {
         return systemApi
             .getTimeseries(message)
-            .then(result => dispatch(recieveMachineTimeSeriesData(result)))
+            .then(result => {
+                console.log("fetchMachineTimeSeriesDataAction result:", result);
+                console.log("  metrics count:", result?.metrics?.length);
+                if (result?.metrics?.[0]) {
+                    console.log("  first metric cpuUsageData:", result.metrics[0].cpuUsageData);
+                }
+                dispatch(recieveMachineTimeSeriesData(result));
+            })
             .catch(e => console.error(e));
     };
 }

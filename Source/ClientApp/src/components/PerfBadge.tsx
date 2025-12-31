@@ -73,7 +73,7 @@ export const ProcessorCoresUsageGraphic: React.FunctionComponent = () => {
 
 export const CpuPerfBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData[0]?.totalCoreUsagePercentage ?? undefined;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData?.[0]?.totalCoreUsagePercentage ?? undefined;
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>
             Cpu
@@ -92,7 +92,7 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
 };
 export const GpuPerfBadge: React.FunctionComponent = () => {
     const timeSeriesMetrics = useSelector<VitalState, TimeSeriesMachineMetricsResponse | undefined>(state => state.machineState?.timeSeriesMetricsState);
-    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.gpuUsageData[0]?.coreUsagePercentage ?? undefined;
+    const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.gpuUsageData?.[0]?.coreUsagePercentage ?? undefined;
 
     return (
         <div style={{ width: 130, display: "flex", alignItems: "center" }}>

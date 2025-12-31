@@ -114,23 +114,8 @@ fn main() {
                 panic!("Failed to get window");
             }
 
-            let always_on_top = match get_client_settings() {
-                Ok(settings) => settings.always_on_top,
-                Err(e) => {
-                    error!("Failed to get client settings: {}", e);
-                    false
-                }
-            };
-
-            let result = window.unwrap().set_always_on_top(always_on_top);
-            match result {
-                Ok(_) => {
-                    debug!("Set always on top to: {}", always_on_top);
-                }
-                Err(e) => {
-                    error!("Failed to set always on top: {}", e);
-                }
-            }
+            // Always on top is permanently disabled
+            let _ = window.unwrap().set_always_on_top(false);
 
             // Set up system tray
             setup_tray(app)?;
@@ -274,7 +259,7 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
     let sys_stat = systemstat::System::new();
     let mut sys_info = sysinfo::System::new_all();
     sys_info.refresh_all();
-    std::thread::sleep(SECOND);
+    tokio::time::sleep(SECOND).await;
 
     // Initialize static CPU data (only needs to be done once)
     machine_store.init_static_cpu(&sys_info);
@@ -341,10 +326,11 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
             log::debug!("Metrics collection took: {:?}", elapsed);
 
             // Sleep for remaining time to maintain ~1-second interval
+            // Use tokio::time::sleep instead of std::thread::sleep to avoid blocking the async runtime
             if elapsed.as_millis() < SECOND.as_millis() {
-                std::thread::sleep(Duration::from_millis(
+                tokio::time::sleep(Duration::from_millis(
                     (SECOND.as_millis() - elapsed.as_millis()) as u64,
-                ));
+                )).await;
             }
         }
     }
@@ -374,6 +360,7 @@ fn update_machine_store(
         cpu_cache: None,
         temperature_readings: cpu_util.temperature_readings.clone().into_iter().collect(),
     };
+    log::info!("CPU update: total_core_percentage={}, core_count={}", cpu.total_core_percentage, cpu.core_percentages.len());
     store.update_cpu(cpu);
 
     // Convert memory usage
@@ -485,15 +472,6 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
     // Create menu items
     let show_i = MenuItem::with_id(app, "show", "Show", true, None::<&str>)?;
     let hide_i = MenuItem::with_id(app, "hide", "Hide", true, None::<&str>)?;
-    let always_on_top_enable_i =
-        MenuItem::with_id(app, "alwaysOnTop_enable", "Enable Always On Top", true, None::<&str>)?;
-    let always_on_top_disable_i = MenuItem::with_id(
-        app,
-        "alwaysOnTop_disable",
-        "Disable Always On Top",
-        true,
-        None::<&str>,
-    )?;
     let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
 
     let menu = Menu::with_items(
@@ -501,8 +479,6 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
         &[
             &show_i,
             &hide_i,
-            &always_on_top_enable_i,
-            &always_on_top_disable_i,
             &quit_i,
         ],
     )?;
@@ -526,32 +502,6 @@ fn setup_tray(app: &tauri::App) -> Result<(), Box<dyn std::error::Error>> {
                     let _ = window.hide();
                 }
             }
-            "alwaysOnTop_enable" => match get_client_settings() {
-                Ok(settings) => {
-                    let mut settings = settings;
-                    settings.always_on_top = true;
-                    let _ = update_client_settings(settings);
-                    if let Some(window) = app.get_webview_window("main") {
-                        let _ = window.set_always_on_top(true);
-                    }
-                }
-                Err(e) => {
-                    error!("Failed to get client settings: {}", e);
-                }
-            },
-            "alwaysOnTop_disable" => match get_client_settings() {
-                Ok(settings) => {
-                    let mut settings = settings;
-                    settings.always_on_top = false;
-                    let _ = update_client_settings(settings);
-                    if let Some(window) = app.get_webview_window("main") {
-                        let _ = window.set_always_on_top(false);
-                    }
-                }
-                Err(e) => {
-                    error!("Failed to get client settings: {}", e);
-                }
-            },
             _ => {}
         })
         .on_tray_icon_event(|tray, event| {

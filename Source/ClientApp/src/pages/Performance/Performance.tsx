@@ -114,28 +114,37 @@ export const PerformancePage: React.FunctionComponent = props => {
 
     function getRamUsageData(e: TimeSeriesMachineMetricsModel): ramMetricsModel {
         const d = e.ramUsageData;
+        if (!d) {
+            return { dateTimeOffset: new Date(e.dateTimeOffset), usedBytes: null, usedPercentage: 0, totalVisibleMemoryBytes: undefined, freePhysicalMemory: undefined, id: 0 };
+        }
         const freeMemory = d.totalVisibleMemoryBytes && d.usedMemoryBytes && d.totalVisibleMemoryBytes - d.usedMemoryBytes;
         return { ...d, dateTimeOffset: new Date(e.dateTimeOffset), usedBytes: d.usedMemoryBytes ?? null, usedPercentage: Number.parseFloat((((d?.usedMemoryBytes ?? 0) / (d?.totalVisibleMemoryBytes ?? 0)) * 100).toFixed(1)), totalVisibleMemoryBytes: d.totalVisibleMemoryBytes ?? undefined, freePhysicalMemory: freeMemory ?? undefined };
     }
     useEffect(() => {
         if (timeSeriesMetrics?.metrics && timeSeriesMetrics.requestRange) {
+            console.log("Performance.tsx: Processing timeSeriesMetrics, count:", timeSeriesMetrics.metrics.length);
+            if (timeSeriesMetrics.metrics[0]) {
+                console.log("  First metric cpuUsageData:", timeSeriesMetrics.metrics[0].cpuUsageData);
+                console.log("  First metric cpuUsageData type:", typeof timeSeriesMetrics.metrics[0].cpuUsageData);
+            }
             const f = timeSeriesMetrics?.metrics.map(e => {
                 return {
-                    cpuMetrics: e.cpuUsageData.map(d => {
+                    cpuMetrics: (e.cpuUsageData ?? []).map(d => {
                         return { ...d, dateTimeOffset: new Date(e.dateTimeOffset) };
                     }) as CpuMetricsModel[],
-                    gpuMetrics: e.gpuUsageData.map(d => {
+                    gpuMetrics: (e.gpuUsageData ?? []).map(d => {
                         return { ...d, dateTimeOffset: new Date(e.dateTimeOffset), vRamUsagePercentage: (((d.vramUsageBytes ?? 0) / (d.vramTotalBytes ?? 0)) * 100).toFixed(1) };
                     }) as gpuMetricsModel[],
                     ramMetrics: getRamUsageData(e),
-                    networkMetrics: e.networkUsageData.map(d => {
+                    networkMetrics: (e.networkUsageData ?? []).map(d => {
                         return { dateTimeOffset: new Date(e.dateTimeOffset), macAddress: d.uniqueIdentifier, uploadSpeedBps: (d.uploadSpeedBps && -ByteToBits(d.uploadSpeedBps)) ?? null, downloadSpeedBps: (d.downloadSpeedBps && ByteToBits(d.downloadSpeedBps)) ?? null };
                     }) as networkMetricsModel[],
-                    diskMetrics: e.diskUsageData.map(d => {
+                    diskMetrics: (e.diskUsageData ?? []).map(d => {
                         return { ...d, dateTimeOffset: e.dateTimeOffset };
                     }) as diskMetricsModel[]
                 };
             }) ?? { requestRange: timeSeriesMetrics?.requestRange, cpuMetrics: [], gpuMetrics: [] };
+            console.log("Performance.tsx: Processed metrics f:", f?.length, "first cpuMetrics:", f?.[0]?.cpuMetrics);
             setChartable({ requestRange: timeSeriesMetrics.requestRange, metrics: f });
         }
     }, [timeSeriesMetrics]);
@@ -208,7 +217,7 @@ export const PerformancePage: React.FunctionComponent = props => {
                                 onClick={() => {
                                     setClassicViewProps({ ...classicViewProps, selectedKey: "CPU" });
                                 }}
-                                stat={`${CurrentMetricState?.cpuUsageData[0].totalCoreUsagePercentage}% (${CurrentMetricState?.cpuUsageData[0].packageTemperature?.toFixed(0)}°C)`}
+                                stat={`${CurrentMetricState?.cpuUsageData?.[0]?.totalCoreUsagePercentage ?? 0}% (${CurrentMetricState?.cpuUsageData?.[0]?.packageTemperature?.toFixed(0) ?? "--"}°C)`}
                                 type="cpu"
                             />
                         )}

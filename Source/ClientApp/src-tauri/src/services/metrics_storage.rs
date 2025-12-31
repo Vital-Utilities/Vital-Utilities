@@ -27,6 +27,8 @@ impl MetricsStorageService {
     /// - Saves metrics to in-memory cache every 2 seconds
     /// - Trims old data every 30 minutes
     pub async fn run(&self) {
+        log::info!("MetricsStorageService: STARTING service loop");
+
         let mut save_interval = interval(TokioDuration::from_secs(2));
         let mut trim_interval = interval(TokioDuration::from_secs(1800)); // 30 minutes
 
@@ -47,8 +49,14 @@ impl MetricsStorageService {
         // Create snapshot from current machine data
         let snapshot = self.machine_store.create_current_snapshot();
 
+        log::info!("MetricsStorageService: saving snapshot, cpu_usage_data present: {:?}",
+            snapshot.cpu_usage_data.as_ref().map(|v| v.len()));
+
         // Add to in-memory cache
         self.machine_store.add_to_cache(snapshot);
+
+        log::info!("MetricsStorageService: cache size after add: {}",
+            self.machine_store.metrics_cache.len());
     }
 
     /// Trim data older than 2 days from cache

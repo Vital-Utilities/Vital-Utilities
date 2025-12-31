@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Layout, Form, Radio, Button, Input } from "antd";
+import { Layout, Form, Radio, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { VitalState } from "../Redux/States";
 import { fetchSettingsAction } from "../Redux/actions/settingsAction";
-import { useRustClientSettings } from "../Utilities/TauriCommands";
 import { SettingsDto } from "@vital/vitalservice";
 import { settingsApi } from "../Redux/actions/tauriApi";
 
@@ -18,7 +17,6 @@ export const Settings: React.FunctionComponent = () => {
     const backendSettings = useSelector<VitalState, SettingsDto | undefined>(state => state.settingsState.settings);
     const [view, setView] = React.useState<viewOptions>(viewOptions.Client);
 
-    const { clientSettings, updateClientSettings } = useRustClientSettings();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -42,13 +40,7 @@ export const Settings: React.FunctionComponent = () => {
                 return (
                     <div>
                         <h2>App Settings</h2>
-                        {clientSettings && (
-                            <>
-                                <Form.Item label="Window is always on top">
-                                    <Input type={"checkbox"} checked={clientSettings.alwaysOnTop} onChange={() => updateClientSettings({ ...clientSettings, alwaysOnTop: !clientSettings.alwaysOnTop })} />
-                                </Form.Item>
-                            </>
-                        )}
+                        {/* Always on top setting has been removed */}
                     </div>
                 );
             case viewOptions.Service:
