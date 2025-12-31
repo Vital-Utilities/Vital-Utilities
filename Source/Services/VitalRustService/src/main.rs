@@ -38,7 +38,7 @@ use crate::platform::{create_process_manager, create_startup_manager, ProcessMan
 #[cfg(target_os = "windows")]
 use crate::services::ConfigApplyerService;
 use crate::services::MetricsStorageService;
-#[cfg(target_os = "windows")]
+#[cfg(any(target_os = "windows", target_os = "macos"))]
 use crate::software::get_process_util;
 use crate::stores::{MachineDataStore, SettingsStore};
 
@@ -300,14 +300,16 @@ fn update_machine_store(
         .collect();
     store.update_gpu(gpus);
 
-    // Collect process metrics (Windows only)
-    #[cfg(target_os = "windows")]
+    // Collect process metrics
+    #[cfg(any(target_os = "windows", target_os = "macos"))]
     {
         if let Some(process_data) = get_process_util(sys_info, nvml, time) {
             let mut cpu_usage = std::collections::HashMap::new();
             let mut ram_usage = std::collections::HashMap::new();
             let mut disk_activity = std::collections::HashMap::new();
             let mut gpu_usage_map = std::collections::HashMap::new();
+            let mut running_processes: std::collections::HashMap<i32, models::ParentChildModelDto> =
+                std::collections::HashMap::new();
 
             for p in &process_data {
                 cpu_usage.insert(p.pid, p.cpu_percentage);
@@ -321,9 +323,48 @@ fn update_machine_store(
                         gpu_usage_map.insert(p.pid, pct);
                     }
                 }
+
+                // Build process view data
+                let process_view = models::ProcessViewDto {
+                    process_name: p.name.clone(),
+                    process_title: p.main_window_title.clone(),
+                    description: p.description.clone(),
+                    id: p.pid,
+                };
+
+                // Group by parent PID to create parent-child hierarchy
+                if let Some(parent_pid) = p.parent_pid {
+                    // This process has a parent
+                    if let Some(parent_entry) = running_processes.get_mut(&parent_pid) {
+                        // Add as child to existing parent
+                        parent_entry.children.insert(p.pid, process_view);
+                    } else {
+                        // Parent not yet in map, add this as standalone for now
+                        // It will be merged later if parent appears
+                        running_processes.insert(
+                            p.pid,
+                            models::ParentChildModelDto {
+                                parent: process_view,
+                                children: std::collections::HashMap::new(),
+                            },
+                        );
+                    }
+                } else {
+                    // This is a root process (no parent or parent is system)
+                    if !running_processes.contains_key(&p.pid) {
+                        running_processes.insert(
+                            p.pid,
+                            models::ParentChildModelDto {
+                                parent: process_view,
+                                children: std::collections::HashMap::new(),
+                            },
+                        );
+                    }
+                }
             }
 
             store.update_process_metrics(cpu_usage, ram_usage, disk_activity, gpu_usage_map);
+            store.update_running_processes(running_processes);
         }
     }
 }
