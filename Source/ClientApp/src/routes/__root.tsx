@@ -98,8 +98,8 @@ function RootLayout() {
                     <InfoPage />
                 </DialogContent>
             </Dialog>
-            <div style={{ display: "grid", borderBottom: "1px solid white", gridTemplateColumns: "auto auto" }}>
-                <nav className="flex h-12 items-center gap-1 px-2">
+            <div className="border-b border-border/50 backdrop-blur-sm bg-background/80" style={{ display: "grid", gridTemplateColumns: "auto auto" }}>
+                <nav className="flex h-12 items-center gap-2 px-3">
                     <NavLink to="/" icon={<Grid className="h-4 w-4" />} active={location.pathname === "/"}>
                         Processes
                     </NavLink>
@@ -147,7 +147,7 @@ interface NavLinkProps {
 
 const NavLink: React.FC<NavLinkProps> = ({ to, icon, active, children }) => {
     return (
-        <Link to={to} className={cn("flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors", active ? "bg-primary/20 text-primary" : "text-muted-foreground hover:bg-accent hover:text-accent-foreground")}>
+        <Link to={to} className={cn("flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200", active ? "bg-primary/15 text-primary shadow-sm shadow-primary/20 ring-1 ring-primary/20" : "text-muted-foreground hover:bg-secondary hover:text-foreground")}>
             {icon}
             {children}
         </Link>

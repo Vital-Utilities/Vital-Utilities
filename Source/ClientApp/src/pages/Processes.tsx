@@ -27,8 +27,7 @@ enum SortByEnum {
     "Ram" = "Ram",
     "DiskIO" = "DiskIO",
     "NetworkIO" = "NetworkIO",
-    "Gpu" = "Gpu",
-    "Title" = "Title"
+    "Gpu" = "Gpu"
 }
 
 export const Processes: React.FunctionComponent = () => {
@@ -93,18 +92,6 @@ export const Processes: React.FunctionComponent = () => {
                         return aa.localeCompare(bb);
                     });
                     returnList = sortBy.descending ? returnList.reverse() : toReturn;
-                    break;
-                }
-                case SortByEnum.Title: {
-                    const [empty, nonEmpty] = _.partition(returnList, x => x.parent.processTitle === undefined || x.parent.processTitle === null || x.parent.processTitle.trim().length === 0);
-                    let toReturn = nonEmpty.sort((a, b) => {
-                        const aa = a.parent.processTitle ?? "";
-                        const bb = b.parent.processTitle ?? "";
-                        return aa.localeCompare(bb);
-                    });
-                    if (sortBy.descending) toReturn = toReturn.reverse();
-                    toReturn.push(...empty);
-                    returnList = toReturn;
                     break;
                 }
                 case SortByEnum.ProcessName: {
@@ -227,11 +214,6 @@ export const Processes: React.FunctionComponent = () => {
                                 <span>{e.parent.description ?? e.parent.processName}</span>
                             </div>
                         </td>
-                        <td title={e.parent.processTitle ?? undefined} style={{ maxWidth: 250 }}>
-                            <p style={{ margin: 0 }} className="cut-text">
-                                {e.parent.processTitle}
-                            </p>
-                        </td>
                         <td title={e.parent.processName}>{e.parent.processName}</td>
                         <td>{e.parent.id}</td>
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(valueOrZero(processCpuPercentage?.[e.parent.id]) ?? 0) }}>{valueOrZero(processCpuPercentage?.[e.parent.id]).toFixed(1)}%</td>
@@ -268,14 +250,9 @@ export const Processes: React.FunctionComponent = () => {
                             <div>
                                 <span style={{ cursor: "pointer", height: 10, width: 10, padding: 2, marginRight: 8 }}>{expandedIds.find(f => f === e.parent.id) === undefined ? <ChevronRight className="h-4 w-4 inline" /> : <ChevronDown className="h-4 w-4 inline" />}</span>
                                 <span>
-                                    {e.parent.description ?? e.parent.processTitle ?? e.parent.processName} {`(+${childrenLength})`}
+                                    {e.parent.description ?? e.parent.processName} {`(+${childrenLength})`}
                                 </span>
                             </div>
-                        </td>
-                        <td title={e.parent.processTitle ?? e.parent.processName} style={{ maxWidth: 250 }}>
-                            <p style={{ margin: 0 }} className="cut-text">
-                                {e.parent.processTitle ?? undefined}
-                            </p>
                         </td>
                         <td title={e.parent.processName}>{e.parent.processName}</td>
                         <td>{e.parent.id}</td>
@@ -298,11 +275,6 @@ export const Processes: React.FunctionComponent = () => {
                                     <span>{e.parent.description ?? e.parent.processName}</span>
                                 </div>
                             </td>
-                            <td title={e.parent.processTitle ?? e.parent.processName} style={{ maxWidth: 250 }}>
-                                <p style={{ margin: 0 }} className="cut-text">
-                                    {e.parent.processTitle}
-                                </p>
-                            </td>
                             <td title={e.parent.processName}>{e.parent.processName}</td>
                             <td>{e.parent.id}</td>
                             <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
@@ -319,11 +291,6 @@ export const Processes: React.FunctionComponent = () => {
                             <ProcessContextMenu key={`dropdown - ${c.id}`} process={c}>
                                 <tr key={c.id} className="child process">
                                     <td style={{ paddingLeft: 70, maxWidth: 200 }}>{c.description || c.processName}</td>
-                                    <td title={c.processTitle ?? c.processName} style={{ maxWidth: 250 }}>
-                                        <p style={{ margin: 0 }} className="cut-text">
-                                            {c.processTitle}
-                                        </p>
-                                    </td>
                                     <td>{c.processName}</td>
                                     <td>{c.id}</td>
                                     <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
@@ -361,9 +328,6 @@ export const Processes: React.FunctionComponent = () => {
                     <tr>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.Description && "active"}`} style={{ minWidth: 100 }} onClick={() => setSort(SortByEnum.Description)}>
                             Name {sortBy.sortBy === SortByEnum.Description && sortDirectionRender()}
-                        </th>
-                        <th className={`sort ${sortBy.sortBy === SortByEnum.Title && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.Title)}>
-                            Window Title {sortBy.sortBy === SortByEnum.Title && sortDirectionRender()}
                         </th>
                         <th className={`sort ${sortBy.sortBy === SortByEnum.ProcessName && "active"}`} style={{ width: 120 }} onClick={() => setSort(SortByEnum.ProcessName)}>
                             Process {sortBy.sortBy === SortByEnum.ProcessName && sortDirectionRender()}

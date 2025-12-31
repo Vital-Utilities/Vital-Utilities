@@ -58,47 +58,69 @@ code {
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Dark theme by default - matching existing app colors */
+/* Modern Dark Theme - Clean neutral dark */
 :root {
-  --radius: 0.5rem;
-  /* Background colors: #222, #333, #555 */
-  --background: #222222;
-  --foreground: #ffffff;
-  --card: #333333;
-  --card-foreground: #ffffff;
-  --popover: #333333;
-  --popover-foreground: #ffffff;
-  /* Primary: #1b6ec2 (blue) */
-  --primary: #1b6ec2;
+  --radius: 0.625rem;
+
+  /* Backgrounds - neutral dark grays */
+  --background: #0c0c0c;
+  --foreground: #fafafa;
+  --card: #141414;
+  --card-foreground: #fafafa;
+  --popover: #181818;
+  --popover-foreground: #fafafa;
+
+  /* Primary - vibrant blue */
+  --primary: #3b82f6;
   --primary-foreground: #ffffff;
-  /* Secondary: #555 */
-  --secondary: #555555;
-  --secondary-foreground: #ffffff;
-  /* Muted: secondary text rgb(168, 168, 168) */
-  --muted: #333333;
-  --muted-foreground: #a8a8a8;
-  /* Accent: #00a2ff (cyan blue) */
-  --accent: #00a2ff;
+
+  /* Secondary - elevated surface */
+  --secondary: #1c1c1c;
+  --secondary-foreground: #fafafa;
+
+  /* Muted - for subtle text and backgrounds */
+  --muted: #1a1a1a;
+  --muted-foreground: #a1a1a1;
+
+  /* Accent - cyan for highlights */
+  --accent: #06b6d4;
   --accent-foreground: #ffffff;
-  /* Destructive: rgb(247, 66, 66) */
-  --destructive: #f74242;
-  --border: #555555;
-  --input: #333333;
-  --ring: #1b6ec2;
-  /* Chart colors */
-  --chart-1: #1b6ec2;
-  --chart-2: #00a2ff;
-  --chart-3: #00e1ff;
-  --chart-4: #f74242;
-  --chart-5: #b94a00;
-  --sidebar: #222222;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #1b6ec2;
+
+  /* Destructive - refined red */
+  --destructive: #ef4444;
+
+  /* Borders and inputs */
+  --border: #262626;
+  --input: #181818;
+  --ring: #3b82f6;
+
+  /* Chart colors - vibrant gradient palette */
+  --chart-1: #3b82f6;
+  --chart-2: #06b6d4;
+  --chart-3: #22d3ee;
+  --chart-4: #ef4444;
+  --chart-5: #f97316;
+
+  /* Sidebar */
+  --sidebar: #0c0c0c;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #3b82f6;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #333333;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: #555555;
-  --sidebar-ring: #1b6ec2;
+  --sidebar-accent: #1a1a1a;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #262626;
+  --sidebar-ring: #3b82f6;
+
+  /* Custom additions for glow effects */
+  --glow-primary: rgba(59, 130, 246, 0.15);
+  --glow-accent: rgba(6, 182, 212, 0.15);
+  --glow-success: rgba(16, 185, 129, 0.15);
+  --glow-warning: rgba(245, 158, 11, 0.15);
+  --glow-destructive: rgba(239, 68, 68, 0.15);
+
+  /* Success/Warning colors */
+  --success: #10b981;
+  --warning: #f59e0b;
 }
 
 @layer base {

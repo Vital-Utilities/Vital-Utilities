@@ -5,8 +5,7 @@ import React, { CSSProperties, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Area, AreaChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { CpuMetricsModel } from "../../../components/Charts/CpuChartTimeSeries";
-import { ChartData, ClassicLayout, formatXAxis, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
-import { OverlayContent } from "../../../components/OverlayContent";
+import { ChartData, ClassicLayout, ItemOne, ItemTwo, ClassicTooltip } from "../../../components/Charts/Shared";
 import { VitalState } from "../../../Redux/States";
 
 export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphView: "Overall" | "Logical" }> = props => {
@@ -46,37 +45,54 @@ export const ClassicCpuChartView: React.FunctionComponent<ChartData & { graphVie
                     </>
                 );
             case "Logical": {
-                const cellHeight = graphWindowSize?.height ? graphWindowSize?.height / 4 - 7 * 4 : 0;
+                const corePercentages = dynamicState?.cpuUsageData?.corePercentages;
+
+                // Calculate per-core average across last 10 data points
+                const coreAverages: number[] = [];
+                if (corePercentages && ordered && ordered.length > 0) {
+                    const last10 = ordered.slice(-10).filter(m => m !== null && m !== undefined);
+                    for (let coreIdx = 0; coreIdx < corePercentages.length; coreIdx++) {
+                        const coreValues = last10.map(m => m?.coresUsagePercentage?.[coreIdx] ?? 0).filter(v => v > 0);
+                        const avg = coreValues.length > 0 ? coreValues.reduce((a, b) => a + b, 0) / coreValues.length : 0;
+                        coreAverages.push(avg);
+                    }
+                }
+
                 return (
-                    <div ref={graphWindowRef} style={{ display: "grid", width: "100%", gridTemplateColumns: `repeat(${Math.round((cores + threads) / 4)}, minmax(50px, 1fr))`, gap: 5, overflow: "hidden" }}>
-                        {dynamicState?.cpuUsageData?.corePercentages?.map((e, i) => {
-                            return (
-                                graphWindowSize && (
-                                    <div key={i} style={{ border: "1px solid gray" }}>
-                                        <OverlayContent
-                                            show
-                                            content={
-                                                <>
-                                                    <span style={{ padding: 5 }}>{i}</span>
-                                                    <ResponsiveContainer width="100%" height={cellHeight}>
-                                                        <AreaChart data={ordered}>
-                                                            <XAxis dataKey="dateTimeOffset" tickFormatter={e => formatXAxis(e)} hide />
-                                                            <YAxis domain={[0, 100]} hide />
-                                                            <Tooltip content={<ClassicTooltip />} />
-                                                            <Area unit="%" type="monotone" dataKey={`coresUsagePercentage.${i}`} name={`Core${i}`} activeDot={{ r: 4 }} fillOpacity={0.3} isAnimationActive={false} />;
-                                                        </AreaChart>
-                                                    </ResponsiveContainer>
-                                                </>
-                                            }
-                                        >
-                                            <div style={{ display: "flex", height: "100%", width: "100%", justifyContent: "center", alignItems: "center" }}>
-                                                <div style={{ fontWeight: "bold", fontSize: "3.5vh", color: "#ccc" }}>{e}%</div>
+                    <div className="flex h-full w-full px-3 py-3 overflow-x-auto">
+                        {corePercentages && corePercentages.length > 0 ? (
+                            <div className="flex gap-2 h-full w-full items-end">
+                                {corePercentages.map((percentage, i) => {
+                                    const coreAvg = coreAverages[i] ?? 0;
+
+                                    return (
+                                        <div key={i} className="flex flex-col items-center h-full flex-1 min-w-[24px]">
+                                            <div className="flex-1 w-full rounded-lg overflow-hidden flex flex-col justify-end bg-secondary/20 relative">
+                                                {/* Per-core average usage line */}
+                                                <div
+                                                    className="absolute w-full h-[2px] bg-white/60 z-10 transition-all duration-500 ease-out"
+                                                    style={{
+                                                        bottom: `${coreAvg}%`,
+                                                        opacity: coreAvg > 0 ? 1 : 0
+                                                    }}
+                                                />
+                                                <div
+                                                    className="w-full rounded-lg transition-all duration-500 ease-out bg-gradient-to-t from-primary to-accent"
+                                                    style={{
+                                                        height: `${percentage}%`,
+                                                        boxShadow: "0 0 12px rgba(59, 130, 246, 0.4)"
+                                                    }}
+                                                />
                                             </div>
-                                        </OverlayContent>
-                                    </div>
-                                )
-                            );
-                        })}
+                                            <div className="text-[10px] text-muted-foreground mt-1.5 font-medium">{i}</div>
+                                            <div className="text-[10px] text-foreground/70 font-mono">{percentage.toFixed(0)}%</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="text-muted-foreground text-center w-full flex items-center justify-center">Core usage data not available</div>
+                        )}
                     </div>
                 );
             }

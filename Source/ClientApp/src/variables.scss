@@ -1,21 +1,36 @@
-$background-0: #222;
-$background-1: #333;
-$background-2: #555;
-$background-3: rgb(185, 74, 0);
+// Modern Dark Theme - neutral grays matching CSS variables
+$background-0: #0c0c0c;     // Deepest background
+$background-1: #141414;     // Card/elevated surfaces
+$background-2: #1c1c1c;     // Hover states, secondary surfaces
+$background-3: #f97316;     // Orange accent (for warnings)
 $header-background: $background-0;
-$blue-0: #1b6ec2;
-$blue-1: #00a2ff;
-$blue-2: #00e1ff;
+
+// Blues - vibrant modern palette
+$blue-0: #3b82f6;           // Primary blue
+$blue-1: #06b6d4;           // Cyan accent
+$blue-2: #22d3ee;           // Bright cyan highlight
 $scroll-hover-color-1: $blue-0;
 $border-blue: $blue-0;
-$btn: #333;
+
+// Borders
+$border-subtle: #262626;
+$border-bright: #333333;
+
+// Buttons
+$btn: #1a1a1a;
 $btn-selected: $blue-1;
-$btn-primary: #1b6ec2;
-$btn-danger: rgb(247, 66, 66);
-$primary: white;
-$secondary: rgb(168, 168, 168);
-$interactableStaticColor: rgb(221, 221, 221);
-$interactableHoverColor: rgb(255, 255, 255);
+$btn-primary: $blue-0;
+$btn-danger: #ef4444;
+
+// Text colors
+$primary: #fafafa;          // Primary text
+$secondary: #a1a1a1;        // Muted text
+$interactableStaticColor: #a1a1a1;
+$interactableHoverColor: #fafafa;
+
+// Status colors
+$success: #10b981;
+$warning: #f59e0b;
 
 @mixin header {
     background: $header-background;

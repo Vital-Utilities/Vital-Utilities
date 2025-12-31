@@ -1,11 +1,9 @@
-@import "../../../src/variables.scss";
-
+/* Performance page styles - using CSS variables for Tailwind compatibility */
 
 .header {
     display: flex;
     flex-direction: row;
 }
-
 
 .container {
     will-change: transform;
@@ -22,7 +20,7 @@
     max-width: 100%;
 
     .category {
-        color: white;
+        color: var(--foreground);
         padding: 1.25rem;
         display: grid;
         gap: 1rem;
@@ -30,7 +28,7 @@
     }
 
     .category-flex {
-        color: white;
+        color: var(--foreground);
         padding: 1.25rem;
         display: flex;
         flex-wrap: wrap;
@@ -40,10 +38,16 @@
 }
 
 .section {
-    background: $background-1;
-    padding: 15px;
+    background: var(--card);
+    padding: 16px;
     width: 100%;
-    border-radius: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s ease;
+
+    &:hover {
+        border-color: color-mix(in srgb, var(--border) 100%, white 20%);
+    }
 }
 
 .title {
@@ -54,28 +58,23 @@
     width: 100%;
     max-width: 100%;
 
-    .ant-dropdown-trigger:hover {
-        background: none !important;
-        box-shadow: none !important;
-    }
-
     .category {
-        border-top: 1px solid #444;
-        border-bottom: 1px solid #444;
-        background: $background-1;
+        border-bottom: 1px solid var(--border);
+        background: var(--card);
         display: grid;
         gap: 0;
         grid-template-columns: 2rem 1fr;
-        padding: 0.625rem 0.625rem 0.625rem 0;
+        padding: 0.75rem 0.75rem 0.75rem 0;
+        transition: all 0.15s ease;
 
         &:hover {
-            background: $background-2;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            background: var(--secondary);
             cursor: pointer;
         }
 
         &.selected {
-            background: $background-0;
+            background: var(--background);
+            border-left: 3px solid var(--primary);
         }
     }
 }
