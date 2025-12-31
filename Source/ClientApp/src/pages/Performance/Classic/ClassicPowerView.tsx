@@ -756,79 +756,145 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
 function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: number, history: number[]) {
     if (history.length < 2) return;
 
-    const graphHeight = height * 0.18;
-    const graphY = height * 0.92;
-    const graphWidth = width * 0.85;
+    const graphHeight = height * 0.16;
+    const graphY = height * 0.9;
+    const graphWidth = width * 0.82;
     const graphX = (width - graphWidth) / 2;
+    const padding = 20;
 
     const minPower = Math.min(...history) * 0.9;
     const maxPower = Math.max(...history, 10) * 1.1;
     const range = maxPower - minPower || 1;
 
-    // Background
-    ctx.fillStyle = "rgba(15, 23, 42, 0.6)";
-    ctx.beginPath();
-    ctx.roundRect(graphX - 15, graphY - graphHeight - 10, graphWidth + 30, graphHeight + 25, 8);
-    ctx.fill();
-
-    // Grid lines
-    ctx.strokeStyle = "rgba(100, 116, 139, 0.2)";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 3; i++) {
-        const y = graphY - (i / 3) * graphHeight;
+    // Grid lines with fade
+    for (let i = 0; i <= 4; i++) {
+        const y = graphY - (i / 4) * graphHeight;
+        const alpha = i === 0 || i === 4 ? 0.15 : 0.08;
+        ctx.strokeStyle = `rgba(100, 116, 139, ${alpha})`;
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(graphX, y);
         ctx.lineTo(graphX + graphWidth, y);
         ctx.stroke();
     }
 
-    // Graph line
-    ctx.beginPath();
-    ctx.moveTo(graphX, graphY - ((history[0] - minPower) / range) * graphHeight);
-
-    for (let i = 1; i < history.length; i++) {
-        const x = graphX + (i / (history.length - 1)) * graphWidth;
-        const y = graphY - ((history[i] - minPower) / range) * graphHeight;
-        ctx.lineTo(x, y);
+    // Vertical grid lines (time markers)
+    for (let i = 0; i <= 6; i++) {
+        const x = graphX + (i / 6) * graphWidth;
+        ctx.strokeStyle = "rgba(100, 116, 139, 0.06)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, graphY - graphHeight);
+        ctx.lineTo(x, graphY);
+        ctx.stroke();
     }
 
+    // Build the path points with smoothing
+    const points: { x: number; y: number }[] = [];
+    for (let i = 0; i < history.length; i++) {
+        const x = graphX + (i / (history.length - 1)) * graphWidth;
+        const y = graphY - ((history[i] - minPower) / range) * graphHeight;
+        points.push({ x, y });
+    }
+
+    // Draw glow effect first (behind the main line)
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.shadowColor = "rgba(59, 130, 246, 0.6)";
+    ctx.shadowBlur = 12;
+    ctx.strokeStyle = "rgba(59, 130, 246, 0.5)";
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+    ctx.restore();
+
+    // Main graph line
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
     ctx.strokeStyle = "#3b82f6";
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.stroke();
 
-    // Fill
+    // Fill gradient under the line
     const lastX = graphX + graphWidth;
     const gradient = ctx.createLinearGradient(0, graphY - graphHeight, 0, graphY);
-    gradient.addColorStop(0, "rgba(59, 130, 246, 0.4)");
-    gradient.addColorStop(1, "rgba(59, 130, 246, 0.05)");
+    gradient.addColorStop(0, "rgba(59, 130, 246, 0.25)");
+    gradient.addColorStop(0.5, "rgba(59, 130, 246, 0.1)");
+    gradient.addColorStop(1, "rgba(59, 130, 246, 0.02)");
 
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
     ctx.lineTo(lastX, graphY);
     ctx.lineTo(graphX, graphY);
     ctx.closePath();
     ctx.fillStyle = gradient;
     ctx.fill();
 
-    // Current value dot
-    const currentY = graphY - ((history[history.length - 1] - minPower) / range) * graphHeight;
+    // Current value dot with glow
+    const currentY = points[points.length - 1].y;
+
+    // Outer glow
+    ctx.save();
     ctx.beginPath();
-    ctx.arc(lastX, currentY, 4, 0, Math.PI * 2);
-    ctx.fillStyle = "#3b82f6";
+    ctx.arc(lastX, currentY, 8, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(59, 130, 246, 0.3)";
+    ctx.fill();
+    ctx.restore();
+
+    // Middle ring
+    ctx.beginPath();
+    ctx.arc(lastX, currentY, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(59, 130, 246, 0.5)";
+    ctx.fill();
+
+    // Inner dot
+    ctx.beginPath();
+    ctx.arc(lastX, currentY, 3, 0, Math.PI * 2);
+    ctx.fillStyle = "#60a5fa";
     ctx.fill();
     ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Labels
-    ctx.font = "10px system-ui";
-    ctx.fillStyle = "#64748b";
-    ctx.textAlign = "left";
-    ctx.fillText(`${maxPower.toFixed(0)}W`, graphX - 12, graphY - graphHeight + 4);
-    ctx.fillText(`${minPower.toFixed(0)}W`, graphX - 12, graphY + 4);
-
+    // Current power value label (prominent)
+    const currentPower = history[history.length - 1];
+    ctx.font = "bold 11px system-ui";
+    ctx.fillStyle = "#f8fafc";
     ctx.textAlign = "right";
-    ctx.fillText("Power (60s)", graphX + graphWidth + 12, graphY - graphHeight + 4);
+    ctx.fillText(`${currentPower.toFixed(1)}W`, lastX - 10, currentY - 10);
+
+    // Y-axis labels
+    ctx.font = "9px system-ui";
+    ctx.fillStyle = "#64748b";
+    ctx.textAlign = "right";
+    ctx.fillText(`${maxPower.toFixed(0)}W`, graphX - 5, graphY - graphHeight + 3);
+    ctx.fillText(`${minPower.toFixed(0)}W`, graphX - 5, graphY + 3);
+
+    // Title
+    ctx.font = "10px system-ui";
+    ctx.fillStyle = "#94a3b8";
+    ctx.textAlign = "left";
+    ctx.fillText("SYSTEM POWER", graphX, graphY - graphHeight - 22);
+
+    // Time indicator
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#64748b";
+    ctx.fillText("60s", graphX, graphY + 12);
+    ctx.textAlign = "right";
+    ctx.fillText("now", graphX + graphWidth, graphY + 12);
 }
 
 function formatTimeRemaining(minutes: number): string {
