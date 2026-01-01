@@ -18,8 +18,8 @@ mod stores;
 
 use crate::commands::api_commands;
 use crate::commands::commands::{
-    get_client_settings, get_os, get_vital_service_ports, open_url, update_client_settings,
-    update_vital_service_port,
+    get_client_settings, get_os, get_vital_service_ports, open_url, reset_settings_to_defaults,
+    update_client_settings, update_vital_service_port,
 };
 use crate::db::{get_app_db_path, AppDb};
 use crate::platform::{create_process_manager, create_startup_manager, ProcessManager, StartupManager};
@@ -137,6 +137,7 @@ fn main() {
             update_client_settings,
             get_vital_service_ports,
             update_vital_service_port,
+            reset_settings_to_defaults,
             open_url,
             get_os,
             // API commands (replaces Rocket HTTP endpoints)
@@ -161,6 +162,7 @@ fn main() {
             api_commands::get_settings,
             api_commands::update_settings,
             api_commands::set_run_at_startup,
+            api_commands::get_battery_history,
         ])
         // Handle window close event to minimize to tray instead of closing
         .on_window_event(|window, event| {
@@ -301,7 +303,17 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
     // Initialize static RAM data
     machine_store.init_static_ram(&sys_info);
 
+    // Pre-fetch battery history so it's available immediately when viewing Power page
+    #[cfg(target_os = "macos")]
+    {
+        let _ = machine_store.get_battery_history(12).await;
+        info!("Battery history pre-fetched");
+    }
+
     info!("Metrics collection started");
+
+    // Counter for periodic battery history refresh (every ~120 seconds)
+    let mut battery_refresh_counter: u32 = 0;
 
     loop {
         let start = std::time::SystemTime::now();
@@ -321,6 +333,17 @@ async fn run_collector(machine_store: Arc<MachineDataStore>) {
 
         // Convert to our DTO types and update store
         update_machine_store(&machine_store, cpu_util, mem_util, net_util, gpu_usage, disk_usage, power_info, &sys_info, time);
+
+        // Periodically refresh battery history cache (every ~120 iterations = 2 minutes)
+        #[cfg(target_os = "macos")]
+        {
+            battery_refresh_counter += 1;
+            if battery_refresh_counter >= 120 {
+                battery_refresh_counter = 0;
+                // This will refresh the cache since TTL will have expired
+                let _ = machine_store.get_battery_history(12).await;
+            }
+        }
 
         // Sleep for remaining time to maintain ~1-second interval
         if let Ok(elapsed) = start.elapsed() {
@@ -481,6 +504,7 @@ fn update_machine_store(
         battery_percentage: power_info.battery_percentage,
         fully_charged: power_info.fully_charged,
         external_connected: power_info.external_connected,
+        low_power_mode: power_info.low_power_mode,
         system_power_watts: power_info.system_power_watts,
         battery_power_watts: power_info.battery_power_watts,
         battery_voltage: power_info.battery_voltage,
@@ -506,6 +530,7 @@ fn update_machine_store(
     let mut process_ram_usage: HashMap<i32, f32> = HashMap::new();
     let mut process_disk_activity: HashMap<i32, f64> = HashMap::new();
     let mut process_gpu_usage: HashMap<i32, f32> = HashMap::new();
+    let mut process_cpu_time: HashMap<i32, u64> = HashMap::new();
 
     // Get core count for CPU percentage normalization
     let core_count = sysinfo::System::physical_core_count().unwrap_or(1) as f32;
@@ -514,11 +539,19 @@ fn update_machine_store(
         let pid_i32 = pid.as_u32() as i32;
         // In sysinfo 0.37+, process.name() returns &OsStr, convert to String
         let process_name = process.name().to_string_lossy().to_string();
+
+        // On macOS, try to get the app display name from the bundle
+        #[cfg(target_os = "macos")]
+        let display_name = software::get_macos_app_display_name(process);
+        #[cfg(not(target_os = "macos"))]
+        let display_name: Option<String> = None;
+
         let process_view = models::ProcessViewDto {
             process_name: process_name.clone(),
             // Set process_title so it shows up when "Show all Processes" is unchecked
-            process_title: Some(process_name),
-            description: None,
+            process_title: Some(process_name.clone()),
+            // Use the app display name if available
+            description: display_name,
             id: pid_i32,
         };
         all_processes.insert(pid_i32, process_view);
@@ -541,6 +574,10 @@ fn update_machine_store(
         if disk_bps > 0.0 {
             process_disk_activity.insert(pid_i32, disk_bps);
         }
+
+        // Collect CPU time (total time the process has been running on CPU)
+        let cpu_time = process.run_time();
+        process_cpu_time.insert(pid_i32, cpu_time);
 
         if let Some(parent_pid) = process.parent() {
             let parent_pid_i32 = parent_pid.as_u32() as i32;
@@ -566,6 +603,7 @@ fn update_machine_store(
     store.process_ram_usage.clear();
     store.process_disk_activity.clear();
     store.process_gpu_usage.clear();
+    store.process_cpu_time.clear();
 
     for (pid, usage) in process_cpu_usage {
         store.process_cpu_usage.insert(pid, usage);
@@ -578,6 +616,9 @@ fn update_machine_store(
     }
     for (pid, usage) in process_gpu_usage {
         store.process_gpu_usage.insert(pid, usage);
+    }
+    for (pid, time) in process_cpu_time {
+        store.process_cpu_time.insert(pid, time);
     }
 
     // Build the result - only include top-level processes (those without parents in our list)

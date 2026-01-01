@@ -101,35 +101,110 @@ pub fn update_client_settings(client_settings: ClientSettings) -> Result<String,
     }
 }
 
+/// Creates default settings
+fn create_default_settings() -> SettingsDto {
+    SettingsDto {
+        run_at_starup: Some(false),
+        launch: Box::new(LaunchSettings {
+            vital_service_https_port: 50031,
+            vital_service_http_port: 50030,
+        }),
+        metrics: Box::new(vital_service_api::models::MetricsSettings {
+            persist_metrics: true,
+        }),
+    }
+}
+
+/// Writes settings to the given file path
+fn write_settings_file(file_path: &std::path::Path, settings: &SettingsDto) -> Result<(), String> {
+    // Ensure the parent directory exists
+    if let Some(parent) = file_path.parent() {
+        std::fs::create_dir_all(parent).map_err(|e| format!("Failed to create directory: {}", e))?;
+    }
+
+    let content = serde_json::to_string_pretty(settings)
+        .map_err(|e| format!("Failed to serialize settings: {}", e))?;
+
+    std::fs::write(file_path, content)
+        .map_err(|e| format!("Failed to write settings file: {}", e))?;
+
+    info!("Settings file written to {}", file_path.display());
+    Ok(())
+}
+
+/// Gets the settings file path
+fn get_settings_file_path() -> Result<std::path::PathBuf, String> {
+    let document_dir = document_dir()
+        .ok_or_else(|| "Failed to get document directory".to_string())?;
+
+    Ok(document_dir
+        .join("Vital Utilities")
+        .join("Settings.json"))
+}
+
 pub fn get_backend_settings() -> Result<SettingsDto, String> {
-    let document_dir = document_dir();
-    if document_dir.is_none() {
-        let msg = "failed to get document dir".to_string();
-        error!("{}", msg);
-        return Err(msg);
-    }
-    let file_path = document_dir
-        .unwrap()
-        .join(r#"Vital Utilities"#)
-        .join(r#"Settings.json"#);
+    let file_path = get_settings_file_path()?;
 
-    let settings_file = std::fs::read_to_string(file_path);
-    if settings_file.is_err() {
-        let msg = "failed to read settings file".to_string();
-        error!("{}", msg);
-        return Err(msg);
-    }
-
-    let settings = serde_json::from_str::<SettingsDto>(&settings_file.unwrap());
-    match settings {
-        Ok(settings) => {
+    // Try to read the settings file
+    let settings_content = match std::fs::read_to_string(&file_path) {
+        Ok(content) => content,
+        Err(_) => {
+            // File doesn't exist, create with defaults
+            info!("Settings file not found, creating with defaults");
+            let settings = create_default_settings();
+            let _ = write_settings_file(&file_path, &settings);
             return Ok(settings);
         }
+    };
+
+    // Try to parse the settings
+    match serde_json::from_str::<SettingsDto>(&settings_content) {
+        Ok(settings) => Ok(settings),
         Err(e) => {
-            error!("{}", e);
-            return Err(format!("{}", e));
+            // Settings file is corrupted - backup and reset
+            error!("Settings file is corrupted: {}. Backing up and resetting to defaults.", e);
+
+            // Create backup with timestamp
+            let backup_path = file_path.with_extension("json.backup");
+            if let Err(backup_err) = std::fs::rename(&file_path, &backup_path) {
+                error!("Failed to backup corrupted settings: {}", backup_err);
+            } else {
+                info!("Corrupted settings backed up to {}", backup_path.display());
+            }
+
+            // Create new default settings
+            let settings = create_default_settings();
+            let _ = write_settings_file(&file_path, &settings);
+            Ok(settings)
         }
     }
+}
+
+/// Reset settings to defaults. Backs up current settings file first.
+#[tauri::command]
+pub fn reset_settings_to_defaults() -> Result<String, String> {
+    let file_path = get_settings_file_path()?;
+
+    // Backup existing file if it exists
+    if file_path.exists() {
+        let timestamp = chrono::Utc::now().format("%Y%m%d_%H%M%S");
+        let backup_name = format!("Settings.{}.backup.json", timestamp);
+        let backup_path = file_path.parent()
+            .ok_or("Invalid settings path")?
+            .join(backup_name);
+
+        if let Err(e) = std::fs::rename(&file_path, &backup_path) {
+            error!("Failed to backup settings: {}", e);
+        } else {
+            info!("Settings backed up to {}", backup_path.display());
+        }
+    }
+
+    // Create new default settings
+    let settings = create_default_settings();
+    write_settings_file(&file_path, &settings)?;
+
+    Ok("Settings reset to defaults successfully".to_string())
 }
 
 #[tauri::command]

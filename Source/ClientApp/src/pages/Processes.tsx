@@ -11,7 +11,7 @@ import { getReadableBytesPerSecondString, getReadableBytesString } from "../comp
 import { GetMachineDynamicDataResponse, ProcessViewDto } from "@vital/vitalservice";
 import { processApi } from "../Redux/actions/tauriApi";
 import { openUrl } from "../Utilities/TauriCommands";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronRight, ChevronDown, Pin } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,6 +38,7 @@ interface ProcessRow {
 
 const COLUMN_SIZING_KEY = "processes-column-sizing-v2";
 const SORTING_KEY = "processes-sorting";
+const PINNED_COLUMNS_KEY = "processes-pinned-columns";
 
 export const Processes: React.FunctionComponent = () => {
     const processViewState = useSelector<VitalState, ProcessViewState>(state => state.processViewState);
@@ -47,11 +48,23 @@ export const Processes: React.FunctionComponent = () => {
     const processRamBytes = dynamicData?.processRamUsageBytes;
     const processBytesPerSecActivity = dynamicData?.processDiskBytesPerSecActivity;
     const processGpuPercentage = dynamicData?.processGpuUsage;
+    const processCpuTimeSecs = dynamicData?.processCpuTimeSecs;
 
     const [showAllProcess, setShowAllProcess] = useState(false);
     const [filter, setFilter] = useState("");
     const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
     const [contextMenu, setContextMenu] = useState<{ x: number; y: number; process: ProcessViewDto } | null>(null);
+    const [headerContextMenu, setHeaderContextMenu] = useState<{ x: number; y: number; columnId: string } | null>(null);
+
+    // Load persisted pinned columns
+    const [pinnedColumns, setPinnedColumns] = useState<Set<string>>(() => {
+        try {
+            const stored = localStorage.getItem(PINNED_COLUMNS_KEY);
+            return stored ? new Set(JSON.parse(stored)) : new Set();
+        } catch {
+            return new Set();
+        }
+    });
 
     const dispatch = useDispatch();
     const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -87,6 +100,40 @@ export const Processes: React.FunctionComponent = () => {
     useEffect(() => {
         localStorage.setItem(SORTING_KEY, JSON.stringify(sorting));
     }, [sorting]);
+
+    // Persist pinned columns
+    useEffect(() => {
+        localStorage.setItem(PINNED_COLUMNS_KEY, JSON.stringify([...pinnedColumns]));
+    }, [pinnedColumns]);
+
+    // Calculate left offset for pinned columns
+    const getPinnedLeftOffset = useCallback(
+        (columnId: string, headers: { id: string; getSize: () => number }[]): number => {
+            let offset = 0;
+            for (const header of headers) {
+                if (header.id === columnId) break;
+                if (pinnedColumns.has(header.id)) {
+                    offset += header.getSize();
+                }
+            }
+            return offset;
+        },
+        [pinnedColumns]
+    );
+
+    // Toggle pin status for a column
+    const toggleColumnPin = useCallback((columnId: string) => {
+        setPinnedColumns(prev => {
+            const next = new Set(prev);
+            if (next.has(columnId)) {
+                next.delete(columnId);
+            } else {
+                next.add(columnId);
+            }
+            return next;
+        });
+        setHeaderContextMenu(null);
+    }, []);
 
     // Fetch processes periodically
     useInterval(
@@ -265,9 +312,19 @@ export const Processes: React.FunctionComponent = () => {
                 size: 80,
                 minSize: 60,
                 cell: ({ getValue }) => <span style={{ textAlign: "right", display: "block" }}>{(getValue() as number).toFixed(1)}%</span>
+            },
+            {
+                id: "cpuTime",
+                accessorFn: row => {
+                    return valueOrZero(processCpuTimeSecs?.[row.id]);
+                },
+                header: "CPU Time",
+                size: 100,
+                minSize: 70,
+                cell: ({ getValue }) => <span style={{ textAlign: "right", display: "block" }}>{formatCpuTime(getValue() as number)}</span>
             }
         ],
-        [processViewState.processView, processCpuPercentage, processRamBytes, processBytesPerSecActivity, processGpuPercentage, valueOrZero]
+        [processViewState.processView, processCpuPercentage, processRamBytes, processBytesPerSecActivity, processGpuPercentage, processCpuTimeSecs, valueOrZero]
     );
 
     const table = useReactTable({
@@ -374,7 +431,7 @@ export const Processes: React.FunctionComponent = () => {
     }, []);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
+        <div className="processes-page" style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
             <div id="view-header" className="view-header" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", padding: "1rem 1.25rem", height: "4rem", flexShrink: 0 }}>
                 <Input placeholder="Search" style={{ width: 200, marginRight: "1.25rem" }} value={filter} onChange={e => setFilter(e.target.value)} />
                 <div className="flex items-center gap-2">
@@ -388,15 +445,36 @@ export const Processes: React.FunctionComponent = () => {
                     <thead>
                         {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id}>
-                                {headerGroup.headers.map(header => (
-                                    <th key={header.id} style={{ width: header.getSize(), position: "relative" }} className={`sort ${header.column.getIsSorted() ? "active" : ""}`} onClick={header.column.getToggleSortingHandler()}>
-                                        <div className="th-content">
-                                            {flexRender(header.column.columnDef.header, header.getContext())}
-                                            {{ asc: " ▲", desc: " ▼" }[header.column.getIsSorted() as string] ?? null}
-                                        </div>
-                                        <div onMouseDown={header.getResizeHandler()} onTouchStart={header.getResizeHandler()} className={`resize-handle ${header.column.getIsResizing() ? "resizing" : ""}`} onClick={e => e.stopPropagation()} />
-                                    </th>
-                                ))}
+                                {headerGroup.headers.map(header => {
+                                    const isPinned = pinnedColumns.has(header.id);
+                                    const leftOffset = isPinned ? getPinnedLeftOffset(header.id, headerGroup.headers) : undefined;
+                                    return (
+                                        <th
+                                            key={header.id}
+                                            style={{
+                                                width: header.getSize(),
+                                                position: isPinned ? "sticky" : "relative",
+                                                left: isPinned ? leftOffset : undefined,
+                                                zIndex: isPinned ? 30 : undefined,
+                                                backgroundColor: isPinned ? "var(--background)" : undefined
+                                            }}
+                                            className={`sort ${header.column.getIsSorted() ? "active" : ""} ${isPinned ? "pinned" : ""}`}
+                                            onClick={header.column.getToggleSortingHandler()}
+                                            onContextMenu={e => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                setHeaderContextMenu({ x: e.clientX, y: e.clientY, columnId: header.id });
+                                            }}
+                                        >
+                                            <div className="th-content">
+                                                {isPinned && <Pin className="inline h-3 w-3 mr-1 opacity-60" />}
+                                                {flexRender(header.column.columnDef.header, header.getContext())}
+                                                {{ asc: " ▲", desc: " ▼" }[header.column.getIsSorted() as string] ?? null}
+                                            </div>
+                                            <div onMouseDown={header.getResizeHandler()} onTouchStart={header.getResizeHandler()} className={`resize-handle ${header.column.getIsResizing() ? "resizing" : ""}`} onClick={e => e.stopPropagation()} />
+                                        </th>
+                                    );
+                                })}
                             </tr>
                         ))}
                     </thead>
@@ -417,8 +495,21 @@ export const Processes: React.FunctionComponent = () => {
                                         const accessorFn = columnDef.accessorFn as ((row: ProcessRow, index: number) => unknown) | undefined;
                                         const accessorKey = columnDef.accessorKey as string | undefined;
                                         const cellValue = accessorFn ? accessorFn(data, virtualRow.index) : accessorKey ? (data as unknown as Record<string, unknown>)[accessorKey] : null;
+                                        const isPinned = pinnedColumns.has(header.id);
+                                        const leftOffset = isPinned ? getPinnedLeftOffset(header.id, headers) : undefined;
                                         return (
-                                            <td key={header.id} style={{ width: header.getSize(), maxWidth: header.getSize() }}>
+                                            <td
+                                                key={header.id}
+                                                style={{
+                                                    width: header.getSize(),
+                                                    maxWidth: header.getSize(),
+                                                    position: isPinned ? "sticky" : undefined,
+                                                    left: isPinned ? leftOffset : undefined,
+                                                    zIndex: isPinned ? 10 : undefined,
+                                                    backgroundColor: isPinned ? "var(--background)" : undefined
+                                                }}
+                                                className={isPinned ? "pinned" : ""}
+                                            >
                                                 {columnDef.cell
                                                     ? flexRender(
                                                           columnDef.cell as never,
@@ -501,6 +592,20 @@ export const Processes: React.FunctionComponent = () => {
                     </DropdownMenu>,
                     document.body
                 )}
+
+            {/* Header Context Menu for pinning columns */}
+            {headerContextMenu &&
+                createPortal(
+                    <DropdownMenu open={true} onOpenChange={open => !open && setHeaderContextMenu(null)} modal={false}>
+                        <DropdownMenuTrigger asChild>
+                            <div style={{ position: "fixed", left: headerContextMenu.x, top: headerContextMenu.y, width: 0, height: 0, pointerEvents: "none" }} />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={() => toggleColumnPin(headerContextMenu.columnId)}>{pinnedColumns.has(headerContextMenu.columnId) ? "Unpin Column" : "Pin Column"}</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>,
+                    document.body
+                )}
         </div>
     );
 };
@@ -514,4 +619,23 @@ function openProcessPath(id: number) {
 
 function openProcessProperties(_id: number) {
     toast("Process properties not available");
+}
+
+function formatCpuTime(seconds: number): string {
+    if (seconds < 60) {
+        return `${seconds}s`;
+    }
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    if (minutes < 60) {
+        return `${minutes}m ${remainingSeconds}s`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+    if (hours < 24) {
+        return `${hours}h ${remainingMinutes}m`;
+    }
+    const days = Math.floor(hours / 24);
+    const remainingHours = hours % 24;
+    return `${days}d ${remainingHours}h`;
 }

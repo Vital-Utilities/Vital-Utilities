@@ -1,5 +1,17 @@
 /* Performance page styles - using CSS variables for Tailwind compatibility */
 
+.container.traditional {
+    -webkit-user-select: none !important;
+    user-select: none !important;
+
+    *,
+    *::before,
+    *::after {
+        -webkit-user-select: none !important;
+        user-select: none !important;
+    }
+}
+
 .header {
     display: flex;
     flex-direction: row;

@@ -3,7 +3,6 @@ import { createRootRoute, Link, Outlet, useLocation } from "@tanstack/react-rout
 import { useDispatch, useSelector } from "react-redux";
 import { AppState, VitalState } from "../Redux/States";
 import { CpuPerfBadge, GpuPerfBadge, RamUsageBadge } from "../components/PerfBadge";
-import { ConnnectionIssuePage } from "../pages/ConnectionIssue";
 import { useInterval } from "ahooks";
 import { InfoPage } from "../pages/Info";
 import { fetchMachineDynamicDataAction, fetchMachineStaticDataAction, fetchMachineTimeSeriesDataAction } from "../Redux/actions/machineActions";
@@ -27,9 +26,7 @@ function RootLayout() {
     const dispatch = useDispatch();
     const location = useLocation();
     const appState = useSelector<VitalState, AppState>(state => state.appState);
-    const [noConnection, setNoConnection] = React.useState(false);
     const [aboutModalVisible, setAboutModalVisible] = React.useState(false);
-    const [initializedTime] = React.useState(moment());
     const os = useOs();
 
     // Check backend connection via Tauri invoke
@@ -47,10 +44,7 @@ function RootLayout() {
 
     useInterval(() => {
         if (appState.httpConnected && appState.signalRConnected) {
-            setNoConnection(false);
             dispatch(updateAppReadyAction(true));
-        } else if (moment().diff(initializedTime, "seconds") > 10) {
-            setNoConnection(true);
         }
     }, 1000);
 
@@ -58,7 +52,7 @@ function RootLayout() {
         () => {
             if (appState.httpConnected) getData();
         },
-        1000,
+        2000,
         { immediate: true }
     );
 
@@ -77,19 +71,10 @@ function RootLayout() {
         dispatch(fetchManagedProcessesAction());
     }
 
-    // eslint-disable-next-line no-constant-condition
-    if (!appState.appReady) return <>{noConnection ? <ConnnectionIssuePage /> : <SplashScreen />}</>;
+    if (!appState.appReady) return <SplashScreen />;
 
     return (
         <div id="page" style={{ display: "flex", flexDirection: "column", overflow: "hidden", height: "100vh", width: "100vw" }}>
-            <Dialog open={noConnection} onOpenChange={setNoConnection}>
-                <DialogContent className="sm:max-w-[600px]">
-                    <DialogHeader>
-                        <DialogTitle>Problem connecting to Vital Service</DialogTitle>
-                    </DialogHeader>
-                    <ConnnectionIssuePage />
-                </DialogContent>
-            </Dialog>
             <Dialog open={aboutModalVisible} onOpenChange={setAboutModalVisible}>
                 <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
@@ -98,7 +83,7 @@ function RootLayout() {
                     <InfoPage />
                 </DialogContent>
             </Dialog>
-            <div className="border-b border-border/50 backdrop-blur-sm bg-background/80" style={{ display: "grid", gridTemplateColumns: "auto auto" }}>
+            <div className="top-nav border-b border-border/50 backdrop-blur-sm bg-background/80" style={{ display: "grid", gridTemplateColumns: "auto auto" }}>
                 <nav className="flex h-12 items-center gap-2 px-3">
                     <NavLink to="/" icon={<Grid className="h-4 w-4" />} active={location.pathname === "/"}>
                         Processes
@@ -121,7 +106,7 @@ function RootLayout() {
                     <GpuPerfBadge />
                     <span>
                         {!appState.httpConnected && (
-                            <span style={{ color: "orange", cursor: "pointer" }} onClick={() => setNoConnection(true)}>
+                            <span style={{ color: "orange" }}>
                                 <AlertTriangle className="h-4 w-4 inline" style={{ color: "orange" }} /> Disconnected
                             </span>
                         )}

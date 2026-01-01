@@ -124,26 +124,6 @@ export const PerformancePage: React.FunctionComponent = () => {
                                 />
                             );
                         })}
-                        {disks &&
-                            Object.entries(disks)
-                                .sort((a, b) => b[0].localeCompare(a[0]))
-                                .map((value, index) => {
-                                    const otherData = CurrentMetricState?.diskUsageData && Object.entries(CurrentMetricState?.diskUsageData).find(d => d[1].driveLetter === value[1].letter);
-                                    return (
-                                        <ClassicNavItem
-                                            key={`Disk ${index}`}
-                                            Key={`Disk ${index}`}
-                                            selectedKey={classicViewProps.selectedKey}
-                                            type="disk"
-                                            title={`Disk (${value[1].letter})`}
-                                            onClick={() => {
-                                                setClassicViewProps({ ...classicViewProps, selectedKey: `Disk ${index}`, driveLetter: value[1].letter });
-                                            }}
-                                            detail={`${value[0]}`}
-                                            stat={`${getReadableBytesString(otherData?.[1].usedSpaceBytes ?? 0)} / ${getReadableBytesString(otherData?.[1].totalSpaceBytes ?? 0)} (${otherData?.[1].usedSpacePercentage?.toFixed(1) ?? 0}%)`}
-                                        />
-                                    );
-                                })}
                         {networkAdapters &&
                             Object.keys(networkAdapters).length > 0 &&
                             (() => {
@@ -189,6 +169,26 @@ export const PerformancePage: React.FunctionComponent = () => {
                                 type="power"
                             />
                         )}
+                        {disks &&
+                            Object.entries(disks)
+                                .sort((a, b) => b[0].localeCompare(a[0]))
+                                .map((value, index) => {
+                                    const otherData = CurrentMetricState?.diskUsageData && Object.entries(CurrentMetricState?.diskUsageData).find(d => d[1].driveLetter === value[1].letter);
+                                    return (
+                                        <ClassicNavItem
+                                            key={`Disk ${index}`}
+                                            Key={`Disk ${index}`}
+                                            selectedKey={classicViewProps.selectedKey}
+                                            type="disk"
+                                            title={`Disk (${value[1].letter})`}
+                                            onClick={() => {
+                                                setClassicViewProps({ ...classicViewProps, selectedKey: `Disk ${index}`, driveLetter: value[1].letter });
+                                            }}
+                                            detail={value[1].volumeLabel || undefined}
+                                            stat={`${getReadableBytesString(otherData?.[1].usedSpaceBytes ?? 0)} / ${getReadableBytesString(otherData?.[1].totalSpaceBytes ?? 0)} (${otherData?.[1].usedSpacePercentage?.toFixed(1) ?? 0}%)`}
+                                        />
+                                    );
+                                })}
                     </div>
 
                     {getClassicContent()}

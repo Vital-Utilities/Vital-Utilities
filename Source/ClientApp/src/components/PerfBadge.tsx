@@ -85,7 +85,9 @@ export const CpuPerfBadge: React.FunctionComponent = () => {
     const data = timeSeriesMetrics?.metrics?.[timeSeriesMetrics.metrics.length - 1]?.cpuUsageData?.[0]?.totalCoreUsagePercentage ?? undefined;
     return (
         <div className="w-32 flex items-center gap-1">
-            <span className="text-sm">cpu</span>
+            <span className="uppercase" style={{ fontSize: "0.65rem" }}>
+                cpu
+            </span>
             <Progress value={data ? Number.parseFloat(data.toFixed(0)) : 0} className="h-2" />
         </div>
     );
@@ -96,7 +98,9 @@ export const GpuPerfBadge: React.FunctionComponent = () => {
 
     return (
         <div className="w-32 flex items-center gap-1">
-            <span className="text-sm">gpu</span>
+            <span className="uppercase" style={{ fontSize: "0.65rem" }}>
+                gpu
+            </span>
             <Progress value={data ? Number.parseFloat(data?.toFixed(0) ?? "0") : 0} className="h-2" />
         </div>
     );
@@ -107,7 +111,9 @@ export const RamUsageBadge: React.FunctionComponent = () => {
     const usages = (data?.usedMemoryBytes && data?.totalVisibleMemoryBytes && (data?.usedMemoryBytes / data?.totalVisibleMemoryBytes) * 100) ?? undefined;
     return (
         <div className="w-32 flex items-center gap-1">
-            <span className="text-sm">mem</span>
+            <span className="uppercase" style={{ fontSize: "0.65rem" }}>
+                mem
+            </span>
             <Progress value={usages ? Number.parseFloat(usages.toFixed(0)) : 0} className="h-2" />
         </div>
     );

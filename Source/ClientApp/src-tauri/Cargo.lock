@@ -5865,6 +5865,7 @@ dependencies = [
  "mach2",
  "nvml-wrapper",
  "once_cell",
+ "plist",
  "regex",
  "reqwest 0.12.28",
  "sentry",

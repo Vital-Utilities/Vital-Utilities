@@ -212,3 +212,17 @@ pub async fn set_run_at_startup(
 pub fn api_hello() -> Result<String, String> {
     Ok("Hello from VitalRustService!".to_string())
 }
+
+// ============================================================================
+// Battery History Command
+// ============================================================================
+
+#[tauri::command]
+pub async fn get_battery_history(
+    hours: Option<u32>,
+    machine_store: State<'_, Arc<MachineDataStore>>,
+) -> Result<crate::models::BatteryHistory, String> {
+    let hours = hours.unwrap_or(12);
+    let history = machine_store.get_battery_history(hours).await;
+    Ok(history)
+}

@@ -134,3 +134,16 @@ code {
     @apply bg-background text-foreground;
   }
 }
+
+/* Disable text selection on top nav bar */
+.top-nav {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+.top-nav *,
+.top-nav *::before,
+.top-nav *::after {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}

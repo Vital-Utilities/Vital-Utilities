@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { ClassicLayout, ItemOne, ItemTwo } from "../../../components/Charts/Shared";
 import { VitalState } from "../../../Redux/States";
 import { Plug } from "lucide-react";
+import { systemApi } from "../../../Redux/actions/tauriApi";
 
 // AC transition animation state
 interface ACTransitionState {
@@ -22,6 +23,13 @@ interface SurgeParticle {
     size: number;
     life: number;
     maxLife: number;
+}
+
+// Battery history entry type (local to avoid linter issues)
+interface BatteryHistoryDataEntry {
+    timestamp: string;
+    chargePercentage: number;
+    onAcPower: boolean;
 }
 
 export const ClassicPowerView: React.FunctionComponent = () => {
@@ -44,8 +52,29 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         surgeParticles: []
     });
 
+    // Battery history state
+    const [batteryHistory, setBatteryHistory] = React.useState<BatteryHistoryDataEntry[]>([]);
+    const batteryHistoryRef = useRef<BatteryHistoryDataEntry[]>([]);
+
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);
     const powerData = dynamicState?.powerUsageData;
+
+    // Fetch battery history on mount and every 5 minutes
+    useEffect(() => {
+        const fetchHistory = async () => {
+            try {
+                const response = await systemApi.getBatteryHistory(12);
+                setBatteryHistory(response.entries);
+                batteryHistoryRef.current = response.entries;
+            } catch (e) {
+                console.error("Failed to fetch battery history:", e);
+            }
+        };
+
+        fetchHistory();
+        const interval = setInterval(fetchHistory, 5 * 60 * 1000); // Refresh every 5 minutes
+        return () => clearInterval(interval);
+    }, []);
 
     // Update power history
     useEffect(() => {
@@ -138,6 +167,7 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         const isPluggedIn = powerData?.externalConnected ?? false;
         const isPassthrough = isPluggedIn && powerData?.fullyCharged === true;
         const adapterWatts = powerData?.adapterWatts ?? 0;
+        const lowPowerMode = powerData?.lowPowerMode ?? false;
 
         // Update AC transition
         const transition = acTransitionRef.current;
@@ -184,10 +214,11 @@ export const ClassicPowerView: React.FunctionComponent = () => {
         }
 
         // Draw unified battery visualization with integrated power flow
-        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, isPassthrough, transition, passthroughTransition);
+        drawIntegratedBattery(ctx, width, height, batteryPercent, systemPower, adapterWatts, isCharging ?? false, isPluggedIn, isPassthrough, lowPowerMode, transition, passthroughTransition);
 
-        // Draw power graph at bottom
+        // Draw power graph at bottom left, battery history at bottom right
         drawPowerGraph(ctx, width, height, powerHistoryRef.current);
+        drawBatteryHistoryGraph(ctx, width, height, batteryHistoryRef.current, batteryPercent, isPluggedIn);
 
         animationRef.current = requestAnimationFrame(draw);
     }, [powerData]);
@@ -226,6 +257,9 @@ export const ClassicPowerView: React.FunctionComponent = () => {
                     <div style={{ display: "flex", flexWrap: "wrap", alignContent: "flex-start", gap: 15, overflowY: "auto" }}>
                         {/* Power consumption */}
                         {powerData.systemPowerWatts !== undefined && <ItemOne color="#3b82f6" title="System Power" value={`${powerData.systemPowerWatts.toFixed(1)}W`} />}
+
+                        {/* Charging Rate - show when charging */}
+                        {powerData.externalConnected && !powerData.fullyCharged && powerData.batteryPowerWatts !== undefined && powerData.batteryPowerWatts > 0 && <ItemOne color="#22c55e" title="Charging Rate" value={`${powerData.batteryPowerWatts.toFixed(1)}W`} />}
 
                         {/* Battery Flow - positive = charging, negative = discharging */}
                         {powerData.batteryAmperage !== undefined && <ItemOne color={powerData.batteryAmperage > 0 ? "#22c55e" : powerData.batteryAmperage < 0 ? "#f97316" : "#94a3b8"} title="Battery Flow" value={`${powerData.batteryAmperage > 0 ? "+" : ""}${powerData.batteryAmperage} mA`} />}
@@ -290,7 +324,7 @@ function easeInCubic(x: number): number {
     return x * x * x;
 }
 
-function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, isPassthrough: boolean, transition: ACTransitionState, passthroughTransition: { active: boolean; direction: "enter" | "exit"; progress: number; startTime: number }) {
+function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, height: number, percent: number, systemPower: number, adapterWatts: number, isCharging: boolean, isPluggedIn: boolean, isPassthrough: boolean, lowPowerMode: boolean, transition: ACTransitionState, passthroughTransition: { active: boolean; direction: "enter" | "exit"; progress: number; startTime: number }) {
     const centerX = width / 2;
     const centerY = height * 0.38;
     const time = Date.now();
@@ -641,7 +675,11 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
 
     // Outer glow based on state
     ctx.save();
-    if (isCharging) {
+    if (lowPowerMode) {
+        // Yellow glow for low power mode
+        ctx.shadowColor = "rgba(250, 204, 21, 0.5)";
+        ctx.shadowBlur = 20;
+    } else if (isCharging) {
         ctx.shadowColor = "rgba(34, 197, 94, 0.5)";
         ctx.shadowBlur = 25;
     } else if (isPassthrough) {
@@ -718,9 +756,14 @@ function drawIntegratedBattery(ctx: CanvasRenderingContext2D, width: number, hei
         ctx.lineTo(fillX + fillWidth, fillY + fillHeight);
         ctx.closePath();
 
-        // Liquid gradient
+        // Liquid gradient - yellow/amber when low power mode is enabled
         const liquidGradient = ctx.createLinearGradient(fillX, fillY, fillX, fillY + fillHeight);
-        if (percent < 20) {
+        if (lowPowerMode) {
+            // Yellow/amber for low power mode
+            liquidGradient.addColorStop(0, "rgba(253, 224, 71, 0.95)");
+            liquidGradient.addColorStop(0.4, "rgba(250, 204, 21, 0.9)");
+            liquidGradient.addColorStop(1, "rgba(202, 138, 4, 0.88)");
+        } else if (percent < 20) {
             liquidGradient.addColorStop(0, "rgba(248, 113, 113, 0.95)");
             liquidGradient.addColorStop(0.4, "rgba(239, 68, 68, 0.9)");
             liquidGradient.addColorStop(1, "rgba(185, 28, 28, 0.88)");
@@ -882,9 +925,9 @@ function drawPowerGraph(ctx: CanvasRenderingContext2D, width: number, height: nu
 
     const graphHeight = height * 0.16;
     const graphY = height * 0.9;
-    const graphWidth = width * 0.82;
-    const graphX = (width - graphWidth) / 2;
-    const padding = 20;
+    // Make power graph narrower to fit on left side
+    const graphWidth = width * 0.38;
+    const graphX = width * 0.08;
 
     const minPower = Math.min(...history) * 0.9;
     const maxPower = Math.max(...history, 10) * 1.1;
@@ -1028,4 +1071,164 @@ function formatTimeRemaining(minutes: number): string {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
+}
+
+function drawBatteryHistoryGraph(ctx: CanvasRenderingContext2D, width: number, height: number, history: BatteryHistoryDataEntry[], currentPercent: number, currentOnAc: boolean) {
+    if (history.length < 1) return;
+
+    // Append current battery state as "now" entry so the graph ends at the actual current value
+    const historyWithCurrent = [
+        ...history,
+        {
+            timestamp: new Date().toISOString(),
+            chargePercentage: currentPercent,
+            onAcPower: currentOnAc
+        }
+    ];
+
+    const graphHeight = height * 0.16;
+    const graphY = height * 0.9;
+    const graphWidth = width * 0.38;
+    const graphX = width * 0.54; // Right side
+
+    // Grid lines
+    for (let i = 0; i <= 4; i++) {
+        const y = graphY - (i / 4) * graphHeight;
+        const alpha = i === 0 || i === 4 ? 0.15 : 0.08;
+        ctx.strokeStyle = `rgba(100, 116, 139, ${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(graphX, y);
+        ctx.lineTo(graphX + graphWidth, y);
+        ctx.stroke();
+    }
+
+    // Vertical grid lines
+    for (let i = 0; i <= 6; i++) {
+        const x = graphX + (i / 6) * graphWidth;
+        ctx.strokeStyle = "rgba(100, 116, 139, 0.06)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, graphY - graphHeight);
+        ctx.lineTo(x, graphY);
+        ctx.stroke();
+    }
+
+    // Build path points
+    const points: { x: number; y: number; onAc: boolean }[] = [];
+    for (let i = 0; i < historyWithCurrent.length; i++) {
+        const x = graphX + (i / (historyWithCurrent.length - 1)) * graphWidth;
+        const y = graphY - (historyWithCurrent[i].chargePercentage / 100) * graphHeight;
+        points.push({ x, y, onAc: historyWithCurrent[i].onAcPower });
+    }
+
+    // Draw glow effect
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.shadowColor = "rgba(34, 197, 94, 0.6)";
+    ctx.shadowBlur = 12;
+    ctx.strokeStyle = "rgba(34, 197, 94, 0.5)";
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke();
+    ctx.restore();
+
+    // Main graph line with color segments for AC vs Battery
+    for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1];
+        const curr = points[i];
+        ctx.beginPath();
+        ctx.moveTo(prev.x, prev.y);
+        ctx.lineTo(curr.x, curr.y);
+        // Green when on AC (charging), orange when on battery
+        ctx.strokeStyle = curr.onAc ? "#22c55e" : "#f97316";
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+        ctx.stroke();
+    }
+
+    // Fill gradient under the line
+    const gradient = ctx.createLinearGradient(0, graphY - graphHeight, 0, graphY);
+    gradient.addColorStop(0, "rgba(34, 197, 94, 0.2)");
+    gradient.addColorStop(0.5, "rgba(34, 197, 94, 0.08)");
+    gradient.addColorStop(1, "rgba(34, 197, 94, 0.02)");
+
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+    }
+    ctx.lineTo(graphX + graphWidth, graphY);
+    ctx.lineTo(graphX, graphY);
+    ctx.closePath();
+    ctx.fillStyle = gradient;
+    ctx.fill();
+
+    // Current value dot
+    const lastPoint = points[points.length - 1];
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(lastPoint.x, lastPoint.y, 8, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(34, 197, 94, 0.3)";
+    ctx.fill();
+    ctx.restore();
+
+    ctx.beginPath();
+    ctx.arc(lastPoint.x, lastPoint.y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(34, 197, 94, 0.5)";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(lastPoint.x, lastPoint.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = "#4ade80";
+    ctx.fill();
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Y-axis labels
+    ctx.font = "9px system-ui";
+    ctx.fillStyle = "#64748b";
+    ctx.textAlign = "right";
+    ctx.fillText("100", graphX - 5, graphY - graphHeight + 3);
+    ctx.fillText("0", graphX - 5, graphY + 3);
+
+    // Title
+    ctx.font = "10px system-ui";
+    ctx.fillStyle = "#94a3b8";
+    ctx.textAlign = "left";
+    ctx.fillText("BATTERY HISTORY (12h)", graphX, graphY - graphHeight - 22);
+
+    // Time indicator - calculate from actual timestamps
+    const firstTime = new Date(history[0].timestamp);
+    const hoursAgo = Math.round((Date.now() - firstTime.getTime()) / (1000 * 60 * 60));
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#64748b";
+    ctx.fillText(`${hoursAgo}h ago`, graphX, graphY + 12);
+    ctx.textAlign = "right";
+    ctx.fillText("now", graphX + graphWidth, graphY + 12);
+
+    // Legend for AC vs Battery
+    ctx.font = "9px system-ui";
+    ctx.textAlign = "right";
+    const legendX = graphX + graphWidth;
+    const legendY = graphY - graphHeight - 22;
+
+    // AC indicator
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(legendX - 70, legendY - 4, 8, 8);
+    ctx.fillStyle = "#64748b";
+    ctx.fillText("AC", legendX - 45, legendY + 4);
+
+    // Battery indicator
+    ctx.fillStyle = "#f97316";
+    ctx.fillRect(legendX - 35, legendY - 4, 8, 8);
+    ctx.fillStyle = "#64748b";
+    ctx.fillText("Batt", legendX - 5, legendY + 4);
 }

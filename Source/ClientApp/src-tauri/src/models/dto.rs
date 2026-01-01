@@ -387,6 +387,8 @@ pub struct PowerUsage {
     pub fully_charged: bool,
     /// Whether external power is connected
     pub external_connected: bool,
+    /// Whether low power mode is enabled
+    pub low_power_mode: bool,
     /// Current system power consumption in watts
     pub system_power_watts: Option<f32>,
     /// Current battery power in/out in watts (positive = charging, negative = discharging)
@@ -411,6 +413,26 @@ pub struct PowerUsage {
     pub adapter_voltage: Option<f32>,
     /// Adapter description (e.g., "pd charger")
     pub adapter_description: Option<String>,
+}
+
+/// A single battery history entry from pmset log
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BatteryHistoryEntry {
+    /// Timestamp in ISO 8601 format
+    pub timestamp: String,
+    /// Battery charge percentage (0-100)
+    pub charge_percentage: i32,
+    /// Whether on AC power (true) or battery (false)
+    pub on_ac_power: bool,
+}
+
+/// Battery history data over time
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BatteryHistory {
+    /// List of battery history entries, sorted by time (oldest first)
+    pub entries: Vec<BatteryHistoryEntry>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -491,6 +513,8 @@ pub struct GetMachineDynamicDataResponse {
     pub process_disk_bytes_per_sec_activity: Option<HashMap<i32, f64>>,
     pub cpu_temperature: Option<HashMap<String, f32>>,
     pub process_gpu_usage: Option<HashMap<i32, f32>>,
+    /// Process CPU time in seconds (total time the process has been running on CPU)
+    pub process_cpu_time_secs: Option<HashMap<i32, u64>>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

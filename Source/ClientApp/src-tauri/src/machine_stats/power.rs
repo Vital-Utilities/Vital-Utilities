@@ -11,6 +11,8 @@ pub struct PowerUsage {
     pub fully_charged: bool,
     /// Whether external power is connected
     pub external_connected: bool,
+    /// Whether low power mode is enabled
+    pub low_power_mode: bool,
     /// Current system power consumption in watts
     pub system_power_watts: Option<f32>,
     /// Current battery power in/out in watts (negative = discharging)
@@ -191,6 +193,56 @@ mod iokit {
     }
 }
 
+/// Cached low power mode state with optional timestamp (None = never fetched)
+#[cfg(target_os = "macos")]
+static LOW_POWER_MODE_CACHE: std::sync::RwLock<Option<(bool, std::time::Instant)>> =
+    std::sync::RwLock::new(None);
+
+/// Check if low power mode is enabled on macOS (cached for 5 seconds)
+#[cfg(target_os = "macos")]
+fn get_low_power_mode() -> bool {
+    use std::process::Command;
+    use std::time::{Duration, Instant};
+
+    const CACHE_TTL: Duration = Duration::from_secs(5);
+
+    // Check cache first
+    {
+        if let Ok(cache) = LOW_POWER_MODE_CACHE.read() {
+            if let Some((value, timestamp)) = *cache {
+                if timestamp.elapsed() < CACHE_TTL {
+                    return value;
+                }
+            }
+        }
+    }
+
+    // Cache expired or never fetched, fetch fresh value
+    let output = match Command::new("pmset").args(["-g"]).output() {
+        Ok(o) => o,
+        Err(_) => return false,
+    };
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let mut low_power = false;
+    for line in stdout.lines() {
+        if line.contains("lowpowermode") {
+            // Parse "lowpowermode         1" or "lowpowermode         0"
+            if let Some(value) = line.split_whitespace().last() {
+                low_power = value == "1";
+                break;
+            }
+        }
+    }
+
+    // Update cache
+    if let Ok(mut cache) = LOW_POWER_MODE_CACHE.write() {
+        *cache = Some((low_power, Instant::now()));
+    }
+
+    low_power
+}
+
 /// Get power and battery information on macOS using IOKit
 #[cfg(target_os = "macos")]
 pub async fn get_power_info() -> PowerUsage {
@@ -199,11 +251,14 @@ pub async fn get_power_info() -> PowerUsage {
         None => return PowerUsage::default(),
     };
 
+    let low_power_mode = get_low_power_mode();
+
     let mut power = PowerUsage {
         battery_installed: data.battery_installed,
         battery_percentage: data.current_capacity.map(|v| v as f32),
         fully_charged: data.fully_charged,
         external_connected: data.external_connected,
+        low_power_mode,
         cycle_count: data.cycle_count.map(|v| v as i32),
         design_capacity_mah: data.design_capacity.map(|v| v as i32),
         max_capacity_mah: data.nominal_charge_capacity.map(|v| v as i32),
@@ -272,4 +327,112 @@ pub async fn get_power_info() -> PowerUsage {
 #[cfg(not(target_os = "macos"))]
 pub async fn get_power_info() -> PowerUsage {
     PowerUsage::default()
+}
+
+/// A single battery history entry
+#[derive(Debug, Clone)]
+pub struct BatteryHistoryEntry {
+    /// Timestamp in ISO 8601 format
+    pub timestamp: String,
+    /// Battery charge percentage (0-100)
+    pub charge_percentage: i32,
+    /// Whether on AC power (true) or battery (false)
+    pub on_ac_power: bool,
+}
+
+/// Battery history data
+#[derive(Debug, Clone, Default)]
+pub struct BatteryHistory {
+    /// List of battery history entries, sorted by time (oldest first)
+    pub entries: Vec<BatteryHistoryEntry>,
+}
+
+/// Get battery history from pmset log on macOS
+#[cfg(target_os = "macos")]
+pub async fn get_battery_history(hours: u32) -> BatteryHistory {
+    use chrono::{DateTime, Utc};
+    use std::process::Command;
+
+    let output = match Command::new("pmset").args(["-g", "log"]).output() {
+        Ok(o) => o,
+        Err(_) => return BatteryHistory::default(),
+    };
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let cutoff_time = Utc::now() - chrono::Duration::hours(hours as i64);
+    let mut entries = Vec::new();
+
+    // Parse lines like:
+    // 2025-12-31 19:14:59 +0000 Assertions          	Summary- [System: PrevIdle DeclUser kDisp] Using Batt(Charge: 100)
+    // 2025-12-31 19:15:03 +0000 Assertions          	Summary- [System: PrevIdle DeclUser kDisp] Using AC(Charge: 100)
+    for line in stdout.lines() {
+        // Look for lines with charge info
+        if !line.contains("(Charge:") {
+            continue;
+        }
+
+        // Extract timestamp (first 25 chars: "2025-12-31 19:14:59 +0000")
+        if line.len() < 25 {
+            continue;
+        }
+        let timestamp_str = &line[0..25];
+
+        // Parse timestamp
+        let timestamp = match DateTime::parse_from_str(timestamp_str, "%Y-%m-%d %H:%M:%S %z") {
+            Ok(t) => t,
+            Err(_) => continue,
+        };
+
+        // Skip entries older than cutoff
+        if timestamp.with_timezone(&Utc) < cutoff_time {
+            continue;
+        }
+
+        // Extract charge percentage
+        let charge_start = match line.find("Charge:") {
+            Some(pos) => pos + 7,
+            None => continue,
+        };
+        let charge_end = match line[charge_start..].find(')') {
+            Some(pos) => charge_start + pos,
+            None => continue,
+        };
+        let charge_str = line[charge_start..charge_end].trim();
+        let charge: i32 = match charge_str.parse() {
+            Ok(c) => c,
+            Err(_) => continue,
+        };
+
+        // Determine if on AC or battery
+        let on_ac = line.contains("Using AC");
+
+        entries.push(BatteryHistoryEntry {
+            timestamp: timestamp.to_rfc3339(),
+            charge_percentage: charge,
+            on_ac_power: on_ac,
+        });
+    }
+
+    // Deduplicate consecutive entries with same charge and power source
+    let mut deduplicated: Vec<BatteryHistoryEntry> = Vec::new();
+    for entry in entries {
+        if let Some(last) = deduplicated.last() {
+            if last.charge_percentage == entry.charge_percentage
+                && last.on_ac_power == entry.on_ac_power
+            {
+                continue;
+            }
+        }
+        deduplicated.push(entry);
+    }
+
+    BatteryHistory {
+        entries: deduplicated,
+    }
+}
+
+/// Get battery history stub for non-macOS platforms
+#[cfg(not(target_os = "macos"))]
+pub async fn get_battery_history(_hours: u32) -> BatteryHistory {
+    BatteryHistory::default()
 }

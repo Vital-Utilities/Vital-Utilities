@@ -109,6 +109,17 @@
             width: inherit;
             white-space: nowrap;
         }
+
+        // Global resize handle positioning (centered on column border)
+        .resize-handle {
+            position: absolute;
+            right: -3px;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            cursor: col-resize;
+            z-index: 10;
+        }
     }
 
     // Resizable table styles
@@ -130,7 +141,7 @@
 
             .resize-handle {
                 position: absolute;
-                right: 0;
+                right: -3px;
                 top: 0;
                 bottom: 0;
                 width: 6px;
@@ -177,35 +188,41 @@
             min-width: 100%;
         }
 
-        th {
-            position: relative;
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 20;
 
-            .th-content {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                padding-right: 12px;
-            }
-
-            .resize-handle {
-                position: absolute;
-                right: 0;
+            th {
+                position: sticky;
                 top: 0;
-                bottom: 0;
-                width: 6px;
-                cursor: col-resize;
-                background: color-mix(in srgb, var(--border) 60%, transparent);
-                transition: background 0.15s ease;
-                z-index: 10;
+                background-color: var(--background);
+                z-index: 20;
 
-                &:hover,
-                &.resizing {
-                    background: var(--primary);
+                .th-content {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding-right: 12px;
                 }
-            }
 
-            &:last-child .resize-handle {
-                display: none;
+                .resize-handle {
+                    position: absolute;
+                    right: -3px;
+                    top: 0;
+                    bottom: 0;
+                    width: 6px;
+                    cursor: col-resize;
+                    background: color-mix(in srgb, var(--border) 60%, transparent);
+                    transition: background 0.15s ease;
+                    z-index: 10;
+
+                    &:hover,
+                    &.resizing {
+                        background: var(--primary);
+                    }
+                }
+
             }
         }
 
@@ -227,6 +244,12 @@
             display: inline-flex;
             align-items: center;
             margin-right: 8px;
+        }
+
+        // Pinned column styles
+        th.pinned,
+        td.pinned {
+            box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
         }
     }
 }

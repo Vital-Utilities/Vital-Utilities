@@ -198,9 +198,99 @@ fn get_mainwindow_title(pid: u32) -> Option<String> {
 fn get_process_path(pid: u32) -> Option<String> {
     None
 }
+
 #[cfg(target_os = "macos")]
 fn get_file_description(path: String) -> Result<String, ()> {
     Err(())
+}
+
+/// Cache for macOS app display names to avoid repeated Info.plist reads.
+/// Maps executable path to display name (Some(name) if found, None if not an app bundle).
+#[cfg(target_os = "macos")]
+static DISPLAY_NAME_CACHE: once_cell::sync::Lazy<Mutex<HashMap<String, Option<String>>>> =
+    once_cell::sync::Lazy::new(|| Mutex::new(HashMap::new()));
+
+/// Get the application display name for a macOS process.
+/// Uses a cache to avoid repeated filesystem reads of Info.plist.
+/// This looks up the app bundle's Info.plist to find CFBundleDisplayName or CFBundleName.
+#[cfg(target_os = "macos")]
+pub fn get_macos_app_display_name(process: &sysinfo::Process) -> Option<String> {
+    // Get the executable path
+    let exe_path = process.exe()?;
+    let exe_path_str = exe_path.to_string_lossy().to_string();
+
+    // Check cache first
+    {
+        let cache = DISPLAY_NAME_CACHE.lock().unwrap();
+        if let Some(cached) = cache.get(&exe_path_str) {
+            return cached.clone();
+        }
+    }
+
+    // Cache miss - look up the display name
+    let display_name = lookup_macos_app_display_name(exe_path);
+
+    // Store in cache
+    {
+        let mut cache = DISPLAY_NAME_CACHE.lock().unwrap();
+        cache.insert(exe_path_str, display_name.clone());
+    }
+
+    display_name
+}
+
+/// Internal function to look up the display name from Info.plist.
+/// This is separated from the caching logic for clarity.
+#[cfg(target_os = "macos")]
+fn lookup_macos_app_display_name(exe_path: &std::path::Path) -> Option<String> {
+    use std::path::PathBuf;
+    use std::fs;
+
+    // Walk up the path to find .app bundle
+    let mut current_path = exe_path.to_path_buf();
+    let mut app_bundle_path: Option<PathBuf> = None;
+
+    while let Some(parent) = current_path.parent() {
+        if current_path.extension().map_or(false, |ext| ext == "app") {
+            app_bundle_path = Some(current_path.clone());
+            break;
+        }
+        current_path = parent.to_path_buf();
+    }
+
+    let app_bundle = app_bundle_path?;
+    let info_plist_path = app_bundle.join("Contents/Info.plist");
+
+    if !info_plist_path.exists() {
+        return None;
+    }
+
+    // Read and parse the plist
+    let plist_content = fs::read(&info_plist_path).ok()?;
+    let plist: plist::Value = plist::from_bytes(&plist_content).ok()?;
+
+    if let plist::Value::Dictionary(dict) = plist {
+        // Try CFBundleDisplayName first (localized display name)
+        if let Some(plist::Value::String(name)) = dict.get("CFBundleDisplayName") {
+            if !name.is_empty() {
+                return Some(name.clone());
+            }
+        }
+        // Fall back to CFBundleName
+        if let Some(plist::Value::String(name)) = dict.get("CFBundleName") {
+            if !name.is_empty() {
+                return Some(name.clone());
+            }
+        }
+        // Try CFBundleExecutable as last resort
+        if let Some(plist::Value::String(name)) = dict.get("CFBundleExecutable") {
+            if !name.is_empty() {
+                return Some(name.clone());
+            }
+        }
+    }
+
+    None
 }
 
 #[cfg(target_os = "windows")]

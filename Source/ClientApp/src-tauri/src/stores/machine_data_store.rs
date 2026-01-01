@@ -5,11 +5,13 @@ use dashmap::DashMap;
 use std::collections::HashMap;
 
 use crate::models::{
-    CpuData, CpuUsage, CpuUsageMetricModel, DiskUsageMetricModel, DiskUsages, GetMachineDynamicDataResponse,
-    GetMachineStaticDataResponse, GpuData, GpuUsage, GpuUsageMetricModel, MemoryUsage,
-    NetworkAdapterUsages, NetworkAdapterHistory, NetworkHistoryEntry, ParentChildModelDto, PowerUsage, RamData,
-    RamUsageMetricModel, TimeSeriesMachineMetricsModel, TimeSeriesMachineMetricsResponse, DateRange,
+    BatteryHistory, BatteryHistoryEntry, CpuData, CpuUsage, CpuUsageMetricModel, DiskUsageMetricModel,
+    DiskUsages, GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GpuData, GpuUsage,
+    GpuUsageMetricModel, MemoryUsage, NetworkAdapterHistory, NetworkAdapterUsages, NetworkHistoryEntry,
+    ParentChildModelDto, PowerUsage, RamData, RamUsageMetricModel, TimeSeriesMachineMetricsModel,
+    TimeSeriesMachineMetricsResponse, DateRange,
 };
+use std::sync::RwLock;
 
 /// Holds the current state of hardware metrics
 pub struct MachineDataStore {
@@ -35,6 +37,8 @@ pub struct MachineDataStore {
     pub process_disk_activity: DashMap<i32, f64>,
     /// Process GPU usage (PID -> percentage)
     pub process_gpu_usage: DashMap<i32, f32>,
+    /// Process CPU time in seconds (total time the process has been running on CPU)
+    pub process_cpu_time: DashMap<i32, u64>,
     /// Running processes with parent-child hierarchy
     pub running_processes: DashMap<i32, ParentChildModelDto>,
     /// Metrics cache for recent data (in-memory only)
@@ -45,6 +49,18 @@ pub struct MachineDataStore {
     static_gpu: DashMap<i32, GpuData>,
     /// Static RAM data (populated once at startup)
     static_ram: DashMap<i32, RamData>,
+    /// Cached battery history (refreshed periodically)
+    battery_history_cache: RwLock<Option<BatteryHistoryCache>>,
+}
+
+/// Cached battery history with expiration
+struct BatteryHistoryCache {
+    /// The cached history data
+    history: BatteryHistory,
+    /// When the cache was last refreshed
+    last_refresh: DateTime<Utc>,
+    /// How many hours of history was requested
+    hours: u32,
 }
 
 impl MachineDataStore {
@@ -62,12 +78,73 @@ impl MachineDataStore {
             process_ram_usage: DashMap::new(),
             process_disk_activity: DashMap::new(),
             process_gpu_usage: DashMap::new(),
+            process_cpu_time: DashMap::new(),
             running_processes: DashMap::new(),
             metrics_cache: DashMap::new(),
             static_cpu: DashMap::new(),
             static_gpu: DashMap::new(),
             static_ram: DashMap::new(),
+            battery_history_cache: RwLock::new(None),
         }
+    }
+
+    /// Get battery history, using cache if available and not stale
+    /// Cache is refreshed every 2 minutes or when hours parameter changes
+    pub async fn get_battery_history(&self, hours: u32) -> BatteryHistory {
+        const CACHE_TTL_SECONDS: i64 = 120; // 2 minutes
+
+        // Check if we have a valid cache
+        {
+            let cache_guard = self.battery_history_cache.read().unwrap();
+            if let Some(ref cache) = *cache_guard {
+                let age = Utc::now() - cache.last_refresh;
+                if age.num_seconds() < CACHE_TTL_SECONDS && cache.hours == hours {
+                    return cache.history.clone();
+                }
+            }
+        }
+
+        // Cache miss or stale - fetch new data
+        let history = Self::fetch_battery_history(hours).await;
+
+        // Update cache
+        {
+            let mut cache_guard = self.battery_history_cache.write().unwrap();
+            *cache_guard = Some(BatteryHistoryCache {
+                history: history.clone(),
+                last_refresh: Utc::now(),
+                hours,
+            });
+        }
+
+        history
+    }
+
+    /// Fetch battery history from pmset (internal method)
+    #[cfg(target_os = "macos")]
+    async fn fetch_battery_history(hours: u32) -> BatteryHistory {
+        use crate::machine_stats::power;
+
+        let raw_history = power::get_battery_history(hours).await;
+
+        // Convert from power module type to DTO
+        let entries = raw_history
+            .entries
+            .into_iter()
+            .map(|e| BatteryHistoryEntry {
+                timestamp: e.timestamp,
+                charge_percentage: e.charge_percentage,
+                on_ac_power: e.on_ac_power,
+            })
+            .collect();
+
+        BatteryHistory { entries }
+    }
+
+    /// Fetch battery history stub for non-macOS platforms
+    #[cfg(not(target_os = "macos"))]
+    async fn fetch_battery_history(_hours: u32) -> BatteryHistory {
+        BatteryHistory { entries: vec![] }
     }
 
     /// Initialize static CPU data from sysinfo
@@ -302,6 +379,12 @@ impl MachineDataStore {
             .map(|r| (*r.key(), *r.value()))
             .collect();
 
+        let process_cpu_time_secs: HashMap<i32, u64> = self
+            .process_cpu_time
+            .iter()
+            .map(|r| (*r.key(), *r.value()))
+            .collect();
+
         // Extract CPU temperature from cpu_usage
         let cpu_temperature = cpu_usage_data
             .as_ref()
@@ -345,6 +428,11 @@ impl MachineDataStore {
                 None
             } else {
                 Some(process_gpu_usage)
+            },
+            process_cpu_time_secs: if process_cpu_time_secs.is_empty() {
+                None
+            } else {
+                Some(process_cpu_time_secs)
             },
         }
     }

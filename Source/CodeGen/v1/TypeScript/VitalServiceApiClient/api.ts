@@ -719,14 +719,20 @@ export interface GetMachineDynamicDataResponse {
      */
     'cpuTemperature'?: { [key: string]: number; };
     /**
-     * 
+     *
      * @type {{ [key: string]: number; }}
      * @memberof GetMachineDynamicDataResponse
      */
     'processGpuUsage'?: { [key: string]: number; };
+    /**
+     * Process CPU time in seconds (total time the process has been running on CPU)
+     * @type {{ [key: string]: number; }}
+     * @memberof GetMachineDynamicDataResponse
+     */
+    'processCpuTimeSecs'?: { [key: string]: number; };
 }
 /**
- * 
+ *
  * @export
  * @interface GetMachineStaticDataResponse
  */
@@ -1613,6 +1619,12 @@ export interface PowerUsage {
      * @memberof PowerUsage
      */
     'externalConnected': boolean;
+    /**
+     * Whether low power mode is enabled
+     * @type {boolean}
+     * @memberof PowerUsage
+     */
+    'lowPowerMode': boolean;
     /**
      * Current system power consumption in watts
      * @type {number}

@@ -19,8 +19,8 @@
         "title": "Vital Utilities",
         "width": 1200,
         "height": 800,
-        "minWidth": 1200,
-        "minHeight": 800,
+        "minWidth": 600,
+        "minHeight": 400,
         "resizable": true,
         "fullscreen": false,
         "alwaysOnTop": true

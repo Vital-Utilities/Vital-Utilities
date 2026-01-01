@@ -11,6 +11,17 @@ import type { GetMachineDynamicDataResponse, GetMachineStaticDataResponse, GetMa
 // System API
 // ============================================================================
 
+// Battery history types
+export interface BatteryHistoryEntry {
+    timestamp: string;
+    chargePercentage: number;
+    onAcPower: boolean;
+}
+
+export interface BatteryHistory {
+    entries: BatteryHistoryEntry[];
+}
+
 export const systemApi = {
     async getStatic(): Promise<GetMachineStaticDataResponse> {
         return invoke<GetMachineStaticDataResponse>("get_system_static");
@@ -22,6 +33,10 @@ export const systemApi = {
 
     async getTimeseries(request: GetMachineTimeSeriesRequest): Promise<TimeSeriesMachineMetricsResponse> {
         return invoke<TimeSeriesMachineMetricsResponse>("get_system_timeseries", { request });
+    },
+
+    async getBatteryHistory(hours?: number): Promise<BatteryHistory> {
+        return invoke<BatteryHistory>("get_battery_history", { hours: hours ?? 12 });
     }
 };
 
@@ -108,6 +123,10 @@ export const settingsApi = {
 
     async setRunAtStartup(enabled: boolean): Promise<void> {
         return invoke<void>("set_run_at_startup", { enabled });
+    },
+
+    async resetToDefaults(): Promise<string> {
+        return invoke<string>("reset_settings_to_defaults");
     }
 };
 

@@ -139,7 +139,9 @@ export const ClassicRamView: React.FunctionComponent = () => {
         }
 
         // Draw memory breakdown bar with animated values
-        const pressure = ramData.memoryPressure ?? 0;
+        // Only use actual memory pressure value - no glow when pressure is 0
+        const stableEffectivePressure = ramData.memoryPressure ?? 0;
+
         drawMemoryBar(ctx, width, height, {
             total: animated.total,
             app: animated.app,
@@ -149,7 +151,7 @@ export const ClassicRamView: React.FunctionComponent = () => {
             free: animated.free,
             swapUsed: animated.swapUsed,
             swapTotal: animated.swapTotal,
-            pressure
+            pressure: stableEffectivePressure
         });
 
         // Draw usage graph at bottom
@@ -233,12 +235,11 @@ function drawMemoryBar(ctx: CanvasRenderingContext2D, width: number, height: num
     const time = Date.now();
 
     // Memory pressure pulsing glow effect
-    // Use memory usage as fallback when pressure is 0 (normal state on macOS)
-    const usedPercent = ((data.total - data.free) / data.total) * 100;
-    // Start showing glow at 30% usage, scale to 100 at 100% usage
-    const effectivePressure = data.pressure > 0 ? data.pressure : Math.max(0, ((usedPercent - 30) / 70) * 100);
+    // data.pressure is now pre-calculated as stableEffectivePressure using raw (non-animated) values
+    // to prevent the glow from flickering due to animation interpolation
+    const effectivePressure = data.pressure;
 
-    if (effectivePressure > 0) {
+    if (effectivePressure > 0 && !Number.isNaN(effectivePressure) && Number.isFinite(effectivePressure)) {
         // Pulse speed increases with pressure (faster when critical)
         const pulseSpeed = 3000 + (100 - effectivePressure) * 40; // 3s at 100%, 7s at 0%
         const pulsePhase = (time % pulseSpeed) / pulseSpeed;
