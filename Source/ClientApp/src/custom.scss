@@ -121,8 +121,13 @@ text.recharts-text.recharts-cartesian-axis-tick-value {
     background: var(--accent);
 }
 
-/* Hide scrollbar until hover on scrollable containers */
-.custom-table,
+/* Scrollbar visibility for scrollable containers */
+.custom-table {
+    &::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--secondary) 60%, transparent);
+    }
+}
+
 #pageContainer {
     &::-webkit-scrollbar-thumb {
         background: transparent;

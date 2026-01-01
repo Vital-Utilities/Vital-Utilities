@@ -15,6 +15,16 @@ import "./performance.scss";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
+// Time range options for time series data fetching (used by __root.tsx)
+export type relativeTypeStringOptions = "Last 1 minute" | "Last 5 minutes" | "Last 15 minutes" | "Last 30 minutes" | "Last 1 hour";
+export const relativeTimeOptions: Record<relativeTypeStringOptions, number> = {
+    "Last 1 minute": -1,
+    "Last 5 minutes": -5,
+    "Last 15 minutes": -15,
+    "Last 30 minutes": -30,
+    "Last 1 hour": -60
+};
+
 export const PerformancePage: React.FunctionComponent = () => {
     const staticState = useSelector<VitalState, GetMachineStaticDataResponse | undefined>(state => state.machineState.static);
     const dynamicState = useSelector<VitalState, GetMachineDynamicDataResponse | undefined>(state => state.machineState.dynamic);

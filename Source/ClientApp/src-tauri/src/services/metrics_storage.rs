@@ -24,10 +24,10 @@ impl MetricsStorageService {
     }
 
     /// Run the metrics storage service
-    /// - Saves metrics to in-memory cache every 2 seconds
+    /// - Saves metrics to in-memory cache every 1 second
     /// - Trims old data every 30 minutes
     pub async fn run(&self) {
-        let mut save_interval = interval(TokioDuration::from_secs(2));
+        let mut save_interval = interval(TokioDuration::from_secs(1));
         let mut trim_interval = interval(TokioDuration::from_secs(1800)); // 30 minutes
 
         loop {

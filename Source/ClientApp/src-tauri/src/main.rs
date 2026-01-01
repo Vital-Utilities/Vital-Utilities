@@ -496,10 +496,19 @@ fn update_machine_store(
     };
     store.update_power(power);
 
-    // Collect and update running processes
+    // Collect and update running processes with their metrics
     // Build a map of all processes first
     let mut all_processes: HashMap<i32, models::ProcessViewDto> = HashMap::new();
     let mut parent_map: HashMap<i32, i32> = HashMap::new(); // child_pid -> parent_pid
+
+    // Process metrics maps
+    let mut process_cpu_usage: HashMap<i32, f32> = HashMap::new();
+    let mut process_ram_usage: HashMap<i32, f32> = HashMap::new();
+    let mut process_disk_activity: HashMap<i32, f64> = HashMap::new();
+    let mut process_gpu_usage: HashMap<i32, f32> = HashMap::new();
+
+    // Get core count for CPU percentage normalization
+    let core_count = sysinfo::System::physical_core_count().unwrap_or(1) as f32;
 
     for (pid, process) in sys_info.processes() {
         let pid_i32 = pid.as_u32() as i32;
@@ -514,6 +523,25 @@ fn update_machine_store(
         };
         all_processes.insert(pid_i32, process_view);
 
+        // Collect CPU usage (normalized by core count)
+        let cpu_pct = process.cpu_usage() / core_count;
+        if cpu_pct > 0.0 {
+            process_cpu_usage.insert(pid_i32, cpu_pct);
+        }
+
+        // Collect RAM usage in bytes
+        let ram_bytes = process.memory() as f32;
+        if ram_bytes > 0.0 {
+            process_ram_usage.insert(pid_i32, ram_bytes);
+        }
+
+        // Collect disk I/O (read + write bytes per second)
+        let disk = process.disk_usage();
+        let disk_bps = (disk.read_bytes + disk.written_bytes) as f64;
+        if disk_bps > 0.0 {
+            process_disk_activity.insert(pid_i32, disk_bps);
+        }
+
         if let Some(parent_pid) = process.parent() {
             let parent_pid_i32 = parent_pid.as_u32() as i32;
             // Only track parent relationship if parent exists in our process list
@@ -522,6 +550,34 @@ fn update_machine_store(
                 parent_map.insert(pid_i32, parent_pid_i32);
             }
         }
+    }
+
+    // GPU usage per process is currently only available on Windows via NVML
+    // For macOS, we leave process_gpu_usage empty
+    #[cfg(target_os = "windows")]
+    {
+        // GPU usage would be populated from NVML process utilization samples
+        // This is handled separately if nvidia GPU is present
+        let _ = &process_gpu_usage; // Suppress unused warning
+    }
+
+    // Update process metrics in the store
+    store.process_cpu_usage.clear();
+    store.process_ram_usage.clear();
+    store.process_disk_activity.clear();
+    store.process_gpu_usage.clear();
+
+    for (pid, usage) in process_cpu_usage {
+        store.process_cpu_usage.insert(pid, usage);
+    }
+    for (pid, usage) in process_ram_usage {
+        store.process_ram_usage.insert(pid, usage);
+    }
+    for (pid, activity) in process_disk_activity {
+        store.process_disk_activity.insert(pid, activity);
+    }
+    for (pid, usage) in process_gpu_usage {
+        store.process_gpu_usage.insert(pid, usage);
     }
 
     // Build the result - only include top-level processes (those without parents in our list)

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import "./home.scss";
@@ -152,34 +153,39 @@ export const Processes: React.FunctionComponent = () => {
         return value || 0;
     }
 
-    const ProcessContextMenu: React.FC<{ process: ProcessViewDto; children: React.ReactNode }> = ({ process, children }) => {
+    const ProcessContextMenu: React.FC<{ process: ProcessViewDto; children: React.ReactElement }> = ({ process, children }) => {
         const [open, setOpen] = React.useState(false);
         const [position, setPosition] = React.useState({ x: 0, y: 0 });
 
+        // Clone the child element and add context menu handler
+        const childWithHandler = React.cloneElement(children, {
+            onContextMenu: (e: React.MouseEvent) => {
+                e.preventDefault();
+                setPosition({ x: e.clientX, y: e.clientY });
+                setOpen(true);
+            }
+        });
+
+        // Render the dropdown menu in a portal to avoid DOM nesting issues in tables
+        const dropdownMenu = (
+            <DropdownMenu open={open} onOpenChange={setOpen}>
+                <DropdownMenuTrigger asChild>
+                    <div style={{ position: "fixed", left: position.x, top: position.y, width: 0, height: 0, pointerEvents: "none" }} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => killProcess(process.id)}>End Task</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openProcessPath(process.id)}>Open Process Location</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openProcessProperties(process.id)}>Open Properties</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => whatIs(process.processName)}>What is {process.processName}?</DropdownMenuItem>
+                    {process.description && <DropdownMenuItem onClick={() => whatIs(process.description ?? "")}>What is {process.description}?</DropdownMenuItem>}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        );
+
         return (
             <>
-                <div
-                    className="contents"
-                    onContextMenu={e => {
-                        e.preventDefault();
-                        setPosition({ x: e.clientX, y: e.clientY });
-                        setOpen(true);
-                    }}
-                >
-                    {children}
-                </div>
-                <DropdownMenu open={open} onOpenChange={setOpen}>
-                    <DropdownMenuTrigger asChild>
-                        <div style={{ position: "fixed", left: position.x, top: position.y, width: 0, height: 0 }} />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => killProcess(process.id)}>End Task</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openProcessPath(process.id)}>Open Process Location</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => openProcessProperties(process.id)}>Open Properties</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => whatIs(process.processName)}>What is {process.processName}?</DropdownMenuItem>
-                        {process.description && <DropdownMenuItem onClick={() => whatIs(process.description ?? "")}>What is {process.description}?</DropdownMenuItem>}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                {childWithHandler}
+                {createPortal(dropdownMenu, document.body)}
             </>
         );
     };
@@ -219,7 +225,7 @@ export const Processes: React.FunctionComponent = () => {
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(valueOrZero(processCpuPercentage?.[e.parent.id]) ?? 0) }}>{valueOrZero(processCpuPercentage?.[e.parent.id]).toFixed(1)}%</td>
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processRamBytes && getReadableBytesString(valueOrZero(processRamBytes[e.parent.id]))}</td>
                         <td style={{ textAlign: "right", minWidth: 80 }}>{processBytesPerSecActivity && getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
-                        <td style={{ textAlign: "right", minWidth: 80 }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
+                        <td style={{ textAlign: "right", minWidth: 80 }}>{valueOrZero(processGpuPercentage?.[e.parent.id]).toFixed(1)}%</td>
                     </tr>
                 </ProcessContextMenu>
             );
@@ -259,7 +265,7 @@ export const Processes: React.FunctionComponent = () => {
                         <td style={{ textAlign: "right", color: getProcessCPUPercentColor(totalCpu ?? 0) }}>{totalCpu?.toFixed(1)}%</td>
                         <td style={{ textAlign: "right" }}>{getReadableBytesString(totalRam)}</td>
                         <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(diskBytesPerSecActivity, 1)}</td>
-                        <td style={{ textAlign: "right" }}>{gpuActivity && gpuActivity}%</td>
+                        <td style={{ textAlign: "right" }}>{gpuActivity.toFixed(1)}%</td>
                     </tr>
                 </ProcessContextMenu>
             );
@@ -280,7 +286,7 @@ export const Processes: React.FunctionComponent = () => {
                             <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
                             <td style={{ textAlign: "right" }}>{getReadableBytesString(valueOrZero(processRamBytes?.[e.parent.id]))}</td>
                             <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[e.parent.id], 1)}</td>
-                            <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[e.parent.id]}%</td>
+                            <td style={{ textAlign: "right" }}>{valueOrZero(processGpuPercentage?.[e.parent.id]).toFixed(1)}%</td>
                         </tr>
                     </ProcessContextMenu>
                 );
@@ -296,7 +302,7 @@ export const Processes: React.FunctionComponent = () => {
                                     <td style={{ textAlign: "right", color: getProcessCPUPercentColor(cpuPercentage) }}>{cpuPercentage.toFixed(1)}%</td>
                                     <td style={{ textAlign: "right" }}>{getReadableBytesString(processRamBytes?.[c.id])}</td>
                                     <td style={{ textAlign: "right" }}>{getReadableBytesPerSecondString(processBytesPerSecActivity?.[c.id], 1)}</td>
-                                    <td style={{ textAlign: "right" }}>{processGpuPercentage && processGpuPercentage?.[c.id]}%</td>
+                                    <td style={{ textAlign: "right" }}>{valueOrZero(processGpuPercentage?.[c.id]).toFixed(1)}%</td>
                                 </tr>
                             </ProcessContextMenu>
                         );
@@ -315,7 +321,7 @@ export const Processes: React.FunctionComponent = () => {
         else setSortBy({ sortBy: e, descending: false });
     }
     return (
-        <>
+        <div style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
             <div id="view-header" className="view-header" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center", padding: "1rem 1.25rem", height: "4rem", flexShrink: 0 }}>
                 <Input placeholder="Search" style={{ width: 200, marginRight: "1.25rem" }} value={filter_LowerCased} onChange={e => setFilter_LowerCased(e.target.value.toLowerCase())} />
                 <div className="flex items-center gap-2">
@@ -351,7 +357,7 @@ export const Processes: React.FunctionComponent = () => {
                 </thead>
                 <tbody>{view.map(e => renderProcess(e))}</tbody>
             </Table>
-        </>
+        </div>
     );
 };
 

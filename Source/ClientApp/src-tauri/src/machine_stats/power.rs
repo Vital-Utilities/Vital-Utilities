@@ -1,8 +1,4 @@
-//! Power and battery information collection for macOS.
-
-use std::collections::HashMap;
-use std::process::Command;
-use std::str;
+//! Power and battery information collection for macOS using IOKit.
 
 /// Power and battery usage data
 #[derive(Debug, Clone, Default)]
@@ -41,48 +37,203 @@ pub struct PowerUsage {
     pub adapter_description: Option<String>,
 }
 
-/// Get power and battery information on macOS
+#[cfg(target_os = "macos")]
+mod iokit {
+    use core_foundation::base::{CFTypeRef, TCFType};
+    use core_foundation::boolean::CFBoolean;
+    use core_foundation::dictionary::{CFDictionary, CFDictionaryRef};
+    use core_foundation::number::CFNumber;
+    use core_foundation::string::CFString;
+    use std::ptr;
+
+    #[allow(non_upper_case_globals)]
+    const kIOMasterPortDefault: u32 = 0;
+
+    #[link(name = "IOKit", kind = "framework")]
+    extern "C" {
+        fn IOServiceGetMatchingService(mainPort: u32, matching: CFDictionaryRef) -> u32;
+        fn IOServiceMatching(name: *const i8) -> CFDictionaryRef;
+        fn IORegistryEntryCreateCFProperties(
+            entry: u32,
+            properties: *mut CFDictionaryRef,
+            allocator: CFTypeRef,
+            options: u32,
+        ) -> i32;
+        fn IOObjectRelease(object: u32) -> i32;
+    }
+
+    /// Battery data from IOKit
+    #[derive(Debug, Default)]
+    pub struct BatteryData {
+        pub battery_installed: bool,
+        pub current_capacity: Option<i64>,
+        pub fully_charged: bool,
+        pub external_connected: bool,
+        pub amperage: Option<i64>,
+        pub cycle_count: Option<i64>,
+        pub design_capacity: Option<i64>,
+        pub nominal_charge_capacity: Option<i64>,
+        pub voltage_mv: Option<i64>,
+        pub time_remaining: Option<i64>,
+        pub system_power_in_mw: Option<i64>,
+        pub system_load_mw: Option<i64>,
+        pub battery_power_mw: Option<i64>,
+        pub adapter_watts: Option<i64>,
+        pub adapter_voltage_mv: Option<i64>,
+        pub adapter_description: Option<String>,
+    }
+
+    /// Get battery data from IOKit (much faster than spawning ioreg)
+    pub fn get_battery_data() -> Option<BatteryData> {
+        unsafe {
+            let matching = IOServiceMatching(b"AppleSmartBattery\0".as_ptr() as *const i8);
+            if matching.is_null() {
+                return None;
+            }
+
+            let service = IOServiceGetMatchingService(kIOMasterPortDefault, matching);
+            if service == 0 {
+                return None;
+            }
+
+            let mut props: CFDictionaryRef = ptr::null();
+            let result = IORegistryEntryCreateCFProperties(service, &mut props, ptr::null(), 0);
+
+            IOObjectRelease(service);
+
+            if result != 0 || props.is_null() {
+                return None;
+            }
+
+            let props_dict = CFDictionary::<CFString, CFTypeRef>::wrap_under_create_rule(props);
+
+            let mut data = BatteryData {
+                battery_installed: true,
+                ..Default::default()
+            };
+
+            // Parse top-level properties
+            data.current_capacity = get_i64(&props_dict, "CurrentCapacity");
+            data.fully_charged = get_bool(&props_dict, "FullyCharged").unwrap_or(false);
+            data.external_connected = get_bool(&props_dict, "ExternalConnected").unwrap_or(false);
+            data.amperage = get_i64(&props_dict, "Amperage");
+            data.cycle_count = get_i64(&props_dict, "CycleCount");
+            data.design_capacity = get_i64(&props_dict, "DesignCapacity");
+            data.nominal_charge_capacity = get_i64(&props_dict, "NominalChargeCapacity");
+            data.voltage_mv = get_i64(&props_dict, "AppleRawBatteryVoltage");
+            data.time_remaining = get_i64(&props_dict, "TimeRemaining");
+
+            // Parse PowerTelemetryData nested dictionary
+            let telemetry_key = CFString::new("PowerTelemetryData");
+            if let Some(telemetry_ptr) = props_dict.find(&telemetry_key) {
+                let telemetry_dict_ref = *telemetry_ptr as CFDictionaryRef;
+                let telemetry_dict =
+                    CFDictionary::<CFString, CFTypeRef>::wrap_under_get_rule(telemetry_dict_ref);
+
+                data.system_power_in_mw = get_i64(&telemetry_dict, "SystemPowerIn");
+                data.system_load_mw = get_i64(&telemetry_dict, "SystemLoad");
+                data.battery_power_mw = get_i64(&telemetry_dict, "BatteryPower");
+            }
+
+            // Parse AdapterDetails nested dictionary
+            let adapter_key = CFString::new("AdapterDetails");
+            if let Some(adapter_ptr) = props_dict.find(&adapter_key) {
+                let adapter_dict_ref = *adapter_ptr as CFDictionaryRef;
+                let adapter_dict =
+                    CFDictionary::<CFString, CFTypeRef>::wrap_under_get_rule(adapter_dict_ref);
+
+                data.adapter_watts = get_i64(&adapter_dict, "Watts");
+                data.adapter_voltage_mv = get_i64(&adapter_dict, "AdapterVoltage");
+                data.adapter_description = get_string(&adapter_dict, "Description");
+            }
+
+            Some(data)
+        }
+    }
+
+    /// Get an i64 value from a CFDictionary
+    fn get_i64(dict: &CFDictionary<CFString, CFTypeRef>, key: &str) -> Option<i64> {
+        let cf_key = CFString::new(key);
+        if let Some(value_ptr) = dict.find(&cf_key) {
+            unsafe {
+                let num_ref = *value_ptr as core_foundation::number::CFNumberRef;
+                let num = CFNumber::wrap_under_get_rule(num_ref);
+                return num.to_i64();
+            }
+        }
+        None
+    }
+
+    /// Get a bool value from a CFDictionary
+    fn get_bool(dict: &CFDictionary<CFString, CFTypeRef>, key: &str) -> Option<bool> {
+        let cf_key = CFString::new(key);
+        if let Some(value_ptr) = dict.find(&cf_key) {
+            unsafe {
+                let bool_ref = *value_ptr as core_foundation::boolean::CFBooleanRef;
+                let cf_bool = CFBoolean::wrap_under_get_rule(bool_ref);
+                return Some(cf_bool.into());
+            }
+        }
+        None
+    }
+
+    /// Get a string value from a CFDictionary
+    fn get_string(dict: &CFDictionary<CFString, CFTypeRef>, key: &str) -> Option<String> {
+        let cf_key = CFString::new(key);
+        if let Some(value_ptr) = dict.find(&cf_key) {
+            unsafe {
+                let str_ref = *value_ptr as core_foundation::string::CFStringRef;
+                let cf_str = CFString::wrap_under_get_rule(str_ref);
+                return Some(cf_str.to_string());
+            }
+        }
+        None
+    }
+}
+
+/// Get power and battery information on macOS using IOKit
 #[cfg(target_os = "macos")]
 pub async fn get_power_info() -> PowerUsage {
-    let output = match Command::new("ioreg")
-        .args(["-r", "-c", "AppleSmartBattery", "-d", "1"])
-        .output()
-    {
-        Ok(o) => o,
-        Err(_) => return PowerUsage::default(),
+    let data = match iokit::get_battery_data() {
+        Some(d) => d,
+        None => return PowerUsage::default(),
     };
-
-    if !output.status.success() {
-        return PowerUsage::default();
-    }
-
-    let output_str = match str::from_utf8(&output.stdout) {
-        Ok(s) => s,
-        Err(_) => return PowerUsage::default(),
-    };
-
-    // If no battery info available, return default
-    if !output_str.contains("AppleSmartBattery") {
-        return PowerUsage::default();
-    }
 
     let mut power = PowerUsage {
-        battery_installed: true,
+        battery_installed: data.battery_installed,
+        battery_percentage: data.current_capacity.map(|v| v as f32),
+        fully_charged: data.fully_charged,
+        external_connected: data.external_connected,
+        cycle_count: data.cycle_count.map(|v| v as i32),
+        design_capacity_mah: data.design_capacity.map(|v| v as i32),
+        max_capacity_mah: data.nominal_charge_capacity.map(|v| v as i32),
+        time_remaining_minutes: data.time_remaining.and_then(|v| {
+            // 65535 means calculating or N/A
+            if v != 65535 {
+                Some(v as i32)
+            } else {
+                None
+            }
+        }),
+        adapter_watts: data.adapter_watts.map(|v| v as i32),
+        adapter_description: data.adapter_description,
         ..Default::default()
     };
 
-    // Parse simple key-value pairs
-    power.battery_percentage = parse_i32_value(output_str, "\"CurrentCapacity\"").map(|v| v as f32);
-    power.fully_charged = parse_bool_value(output_str, "\"FullyCharged\"").unwrap_or(false);
-    power.external_connected = parse_bool_value(output_str, "\"ExternalConnected\"").unwrap_or(false);
-    power.battery_amperage = parse_i32_value(output_str, "\"Amperage\"");
-    power.cycle_count = parse_i32_value(output_str, "\"CycleCount\"");
-    power.design_capacity_mah = parse_i32_value(output_str, "\"DesignCapacity\"");
-    power.max_capacity_mah = parse_i32_value(output_str, "\"NominalChargeCapacity\"");
+    // Handle amperage (may be unsigned representation of negative value)
+    if let Some(amp) = data.amperage {
+        // Convert from u64 representation to signed if needed
+        power.battery_amperage = Some(amp as i32);
+    }
 
-    // Parse voltage (in mV, convert to V)
-    if let Some(mv) = parse_i32_value(output_str, "\"AppleRawBatteryVoltage\"") {
+    // Convert voltage from mV to V
+    if let Some(mv) = data.voltage_mv {
         power.battery_voltage = Some(mv as f32 / 1000.0);
+    }
+
+    // Convert adapter voltage from mV to V
+    if let Some(mv) = data.adapter_voltage_mv {
+        power.adapter_voltage = Some(mv as f32 / 1000.0);
     }
 
     // Calculate battery health
@@ -92,96 +243,29 @@ pub async fn get_power_info() -> PowerUsage {
         }
     }
 
-    // Parse time remaining
-    if let Some(time) = parse_i32_value(output_str, "\"TimeRemaining\"") {
-        // 65535 means calculating or N/A
-        if time != 65535 {
-            power.time_remaining_minutes = Some(time);
-        }
-    }
-
-    // Parse PowerTelemetryData for system power consumption
-    if let Some(telemetry_start) = output_str.find("\"PowerTelemetryData\"") {
-        let telemetry_section = &output_str[telemetry_start..];
-
-        // SystemPowerIn is in milliwatts
-        if let Some(mw) = parse_i32_in_section(telemetry_section, "\"SystemPowerIn\"") {
+    // System power: use SystemPowerIn if available (on AC), otherwise SystemLoad (on battery)
+    if let Some(mw) = data.system_power_in_mw {
+        if mw > 0 {
             power.system_power_watts = Some(mw as f32 / 1000.0);
         }
-
-        // BatteryPower is in milliwatts (can be 0 when on AC)
-        if let Some(mw) = parse_i32_in_section(telemetry_section, "\"BatteryPower\"") {
-            // When discharging, this shows power from battery
-            if mw != 0 {
-                power.battery_power_watts = Some(mw as f32 / 1000.0);
+    }
+    if power.system_power_watts.is_none() || power.system_power_watts == Some(0.0) {
+        if let Some(mw) = data.system_load_mw {
+            if mw > 0 {
+                power.system_power_watts = Some(mw as f32 / 1000.0);
             }
         }
     }
 
-    // Parse AdapterDetails
-    if let Some(adapter_start) = output_str.find("\"AdapterDetails\"") {
-        let adapter_section = &output_str[adapter_start..];
-
-        if let Some(watts) = parse_i32_in_section(adapter_section, "\"Watts\"") {
-            power.adapter_watts = Some(watts);
-        }
-
-        // AdapterVoltage is in mV
-        if let Some(mv) = parse_i32_in_section(adapter_section, "\"AdapterVoltage\"") {
-            power.adapter_voltage = Some(mv as f32 / 1000.0);
-        }
-
-        // Parse description - it's in quotes like "Description"="pd charger"
-        if let Some(desc_start) = adapter_section.find("\"Description\"=\"") {
-            let after_key = &adapter_section[desc_start + 15..];
-            if let Some(end) = after_key.find('"') {
-                power.adapter_description = Some(after_key[..end].to_string());
-            }
+    // Battery power (convert from possibly-negative i64)
+    if let Some(mw) = data.battery_power_mw {
+        let signed_mw = mw as i64;
+        if signed_mw != 0 {
+            power.battery_power_watts = Some((signed_mw.abs() as f32) / 1000.0);
         }
     }
 
     power
-}
-
-/// Parse an integer value from ioreg output
-fn parse_i32_value(output: &str, key: &str) -> Option<i32> {
-    // Format: "Key" = 123
-    let pattern = format!("{} = ", key);
-    if let Some(start) = output.find(&pattern) {
-        let after_key = &output[start + pattern.len()..];
-        let end = after_key.find(|c: char| !c.is_ascii_digit() && c != '-').unwrap_or(after_key.len());
-        let value_str = &after_key[..end];
-        return value_str.parse::<i32>().ok();
-    }
-    None
-}
-
-/// Parse a boolean value from ioreg output
-fn parse_bool_value(output: &str, key: &str) -> Option<bool> {
-    // Format: "Key" = Yes or "Key" = No
-    let pattern = format!("{} = ", key);
-    if let Some(start) = output.find(&pattern) {
-        let after_key = &output[start + pattern.len()..];
-        if after_key.starts_with("Yes") {
-            return Some(true);
-        } else if after_key.starts_with("No") {
-            return Some(false);
-        }
-    }
-    None
-}
-
-/// Parse an integer value within a section (for nested dicts)
-fn parse_i32_in_section(section: &str, key: &str) -> Option<i32> {
-    // Format within dict: "Key"=123 (no spaces around =)
-    let pattern = format!("{}=", key);
-    if let Some(start) = section.find(&pattern) {
-        let after_key = &section[start + pattern.len()..];
-        let end = after_key.find(|c: char| !c.is_ascii_digit() && c != '-').unwrap_or(after_key.len());
-        let value_str = &after_key[..end];
-        return value_str.parse::<i32>().ok();
-    }
-    None
 }
 
 /// Get power info stub for non-macOS platforms

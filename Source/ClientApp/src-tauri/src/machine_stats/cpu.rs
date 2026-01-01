@@ -1,9 +1,12 @@
-use std::{collections::HashMap, process::Command};
+use std::collections::HashMap;
+#[cfg(target_os = "macos")]
+use std::process::Command;
+#[cfg(target_os = "macos")]
+use std::str;
 
 use sysinfo::{Cpu, Components};
 use systemstat::Platform;
 use vital_service_api::models::CpuUsage;
-use std::str;
 
 pub async fn get_cpu_util(
     sysinfo: &sysinfo::System,
@@ -60,10 +63,8 @@ pub async fn get_cpu_util(
     let first_cpu = sysinfo.cpus().first();
     let total_usage = sysinfo.global_cpu_usage();
 
-    // Get system power consumption on macOS
-    #[cfg(target_os = "macos")]
-    let power_draw_wattage = get_system_power_watts();
-    #[cfg(not(target_os = "macos"))]
+    // CPU-specific power is not available on macOS without elevated privileges
+    // System power is shown in the Power view instead
     let power_draw_wattage: Option<f32> = None;
 
     Box::new(CpuUsage {
@@ -88,42 +89,6 @@ fn get_name(_info: Option<&Cpu>) -> String {
 
     let cpu_name = str::from_utf8(&output.stdout).expect("Output was not valid UTF-8");
     cpu_name.trim().to_string()
-}
-
-/// Get system power consumption in watts from macOS ioreg
-/// Returns SystemPowerIn from PowerTelemetryData (in milliwatts, converted to watts)
-#[cfg(target_os = "macos")]
-fn get_system_power_watts() -> Option<f32> {
-    let output = Command::new("ioreg")
-        .args(["-r", "-c", "AppleSmartBattery", "-d", "1"])
-        .output()
-        .ok()?;
-
-    if !output.status.success() {
-        return None;
-    }
-
-    let output_str = str::from_utf8(&output.stdout).ok()?;
-
-    // First, find PowerTelemetryData section which contains SystemPowerIn
-    // Format is: "PowerTelemetryData" = {...,"SystemPowerIn"=10631,...}
-    if let Some(telemetry_start) = output_str.find("\"PowerTelemetryData\"") {
-        let telemetry_section = &output_str[telemetry_start..];
-
-        // Look for "SystemPowerIn"=<number> within PowerTelemetryData
-        if let Some(power_start) = telemetry_section.find("\"SystemPowerIn\"=") {
-            let after_key = &telemetry_section[power_start + 16..]; // Skip past "SystemPowerIn"=
-            // Find where the number ends (comma or closing brace)
-            let end = after_key.find(|c: char| c == ',' || c == '}').unwrap_or(after_key.len());
-            let value_str = &after_key[..end];
-            if let Ok(milliwatts) = value_str.parse::<f32>() {
-                // Convert milliwatts to watts, round to 1 decimal
-                return Some((milliwatts / 100.0).round() / 10.0);
-            }
-        }
-    }
-
-    None
 }
 
 #[cfg(target_os = "windows")]
