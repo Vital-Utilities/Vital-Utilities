@@ -108,23 +108,23 @@ text.recharts-text.recharts-cartesian-axis-tick-value {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: color-mix(in srgb, var(--secondary) 60%, transparent);
+    background: color-mix(in srgb, var(--primary) 50%, transparent);
     border-radius: 3px;
     transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+    background: color-mix(in srgb, var(--primary) 80%, transparent);
 }
 
 ::-webkit-scrollbar-thumb:active {
-    background: var(--accent);
+    background: var(--primary);
 }
 
 /* Scrollbar visibility for scrollable containers */
 .custom-table {
     &::-webkit-scrollbar-thumb {
-        background: color-mix(in srgb, var(--secondary) 60%, transparent);
+        background: color-mix(in srgb, var(--primary) 50%, transparent);
     }
 }
 
@@ -134,7 +134,7 @@ text.recharts-text.recharts-cartesian-axis-tick-value {
     }
 
     &:hover::-webkit-scrollbar-thumb {
-        background: color-mix(in srgb, var(--secondary) 60%, transparent);
+        background: color-mix(in srgb, var(--primary) 50%, transparent);
     }
 }
 

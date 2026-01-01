@@ -31,10 +31,18 @@
             padding: 12px 16px;
             user-select: none;
             font-size: 0.8125rem;
+            // Column separators
+            border-right: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+
+            &:last-child {
+                border-right: none;
+            }
         }
 
         td {
             font-family: var(--font-mono);
+            // Row separators
+            border-bottom: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
         }
 
         th {
@@ -65,7 +73,6 @@
             overflow-y: auto;
 
             tr {
-                border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
                 transition: all 0.15s ease;
 
                 td {
@@ -101,6 +108,125 @@
             overflow: hidden;
             width: inherit;
             white-space: nowrap;
+        }
+    }
+
+    // Resizable table styles
+    &.resizable-table {
+        table {
+            table-layout: fixed;
+        }
+
+        .resizable-th {
+            position: relative;
+            overflow: hidden;
+
+            .th-content {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding-right: 8px;
+            }
+
+            .resize-handle {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 6px;
+                cursor: col-resize;
+                background: transparent;
+                transition: background 0.15s ease;
+                z-index: 10;
+
+                &:hover {
+                    background: var(--primary);
+                }
+
+                &:active {
+                    background: var(--primary);
+                }
+            }
+
+            &:last-child .resize-handle {
+                display: none;
+            }
+        }
+
+        td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    // Virtualized table styles (TanStack Table)
+    &.virtualized-table {
+        // Prevent text selection while resizing columns
+        &.resizing {
+            user-select: none;
+            cursor: col-resize;
+
+            * {
+                user-select: none;
+            }
+        }
+
+        table {
+            table-layout: fixed;
+            min-width: 100%;
+        }
+
+        th {
+            position: relative;
+
+            .th-content {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                padding-right: 12px;
+            }
+
+            .resize-handle {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 6px;
+                cursor: col-resize;
+                background: color-mix(in srgb, var(--border) 60%, transparent);
+                transition: background 0.15s ease;
+                z-index: 10;
+
+                &:hover,
+                &.resizing {
+                    background: var(--primary);
+                }
+            }
+
+            &:last-child .resize-handle {
+                display: none;
+            }
+        }
+
+        td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        // Process-specific styles
+        .process-row {
+            &.child {
+                background: color-mix(in srgb, var(--background) 60%, transparent);
+            }
+        }
+
+        .expand-icon {
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 8px;
         }
     }
 }

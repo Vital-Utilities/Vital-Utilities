@@ -53,7 +53,7 @@ export function getPercentColor(percent: number) {
     return ["hsl(", hue, ",100%,50%)"].join("");
 }
 export function getProcessCPUPercentColor(percent: number) {
-    if (percent === 0) return "White";
+    if (percent < 0.05) return "White";
     else if (percent < 5) return "#00ff37";
     else if (percent < 20) return "Yellow";
     else if (percent < 40) return "Orange";
