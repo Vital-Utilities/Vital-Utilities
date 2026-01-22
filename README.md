@@ -1,3 +1,5 @@
+> **This project is no longer maintained.** It has been superseded by [Better Task Manager](https://bettertaskmanager.com) ([GitHub](https://github.com/BetterTaskManager/BetterTaskManager)).
+
 <p align="center">
 <img height="200" src="Source/Assets/Logo.svg"/>
 </p>
